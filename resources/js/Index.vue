@@ -1,16 +1,11 @@
 <template>
     <div>
-        <login-component></login-component>
+        <router-view></router-view>
     </div>
 </template>
 
 <script>
-import LoginComponent from "./components/LoginComponent.vue";
-
 export default {
-    components: {
-        LoginComponent
-    },
     mounted() {}
 };
 </script>
