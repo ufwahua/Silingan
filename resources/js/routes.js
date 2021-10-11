@@ -1,6 +1,6 @@
 import Dashboard from "./components/DashboardComponent.vue";
 import Login from "./components/LoginComponent.vue";
-import VueRouter from "vue-router";
+import { createRouter, createWebHistory } from "vue-router";
 const routes = [
     {
         path: "/",
@@ -14,9 +14,12 @@ const routes = [
     }
 ];
 
-const router = new VueRouter({
-    routes,
-    mode: "history"
-});
+// const router = new VueRouter({
+//     routes,
+//     mode: "history"
+// });
 
-export default router;
+export default createRouter({
+    history: createWebHistory(),
+    routes
+});
