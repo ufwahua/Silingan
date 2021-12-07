@@ -29,10 +29,12 @@ class RegisterRequest extends FormRequest
             'gender' => ['required'],
             'form.*.block' => ['required'],
             'form.*.lot' => ['required'],
+            'age' => ['required','integer'],
+            'contact_num' => ['required','integer'],
             'email' => ['required','string' ,'email', 'max:255','unique:users'],
             'password' => ['required' , 'min:8'],
             'confirm_password' => ['required','same:password' , 'min:8'],
-
+            'profile_pic'=> ['sometimes','required','blob'],
         ];
 }
     
