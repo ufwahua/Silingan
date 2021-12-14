@@ -67,7 +67,7 @@ export default {
                 {
                     items: [
                         {
-                            label: "Profile",
+                            label: "Profiles",
                             icon: "pi pi-pencil",
                             command: () => {
                                 this.$toast.add({
