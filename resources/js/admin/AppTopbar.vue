@@ -84,10 +84,10 @@ export default {
                             command: async () => {
                                 await axios({
                                     method: "post",
-                                    url: "api/logout",
+                                    url: "/api/logout",
                                 })
                                     .then((response) => {
-                                        name: "index";
+                                        this.$router.push("/");
                                     })
                                     .catch((error) => {
                                         console.log(error);
