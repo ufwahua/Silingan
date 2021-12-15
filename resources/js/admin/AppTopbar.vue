@@ -1,7 +1,8 @@
 <template>
     <div class="layout-topbar">
         <router-link to="/home/dashboard" class="layout-topbar-logo">
-            <span>Silingan</span>
+            <img alt="Logo" :src="topbarImage()" />
+            <!--<span>Silingan</span>-->
         </router-link>
         <button
             class="p-link layout-menu-button layout-topbar-button"
@@ -87,7 +88,7 @@ export default {
                                     url: "api/logout",
                                 })
                                     .then((response) => {
-                                        this.$router.push("/");
+                                        this.$router.push("/login");
                                     })
                                     .catch((error) => {
                                         console.log(error);
@@ -109,6 +110,9 @@ export default {
         onTopbarMenuToggle(event) {
             this.$emit("topbar-menu-toggle", event);
         },
+        topbarImage() {
+			return 'silingan-icon.png';
+		},
     },
 };
 </script>
