@@ -7705,14 +7705,14 @@ iframe {
     font-family: Poppins-Regular;
     font-size: 13px;
     line-height: 1.5;
-    color: #999999;
+    color: rgb(28, 152, 237);
 }
 
 .txt2 {
     font-family: Poppins-Regular;
     font-size: 13px;
     line-height: 1.5;
-    color: #666666;
+    color: rgb(28, 152, 237);
 }
 
 /*//////////////////////////////////////////////////////////////////
@@ -7735,11 +7735,22 @@ iframe {
     justify-content: center;
     align-items: center;
     padding: 15px;
-    background: #9053c7;
-    background: -webkit-linear-gradient(-135deg, #c850c0, #4158d0);
-    background: -o-linear-gradient(-135deg, #c850c0, #4158d0);
-    background: -moz-linear-gradient(-135deg, #c850c0, #4158d0);
-    background: linear-gradient(-135deg, #c850c0, #4158d0);
+    background: rgb(28, 152, 237);
+    background: -webkit-linear-gradient(
+        -135deg,
+        rgb(64, 66, 226) rgb(28, 152, 237)
+    );
+    background: -o-linear-gradient(
+        -135deg,
+        rgb(64, 66, 226),
+        rgb(28, 152, 237)
+    );
+    background: -moz-linear-gradient(
+        -135deg,
+        rgb(64, 66, 226),
+        rgb(28, 152, 237)
+    );
+    background: linear-gradient(-135deg, rgb(64, 66, 226), rgb(28, 152, 237));
 }
 
 .wrap-login100 {
@@ -7755,13 +7766,13 @@ iframe {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
-    padding: 177px 130px 33px 95px;
+    padding: 95px 120px 33px 95px;
 }
 
 /*------------------------------------------------------------------
 [  ]*/
 .login100-pic {
-    width: 316px;
+    width: 400px;
 }
 
 .login100-pic img {
@@ -7785,6 +7796,11 @@ iframe {
     display: block;
     padding-bottom: 54px;
 }
+.img-login {
+    height: 100%;
+    width: 100%;
+    object-fit: fill;
+}
 
 /*---------------------------------------------*/
 .wrap-input100 {
@@ -7792,6 +7808,9 @@ iframe {
     width: 100%;
     z-index: 1;
     margin-bottom: 10px;
+}
+.gender-label {
+    margin-bottom: 0px;
 }
 
 .input100 {
@@ -7820,12 +7839,7 @@ iframe {
     width: 100%;
     height: 100%;
     box-shadow: 0px 0px 0px 0px;
-    color: rgba(87, 184, 70, 0.8);
-}
-
-.input100:focus + .focus-input100 {
-    -webkit-animation: anim-shadow 0.5s ease-in-out forwards;
-    animation: anim-shadow 0.5s ease-in-out forwards;
+    color: rgb(28, 152, 237);
 }
 
 @-webkit-keyframes anim-shadow {
@@ -7868,7 +7882,7 @@ iframe {
 }
 
 .input100:focus + .focus-input100 + .symbol-input100 {
-    color: #57b846;
+    color: rgb(28, 152, 237);
     padding-left: 28px;
 }
 
@@ -7896,7 +7910,7 @@ iframe {
     width: 100%;
     height: 50px;
     border-radius: 25px;
-    background: #57b846;
+    background: rgb(28, 152, 237);
     display: -webkit-box;
     display: -webkit-flex;
     display: -moz-box;
@@ -7913,45 +7927,51 @@ iframe {
 }
 
 .login100-form-btn:hover {
-    background: #333333;
+    background: #4f52ff;
 }
 
 /*------------------------------------------------------------------
 [ Responsive ]*/
 
-@media (max-width: 992px) {
+@media (max-width: 990px) {
     .wrap-login100 {
-        padding: 177px 90px 33px 85px;
-    }
-
-    .login100-pic {
-        width: 35%;
+        padding: 30px;
+        width: 90vw;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
 
     .login100-form {
-        width: 50%;
+        width: 90vw;
+    }
+    .login100-form-title {
+        width: 40vw;
+    }
+    .login100-pic {
+        width: 40vw;
+        object-fit: cover;
     }
 }
 
-@media (max-width: 768px) {
+/* @media (max-width: 600px) {
     .wrap-login100 {
-        padding: 100px 80px 33px 80px;
+        width: 80vw;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 50px;
     }
 
     .login100-pic {
-        display: none;
+        width: 80vw;
+        object-fit: cover;
     }
 
     .login100-form {
-        width: 100%;
+        width: 80vw;
     }
-}
-
-@media (max-width: 576px) {
-    .wrap-login100 {
-        padding: 100px 15px 33px 15px;
-    }
-}
+} */
 
 /*------------------------------------------------------------------
 [ Alert validate ]*/
