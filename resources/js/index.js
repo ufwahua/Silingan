@@ -2,12 +2,12 @@ import Login from "./login/LoginComponent.vue";
 import Register from "./login/RegisterComponent.vue";
 
 import HomeComponent from "./admin/dashboard/HomeComponent.vue";
-import DashboardComponent from "./admin/contents/DashboardComponent.vue";
-import DeviceStatusComponent from "./admin/contents/DeviceStatusComponent.vue";
-import DeviceConditionComponent from "./admin/contents/DeviceConditionComponent.vue";
-import MakeComponent from "./admin/contents/MakeComponent.vue";
-import TypeComponent from "./admin/contents/TypeComponent.vue";
-import VendorComponent from "./admin/contents/VendorComponent.vue";
+import DashboardComponent from "./admin/dashboard/DashboardComponent.vue";
+import Block_Lot from "./admin/dashboard/Block_LotComponent.vue";
+import LotComponent from "./admin/dashboard/LotComponent.vue";
+import MakeComponent from "./admin/dashboard/MakeComponent.vue";
+import TypeComponent from "./admin/dashboard/TypeComponent.vue";
+import VendorComponent from "./admin/dashboard/VendorComponent.vue";
 import NotFound from "./components/NotFoundComponent.vue";
 
 import { createRouter, createWebHistory } from "vue-router";
@@ -68,17 +68,17 @@ export default createRouter({
                     },
                 },
                 {
-                    path: "devicestatus",
+                    path: "block",
                     components: {
                         default: NotFound,
-                        contents: DeviceStatusComponent,
+                        contents: Block_Lot,
                     },
                 },
                 {
-                    path: "devicecondition",
+                    path: "lot",
                     components: {
                         default: NotFound,
-                        contents: DeviceConditionComponent,
+                        contents: LotComponent,
                     },
                 },
                 {

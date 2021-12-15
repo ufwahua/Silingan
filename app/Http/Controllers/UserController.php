@@ -59,9 +59,8 @@ class UserController extends Controller
 
         $request->session()->regenerateToken();
 
-        return redirect('/');
+        return $request;
     }
-     //
     public function index(){
         return [
             'user' => Auth::user(),

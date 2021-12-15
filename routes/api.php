@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\admin\BlockController;
+use App\Http\Controllers\admin\LotController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -29,3 +31,8 @@ Route::post('logout', [UserController::class, 'logout']);
 
 //Check if User is Logged in
 Route::get('/verify',[UserController::class,'index']);
+
+ Route::apiResources([
+        'block'             => BlockController::class,
+        'lot'             => LotController::class,
+    ]);

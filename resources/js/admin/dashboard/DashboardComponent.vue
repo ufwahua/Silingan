@@ -226,7 +226,7 @@ export default {
     margin-right: 5%;
 }
 .lanex-font {
-    font-family: "Poppins", sans-serif;
+    font-family: "Poppins";
 }
 .lanex-font-title {
     font-size: 24px;
