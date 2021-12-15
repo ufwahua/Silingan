@@ -1,13 +1,13 @@
 import Login from "./login/LoginComponent.vue";
 import Register from "./login/RegisterComponent.vue";
 
-import HomeComponent from "./admin/dashboard/HomeComponent.vue";
-import DashboardComponent from "./admin/contents/DashboardComponent.vue";
-import DeviceStatusComponent from "./admin/contents/DeviceStatusComponent.vue";
-import DeviceConditionComponent from "./admin/contents/DeviceConditionComponent.vue";
-import MakeComponent from "./admin/contents/MakeComponent.vue";
-import TypeComponent from "./admin/contents/TypeComponent.vue";
-import VendorComponent from "./admin/contents/VendorComponent.vue";
+import HomeComponent from "./user/dashboard/HomeComponent.vue";
+import DashboardComponent from "./user/contents/DashboardComponent.vue";
+import DeviceStatusComponent from "./user/contents/DeviceStatusComponent.vue";
+import DeviceConditionComponent from "./user/contents/DeviceConditionComponent.vue";
+import MakeComponent from "./user/contents/MakeComponent.vue";
+import TypeComponent from "./user/contents/TypeComponent.vue";
+import VendorComponent from "./user/contents/VendorComponent.vue";
 import NotFound from "./components/NotFoundComponent.vue";
 
 import { createRouter, createWebHistory } from "vue-router";
