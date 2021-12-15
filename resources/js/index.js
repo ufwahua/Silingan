@@ -5,11 +5,10 @@ import Home from "./home/HomeComponent.vue";
 
 import HomeComponent from "./user/dashboard/HomeComponent.vue";
 import DashboardComponent from "./user/contents/DashboardComponent.vue";
-import DeviceStatusComponent from "./user/contents/DeviceStatusComponent.vue";
-import DeviceConditionComponent from "./user/contents/DeviceConditionComponent.vue";
 import MakeComponent from "./user/contents/MakeComponent.vue";
 import TypeComponent from "./user/contents/TypeComponent.vue";
 import VendorComponent from "./user/contents/VendorComponent.vue";
+
 import NotFound from "./components/NotFoundComponent.vue";
 
 import { createRouter, createWebHistory } from "vue-router";
@@ -77,17 +76,17 @@ export default createRouter({
                     },
                 },
                 {
-                    path: "devicestatus",
+                    path: "block",
                     components: {
                         default: NotFound,
-                        contents: DeviceStatusComponent,
+                        contents: Block_Lot,
                     },
                 },
                 {
-                    path: "devicecondition",
+                    path: "lot",
                     components: {
                         default: NotFound,
-                        contents: DeviceConditionComponent,
+                        contents: LotComponent,
                     },
                 },
                 {

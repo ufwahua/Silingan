@@ -23,48 +23,46 @@
 
                     <div class="formgrid grid">
                         <div class="field col-12 md:col-6">
-                            <div v-if="this.error.first_name">
-                                <label class="p-error" for="first_name"
-                                    >First name required</label
-                                >
-                                <InputText
-                                    id="firstname"
-                                    type="text"
-                                    class="p-invalid inputfield w-full"
-                                    v-model="form.first_name"
-                                />
-                            </div>
-                            <div v-else>
-                                <label for="first_name">First name</label>
-                                <InputText
-                                    id="firstname"
-                                    type="text"
-                                    class="inputfield w-full"
-                                    v-model="form.first_name"
-                                />
-                            </div>
+                            <label for="first_name">First Name</label
+                            ><label
+                                style="color: red"
+                                for="first_name"
+                                v-if="!form.first_name"
+                                >*</label
+                            >
+                            <InputText
+                                id="firstname"
+                                type="text"
+                                class="inputfield w-full"
+                                v-model="form.first_name"
+                            />
+                            <label
+                                style="color: red"
+                                for="first_name"
+                                v-if="error_first_name"
+                                >{{ error_first_name }}</label
+                            >
                         </div>
                         <div class="field col-12 md:col-6">
-                            <div v-if="this.error.last_name">
-                                <label class="p-error" for="last_name"
-                                    >Last name required</label
-                                >
-                                <InputText
-                                    id="last_name"
-                                    type="text"
-                                    class="p-invalid inputfield w-full"
-                                    v-model="form.last_name"
-                                />
-                            </div>
-                            <div v-else>
-                                <label for="last_name">Last name</label>
-                                <InputText
-                                    id="last_name"
-                                    type="text"
-                                    class="inputfield w-full"
-                                    v-model="form.last_name"
-                                />
-                            </div>
+                            <label for="last_name">Last name</label>
+                            <label
+                                style="color: red"
+                                for="last_name"
+                                v-if="!form.last_name"
+                                >*</label
+                            >
+                            <InputText
+                                id="last_name"
+                                type="text"
+                                class="inputfield w-full"
+                                v-model="form.last_name"
+                            />
+                            <label
+                                style="color: red"
+                                for="first_name"
+                                v-if="error_last_name"
+                                >{{ error_last_name }}</label
+                            >
                         </div>
                         <div class="wrap-input100">
                             <div
@@ -83,6 +81,12 @@
                                     <label class="mb-0 ml-1" for="gender"
                                         >Male</label
                                     >
+                                    <label
+                                        style="color: red"
+                                        for="last_name"
+                                        v-if="!form.gender"
+                                        >*</label
+                                    >
                                 </div>
                                 <div class>
                                     <RadioButton
@@ -93,55 +97,183 @@
                                     <label class="mb-0 ml-1" for="gender"
                                         >Female</label
                                     >
+                                    <label
+                                        style="color: red"
+                                        for="last_name"
+                                        v-if="!form.gender"
+                                        >*</label
+                                    >
                                 </div>
+                            </div>
+                            <div
+                                class="
+                                    formgroup-inline
+                                    flex
+                                    justify-content-around
+                                "
+                            >
+                                <label
+                                    style="color: red"
+                                    for="first_name"
+                                    v-if="error_gender"
+                                    >{{ error_gender }}</label
+                                >
                             </div>
                         </div>
                         <div class="field col-12 md:col-6 lg:col-6">
-                            <label for="state">Block</label>
+                            <label for="selected_block">Block</label>
+                            <label
+                                style="color: red"
+                                for="selected_block"
+                                v-if="!form.selected_block"
+                                >*</label
+                            >
                             <Dropdown
                                 class="inputfield w-full"
                                 v-model="form.selected_block"
                                 :options="block"
                                 optionLabel="block"
+                            />
+                            <label
+                                style="color: red"
+                                for="first_name"
+                                v-if="error_selected_block"
+                                >{{ error_selected_block }}</label
                             >
-                            </Dropdown>
                         </div>
                         <div class="field col-12 md:col-6 lg:col-6">
-                            <label for="state">Lot</label>
+                            <label for="selected_lot">Lot</label>
+                            <label
+                                style="color: red"
+                                for="selected_lot"
+                                v-if="!form.selected_lot"
+                                >*</label
+                            >
                             <Dropdown
                                 class="inputfield w-full"
                                 v-model="form.selected_lot"
                                 :options="lot"
                                 optionLabel="lot"
+                            />
+                            <label
+                                style="color: red"
+                                for="first_name"
+                                v-if="error_selected_lot"
+                                >{{ error_selected_lot }}</label
                             >
-                            </Dropdown>
+                        </div>
+                        <div class="field col-12 md:col-6 lg:col-6">
+                            <label for="form.age">Age</label
+                            ><label
+                                style="color: red"
+                                for="form.age"
+                                v-if="!form.age"
+                                >*</label
+                            >
+                            <InputText
+                                id="age"
+                                type="number"
+                                min="0"
+                                step="1"
+                                onfocus="this.previousValue = this.value"
+                                onkeydown="this.previousValue = this.value"
+                                oninput="validity.valid || (value = this.previousValue)"
+                                class="inputfield w-full"
+                                v-model="form.age"
+                            />
+                            <label
+                                style="color: red"
+                                for="form.age"
+                                v-if="error_age"
+                                >{{ error_age }}</label
+                            >
+                        </div>
+                        <div class="field col-12 md:col-6 lg:col-6">
+                            <label for="form.contact_num">Contact Number</label
+                            ><label
+                                style="color: red"
+                                for="form.contact_num"
+                                v-if="!form.contact_num"
+                                >*</label
+                            >
+                            <InputText
+                                id="contact_num"
+                                type="text"
+                                onkeyup="if(this.value<0){this.value= this.value * -1}"
+                                class="inputfield w-full"
+                                v-model="form.contact_num"
+                            />
+                            <label
+                                style="color: red"
+                                for="form.contact_num"
+                                v-if="error_contact_num"
+                                >{{ error_contact_num }}</label
+                            >
                         </div>
                         <div class="field col-12 md:col-12">
-                            <label for="firstname1">Email</label>
+                            <label for="form.email">Email</label
+                            ><label
+                                style="color: red"
+                                for="form.form.email"
+                                v-if="!form.email"
+                                >*</label
+                            >
                             <InputText
                                 class="inputfield w-full"
                                 type="text"
                                 name="email"
                                 v-model="form.email"
                             />
+                            <label
+                                style="color: red"
+                                for="form.email"
+                                v-if="error_email"
+                                >{{ error_email }}</label
+                            >
                         </div>
                         <div class="field col-12 md:col-12">
-                            <label for="firstname1">Password</label>
+                            <label for="form.password">Password</label
+                            ><label
+                                style="color: red"
+                                for="form.password"
+                                v-if="!form.password"
+                                >*</label
+                            >
                             <InputText
                                 class="inputfield w-full"
                                 type="password"
                                 name="password"
                                 v-model="form.password"
                             />
+                            <label
+                                style="color: red"
+                                for="form.password"
+                                v-if="error_password"
+                                >{{ error_password }}</label
+                            >
                         </div>
                         <div class="field col-12 md:col-12">
-                            <label for="firstname1">Confirm Password</label>
+                            <label for="confirm_password"
+                                >Confirm Password</label
+                            >
+                            <label
+                                style="color: red"
+                                for="confirm_password"
+                                v-if="!form.confirm_password"
+                                >*</label
+                            >
                             <InputText
                                 class="inputfield w-full"
                                 type="password"
                                 name="confirmpassword"
                                 v-model="form.confirm_password"
                             />
+                            <label
+                                style="color: red"
+                                for="confirm_password"
+                                v-if="error_confirm_password"
+                                >{{ error_confirm_password }}</label
+                            >
                         </div>
                     </div>
 
@@ -189,10 +321,23 @@ export default {
                 email: "",
                 password: "",
                 confirm_password: "",
+                age: "",
+                contact_num: "",
+                role: "residents",
             },
             block: null,
             lot: null,
-            error: [],
+
+            error_first_name: "",
+            error_last_name: "",
+            error_gender: "",
+            error_selected_block: "",
+            error_selected_lot: "",
+            error_email: "",
+            error_password: "",
+            error_confirm_password: "",
+            error_age: "",
+            error_contact_num: "",
         };
     },
     components: {
@@ -200,17 +345,64 @@ export default {
         InputText,
         Dropdown,
     },
+    computed: {},
     methods: {
-        onRegisterClick() {
-            axios
-                .post("/api/register", this.form)
-                .then(() => {
-                    console.log("Successfully Registered");
-                    this.$router.push({ name: "login" });
-                })
-                .catch((err) => {
-                    this.error = err.response.data.errors;
-                });
+        async onRegisterClick() {
+            try {
+                await axios
+                    .post("/api/register", this.form)
+                    .then(() => {
+                        console.log("Successfully Registered");
+                        this.$router.push({ name: "login" });
+                    })
+                    .catch((err) => {
+                        this.resetFields();
+                        this.validate(err);
+                        console.log(error.response.data);
+                    });
+            } catch (error) {
+                console.log(error.response.data);
+                this.validate(error);
+            }
+        },
+        resetFields() {
+            this.error_first_name = "";
+            this.error_last_name = "";
+            this.error_gender = "";
+            this.error_selected_block = "";
+            this.error_selected_lot = "";
+            this.error_email = "";
+            this.error_password = "";
+            this.error_confirm_password = "";
+            this.error_age = "";
+            this.error_contact_num = "";
+        },
+        validate(error) {
+            if (error.response.data.errors.first_name)
+                this.error_first_name =
+                    error.response.data.errors.first_name[0];
+            if (error.response.data.errors.last_name)
+                this.error_last_name = error.response.data.errors.last_name[0];
+            if (error.response.data.errors.gender)
+                this.error_gender = error.response.data.errors.gender[0];
+            if (error.response.data.errors.selected_block)
+                this.error_selected_block =
+                    error.response.data.errors.selected_block[0];
+            if (error.response.data.errors.selected_lot)
+                this.error_selected_lot =
+                    error.response.data.errors.selected_lot[0];
+            if (error.response.data.errors.email)
+                this.error_email = error.response.data.errors.email[0];
+            if (error.response.data.errors.password)
+                this.error_password = error.response.data.errors.password[0];
+            if (error.response.data.errors.confirm_password)
+                this.error_confirm_password =
+                    error.response.data.errors.confirm_password[0];
+            if (error.response.data.errors.age)
+                this.error_age = error.response.data.errors.age[0];
+            if (error.response.data.errors.contact_num)
+                this.error_contact_num =
+                    error.response.data.errors.contact_num[0];
         },
     },
     mounted() {

@@ -53,14 +53,14 @@ export default {
                     icon: "pi pi-fw pi-sitemap",
                     items: [
                         {
-                            label: "Device Status",
+                            label: "Block and Lot",
                             icon: "pi pi-info-circle",
-                            to: "/home/devicestatus",
+                            to: "/home/block",
                         },
                         {
-                            label: "Device Condition",
+                            label: "Lot",
                             icon: "pi pi-info-circle",
-                            to: "/home/devicecondition",
+                            to: "/home/lot",
                         },
                         {
                             label: "Make",

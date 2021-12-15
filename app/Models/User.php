@@ -23,8 +23,12 @@ class User extends Authenticatable
         'gender',
         'block',
         'lot',
+        'age',
+        'contact_num',
+        'role',
         'email',
         'password',
+        'profile_pic',
     ];
 
     /**
