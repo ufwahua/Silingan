@@ -3,7 +3,7 @@
         <router-link to="/home/dashboard" class="layout-topbar-logo">
             <img
                 alt="Silingan-Logo"
-                src="https://lh3.googleusercontent.com/-7CmG6rtPXRbXhTFmglVLBNBWdAcX0OgVGwmpef06SdNd-BYy6i076zwmzNJaR0vi5_LRKEVTJJgmXoKpYKQZCI-jJkuENOJSBHT80QeT7ThBILf97rSRQqXnWS4A1qbp7kGyTd00vt4s6PNvi6BpxHQsZhW2IzohLqhkBek3XLTDEM5rA3iXjOuX-XyvqtgqFm0KkiCHSzCThEpVul5AYVB0LxkJ31NCfZ4mQh298P0R38QmpHj6EDZfV8vm_y6qVD0YVQsJIuVJi79kjjaj6k_IkRnhmdxw6oNNJgFIe_9LpL2a20xCSb2PB7IXpHJCMdMzCx3TKMwkRuK3yK5-YsLhmiLqsi92yzf76lhHuqlV3S17CY54y4knHuDcDltS1hyQ6tFwRpD0X73iTydFxHGSg9sDhzBIbROUkT5yFR02nwAEg0MwF9qdM-7Ak0ufkGOC1xebc6PZZT7AHy5-cK0tBn_3dHJDwan_kt-UidPy3Xxmz4T85hKS9yoGFDjoWTvc4FEVG6cv_2iUG7whRWghh3AcjCYS8iFNm86CoEoEOnvyTQJFa8_1IRcAn4Rr61tDAxfVjjHxU3SMrbFxpF2pAuhqkLEe3tN0BJANL3SVWHCXlaeNGwlhqkjeUt32BrjcTmwy8zV9-YDGLKBkAqdvKDkEfCM0bU4210G4yZyjIzDpcavjZw5ZtpJVVjo4LAWJSi-eprtuf4pIiIzGdA=w350-h100-no?authuser=0"
+                src="https://i.ibb.co/V3B8NBM/silingan-icon.png"
             />
         </router-link>
         <button
