@@ -116,6 +116,24 @@
                             >
                             </Dropdown>
                         </div>
+                        <div class="field col-12 md:col-6 lg:col-6">
+                            <label for="state">Age</label>
+                            <InputText
+                                id="age"
+                                type="text"
+                                class="inputfield w-full"
+                                v-model="form.age"
+                            />
+                        </div>
+                        <div class="field col-12 md:col-6 lg:col-6">
+                            <label for="state">Contact Number</label>
+                            <InputText
+                                id="contact_num"
+                                type="text"
+                                class="inputfield w-full"
+                                v-model="form.contact_num"
+                            />
+                        </div>
                         <div class="field col-12 md:col-12">
                             <label for="firstname1">Email</label>
                             <InputText
@@ -189,6 +207,11 @@ export default {
                 email: "",
                 password: "",
                 confirm_password: "",
+                age: "",
+                contact_num: "",
+                role: "residents",
+                profile_picture: "",
+
             },
             block: null,
             lot: null,
@@ -202,7 +225,8 @@ export default {
     },
     methods: {
         onRegisterClick() {
-            axios
+            try{
+                await axios
                 .post("/api/register", this.form)
                 .then(() => {
                     console.log("Successfully Registered");
@@ -211,6 +235,8 @@ export default {
                 .catch((err) => {
                     this.error = err.response.data.errors;
                 });
+            }
+
         },
     },
     mounted() {

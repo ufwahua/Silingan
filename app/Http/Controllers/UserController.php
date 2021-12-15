@@ -39,8 +39,12 @@ class UserController extends Controller
             'gender'=> $request['gender'],
             'block'=> $request->input("selected_block.block"),
             'lot'=> $request->input("selected_lot.lot"),
+            'age'=> $request['age'] ,
+            'contact_num'=> $request['contact_num'] ,
+            'role'=> $request['role'] ,
             'email'=> $request['email'] ,
             'password'=> Hash::make($request['password']),
+            'profile_pic'=> $request['profile_pic'],
             ])
         )
         return response($user,201);
