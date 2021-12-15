@@ -288,7 +288,7 @@
                     </div>
 
                     <div class="text-center p-t-12">
-                        <router-link to="/"
+                        <router-link to="/login"
                             ><a class="txt2" href="#">
                                 Login
                                 <i

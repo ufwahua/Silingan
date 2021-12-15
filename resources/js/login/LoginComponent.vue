@@ -60,15 +60,15 @@
                             >Remember Me</label
                         >
                     </div>
-                    <div class="container-login100-form-btn">
-                        <button
-                            @click="onLoginSubmit"
-                            type="submit"
-                            class="login100-form-btn"
-                        >
-                            Login
-                        </button>
-                    </div>
+                        <div class="container-login100-form-btn">
+                            <button
+                                @click="onLoginSubmit"
+                                type="submit"
+                                class="login100-form-btn"
+                            >
+                                Login
+                            </button>
+                        </div>
 
                     <div class="text-center p-t-12">
                         <label style="color: black">Forgot</label>
@@ -77,7 +77,7 @@
 
                     <div class="text-center p-t-136">
                         <span style="color: black">Don't have an account?</span>
-                        <router-link to="register">
+                        <router-link to="register" :key="$route.fullPath">
                             <span class="txt2" href="#">
                                 Register
                                 <i
