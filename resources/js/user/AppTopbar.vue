@@ -29,14 +29,14 @@
         <ul class="layout-topbar-menu hidden lg:flex origin-top">
             <li>
                 <button class="p-link layout-topbar-button">
-                    <i class="pi pi-calendar"></i>
-                    <span>Events</span>
+                    <i class="pi pi-bell"></i>
+                    <span>Activity</span>
                 </button>
             </li>
             <li>
                 <button class="p-link layout-topbar-button">
-                    <i class="pi pi-cog"></i>
-                    <span>Settings</span>
+                    <i class="pi pi-comment"></i>
+                    <span>Chat</span>
                 </button>
             </li>
             <li>
@@ -68,6 +68,7 @@ export default {
         return {
             profile_menu: [
                 {
+                    label: "Username",
                     items: [
                         {
                             label: "Profile",
@@ -80,6 +81,10 @@ export default {
                                     life: 3000,
                                 });
                             },
+                        },
+                        {
+                            label: "Settings",
+                            icon: "pi pi-cog",
                         },
                         {
                             label: "Logout",

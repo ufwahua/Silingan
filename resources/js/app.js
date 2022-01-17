@@ -15,6 +15,9 @@ import "primeflex/primeflex.css";
 import "./admin/assets/styles/layout.scss";
 import "./admin/assets/demo/flags/flags.css";
 
+//import "./user/assets/styles/layout.scss";
+// import "./user/assets/demo/flags/flags.css";
+
 import AutoComplete from "primevue/autocomplete";
 import Accordion from "primevue/accordion";
 import AccordionTab from "primevue/accordiontab";

@@ -70,7 +70,7 @@ export default createRouter({
             },
             children: [
                 {
-                    path: "dashboard",
+                    path: "news_feed",
                     components: {
                         default: NotFound,
                         contents: DashboardComponent,
