@@ -25,7 +25,7 @@
                     <div class="col-12 md:col-6">
                         <img
                             class="bgimage"
-                            src="images/background.png"
+                            src="https://i.ibb.co/XWbv4xB/background.png"
                             alt="background"
                         />
                     </div>

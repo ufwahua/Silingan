@@ -87,7 +87,7 @@ export default {
                                     url: "/api/logout",
                                 })
                                     .then((response) => {
-                                        this.$router.push({ name: "login" });
+                                        this.$router.push("/login");
                                     })
                                     .catch((error) => {
                                         console.log(error);

@@ -1,7 +1,10 @@
 <template>
     <div class="layout-topbar">
         <router-link to="/" class="layout-topbar-logo">
-            <img alt="Silingan-Logo" src="images/silingan-icon.png" />
+            <img
+                alt="Silingan-Logo"
+                src="https://i.ibb.co/V3B8NBM/silingan-icon.png"
+            />
         </router-link>
         <button
             class="p-link layout-menu-button layout-topbar-button"

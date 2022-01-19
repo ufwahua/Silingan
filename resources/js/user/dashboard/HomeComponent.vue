@@ -42,133 +42,34 @@ export default {
             mobileMenuActive: false,
             menu: [
                 {
-                    label: "Home",
                     items: [
                         {
-                            label: "Dashboard",
+                            label: "Home",
                             icon: "pi pi-fw pi-home",
-                            to: "/home/dashboard",
+                            to: "/home/news_feed",
                         },
-                    ],
-                },
-                {
-                    label: "Maintain",
-                    icon: "pi pi-fw pi-sitemap",
-                    items: [
                         {
-                            label: "Device Status",
-                            icon: "pi pi-info-circle",
+                            label: "Neighbourhood",
+                            icon: "pi pi-fw pi-map",
                             to: "/home/devicestatus",
                         },
-                        {
-                            label: "Device Condition",
-                            icon: "pi pi-info-circle",
-                            to: "/home/devicecondition",
-                        },
-                        {
-                            label: "Make",
-                            icon: "pi pi-info-circle",
-                            to: "/home/make",
-                        },
-                        {
-                            label: "Type",
-                            icon: "pi pi-info-circle",
-                            to: "/home/type",
-                        },
-                        {
-                            label: "Vendor",
-                            icon: "pi pi-info-circle",
-                            to: "/home/vendor",
-                        },
                     ],
                 },
+
                 {
-                    label: "Inventory",
+                    label: "GROUPS",
                     items: [
                         {
-                            label: "Master List",
-                            icon: "pi pi-list",
-                            to: "/home/device",
-                        },
-                    ],
-                },
-                {
-                    label: "Group Name",
-                    icon: "pi pi-fw pi-search",
-                    items: [
-                        {
-                            label: "Submenu 1",
-                            icon: "pi pi-fw pi-bookmark",
+                            label: "General",
+                            icon: "pi pi-fw pi-users",
                             items: [
                                 {
-                                    label: "Submenu 1.1",
-                                    icon: "pi pi-fw pi-bookmark",
-                                    items: [
-                                        {
-                                            label: "Submenu 1.1.1",
-                                            icon: "pi pi-fw pi-bookmark",
-                                        },
-                                        {
-                                            label: "Submenu 1.1.2",
-                                            icon: "pi pi-fw pi-bookmark",
-                                        },
-                                        {
-                                            label: "Submenu 1.1.3",
-                                            icon: "pi pi-fw pi-bookmark",
-                                        },
-                                    ],
+                                    label: "Group 1",
+                                    to: "/home/devicecondition",
                                 },
                                 {
-                                    label: "Submenu 1.2",
-                                    icon: "pi pi-fw pi-bookmark",
-                                    items: [
-                                        {
-                                            label: "Submenu 1.2.1",
-                                            icon: "pi pi-fw pi-bookmark",
-                                        },
-                                        {
-                                            label: "Submenu 1.2.2",
-                                            icon: "pi pi-fw pi-bookmark",
-                                        },
-                                    ],
-                                },
-                            ],
-                        },
-                        {
-                            label: "Submenu 2",
-                            icon: "pi pi-fw pi-bookmark",
-                            items: [
-                                {
-                                    label: "Submenu 2.1",
-                                    icon: "pi pi-fw pi-bookmark",
-                                    items: [
-                                        {
-                                            label: "Submenu 2.1.1",
-                                            icon: "pi pi-fw pi-bookmark",
-                                        },
-                                        {
-                                            label: "Submenu 2.1.2",
-                                            icon: "pi pi-fw pi-bookmark",
-                                        },
-                                        {
-                                            label: "Submenu 2.1.3",
-                                            icon: "pi pi-fw pi-bookmark",
-                                        },
-                                    ],
-                                },
-                                {
-                                    label: "Submenu 2.2",
-                                    icon: "pi pi-fw pi-bookmark",
-                                    items: [
-                                        {
-                                            label: "Submenu 2.2.1",
-                                            icon: "pi pi-fw pi-bookmark",
-                                        },
-                                        {
-                                            label: "Submenu 2.2.2",
-                                            icon: "pi pi-fw pi-bookmark",
-                                        },
-                                    ],
+                                    label: "Group 2",
+                                    to: "/home/make",
                                 },
                             ],
                         },

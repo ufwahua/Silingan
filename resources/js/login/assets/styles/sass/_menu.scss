@@ -1,18 +1,17 @@
 .layout-sidebar {
-    position: fixed;
-    width: 300px;
-    height: calc(100vh - 9rem);
-    z-index: 999;
-    overflow-y: auto;
-    user-select: none;
-    top: 7rem;
-    left: 2rem;
-    transition: transform $transitionDuration, left $transitionDuration;
-    background-color: var(--surface-overlay);
-    border-radius: 12px;
+	position: fixed;
+	width: 300px;
+	height: calc(100vh - 9rem);
+	z-index: 999;
+	overflow-y: auto;
+	user-select: none;
+	top: 7rem;
+	left: 2rem;
+	transition: transform $transitionDuration, left $transitionDuration;
+	background-color: var(--surface-overlay);
+	border-radius: 12px;
     padding: 1.5rem;
-    box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.02), 0px 0px 2px rgba(0, 0, 0, 0.05),
-        0px 1px 4px rgba(0, 0, 0, 0.08);
+    box-shadow: 0px 3px 5px rgba(0,0,0,.02), 0px 0px 2px rgba(0,0,0,.05), 0px 1px 4px rgba(0,0,0,.08)
 }
 
 .layout-menu {
@@ -22,19 +21,19 @@
 
     li {
         &.layout-menuitem-category {
-            margin-top: 0.75rem;
+            margin-top: .75rem;
 
             &:first-child {
                 margin-top: 0;
             }
         }
-
+        
         .layout-menuitem-root-text {
             text-transform: uppercase;
-            color: var(--text-color-secondary);
+            color:var(--text-color-secondary);
             font-weight: 600;
-            margin-bottom: 0.5rem;
-            font-size: 0.875rem;
+            margin-bottom: .5rem;
+            font-size: .875rem;
         }
 
         a {
@@ -42,11 +41,11 @@
             text-decoration: none;
             display: flex;
             align-items: center;
-            color: var(--text-color);
+            color:var(--text-color);
             transition: color $transitionDuration;
             border-radius: $borderRadius;
-            padding: 0.75rem 1rem;
-            transition: background-color 0.15s;
+            padding: .75rem 1rem;
+            transition: background-color .15s;
 
             span {
                 margin-left: 0.5rem;
@@ -66,7 +65,6 @@
 
             &.router-link-exact-active {
                 font-weight: 700;
-                color: #1ca7ec;
             }
         }
 
@@ -74,7 +72,7 @@
             > a {
                 .menuitem-toggle-icon {
                     &:before {
-                        content: "\e933";
+                        content: '\e933';
                     }
                 }
             }
