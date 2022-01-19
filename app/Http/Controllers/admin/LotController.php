@@ -29,7 +29,7 @@ class LotController extends Controller
     public function show(Lot $lot) : JsonResponse
     {
         return response()->json(
-            Lot::query()->where('block_id',$lot['id'])->get()
+            Lot::query()->where('block_id',$lot['id'])->orderBy('block_id','asc')->get()
         );
     }
 
@@ -79,14 +79,25 @@ class LotController extends Controller
      * @param LotRequest $request
      * @return JsonResponse
      */
-    public function update(Lot $lot, LotRequest $request) : JsonResponse
+    public function update(Request $request , $id) : JsonResponse
     {
-        $request->validate([
-        'lot_number' => ['required','integer', 'max:255','gt:0','unique:blocks' ]
-        ]);
-        $lot->update($request->validated());
-
-        return response()->json($lot);
+        $found = false;
+        $lots =  Lot::query()->where('block_id',$request['id'])->get();
+        foreach ($lots as $lot)
+        {
+            if($lot->lot_number === $request['lot_number']){
+                $found = true;
+            }
+        }
+       if(!$found){
+            Lot::where('id', $id)
+                ->update(['block_id' => $request->input('block_id'),
+                         'lot_number'=>$request->input('lot_number')]);
+        return response()->json($lots);
+       }
+      
+       return response()->json("Lot number is exist");
+        
     }
 
     /**

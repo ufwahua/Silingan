@@ -296,13 +296,13 @@
                                 label="Cancel"
                                 icon="pi pi-times"
                                 class="p-button-text"
-                                @click=""
+                                @click="closeUpdateLotModal()"
                             />
                             <Button
                                 label="Edit"
                                 icon="pi pi-check"
                                 class="p-button-text p-button-warning"
-                                @click=""
+                                @click="confirmEditLot()"
                             />
                         </template>
                     </Dialog>
@@ -610,7 +610,7 @@ export default {
             this.updateBlockModal = false;
             this.resetFields();
         },
-        showUpdateToast() {
+        showUpdateBlockToast() {
             this.$toast.add({
                 severity: "success",
                 summary: "Success Message",
@@ -634,7 +634,7 @@ export default {
                     .then((res) => {
                         this.updateBlockModal = false;
                         this.getBlock();
-                        this.showUpdateToast();
+                        this.showUpdateBlockToast();
                     })
                     .catch((error) => {
                         if (error.response.data.errors.block_number)
@@ -655,7 +655,7 @@ export default {
             this.deleteModal = true;
         },
 
-        showDeleteToast() {
+        showDeleteBlockToast() {
             this.$toast.add({
                 severity: "success",
                 summary: "Successful Request",
@@ -675,7 +675,7 @@ export default {
                     .then((res) => {
                         this.deleteModal = false;
                         this.getBlock();
-                        this.showDeleteToast();
+                        this.showDeleteBlockToast();
                     })
                     .catch((error) => {
                         this.process = false;
@@ -771,16 +771,43 @@ export default {
             this.updateLotModal = false;
             this.resetFields();
         },
-        showUpdateToast() {
+        showUpdateLotToast() {
             this.$toast.add({
                 severity: "success",
                 summary: "Success Message",
-                detail: "Updated block",
+                detail: "Updated Lot",
                 life: 3000,
             });
             this.resetFields();
         },
-
+        async confirmEditLot() {
+            console.log(this.lot_number);
+            try {
+                this.process = true;
+                await axios({
+                    method: "put",
+                    url: "/api/lot/" + this.lot_id,
+                    data: {
+                        lot_number: this.lot_number,
+                    },
+                })
+                    .then((res) => {
+                        this.updateBlockModal = false;
+                        this.getLot(this.block_id);
+                        this.showUpdateLotToast();
+                    })
+                    .catch((error) => {
+                        if (error.response.data.errors.block_number)
+                            this.error =
+                                error.response.data.errors.block_number[0];
+                        this.process = false;
+                        console.log(error);
+                    });
+            } catch (error) {
+                this.process = false;
+                console.log(error);
+            }
+        },
         // Delete Block Modal
         openDeleteBlockModal(block_number, block_id) {
             this.block_id = block_id;
@@ -798,35 +825,6 @@ export default {
             this.resetFields();
         },
 
-        async confirmEditLot() {
-            console.log(this.block_id);
-            console.log(this.block_number);
-            try {
-                this.process = true;
-                await axios({
-                    method: "put",
-                    url: "/api/lot/" + this.block_id,
-                    data: {
-                        lot_number: this.lot_number,
-                    },
-                })
-                    .then((res) => {
-                        this.updateBlockModal = false;
-                        this.getBlock();
-                        this.showUpdateToast();
-                    })
-                    .catch((error) => {
-                        if (error.response.data.errors.block_number)
-                            this.error =
-                                error.response.data.errors.block_number[0];
-                        this.process = false;
-                        console.log(error);
-                    });
-            } catch (error) {
-                this.process = false;
-                console.log(error);
-            }
-        },
         async confirmDeleteLot() {
             try {
                 this.process = true;

@@ -70,7 +70,7 @@ span {
 }
 
 .logo-name {
-    font-family: "Ubuntu", sans-serif;
+    font-family: "Poppins", sans-serif;
     font-weight: 700;
     font-size: 25px;
     color: #0098ec;

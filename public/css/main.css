@@ -7938,7 +7938,7 @@ iframe {
     }
 }
 
-/* @media (max-width: 600px) {
+@media (max-width: 600px) {
     .wrap-login100 {
         width: 80vw;
         display: flex;
@@ -7955,7 +7955,7 @@ iframe {
     .login100-form {
         width: 80vw;
     }
-} */
+}
 
 /*------------------------------------------------------------------
 [ Alert validate ]*/

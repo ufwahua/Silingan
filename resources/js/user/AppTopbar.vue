@@ -91,7 +91,7 @@ export default {
                                 })
                                     .then((response) => {
                                         this.$router.push({
-                                            name: "index",
+                                            path: "login",
                                         });
                                     })
                                     .catch((error) => {
