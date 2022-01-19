@@ -1,7 +1,8 @@
 <template>
     <div class="layout-topbar">
         <router-link to="/home/dashboard" class="layout-topbar-logo">
-            <span>Silingan</span>
+            <img alt="Logo" :src="topbarImage()" />
+            <!--<span>Silingan</span>-->
         </router-link>
         <button
             class="p-link layout-menu-button layout-topbar-button"
@@ -67,7 +68,7 @@ export default {
                 {
                     items: [
                         {
-                            label: "Profile",
+                            label: "Profiles",
                             icon: "pi pi-pencil",
                             command: () => {
                                 this.$toast.add({
@@ -109,6 +110,9 @@ export default {
         onTopbarMenuToggle(event) {
             this.$emit("topbar-menu-toggle", event);
         },
+        topbarImage() {
+			return 'silingan-icon.png';
+		},
     },
 };
 </script>

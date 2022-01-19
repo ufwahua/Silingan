@@ -31,6 +31,7 @@ export default createRouter({
     routes: [
         { path: "/:pathMatch(.*)*", component: NotFound },
         {
+<<<<<<< HEAD
             path: "/",
             component: Home,
             name: "index",
@@ -41,6 +42,11 @@ export default createRouter({
         {
             path: "/login",
             component: Login,
+=======
+            path: "/login",
+            component: Login,
+            //beforeEnter: toHome,
+>>>>>>> fb3d2d4dff5c23ed7bedf0337034b23213d01e00
             name: "login",
         },
         {
@@ -69,6 +75,7 @@ export default createRouter({
                         default: NotFound,
                         contents: DashboardComponent,
                     },
+                    name: "dashboard"
                 },
                 {
                     path: "devicestatus",
