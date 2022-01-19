@@ -1,25 +1,10 @@
 import Login from "./login/LoginComponent.vue";
 import Register from "./login/RegisterComponent.vue";
-
 import Home from "./home/HomeComponent.vue";
-
-<<<<<<< HEAD
 import HomeComponent from "./admin/dashboard/HomeComponent.vue";
 import DashboardComponent from "./admin/dashboard/DashboardComponent.vue";
 import Block_Lot from "./admin/dashboard/Block_LotComponent.vue";
 import LotComponent from "./admin/dashboard/LotComponent.vue";
-import MakeComponent from "./admin/dashboard/MakeComponent.vue";
-import TypeComponent from "./admin/dashboard/TypeComponent.vue";
-import VendorComponent from "./admin/dashboard/VendorComponent.vue";
-=======
-import HomeComponent from "./user/dashboard/HomeComponent.vue";
-import DashboardComponent from "./user/contents/DashboardComponent.vue";
-import DeviceStatusComponent from "./user/contents/DeviceStatusComponent.vue";
-import DeviceConditionComponent from "./user/contents/DeviceConditionComponent.vue";
-import MakeComponent from "./user/contents/MakeComponent.vue";
-import TypeComponent from "./user/contents/TypeComponent.vue";
-import VendorComponent from "./user/contents/VendorComponent.vue";
->>>>>>> cceb38c0bcce87de43be4b7e81522a5bd26c913f
 import NotFound from "./components/NotFoundComponent.vue";
 
 import { createRouter, createWebHistory } from "vue-router";
@@ -31,7 +16,6 @@ export default createRouter({
     routes: [
         { path: "/:pathMatch(.*)*", component: NotFound },
         {
-<<<<<<< HEAD
             path: "/",
             component: Home,
             name: "index",
@@ -42,11 +26,6 @@ export default createRouter({
         {
             path: "/login",
             component: Login,
-=======
-            path: "/login",
-            component: Login,
-            //beforeEnter: toHome,
->>>>>>> fb3d2d4dff5c23ed7bedf0337034b23213d01e00
             name: "login",
         },
         {
@@ -70,46 +49,24 @@ export default createRouter({
             },
             children: [
                 {
-                    path: "news_feed",
+                    path: "/dashboard",
                     components: {
                         default: NotFound,
                         contents: DashboardComponent,
                     },
-                    name: "dashboard"
                 },
                 {
-                    path: "devicestatus",
+                    path: "/block",
                     components: {
                         default: NotFound,
-                        contents: DeviceStatusComponent,
+                        contents: Block_Lot,
                     },
                 },
                 {
-                    path: "devicecondition",
+                    path: "/lot",
                     components: {
                         default: NotFound,
-                        contents: DeviceConditionComponent,
-                    },
-                },
-                {
-                    path: "make",
-                    components: {
-                        default: NotFound,
-                        contents: MakeComponent,
-                    },
-                },
-                {
-                    path: "type",
-                    components: {
-                        default: NotFound,
-                        contents: TypeComponent,
-                    },
-                },
-                {
-                    path: "vendor",
-                    components: {
-                        default: NotFound,
-                        contents: VendorComponent,
+                        contents: LotComponent,
                     },
                 },
             ],

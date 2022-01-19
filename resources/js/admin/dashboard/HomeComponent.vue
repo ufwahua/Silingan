@@ -44,7 +44,7 @@ export default {
                         {
                             label: "Dashboard",
                             icon: "pi pi-fw pi-home",
-                            to: "/home/dashboard",
+                            to: "/dashboard",
                         },
                     ],
                 },
@@ -55,32 +55,17 @@ export default {
                         {
                             label: "Block and Lot",
                             icon: "pi pi-info-circle",
-                            to: "/home/block",
+                            to: "/block",
                         },
                         {
                             label: "Lot",
                             icon: "pi pi-info-circle",
-                            to: "/home/lot",
-                        },
-                        {
-                            label: "Make",
-                            icon: "pi pi-info-circle",
-                            to: "/home/make",
-                        },
-                        {
-                            label: "Type",
-                            icon: "pi pi-info-circle",
-                            to: "/home/type",
-                        },
-                        {
-                            label: "Vendor",
-                            icon: "pi pi-info-circle",
-                            to: "/home/vendor",
+                            to: "/lot",
                         },
                     ],
                 },
                 {
-                    label: "Inventory",
+                    label: "Test",
                     items: [
                         {
                             label: "Master List",

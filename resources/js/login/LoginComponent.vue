@@ -108,7 +108,7 @@ export default {
                 .post("/api/login", this.form)
                 .then((response) => {
                     console.log("Successfully Login");
-                    this.$router.push("/home/news_feed");
+                    this.$router.push("/dashboard");
                 })
                 .catch((err) => {
                     this.error = err.response.data.error;

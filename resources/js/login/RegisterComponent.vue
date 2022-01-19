@@ -269,7 +269,6 @@
                             >{{ error_confirm_password }}</label
                         >
                     </div>
-                    <label class="title-form">*Required fields</label>
                     <div class="col-12 mb-2 lg:col-12 lg:mb-0">
                         <Button
                             @click.prevent="onRegisterClick"
