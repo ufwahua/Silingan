@@ -4,7 +4,14 @@ import Home from "./home/HomeComponent.vue";
 import HomeComponent from "./admin/dashboard/HomeComponent.vue";
 import DashboardComponent from "./admin/dashboard/DashboardComponent.vue";
 import Block_Lot from "./admin/dashboard/Block_LotComponent.vue";
-import LotComponent from "./admin/dashboard/LotComponent.vue";
+import RegisteredUsersComponent from "./admin/dashboard/RegisterUsersComponent.vue";
+
+import DeviceStatusComponent from "./user/contents/DeviceStatusComponent.vue";
+import DeviceConditionComponent from "./user/contents/DeviceConditionComponent.vue";
+import MakeComponent from "./user/contents/MakeComponent.vue";
+import TypeComponent from "./user/contents/TypeComponent.vue";
+import VendorComponent from "./user/contents/VendorComponent.vue";
+
 import NotFound from "./components/NotFoundComponent.vue";
 
 import { createRouter, createWebHistory } from "vue-router";
@@ -34,7 +41,7 @@ export default createRouter({
             name: "register",
         },
         {
-            path: "/home",
+            path: "/admin/home",
             component: HomeComponent,
             name: "home",
             beforeEnter: (to, from, next) => {
@@ -49,24 +56,60 @@ export default createRouter({
             },
             children: [
                 {
-                    path: "/dashboard",
+                    path: "/admin/dashboard",
                     components: {
                         default: NotFound,
                         contents: DashboardComponent,
                     },
                 },
                 {
-                    path: "/block",
+                    path: "/block-lot",
                     components: {
                         default: NotFound,
                         contents: Block_Lot,
                     },
                 },
                 {
-                    path: "/lot",
+                    path: "/registered-users",
                     components: {
                         default: NotFound,
-                        contents: LotComponent,
+                        contents: RegisteredUsersComponent,
+                    },
+                },
+
+                {
+                    path: "/devicestatus",
+                    components: {
+                        default: NotFound,
+                        contents: DeviceStatusComponent,
+                    },
+                },
+                {
+                    path: "/devicecondition",
+                    components: {
+                        default: NotFound,
+                        contents: DeviceConditionComponent,
+                    },
+                },
+                {
+                    path: "/make",
+                    components: {
+                        default: NotFound,
+                        contents: MakeComponent,
+                    },
+                },
+                {
+                    path: "/type",
+                    components: {
+                        default: NotFound,
+                        contents: TypeComponent,
+                    },
+                },
+                {
+                    path: "/vendor",
+                    components: {
+                        default: NotFound,
+                        contents: VendorComponent,
                     },
                 },
             ],

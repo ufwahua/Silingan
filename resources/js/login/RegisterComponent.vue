@@ -164,7 +164,7 @@
                         <Dropdown
                             v-model="form.selected_block"
                             :options="block"
-                            optionLabel="block"
+                            optionLabel="block_number"
                             placeholder="Select Block"
                         />
                         <label
@@ -186,7 +186,7 @@
                         <Dropdown
                             v-model="form.selected_lot"
                             :options="lot"
-                            optionLabel="lot"
+                            optionLabel="lot_number"
                             placeholder="Select Lot"
                         />
                         <label
@@ -271,7 +271,7 @@
                     </div>
                     <div class="col-12 mb-2 lg:col-12 lg:mb-0">
                         <Button
-                            @click.prevent="onRegisterClick"
+                            @click.prevent="onRegisterClick()"
                             type="submit"
                             label="Register"
                         />
@@ -284,274 +284,6 @@
                         ></router-link>
                     </div>
                 </div>
-
-                <!-- <div class="formgrid grid">
-                    <div class="field col-12 md:col-6">
-                        <label for="first_name">First Name</label
-                        ><label
-                            style="color: red"
-                            for="first_name"
-                            v-if="!form.first_name"
-                            >*</label
-                        >
-                        <InputText
-                            id="firstname"
-                            type="text"
-                            class="inputfield w-full"
-                            v-model="form.first_name"
-                        />
-                        <label
-                            style="color: red"
-                            for="first_name"
-                            v-if="error_first_name"
-                            >{{ error_first_name }}</label
-                        >
-                    </div>
-                    <div class="field col-12 md:col-6">
-                        <label for="last_name">Last name</label>
-                        <label
-                            style="color: red"
-                            for="last_name"
-                            v-if="!form.last_name"
-                            >*</label
-                        >
-                        <InputText
-                            id="last_name"
-                            type="text"
-                            class="inputfield w-full"
-                            v-model="form.last_name"
-                        />
-                        <label
-                            style="color: red"
-                            for="first_name"
-                            v-if="error_last_name"
-                            >{{ error_last_name }}</label
-                        >
-                    </div>
-                    <div class="wrap-input100">
-                        <div
-                            class="formgroup-inline flex justify-content-around"
-                        >
-                            <div>
-                                <RadioButton
-                                    name="gender"
-                                    value="male"
-                                    v-model="form.gender"
-                                />
-                                <label class="mb-0 ml-1" for="gender"
-                                    >Male</label
-                                >
-                                <label
-                                    style="color: red"
-                                    for="last_name"
-                                    v-if="!form.gender"
-                                    >*</label
-                                >
-                            </div>
-                            <div class>
-                                <RadioButton
-                                    name="gender"
-                                    value="female"
-                                    v-model="form.gender"
-                                />
-                                <label class="mb-0 ml-1" for="gender"
-                                    >Female</label
-                                >
-                                <label
-                                    style="color: red"
-                                    for="last_name"
-                                    v-if="!form.gender"
-                                    >*</label
-                                >
-                            </div>
-                        </div>
-                        <div
-                            class="formgroup-inline flex justify-content-around"
-                        >
-                            <label
-                                style="color: red"
-                                for="first_name"
-                                v-if="error_gender"
-                                >{{ error_gender }}</label
-                            >
-                        </div>
-                    </div>
-                    <div class="field col-12 md:col-6 lg:col-6">
-                        <label for="selected_block">Block</label>
-                        <label
-                            style="color: red"
-                            for="selected_block"
-                            v-if="!form.selected_block"
-                            >*</label
-                        >
-                        <Dropdown
-                            class="inputfield w-full"
-                            v-model="form.selected_block"
-                            :options="block"
-                            optionLabel="block"
-                        />
-                        <label
-                            style="color: red"
-                            for="first_name"
-                            v-if="error_selected_block"
-                            >{{ error_selected_block }}</label
-                        >
-                    </div>
-                    <div class="field col-12 md:col-6 lg:col-6">
-                        <label for="selected_lot">Lot</label>
-                        <label
-                            style="color: red"
-                            for="selected_lot"
-                            v-if="!form.selected_lot"
-                            >*</label
-                        >
-                        <Dropdown
-                            class="inputfield w-full"
-                            v-model="form.selected_lot"
-                            :options="lot"
-                            optionLabel="lot"
-                        />
-                        <label
-                            style="color: red"
-                            for="first_name"
-                            v-if="error_selected_lot"
-                            >{{ error_selected_lot }}</label
-                        >
-                    </div>
-                    <div class="field col-12 md:col-6 lg:col-6">
-                        <label for="form.age">Age</label
-                        ><label
-                            style="color: red"
-                            for="form.age"
-                            v-if="!form.age"
-                            >*</label
-                        >
-                        <InputText
-                            id="age"
-                            type="number"
-                            min="0"
-                            step="1"
-                            onfocus="this.previousValue = this.value"
-                            onkeydown="this.previousValue = this.value"
-                            oninput="validity.valid || (value = this.previousValue)"
-                            class="inputfield w-full"
-                            v-model="form.age"
-                        />
-                        <label
-                            style="color: red"
-                            for="form.age"
-                            v-if="error_age"
-                            >{{ error_age }}</label
-                        >
-                    </div>
-                    <div class="field col-12 md:col-6 lg:col-6">
-                        <label for="form.contact_num">Contact Number</label
-                        ><label
-                            style="color: red"
-                            for="form.contact_num"
-                            v-if="!form.contact_num"
-                            >*</label
-                        >
-                        <InputText
-                            id="contact_num"
-                            type="text"
-                            onkeyup="if(this.value<0){this.value= this.value * -1}"
-                            class="inputfield w-full"
-                            v-model="form.contact_num"
-                        />
-                        <label
-                            style="color: red"
-                            for="form.contact_num"
-                            v-if="error_contact_num"
-                            >{{ error_contact_num }}</label
-                        >
-                    </div>
-                    <div class="field col-12 md:col-12">
-                        <label for="form.email">Email</label
-                        ><label
-                            style="color: red"
-                            for="form.form.email"
-                            v-if="!form.email"
-                            >*</label
-                        >
-                        <InputText
-                            class="inputfield w-full"
-                            type="text"
-                            name="email"
-                            v-model="form.email"
-                        />
-                        <label
-                            style="color: red"
-                            for="form.email"
-                            v-if="error_email"
-                            >{{ error_email }}</label
-                        >
-                    </div>
-                    <div class="field col-12 md:col-12">
-                        <label for="form.password">Password</label
-                        ><label
-                            style="color: red"
-                            for="form.password"
-                            v-if="!form.password"
-                            >*</label
-                        >
-                        <InputText
-                            class="inputfield w-full"
-                            type="password"
-                            name="password"
-                            v-model="form.password"
-                        />
-                        <label
-                            style="color: red"
-                            for="form.password"
-                            v-if="error_password"
-                            >{{ error_password }}</label
-                        >
-                    </div>
-                    <div class="field col-12 md:col-12">
-                        <label for="confirm_password">Confirm Password</label>
-                        <label
-                            style="color: red"
-                            for="confirm_password"
-                            v-if="!form.confirm_password"
-                            >*</label
-                        >
-                        <InputText
-                            class="inputfield w-full"
-                            type="password"
-                            name="confirmpassword"
-                            v-model="form.confirm_password"
-                        />
-                        <label
-                            style="color: red"
-                            for="confirm_password"
-                            v-if="error_confirm_password"
-                            >{{ error_confirm_password }}</label
-                        >
-                    </div>
-                </div>
-
-                <div class="container-login100-form-btn">
-                    <button
-                        @click.prevent="onRegisterClick"
-                        type="submit"
-                        class="login100-form-btn"
-                    >
-                        Register
-                    </button>
-                </div>
-
-                <div class="text-center p-t-12">
-                    <router-link to="/login"
-                        ><a class="txt2" href="#">
-                            Login
-                            <i
-                                class="fa fa-long-arrow-right m-l-5"
-                                aria-hidden="true"
-                            ></i> </a
-                    ></router-link>
-                </div>
-            </div> -->
             </div>
         </div>
     </div>
@@ -577,7 +309,7 @@ export default {
                 confirm_password: "",
                 age: "",
                 contact_num: "",
-                role: "residents",
+                role: "resident",
             },
             block: null,
             lot: null,
@@ -658,22 +390,53 @@ export default {
                 this.error_contact_num =
                     error.response.data.errors.contact_num[0];
         },
+        // //GET Lot
+        // async getLot() {
+        //     try {
+        //         const { data } = axios({
+        //             method: "get",
+        //             url: "/api/lot/",
+        //         });
+        //         this.lot = data;
+        //     } catch (error) {
+        //         console.log("error");
+        //     }
+        // },
+        // //GET BLOCK
+        // async getBlock() {
+        //     try {
+        //         const { data } = await axios({
+        //             method: "get",
+        //             url: "/api/block/",
+        //         });
+        //         this.block = data;
+        //     } catch (error) {
+        //         console.log(error);
+        //     }
+        // },
     },
+    // watch: {
+    //     selected_block: function (val, oldVal) {
+    //         this.getLot(val.block_number);
+    //     },
+    // },
     mounted() {
         this.block = [
-            { block: "Block 1" },
-            { block: "Block 2" },
-            { block: "Block 3" },
-            { block: "Block 4" },
-            { block: "Block 5" },
+            { block_number: "1", value: 1 },
+            { block_number: "2", value: 2 },
+            { block_number: "3", value: 3 },
+            { block_number: "4", value: 4 },
+            { block_number: "5", value: 5 },
         ];
         this.lot = [
-            { lot: "Lot 1" },
-            { lot: "Lot 2" },
-            { lot: "Lot 3" },
-            { lot: "Lot 4" },
-            { lot: "Lot 5" },
+            { lot_number: "1", value: 1 },
+            { lot_number: "2", value: 2 },
+            { lot_number: "3", value: 3 },
+            { lot_number: "4", value: 4 },
+            { lot_number: "5", value: 5 },
         ];
+        // this.getBlock();
+        // this.getLot();
     },
 };
 </script>
@@ -681,11 +444,6 @@ export default {
 <style scoped>
 @import "./App.scss";
 @import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap");
-
-/* div {
-    display: block;
-    margin: auto;
-} */
 
 .login100-form {
     height: auto;
@@ -753,18 +511,6 @@ export default {
     transition: background 250ms ease 0s;
     box-shadow: none;
 }
-
-/* .shape-divider {
-    margin-top: 15px;
-    margin-bottom: 15px;
-    box-sizing: border-box;
-    height: 2px;
-    width: 410px;
-    left: 0px;
-    top: 0px;
-    background-color: rgb(222, 222, 222);
-    border-radius: 0px;
-} */
 
 .input100 {
     width: 410px;

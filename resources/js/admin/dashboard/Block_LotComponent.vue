@@ -49,10 +49,7 @@
                             <template #body="{ data }">
                                 <Button
                                     icon="pi pi-plus"
-                                    class="
-                                        p-button-rounded p-button-success
-                                        mr-1
-                                    "
+                                    class="p-button-rounded p-button-success mr-1"
                                     v-tooltip="'Add lots'"
                                     @click="
                                         openLotModal(data.block_number, data.id)
@@ -60,10 +57,7 @@
                                 />
                                 <Button
                                     icon="pi pi-pencil"
-                                    class="
-                                        p-button-rounded p-button-primary
-                                        mr-1
-                                    "
+                                    class="p-button-rounded p-button-primary mr-1"
                                     v-tooltip="'Edit'"
                                     @click="
                                         openEditBlockModal(
@@ -190,11 +184,7 @@
                                     <template #body="{ data }">
                                         <Button
                                             icon="pi pi-pencil"
-                                            class="
-                                                p-button-rounded
-                                                p-button-primary
-                                                mr-1
-                                            "
+                                            class="p-button-rounded p-button-primary mr-1"
                                             v-tooltip="'Edit'"
                                             @click="
                                                 openEditLotModal(
@@ -205,9 +195,7 @@
                                         />
                                         <Button
                                             icon="pi pi-trash"
-                                            class="
-                                                p-button-rounded p-button-danger
-                                            "
+                                            class="p-button-rounded p-button-danger"
                                             v-tooltip="'Delete'"
                                             @click="
                                                 openDeleteLotModal(
@@ -315,12 +303,7 @@
                         <div class="confirmation-content">
                             <div class="grid">
                                 <div
-                                    class="
-                                        col-12
-                                        flex
-                                        align-items-center
-                                        justify-content-center
-                                    "
+                                    class="col-12 flex align-items-center justify-content-center"
                                 >
                                     <i
                                         class="pi pi-exclamation-triangle mr-3"
@@ -416,12 +399,7 @@
                 <div class="confirmation-content">
                     <div class="grid">
                         <div
-                            class="
-                                col-12
-                                flex
-                                align-items-center
-                                justify-content-center
-                            "
+                            class="col-12 flex align-items-center justify-content-center"
                         >
                             <i
                                 class="pi pi-exclamation-triangle mr-3"
@@ -541,6 +519,7 @@ export default {
             this.error = null;
         },
 
+        //GET BLOCK
         async getBlock() {
             try {
                 const { data } = await axios({
@@ -809,10 +788,10 @@ export default {
             }
         },
         // Delete Block Modal
-        openDeleteBlockModal(block_number, block_id) {
+        openDeleteLotModal(lot_number, block_id) {
             this.block_id = block_id;
-            this.block_number = block_number;
-            this.deleteModal = true;
+            this.lot_number = lot_number;
+            this.deleteLotModal = true;
         },
 
         showDeleteToast() {

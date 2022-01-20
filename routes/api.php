@@ -35,4 +35,5 @@ Route::get('/verify',[UserController::class,'index']);
  Route::apiResources([
         'block'             => BlockController::class,
         'lot'             => LotController::class,
+        'user'             => UserController::class,
     ]);

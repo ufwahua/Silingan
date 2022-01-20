@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 use App\Http\Requests\LoginRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -27,7 +28,7 @@ class UserController extends Controller
          else
             return response(["error"=>"Invalid Credentials, please try again"],401);
 
-        return $user->createToken('lanex')->plainTextToken;
+        return $user->createToken('silingan')->plainTextToken;
                 
     }
     public function register(RegisterRequest $request)
@@ -37,8 +38,8 @@ class UserController extends Controller
             'first_name'=> $request['first_name'],
             'last_name'=> $request['last_name'],
             'gender'=> $request['gender'],
-            'block'=> $request->input("selected_block.block"),
-            'lot'=> $request->input("selected_lot.lot"),
+            'block'=> $request->input("selected_block.block_number"),
+            'lot'=> $request->input("selected_lot.lot_number"),
             'age'=> $request['age'] ,
             'contact_num'=> $request['contact_num'] ,
             'role'=> $request['role'] ,
@@ -48,8 +49,6 @@ class UserController extends Controller
             ])
         )
         return response($user,201);
-  
-
     }
     public function logout(Request $request)
     {
@@ -61,10 +60,50 @@ class UserController extends Controller
         
         return $request;
     }
-    public function index(){
-        return [
-            'user' => Auth::user(),
-            'id' => Auth::id()
-        ];
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function index(Request $request) : JsonResponse
+    {
+        return response()->json(
+            User::query()->where('role','resident')->orWhere('role','officer')->orderBy('id','asc')->get()
+        );
+    }
+
+    /**
+     * @param User $user
+     * @return JsonResponse
+     */
+    public function show(User $user) : JsonResponse
+    {
+        return response()->json($user);
+    }
+
+
+    /**
+     * @param User        $user
+     * @param BlockRequest $request
+     * @return JsonResponse
+     */
+    public function update(User $user, RegisterRequest $request) : JsonResponse
+    {
+        $request->validate([
+        'block_number' => ['required','integer', 'max:255','gt:0','unique:blocks' ]
+        ]);
+        $user->update($request->validated());
+
+        return response()->json($user);
+    }
+
+    /**
+     * @param User $user
+     * @return JsonResponse
+     */
+    public function destroy(User $user) : JsonResponse
+    {
+        $user->delete();
+
+        return response()->json(['ok']);
     }
 }

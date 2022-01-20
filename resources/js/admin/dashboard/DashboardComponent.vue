@@ -12,7 +12,7 @@
                         <template #title>
                             <div class="grid m-1">
                                 <div class="col-6">
-                                    <span class="block mb-3">100</span>
+                                    <span class="block mb-3">28</span>
                                 </div>
                                 <div class="col-6 text-right">
                                     <i
@@ -25,9 +25,7 @@
                         <template #subtitle>
                             <div class="grid m-1">
                                 <div class="col-12">
-                                    <span class="text-700"
-                                        >Pending Requests</span
-                                    >
+                                    <h6 class="text-700">Blocks</h6>
                                 </div>
                             </div>
                         </template>
@@ -38,7 +36,7 @@
                         <template #title>
                             <div class="grid m-1">
                                 <div class="col-6">
-                                    <span class="block mb-3">200</span>
+                                    <span class="block mb-3">129</span>
                                 </div>
                                 <div class="col-6 text-right">
                                     <i
@@ -51,9 +49,7 @@
                         <template #subtitle>
                             <div class="grid m-1">
                                 <div class="col-12">
-                                    <span class="text-700"
-                                        >Available Devices</span
-                                    >
+                                    <h6 class="text-700">Lots</h6>
                                 </div>
                             </div>
                         </template>
@@ -64,7 +60,7 @@
                         <template #title>
                             <div class="grid m-1">
                                 <div class="col-6">
-                                    <span class="block mb-3">300</span>
+                                    <span class="block mb-3">3</span>
                                 </div>
                                 <div class="col-6 text-right">
                                     <i
@@ -77,16 +73,14 @@
                         <template #subtitle>
                             <div class="grid m-1">
                                 <div class="col-12">
-                                    <span class="text-700"
-                                        >Recent Rejected Requests</span
-                                    >
+                                    <h6 class="text-700">Residents</h6>
                                 </div>
                             </div>
                         </template>
                     </Card>
                 </div>
             </div>
-            <div class="grid">
+            <!-- <div class="grid">
                 <div class="col-12">
                     <DataTable :value="data">
                         <template #header>
@@ -97,13 +91,7 @@
                                     </h4>
                                 </div>
                                 <div
-                                    class="
-                                        col-6
-                                        text-right
-                                        align-items-center
-                                        justify-content-end
-                                        flex
-                                    "
+                                    class="col-6 text-right align-items-center justify-content-end flex"
                                 >
                                     <span
                                         class="p-input-icon-left inline-block"
@@ -170,7 +158,8 @@
                         </Column>
                     </DataTable>
                 </div>
-            </div>
+            </div> -->
+          
         </div>
     </div>
 </template>

@@ -1,7 +1,10 @@
 <template>
     <div class="layout-topbar">
-        <router-link to="/home/dashboard" class="layout-topbar-logo">
-            <img alt="Logo" :src="topbarImage()" />
+        <router-link to="/dashboard" class="layout-topbar-logo">
+            <img
+                alt="Silingan-Logo"
+                src="https://i.ibb.co/V3B8NBM/silingan-icon.png"
+            />
             <!--<span>Silingan</span>-->
         </router-link>
         <button
@@ -111,8 +114,8 @@ export default {
             this.$emit("topbar-menu-toggle", event);
         },
         topbarImage() {
-			return 'silingan-icon.png';
-		},
+            return "silingan-icon.png";
+        },
     },
 };
 </script>

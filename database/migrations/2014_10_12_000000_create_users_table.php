@@ -22,7 +22,7 @@ class CreateUsersTable extends Migration
             $table->string('lot');
             $table->integer('age');
             $table->string('contact_num');
-            $table->enum('role' , ['residents','admin']);
+            $table->enum('role' , ['admin','officer','resident']);
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');

@@ -107,8 +107,16 @@ export default {
             axios
                 .post("/api/login", this.form)
                 .then((response) => {
-                    console.log("Successfully Login");
-                    this.$router.push("/dashboard");
+                    axios
+                        .get("/api/user")
+                        .then((response) => {
+                            if (response.data.role == "resident")
+                                this.$router.push("/user/dashboard");
+                            else this.$router.push("/admin/dashboard");
+                        })
+                        .catch(() => {
+                            return next({ path: "login" });
+                        });
                 })
                 .catch((err) => {
                     this.error = err.response.data.error;

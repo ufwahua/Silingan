@@ -1,0 +1,1008 @@
+<template>
+    <div>
+        <Toast />
+        <div class="grid">
+            <div class="col-12">
+                <h1>Registered Users</h1>
+            </div>
+        </div>
+        <div class="card">
+            <div class="grid mb-4">
+                <div class="col-12">
+                    <Toolbar>
+                        <template #left>
+                            <span class="p-input-icon-left inline-block">
+                                <i class="pi pi-search" />
+                                <InputText
+                                    v-model="filters['global'].value"
+                                    placeholder="Keyword Search"
+                                />
+                            </span>
+                        </template>
+
+                        <template #right>
+                            <div class="mr-2">
+                                <Button
+                                    label="Add"
+                                    icon="pi pi-plus"
+                                    class="p-button-success p-mr-2"
+                                    @click="registerUser()"
+                                />
+                            </div>
+                        </template>
+                    </Toolbar>
+                </div>
+            </div>
+            <div class="grid">
+                <div class="col-12">
+                    <DataTable :value="user" :filters="filters">
+                        <template #empty> No registered users found </template>
+                        <template #loading> Loading Users </template>
+                        <Column header="Id" field="id">
+                            <template #body="{ data }">
+                                {{ data.id }}
+                            </template>
+                        </Column>
+                        <Column header="Name" field="name">
+                            <template #body="{ data }">
+                                {{ data.first_name }} {{ data.last_name }}
+                            </template>
+                        </Column>
+                        <Column header="Email" field="email">
+                            <template #body="{ data }">
+                                {{ data.email }}
+                            </template>
+                        </Column>
+                        <Column header="Block" field="block">
+                            <template #body="{ data }">
+                                {{ data.block }}
+                            </template>
+                        </Column>
+                        <Column header="Lot" field="lot">
+                            <template #body="{ data }">
+                                {{ data.lot }}
+                            </template>
+                        </Column>
+                        <Column header="Role" field="role">
+                            <template #body="{ data }">
+                                <Badge :class="badgecolor(data.role)">{{
+                                    data.role
+                                }}</Badge>
+                            </template>
+                        </Column>
+                        <Column header="Actions" field="actions">
+                            <template #body="{ data }">
+                                <Button
+                                    icon="pi pi-pencil"
+                                    class="p-button-rounded p-button-primary mr-2"
+                                    @click="
+                                        updateUser(
+                                            data.first_name,
+                                            data.last_name,
+                                            data.gender,
+                                            data.block,
+                                            data.lot,
+                                            data.email,
+                                            data.password,
+                                            data.confirm_password,
+                                            data.age,
+                                            data.contact_num,
+                                            data.id
+                                        )
+                                    "
+                                />
+                                <Button
+                                    icon="pi pi-trash"
+                                    class="p-button-rounded p-button-danger"
+                                    @click="
+                                        deleteUser(
+                                            data.first_name,
+                                            data.last_name,
+                                            data.id
+                                        )
+                                    "
+                                />
+                            </template>
+                        </Column>
+                    </DataTable>
+
+                    <Dialog
+                        v-model:visible="deleteUserDialog"
+                        :style="{ width: '450px' }"
+                        header="Confirm"
+                        :modal="true"
+                    >
+                        <div class="confirmation-content">
+                            <div class="grid">
+                                <div
+                                    class="col-12 flex align-items-center justify-content-center"
+                                >
+                                    <i
+                                        class="pi pi-exclamation-triangle mr-3"
+                                        style="font-size: 2rem"
+                                    />
+                                    <span
+                                        >Are you sure you want to delete
+                                        <b>{{ name }}</b
+                                        >?</span
+                                    >
+                                </div>
+                            </div>
+                        </div>
+                        <template #footer>
+                            <Button
+                                label="Cancel"
+                                icon="pi pi-times"
+                                class="p-button-text"
+                                @click="deleteUserDialog = false"
+                            />
+                            <Button
+                                label="Delete"
+                                icon="pi pi-check"
+                                class="p-button-text p-button-danger"
+                                @click="confirmDeleteItem(id)"
+                            />
+                        </template>
+                    </Dialog>
+                    <Dialog
+                        v-model:visible="updateUserDialog"
+                        :style="{ width: '500px' }"
+                        header="Update User"
+                        :modal="true"
+                    >
+                        <div class="grid">
+                            <div class="col-12 title-form">
+                                <Badge
+                                    :value="1"
+                                    severity="info"
+                                    class="mr-2 mb-2"
+                                    size="large"
+                                ></Badge>
+                                <label><h6>Basic Information</h6></label>
+                            </div>
+
+                            <div class="p-fluid formgrid grid">
+                                <div class="field col-12 md:col-6">
+                                    <label for="first_name">Firstname</label>
+                                    <label
+                                        style="color: red"
+                                        for="first_name"
+                                        v-if="!form.first_name"
+                                        >*</label
+                                    >
+                                    <InputText
+                                        id="firstname"
+                                        type="text"
+                                        v-model="form.first_name"
+                                    />
+                                    <label
+                                        style="color: red"
+                                        for="first_name"
+                                        v-if="error_first_name"
+                                        >{{ error_first_name }}</label
+                                    >
+                                </div>
+
+                                <div class="field col-12 md:col-6">
+                                    <label for="last_name">Lastname</label>
+                                    <label
+                                        style="color: red"
+                                        for="last_name"
+                                        v-if="!form.last_name"
+                                        >*</label
+                                    >
+                                    <InputText
+                                        id="last_name"
+                                        type="text"
+                                        v-model="form.last_name"
+                                    />
+                                    <label
+                                        style="color: red"
+                                        for="first_name"
+                                        v-if="error_last_name"
+                                        >{{ error_last_name }}</label
+                                    >
+                                </div>
+
+                                <div class="field col-12 md:col-6">
+                                    <div class="field-radiobutton mb-0">
+                                        <RadioButton
+                                            name="gender"
+                                            value="male"
+                                            v-model="form.gender"
+                                        />
+                                        <label class="mb-0 ml-1" for="gender"
+                                            >Male</label
+                                        >
+                                        <label
+                                            style="color: red"
+                                            for="gender"
+                                            v-if="!form.gender"
+                                            >*</label
+                                        >
+                                    </div>
+                                </div>
+                                <div class="field col-12 md:col-6">
+                                    <div class="field-radiobutton mb-0">
+                                        <RadioButton
+                                            name="gender"
+                                            value="female"
+                                            v-model="form.gender"
+                                        />
+                                        <label class="mb-0 ml-1" for="gender"
+                                            >Female</label
+                                        >
+                                        <label
+                                            style="color: red"
+                                            for="gender"
+                                            v-if="!form.gender"
+                                            >*</label
+                                        >
+                                    </div>
+                                </div>
+                                <div
+                                    class="formgroup-inline flex justify-content-around"
+                                >
+                                    <label
+                                        style="color: red"
+                                        for="first_name"
+                                        v-if="error_gender"
+                                        >{{ error_gender }}</label
+                                    >
+                                </div>
+
+                                <div class="field col-12 md:col-6">
+                                    <label for="form.age">Age</label
+                                    ><label
+                                        style="color: red"
+                                        for="form.age"
+                                        v-if="!form.age"
+                                        >*</label
+                                    >
+                                    <InputText
+                                        id="age"
+                                        type="number"
+                                        min="0"
+                                        step="1"
+                                        onfocus="this.previousValue = this.value"
+                                        onkeydown="this.previousValue = this.value"
+                                        oninput="validity.valid || (value = this.previousValue)"
+                                        v-model="form.age"
+                                    />
+                                    <label
+                                        style="color: red"
+                                        for="form.age"
+                                        v-if="error_age"
+                                        >{{ error_age }}</label
+                                    >
+                                </div>
+
+                                <div class="field col-12 md:col-6">
+                                    <label for="form.contact_num"
+                                        >Contact Number</label
+                                    ><label
+                                        style="color: red"
+                                        for="form.contact_num"
+                                        v-if="!form.contact_num"
+                                        >*</label
+                                    >
+                                    <InputText
+                                        id="contact_num"
+                                        type="text"
+                                        onkeyup="if(this.value<0){this.value= this.value * -1}"
+                                        v-model="form.contact_num"
+                                    />
+                                    <label
+                                        style="color: red"
+                                        for="form.contact_num"
+                                        v-if="error_contact_num"
+                                        >{{ error_contact_num }}</label
+                                    >
+                                </div>
+
+                                <div class="field col-12 md:col-6">
+                                    <label for="selected_block">Block</label>
+                                    <label
+                                        style="color: red"
+                                        for="selected_block"
+                                        v-if="!form.selected_block"
+                                        >*</label
+                                    >
+                                    <Dropdown
+                                        v-model="form.selected_block"
+                                        :options="block"
+                                        optionLabel="block_number"
+                                        placeholder="Select Block"
+                                    />
+                                    <label
+                                        style="color: red"
+                                        for="form.selected_block"
+                                        v-if="error_selected_block"
+                                        >{{ error_selected_block }}</label
+                                    >
+                                </div>
+
+                                <div class="field col-12 md:col-6">
+                                    <label for="selected_lot">Lot</label>
+                                    <label
+                                        style="color: red"
+                                        for="selected_lot"
+                                        v-if="!form.selected_lot"
+                                        >*</label
+                                    >
+                                    <Dropdown
+                                        v-model="form.selected_lot"
+                                        :options="lot"
+                                        optionLabel="lot_number"
+                                        placeholder="Select Lot"
+                                    />
+                                    <label
+                                        style="color: red"
+                                        for="form.selected_lot"
+                                        v-if="error_selected_lot"
+                                        >{{ error_selected_lot }}</label
+                                    >
+                                </div>
+
+                                <br />
+
+                                <div class="col-12 title-form">
+                                    <Badge
+                                        :value="2"
+                                        severity="info"
+                                        class="mr-2 mb-2"
+                                        size="large"
+                                    ></Badge>
+                                    <label><h6>Security Information</h6></label>
+                                </div>
+
+                                <div class="field col-12 md:col-4">
+                                    <label for="form.email">Email</label
+                                    ><label
+                                        style="color: red"
+                                        for="form.form.email"
+                                        v-if="!form.email"
+                                        >*</label
+                                    >
+                                    <InputText
+                                        type="text"
+                                        name="email"
+                                        v-model="form.email"
+                                    />
+                                    <label
+                                        style="color: red"
+                                        for="form.email"
+                                        v-if="error_email"
+                                        >{{ error_email }}</label
+                                    >
+                                </div>
+                                <div class="field col-12 md:col-4">
+                                    <label for="form.password">Password</label
+                                    ><label
+                                        style="color: red"
+                                        for="form.password"
+                                        v-if="!form.password"
+                                        >*</label
+                                    >
+                                    <InputText
+                                        type="password"
+                                        name="password"
+                                        v-model="form.password"
+                                    />
+                                    <label
+                                        style="color: red"
+                                        for="form.password"
+                                        v-if="error_password"
+                                        >{{ error_password }}</label
+                                    >
+                                </div>
+                                <div class="field col-12 md:col-4">
+                                    <label for="confirm_password"
+                                        >Confirm Password</label
+                                    >
+                                    <label
+                                        style="color: red"
+                                        for="confirm_password"
+                                        v-if="!form.confirm_password"
+                                        >*</label
+                                    >
+                                    <InputText
+                                        type="password"
+                                        name="confirmpassword"
+                                        v-model="form.confirm_password"
+                                    />
+                                    <label
+                                        style="color: red"
+                                        for="confirm_password"
+                                        v-if="error_confirm_password"
+                                        >{{ error_confirm_password }}</label
+                                    >
+                                </div>
+                            </div>
+                        </div>
+                        <template #footer>
+                            <Button
+                                label="Cancel"
+                                icon="pi pi-times"
+                                class="p-button-text"
+                                @click="updateUserDialog = false"
+                            />
+                            <Button
+                                label="Update"
+                                icon="pi pi-check"
+                                class="p-button-text p-button-warning"
+                                @click="confirmUpdateUser(id)"
+                            />
+                        </template>
+                    </Dialog>
+                    <Dialog
+                        v-model:visible="registerUserDialog"
+                        :style="{ width: '500px' }"
+                        header="Register User"
+                        :modal="true"
+                    >
+                        <div class="grid">
+                            <div class="col-12 title-form">
+                                <Badge
+                                    :value="1"
+                                    severity="info"
+                                    class="mr-2 mb-2"
+                                    size="large"
+                                ></Badge>
+                                <label><h6>Basic Information</h6></label>
+                            </div>
+
+                            <div class="p-fluid formgrid grid">
+                                <div class="field col-12 md:col-6">
+                                    <label for="first_name">Firstname</label>
+                                    <label
+                                        style="color: red"
+                                        for="first_name"
+                                        v-if="!form.first_name"
+                                        >*</label
+                                    >
+                                    <InputText
+                                        id="firstname"
+                                        type="text"
+                                        v-model="form.first_name"
+                                    />
+                                    <label
+                                        style="color: red"
+                                        for="first_name"
+                                        v-if="error_first_name"
+                                        >{{ error_first_name }}</label
+                                    >
+                                </div>
+
+                                <div class="field col-12 md:col-6">
+                                    <label for="last_name">Lastname</label>
+                                    <label
+                                        style="color: red"
+                                        for="last_name"
+                                        v-if="!form.last_name"
+                                        >*</label
+                                    >
+                                    <InputText
+                                        id="last_name"
+                                        type="text"
+                                        v-model="form.last_name"
+                                    />
+                                    <label
+                                        style="color: red"
+                                        for="first_name"
+                                        v-if="error_last_name"
+                                        >{{ error_last_name }}</label
+                                    >
+                                </div>
+
+                                <div class="field col-12 md:col-6">
+                                    <div class="field-radiobutton mb-0">
+                                        <RadioButton
+                                            name="gender"
+                                            value="male"
+                                            v-model="form.gender"
+                                        />
+                                        <label class="mb-0 ml-1" for="gender"
+                                            >Male</label
+                                        >
+                                        <label
+                                            style="color: red"
+                                            for="gender"
+                                            v-if="!form.gender"
+                                            >*</label
+                                        >
+                                    </div>
+                                </div>
+                                <div class="field col-12 md:col-6">
+                                    <div class="field-radiobutton mb-0">
+                                        <RadioButton
+                                            name="gender"
+                                            value="female"
+                                            v-model="form.gender"
+                                        />
+                                        <label class="mb-0 ml-1" for="gender"
+                                            >Female</label
+                                        >
+                                        <label
+                                            style="color: red"
+                                            for="gender"
+                                            v-if="!form.gender"
+                                            >*</label
+                                        >
+                                    </div>
+                                </div>
+                                <div
+                                    class="formgroup-inline flex justify-content-around"
+                                >
+                                    <label
+                                        style="color: red"
+                                        for="first_name"
+                                        v-if="error_gender"
+                                        >{{ error_gender }}</label
+                                    >
+                                </div>
+
+                                <div class="field col-12 md:col-6">
+                                    <label for="form.age">Age</label
+                                    ><label
+                                        style="color: red"
+                                        for="form.age"
+                                        v-if="!form.age"
+                                        >*</label
+                                    >
+                                    <InputText
+                                        id="age"
+                                        type="number"
+                                        min="0"
+                                        step="1"
+                                        onfocus="this.previousValue = this.value"
+                                        onkeydown="this.previousValue = this.value"
+                                        oninput="validity.valid || (value = this.previousValue)"
+                                        v-model="form.age"
+                                    />
+                                    <label
+                                        style="color: red"
+                                        for="form.age"
+                                        v-if="error_age"
+                                        >{{ error_age }}</label
+                                    >
+                                </div>
+
+                                <div class="field col-12 md:col-6">
+                                    <label for="form.contact_num"
+                                        >Contact Number</label
+                                    ><label
+                                        style="color: red"
+                                        for="form.contact_num"
+                                        v-if="!form.contact_num"
+                                        >*</label
+                                    >
+                                    <InputText
+                                        id="contact_num"
+                                        type="text"
+                                        onkeyup="if(this.value<0){this.value= this.value * -1}"
+                                        v-model="form.contact_num"
+                                    />
+                                    <label
+                                        style="color: red"
+                                        for="form.contact_num"
+                                        v-if="error_contact_num"
+                                        >{{ error_contact_num }}</label
+                                    >
+                                </div>
+
+                                <div class="field col-12 md:col-6">
+                                    <label for="selected_block">Block</label>
+                                    <label
+                                        style="color: red"
+                                        for="selected_block"
+                                        v-if="!form.selected_block"
+                                        >*</label
+                                    >
+                                    <Dropdown
+                                        v-model="form.selected_block"
+                                        :options="block"
+                                        optionLabel="block_number"
+                                        placeholder="Select Block"
+                                    />
+                                    <label
+                                        style="color: red"
+                                        for="form.selected_block"
+                                        v-if="error_selected_block"
+                                        >{{ error_selected_block }}</label
+                                    >
+                                </div>
+
+                                <div class="field col-12 md:col-6">
+                                    <label for="selected_lot">Lot</label>
+                                    <label
+                                        style="color: red"
+                                        for="selected_lot"
+                                        v-if="!form.selected_lot"
+                                        >*</label
+                                    >
+                                    <Dropdown
+                                        v-model="form.selected_lot"
+                                        :options="lot"
+                                        optionLabel="lot_number"
+                                        placeholder="Select Lot"
+                                    />
+                                    <label
+                                        style="color: red"
+                                        for="form.selected_lot"
+                                        v-if="error_selected_lot"
+                                        >{{ error_selected_lot }}</label
+                                    >
+                                </div>
+
+                                <br />
+
+                                <div class="col-12 title-form">
+                                    <Badge
+                                        :value="2"
+                                        severity="info"
+                                        class="mr-2 mb-2"
+                                        size="large"
+                                    ></Badge>
+                                    <label><h6>Security Information</h6></label>
+                                </div>
+
+                                <div class="field col-12 md:col-4">
+                                    <label for="form.email">Email</label
+                                    ><label
+                                        style="color: red"
+                                        for="form.form.email"
+                                        v-if="!form.email"
+                                        >*</label
+                                    >
+                                    <InputText
+                                        type="text"
+                                        name="email"
+                                        v-model="form.email"
+                                    />
+                                    <label
+                                        style="color: red"
+                                        for="form.email"
+                                        v-if="error_email"
+                                        >{{ error_email }}</label
+                                    >
+                                </div>
+                                <div class="field col-12 md:col-4">
+                                    <label for="form.password">Password</label
+                                    ><label
+                                        style="color: red"
+                                        for="form.password"
+                                        v-if="!form.password"
+                                        >*</label
+                                    >
+                                    <InputText
+                                        type="password"
+                                        name="password"
+                                        v-model="form.password"
+                                    />
+                                    <label
+                                        style="color: red"
+                                        for="form.password"
+                                        v-if="error_password"
+                                        >{{ error_password }}</label
+                                    >
+                                </div>
+                                <div class="field col-12 md:col-4">
+                                    <label for="confirm_password"
+                                        >Confirm Password</label
+                                    >
+                                    <label
+                                        style="color: red"
+                                        for="confirm_password"
+                                        v-if="!form.confirm_password"
+                                        >*</label
+                                    >
+                                    <InputText
+                                        type="password"
+                                        name="confirmpassword"
+                                        v-model="form.confirm_password"
+                                    />
+                                    <label
+                                        style="color: red"
+                                        for="confirm_password"
+                                        v-if="error_confirm_password"
+                                        >{{ error_confirm_password }}</label
+                                    >
+                                </div>
+                            </div>
+                        </div>
+                        <template #footer>
+                            <Button
+                                label="Cancel"
+                                icon="pi pi-times"
+                                class="p-button-text"
+                                @click="registerUserDialog = false"
+                            />
+                            <Button
+                                label="Register"
+                                icon="pi pi-check"
+                                class="p-button-text p-button-success"
+                                @click="onRegisterClick()"
+                            />
+                        </template>
+                    </Dialog>
+                    <Dialog
+                        v-model:visible="process"
+                        :style="{ width: '450px' }"
+                        :modal="true"
+                        :closeOnEscape="true"
+                    >
+                        <div class="grid">
+                            <div class="col-12 text-center">
+                                <ProgressSpinner
+                                    class="block mb-4"
+                                    style="width: 100px; height: 100px"
+                                    strokeWidth="4"
+                                    fill="#EEEEEE"
+                                    animationDuration="1s"
+                                />
+                                <span class="block"
+                                    >Processeing Request...</span
+                                >
+                            </div>
+                        </div>
+                    </Dialog>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+
+<script>
+import axios from "axios";
+import { FilterMatchMode } from "primevue/api";
+export default {
+    name: "RegisterUsersComponent",
+    data() {
+        return {
+            invalidMsg: "asd",
+            isInvalid: false,
+            filters: {},
+            id: null,
+            name: null,
+            process: false,
+            registerUserDialog: false,
+            deleteUserDialog: false,
+            updateUserDialog: false,
+
+            form: {
+                first_name: "",
+                last_name: "",
+                gender: "",
+                selected_block: "",
+                selected_lot: "",
+                email: "",
+                password: "",
+                confirm_password: "",
+                age: "",
+                contact_num: "",
+                role: "resident",
+            },
+            block: null,
+            lot: null,
+            user: null,
+
+            error_first_name: "",
+            error_last_name: "",
+            error_gender: "",
+            error_selected_block: "",
+            error_selected_lot: "",
+            error_email: "",
+            error_password: "",
+            error_confirm_password: "",
+            error_age: "",
+            error_contact_num: "",
+        };
+    },
+    methods: {
+        async getUsers() {
+            try {
+                const { data } = await axios({
+                    method: "get",
+                    url: "/api/user/",
+                });
+                this.user = data;
+            } catch (err) {
+                console.log(err);
+            }
+        },
+        showSuccess() {
+            this.$toast.add({
+                severity: "success",
+                summary: "Success Message",
+                detail: "Message Content",
+                life: 3000,
+            });
+        },
+        initFilters() {
+            this.filters = {
+                global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+            };
+        },
+        badgecolor(color) {
+            if (color == "admin") {
+                return "bg-gray-500";
+            } else if (color == "resident") {
+                return "bg-orange-500";
+            } else {
+                return "bg-yellow-800";
+            }
+        },
+        deleteUser(first_name, last_name, id) {
+            this.id = id;
+            this.name = first_name + " " + last_name;
+            this.deleteUserDialog = true;
+        },
+        async confirmDeleteItem(id) {
+            try {
+                this.deleteUserDialog = false;
+                this.process = true;
+                await axios({
+                    method: "delete",
+                    url: "/api/device-condition/" + id,
+                });
+                this.getUsers();
+                this.process = false;
+                this.$toast.add({
+                    severity: "success",
+                    summary: "Successful Request",
+                    detail: "Deleted Condition",
+                    life: 3000,
+                });
+            } catch (err) {
+                this.process = false;
+                console.log(err.response);
+                this.$toast.add({
+                    severity: "error",
+                    summary: "Invalid Request",
+                    detail: err.response.data.errors.name[0],
+                    life: 3000,
+                });
+            }
+        },
+        updateUser(
+            first_name,
+            last_name,
+            gender,
+            block_id,
+            lot_number,
+            email,
+            password,
+            confirm_password,
+            age,
+            contact_num,
+            id
+        ) {
+            this.id = id;
+            this.updateUserDialog = true;
+            this.form.first_name = first_name;
+            this.form.last_name = last_name;
+            this.form.gender = gender;
+            this.form.selected_block = block_id;
+            this.form.selected_lot = lot_number;
+            this.form.email = email;
+            this.form.password = password;
+            this.form.confirm_password = confirm_password;
+            this.form.age = age;
+            this.form.contact_num = contact_num;
+        },
+        async confirmUpdateUser(id) {
+            try {
+                this.updateUserDialog = false;
+                this.process = true;
+                await axios({
+                    method: "put",
+                    url: "/api/user/" + id,
+                    data: {
+                        form: this.form,
+                    },
+                });
+                this.getUsers();
+                this.process = false;
+                this.$toast.add({
+                    severity: "success",
+                    summary: "Successful Request",
+                    detail: "Edited Condition",
+                    life: 3000,
+                });
+            } catch (err) {
+                this.process = false;
+                console.log(err.response);
+                this.$toast.add({
+                    severity: "error",
+                    summary: "Invalid Request",
+                    detail: err.response.data.errors.name[0],
+                    life: 3000,
+                });
+            }
+        },
+        //REGISTER USER
+        registerUser() {
+            this.registerUserDialog = true;
+        },
+        async onRegisterClick() {
+            try {
+                await axios
+                    .post("/api/register", this.form)
+                    .then(() => {
+                        console.log("Successfully Registered");
+                    })
+                    .catch((err) => {
+                        this.resetFields();
+                        this.validate(err);
+                        console.log(error.response.data);
+                    });
+            } catch (error) {
+                console.log(error.response.data);
+                this.validate(error);
+            }
+        },
+        resetFields() {
+            this.error_first_name = "";
+            this.error_last_name = "";
+            this.error_gender = "";
+            this.error_selected_block = "";
+            this.error_selected_lot = "";
+            this.error_email = "";
+            this.error_password = "";
+            this.error_confirm_password = "";
+            this.error_age = "";
+            this.error_contact_num = "";
+        },
+        validate(error) {
+            if (error.response.data.errors.first_name)
+                this.error_first_name =
+                    error.response.data.errors.first_name[0];
+            if (error.response.data.errors.last_name)
+                this.error_last_name = error.response.data.errors.last_name[0];
+            if (error.response.data.errors.gender)
+                this.error_gender = error.response.data.errors.gender[0];
+            if (error.response.data.errors.selected_block)
+                this.error_selected_block =
+                    error.response.data.errors.selected_block[0];
+            if (error.response.data.errors.selected_lot)
+                this.error_selected_lot =
+                    error.response.data.errors.selected_lot[0];
+            if (error.response.data.errors.email)
+                this.error_email = error.response.data.errors.email[0];
+            if (error.response.data.errors.password)
+                this.error_password = error.response.data.errors.password[0];
+            if (error.response.data.errors.confirm_password)
+                this.error_confirm_password =
+                    error.response.data.errors.confirm_password[0];
+            if (error.response.data.errors.age)
+                this.error_age = error.response.data.errors.age[0];
+            if (error.response.data.errors.contact_num)
+                this.error_contact_num =
+                    error.response.data.errors.contact_num[0];
+        },
+    },
+    created() {
+        this.initFilters();
+    },
+    mounted() {
+        this.block = [
+            { block_number: "1", value: 1 },
+            { block_number: "2", value: 2 },
+            { block_number: "3", value: 3 },
+            { block_number: "4", value: 4 },
+            { block_number: "5", value: 5 },
+        ];
+        this.lot = [
+            { lot_number: "1", value: 1 },
+            { lot_number: "2", value: 2 },
+            { lot_number: "3", value: 3 },
+            { lot_number: "4", value: 4 },
+            { lot_number: "5", value: 5 },
+        ];
+        this.getUsers();
+    },
+};
+</script>
+
+<style></style>
