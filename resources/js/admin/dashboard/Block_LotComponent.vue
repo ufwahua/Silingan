@@ -51,9 +51,7 @@
                                     icon="pi pi-plus"
                                     class="p-button-rounded p-button-success mr-1"
                                     v-tooltip="'Add lots'"
-                                    @click="
-                                        openLotModal(data.block_number, data.id)
-                                    "
+                                    @click="openLotModal(data.block_number)"
                                 />
                                 <Button
                                     icon="pi pi-pencil"
@@ -168,6 +166,7 @@
                             </Toolbar>
                         </div>
                     </div>
+
                     <div class="grid">
                         <div class="col-12">
                             <DataTable :value="lot" :filters="filters">
@@ -189,6 +188,7 @@
                                             @click="
                                                 openEditLotModal(
                                                     data.id,
+                                                    data.block_id,
                                                     data.lot_number
                                                 )
                                             "
@@ -199,8 +199,8 @@
                                             v-tooltip="'Delete'"
                                             @click="
                                                 openDeleteLotModal(
-                                                    data.lot_number,
-                                                    data.id
+                                                    data.id,
+                                                    data.lot_number
                                                 )
                                             "
                                         />
@@ -269,13 +269,10 @@
                             <div class="col-12">
                                 <div class="p-fluid">
                                     <h5>Lot Number</h5>
-                                    <InputText v-model="lot_number" />
-                                    <label
-                                        style="color: red"
-                                        for="block_number"
-                                        v-if="error"
-                                        >{{ this.error }}</label
-                                    >
+                                    <InputText v-model="form_lot_number" />
+                                    <label style="color: red" v-if="error">{{
+                                        this.error
+                                    }}</label>
                                 </div>
                             </div>
                         </div>
@@ -284,13 +281,13 @@
                                 label="Cancel"
                                 icon="pi pi-times"
                                 class="p-button-text"
-                                @click="closeUpdateLotModal()"
+                                @click="closeUpdateLotModal"
                             />
                             <Button
                                 label="Edit"
                                 icon="pi pi-check"
                                 class="p-button-text p-button-warning"
-                                @click="confirmEditLot()"
+                                @click="confirmEditLot"
                             />
                         </template>
                     </Dialog>
@@ -486,6 +483,7 @@ export default {
             block_number: null,
 
             lot: null,
+            lot_id: null,
             lot_number: null,
             filters: {},
             search: null,
@@ -521,16 +519,16 @@ export default {
 
         //GET BLOCK
         async getBlock() {
-            try {
-                const { data } = await axios({
-                    method: "get",
-                    url: "/api/block/",
+            await axios({
+                method: "get",
+                url: "/api/block/",
+            })
+                .then((res) => {
+                    this.block = res.data;
+                })
+                .catch((error) => {
+                    console.log(error);
                 });
-                this.block = data;
-            } catch (error) {
-                console.log(error);
-            }
-            this.process = false;
         },
 
         // Open Block Modal
@@ -554,30 +552,25 @@ export default {
         },
 
         async confirmCreateBlock() {
-            try {
-                this.process = true;
-                await axios({
-                    method: "post",
-                    url: "/api/block",
-                    data: {
-                        block_number: this.form_block_number,
-                    },
+            this.process = true;
+            await axios({
+                method: "post",
+                url: "/api/block",
+                data: {
+                    block_number: this.form_block_number,
+                },
+            })
+                .then((res) => {
+                    this.addBlockModal = false;
+                    this.getBlock();
+                    this.showAddBlockToast();
+                    this.process = false;
                 })
-                    .then((res) => {
-                        this.addBlockModal = false;
-                        this.getBlock();
-                        this.showAddBlockToast();
-                    })
-                    .catch((error) => {
-                        if (error.response.data.errors.block_number)
-                            this.error =
-                                error.response.data.errors.block_number[0];
-                        this.process = false;
-                    });
-            } catch (error) {
-                this.process = false;
-                console.log(error);
-            }
+                .catch((error) => {
+                    if (error.response.data.errors.block_number)
+                        this.error = error.response.data.errors.block_number[0];
+                    this.process = false;
+                });
         },
         // Edit Block Modal
         openEditBlockModal(block_number, block_id) {
@@ -599,33 +592,25 @@ export default {
             this.resetFields();
         },
         async confirmEditBlock() {
-            console.log(this.block_id);
-            console.log(this.block_number);
-            try {
-                this.process = true;
-                await axios({
-                    method: "put",
-                    url: "/api/block/" + this.block_id,
-                    data: {
-                        block_number: this.block_number,
-                    },
+            this.process = true;
+            await axios({
+                method: "put",
+                url: "/api/block/" + this.block_id,
+                data: {
+                    block_number: this.block_number,
+                },
+            })
+                .then((res) => {
+                    this.updateBlockModal = false;
+                    this.getBlock();
+                    this.showUpdateBlockToast();
+                    this.process = false;
                 })
-                    .then((res) => {
-                        this.updateBlockModal = false;
-                        this.getBlock();
-                        this.showUpdateBlockToast();
-                    })
-                    .catch((error) => {
-                        if (error.response.data.errors.block_number)
-                            this.error =
-                                error.response.data.errors.block_number[0];
-                        this.process = false;
-                        console.log(error);
-                    });
-            } catch (error) {
-                this.process = false;
-                console.log(error);
-            }
+                .catch((error) => {
+                    if (error.response.data.errors.block_number)
+                        this.error = error.response.data.errors.block_number[0];
+                    this.process = false;
+                });
         },
         // Delete Block Modal
         openDeleteBlockModal(block_number, block_id) {
@@ -645,48 +630,44 @@ export default {
         },
 
         async confirmDeleteBlock() {
-            try {
-                this.process = true;
-                await axios({
-                    method: "delete",
-                    url: "/api/block/" + this.block_id,
+            this.process = true;
+            await axios({
+                method: "delete",
+                url: "/api/block/" + this.block_id,
+            })
+                .then((res) => {
+                    this.deleteModal = false;
+                    this.getBlock();
+                    this.showDeleteBlockToast();
+                    this.process = false;
                 })
-                    .then((res) => {
-                        this.deleteModal = false;
-                        this.getBlock();
-                        this.showDeleteBlockToast();
-                    })
-                    .catch((error) => {
-                        this.process = false;
-                        console.log(error);
-                    });
-            } catch (error) {
-                this.process = false;
-                console.log(error);
-            }
+                .catch((error) => {
+                    console.log(error);
+                    this.process = false;
+                });
         },
 
         //LOT
-        async getLot(block_id) {
-            this.lot;
-            try {
-                const { data } = await axios({
-                    method: "get",
-                    url: "/api/lot/" + block_id,
+        async getLot() {
+            await axios({
+                method: "get",
+                url: "/api/lot/" + this.block_id,
+            })
+                .then((res) => {
+                    this.lot = res.data;
+                })
+                .catch((error) => {
+                    this.lot = null;
+                    console.log(error);
                 });
-                this.lot = data;
-            } catch (error) {
-                console.log(error);
-            }
-            this.process = false;
         },
 
         // Open Lot Modal
-        openLotModal(block_number, block_id) {
-            this.block_id = block_id;
+        openLotModal(block_number) {
+            this.block_id = block_number;
             this.block_number = "Block " + block_number;
             this.lotModal = true;
-            this.getLot(block_id);
+            this.getLot();
         },
         closeLotModal() {
             this.lotModal = false;
@@ -695,9 +676,8 @@ export default {
 
         // Open Add Lot Modal
         openAddLotModal() {
+            this.resetFields();
             this.addLotModal = true;
-            this.form_lot_number = null;
-            this.error = null;
         },
         closeAddLotModal() {
             this.addLotModal = false;
@@ -713,42 +693,41 @@ export default {
             this.resetFields();
         },
         async confirmCreateLot() {
-            try {
-                this.process = true;
-                await axios({
-                    method: "post",
-                    url: "/api/lot",
-                    data: {
-                        block_id: this.block_id,
-                        lot_number: this.form_lot_number,
-                    },
+            this.process = true;
+            await axios({
+                method: "post",
+                url: "/api/lot",
+                data: {
+                    block_id: this.block_id,
+                    lot_number: this.form_lot_number,
+                },
+            })
+                .then((res) => {
+                    this.addLotModal = false;
+                    this.getLot();
+                    this.showAddLotToast();
+                    this.process = false;
                 })
-                    .then((res) => {
-                        this.addLotModal = false;
-                        this.getLot(this.block_id);
-                        this.showAddLotToast();
-                    })
-                    .catch((error) => {
-                        if (error.response.data.errors.lot)
-                            this.error =
-                                error.response.data.errors.lot_number[0];
-                        this.process = false;
-                    });
-            } catch (error) {
-                this.process = false;
-                console.log(error);
-            }
+                .catch((error) => {
+                    if (error.response.data.errors.lot)
+                        this.error = error.response.data.errors.lot_number[0];
+                    this.lot = [];
+                    this.process = false;
+                });
         },
 
         //Open  Edit Lot Modal
-        openEditLotModal(lot_id, lot_number) {
+        openEditLotModal(lot_id, block_id, lot_number) {
+            this.resetFields();
             this.lot_id = lot_id;
-            this.lot_number = lot_number;
+            this.block_id = block_id;
+            this.form_lot_number = lot_number;
             this.updateLotModal = true;
         },
         closeUpdateLotModal() {
             this.updateLotModal = false;
             this.resetFields();
+            this.error = null;
         },
         showUpdateLotToast() {
             this.$toast.add({
@@ -760,36 +739,39 @@ export default {
             this.resetFields();
         },
         async confirmEditLot() {
-            console.log(this.lot_number);
-            try {
-                this.process = true;
-                await axios({
-                    method: "put",
-                    url: "/api/lot/" + this.lot_id,
-                    data: {
-                        lot_number: this.lot_number,
-                    },
+            this.process = true;
+            await axios({
+                method: "put",
+                url: "/api/lot/" + this.lot_id,
+                data: {
+                    id: this.lot_id,
+                    block_id: this.block_id,
+                    lot_number: this.form_lot_number,
+                },
+            })
+                .then(() => {
+                    console.log(
+                        "id",
+                        this.lot_id,
+                        "block_id",
+                        this.block_id,
+                        "lot_number",
+                        this.form_lot_number
+                    );
+                    this.updateLotModal = false;
+                    this.getLot();
+                    this.showUpdateLotToast();
+                    this.process = false;
                 })
-                    .then((res) => {
-                        this.updateBlockModal = false;
-                        this.getLot(this.block_id);
-                        this.showUpdateLotToast();
-                    })
-                    .catch((error) => {
-                        if (error.response.data.errors.block_number)
-                            this.error =
-                                error.response.data.errors.block_number[0];
-                        this.process = false;
-                        console.log(error);
-                    });
-            } catch (error) {
-                this.process = false;
-                console.log(error);
-            }
+                .catch((error) => {
+                    console.log(error);
+                    this.error = "The lot number has already been taken.";
+                    this.process = false;
+                });
         },
-        // Delete Block Modal
-        openDeleteLotModal(lot_number, block_id) {
-            this.block_id = block_id;
+        // Delete Lot Modal
+        openDeleteLotModal(lot_id, lot_number) {
+            this.lot_id = lot_id;
             this.lot_number = lot_number;
             this.deleteLotModal = true;
         },
@@ -805,25 +787,22 @@ export default {
         },
 
         async confirmDeleteLot() {
-            try {
-                this.process = true;
-                await axios({
-                    method: "delete",
-                    url: "/api/block/" + this.block_id,
+            this.process = true;
+            await axios({
+                method: "delete",
+                url: "/api/lot/" + this.lot_id,
+            })
+                .then((res) => {
+                    this.deleteLotModal = false;
+                    this.getLot();
+                    this.showDeleteToast();
+                    this.process = false;
                 })
-                    .then((res) => {
-                        this.deleteModal = false;
-                        this.getBlock();
-                        this.showDeleteToast();
-                    })
-                    .catch((error) => {
-                        this.process = false;
-                        console.log(error);
-                    });
-            } catch (error) {
-                this.process = false;
-                console.log(error);
-            }
+                .catch((error) => {
+                    this.lot = [];
+                    console.log(error);
+                    this.process = false;
+                });
         },
     },
 

@@ -1,6 +1,6 @@
 <template>
     <div class="layout-topbar">
-        <router-link to="/dashboard" class="layout-topbar-logo">
+        <router-link to="/admin/dashboard" class="layout-topbar-logo">
             <img
                 alt="Silingan-Logo"
                 src="https://i.ibb.co/V3B8NBM/silingan-icon.png"
@@ -65,11 +65,13 @@
 <script>
 import Menu from "primevue/menu";
 export default {
+    props: ["id", "first_name", "last_name"],
     data() {
         return {
             profile_menu: [
                 {
                     items: [
+                        { label: this.first_name + " " + this.last_name },
                         {
                             label: "Profiles",
                             icon: "pi pi-pencil",

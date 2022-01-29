@@ -26,7 +26,7 @@
                                     label="Add"
                                     icon="pi pi-plus"
                                     class="p-button-success p-mr-2"
-                                    @click="registerUser()"
+                                    @click="registerUser"
                                 />
                             </div>
                         </template>
@@ -35,7 +35,13 @@
             </div>
             <div class="grid">
                 <div class="col-12">
-                    <DataTable :value="user" :filters="filters">
+                    <DataTable
+                        :value="user"
+                        :filters="filters"
+                        :resizableColumns="true"
+                        columnResizeMode="fit"
+                        responsiveLayout="scroll"
+                    >
                         <template #empty> No registered users found </template>
                         <template #loading> Loading Users </template>
                         <Column header="Id" field="id">
@@ -83,10 +89,9 @@
                                             data.block,
                                             data.lot,
                                             data.email,
-                                            data.password,
-                                            data.confirm_password,
                                             data.age,
                                             data.contact_num,
+                                            data.role,
                                             data.id
                                         )
                                     "
@@ -140,7 +145,7 @@
                                 label="Delete"
                                 icon="pi pi-check"
                                 class="p-button-text p-button-danger"
-                                @click="confirmDeleteItem(id)"
+                                @click="confirmDeleteItem"
                             />
                         </template>
                     </Dialog>
@@ -205,15 +210,8 @@
                                 </div>
 
                                 <div class="field col-12 md:col-6">
-                                    <div class="field-radiobutton mb-0">
-                                        <RadioButton
-                                            name="gender"
-                                            value="male"
-                                            v-model="form.gender"
-                                        />
-                                        <label class="mb-0 ml-1" for="gender"
-                                            >Male</label
-                                        >
+                                    <div>
+                                        <label for="last_name">Gender</label>
                                         <label
                                             style="color: red"
                                             for="gender"
@@ -221,23 +219,40 @@
                                             >*</label
                                         >
                                     </div>
-                                </div>
-                                <div class="field col-12 md:col-6">
-                                    <div class="field-radiobutton mb-0">
-                                        <RadioButton
-                                            name="gender"
-                                            value="female"
-                                            v-model="form.gender"
-                                        />
-                                        <label class="mb-0 ml-1" for="gender"
-                                            >Female</label
-                                        >
-                                        <label
-                                            style="color: red"
-                                            for="gender"
-                                            v-if="!form.gender"
-                                            >*</label
-                                        >
+
+                                    <div>
+                                        <div class="field-radiobutton mb-0">
+                                            <RadioButton
+                                                name="gender"
+                                                value="male"
+                                                v-model="form.gender"
+                                                @keydown.enter="onRegisterClick"
+                                            />
+                                            <label
+                                                class="mb-0 ml-1 mr-5"
+                                                for="gender"
+                                                >Male</label
+                                            >
+                                            <RadioButton
+                                                name="gender"
+                                                value="female"
+                                                v-model="form.gender"
+                                                @keydown.enter="onRegisterClick"
+                                            />
+                                            <label
+                                                class="mb-0 ml-1"
+                                                for="gender"
+                                                >Female</label
+                                            >
+                                        </div>
+                                        <div>
+                                            <label
+                                                style="color: red"
+                                                for="first_name"
+                                                v-if="error_gender"
+                                                >{{ error_gender }}</label
+                                            >
+                                        </div>
                                     </div>
                                 </div>
                                 <div
@@ -250,13 +265,29 @@
                                         >{{ error_gender }}</label
                                     >
                                 </div>
-
                                 <div class="field col-12 md:col-6">
-                                    <label for="form.age">Age</label
-                                    ><label
+                                    <label>Role</label>
+                                    <label
                                         style="color: red"
-                                        for="form.age"
-                                        v-if="!form.age"
+                                        v-if="!form.selected_role"
+                                        >*</label
+                                    >
+                                    <Dropdown
+                                        v-model="form.selected_role"
+                                        :options="role"
+                                        placeholder="Select Role"
+                                    />
+                                    <label
+                                        style="color: red"
+                                        for="first_name"
+                                        v-if="error_role"
+                                        >{{ error_role }}</label
+                                    >
+                                </div>
+
+                                <div class="field col-12 md:col-12">
+                                    <label for="form.age">Age</label
+                                    ><label style="color: red" v-if="!form.age"
                                         >*</label
                                     >
                                     <InputText
@@ -277,7 +308,7 @@
                                     >
                                 </div>
 
-                                <div class="field col-12 md:col-6">
+                                <div class="field col-12 md:col-12">
                                     <label for="form.contact_num"
                                         >Contact Number</label
                                     ><label
@@ -312,7 +343,9 @@
                                         v-model="form.selected_block"
                                         :options="block"
                                         optionLabel="block_number"
+                                        optionValue="value"
                                         placeholder="Select Block"
+                                        @change="getBlockLot"
                                     />
                                     <label
                                         style="color: red"
@@ -334,6 +367,7 @@
                                         v-model="form.selected_lot"
                                         :options="lot"
                                         optionLabel="lot_number"
+                                        optionValue="value"
                                         placeholder="Select Lot"
                                     />
                                     <label
@@ -343,20 +377,7 @@
                                         >{{ error_selected_lot }}</label
                                     >
                                 </div>
-
-                                <br />
-
-                                <div class="col-12 title-form">
-                                    <Badge
-                                        :value="2"
-                                        severity="info"
-                                        class="mr-2 mb-2"
-                                        size="large"
-                                    ></Badge>
-                                    <label><h6>Security Information</h6></label>
-                                </div>
-
-                                <div class="field col-12 md:col-4">
+                                <div class="field col-12 md:col-12">
                                     <label for="form.email">Email</label
                                     ><label
                                         style="color: red"
@@ -376,48 +397,6 @@
                                         >{{ error_email }}</label
                                     >
                                 </div>
-                                <div class="field col-12 md:col-4">
-                                    <label for="form.password">Password</label
-                                    ><label
-                                        style="color: red"
-                                        for="form.password"
-                                        v-if="!form.password"
-                                        >*</label
-                                    >
-                                    <InputText
-                                        type="password"
-                                        name="password"
-                                        v-model="form.password"
-                                    />
-                                    <label
-                                        style="color: red"
-                                        for="form.password"
-                                        v-if="error_password"
-                                        >{{ error_password }}</label
-                                    >
-                                </div>
-                                <div class="field col-12 md:col-4">
-                                    <label for="confirm_password"
-                                        >Confirm Password</label
-                                    >
-                                    <label
-                                        style="color: red"
-                                        for="confirm_password"
-                                        v-if="!form.confirm_password"
-                                        >*</label
-                                    >
-                                    <InputText
-                                        type="password"
-                                        name="confirmpassword"
-                                        v-model="form.confirm_password"
-                                    />
-                                    <label
-                                        style="color: red"
-                                        for="confirm_password"
-                                        v-if="error_confirm_password"
-                                        >{{ error_confirm_password }}</label
-                                    >
-                                </div>
                             </div>
                         </div>
                         <template #footer>
@@ -431,7 +410,7 @@
                                 label="Update"
                                 icon="pi pi-check"
                                 class="p-button-text p-button-warning"
-                                @click="confirmUpdateUser(id)"
+                                @click="confirmUpdateUser"
                             />
                         </template>
                     </Dialog>
@@ -465,6 +444,7 @@
                                         id="firstname"
                                         type="text"
                                         v-model="form.first_name"
+                                        @keydown.enter="onRegisterClick"
                                     />
                                     <label
                                         style="color: red"
@@ -486,6 +466,7 @@
                                         id="last_name"
                                         type="text"
                                         v-model="form.last_name"
+                                        @keydown.enter="onRegisterClick"
                                     />
                                     <label
                                         style="color: red"
@@ -495,54 +476,7 @@
                                     >
                                 </div>
 
-                                <div class="field col-12 md:col-6">
-                                    <div class="field-radiobutton mb-0">
-                                        <RadioButton
-                                            name="gender"
-                                            value="male"
-                                            v-model="form.gender"
-                                        />
-                                        <label class="mb-0 ml-1" for="gender"
-                                            >Male</label
-                                        >
-                                        <label
-                                            style="color: red"
-                                            for="gender"
-                                            v-if="!form.gender"
-                                            >*</label
-                                        >
-                                    </div>
-                                </div>
-                                <div class="field col-12 md:col-6">
-                                    <div class="field-radiobutton mb-0">
-                                        <RadioButton
-                                            name="gender"
-                                            value="female"
-                                            v-model="form.gender"
-                                        />
-                                        <label class="mb-0 ml-1" for="gender"
-                                            >Female</label
-                                        >
-                                        <label
-                                            style="color: red"
-                                            for="gender"
-                                            v-if="!form.gender"
-                                            >*</label
-                                        >
-                                    </div>
-                                </div>
-                                <div
-                                    class="formgroup-inline flex justify-content-around"
-                                >
-                                    <label
-                                        style="color: red"
-                                        for="first_name"
-                                        v-if="error_gender"
-                                        >{{ error_gender }}</label
-                                    >
-                                </div>
-
-                                <div class="field col-12 md:col-6">
+                                <div class="field col-12 md:col-12">
                                     <label for="form.age">Age</label
                                     ><label
                                         style="color: red"
@@ -559,6 +493,7 @@
                                         onkeydown="this.previousValue = this.value"
                                         oninput="validity.valid || (value = this.previousValue)"
                                         v-model="form.age"
+                                        @keydown.enter="onRegisterClick"
                                     />
                                     <label
                                         style="color: red"
@@ -567,8 +502,53 @@
                                         >{{ error_age }}</label
                                     >
                                 </div>
+                                <div class="field col-12 md:col-12">
+                                    <div>
+                                        <label for="last_name">Gender</label>
+                                        <label
+                                            style="color: red"
+                                            for="gender"
+                                            v-if="!form.gender"
+                                            >*</label
+                                        >
+                                    </div>
 
-                                <div class="field col-12 md:col-6">
+                                    <div>
+                                        <div class="field-radiobutton mb-0">
+                                            <RadioButton
+                                                name="gender"
+                                                value="male"
+                                                v-model="form.gender"
+                                                @keydown.enter="onRegisterClick"
+                                            />
+                                            <label
+                                                class="mb-0 ml-1 mr-5"
+                                                for="gender"
+                                                >Male</label
+                                            >
+                                            <RadioButton
+                                                name="gender"
+                                                value="female"
+                                                v-model="form.gender"
+                                                @keydown.enter="onRegisterClick"
+                                            />
+                                            <label
+                                                class="mb-0 ml-1"
+                                                for="gender"
+                                                >Female</label
+                                            >
+                                        </div>
+                                        <div>
+                                            <label
+                                                style="color: red"
+                                                for="first_name"
+                                                v-if="error_gender"
+                                                >{{ error_gender }}</label
+                                            >
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="field col-12 md:col-12">
                                     <label for="form.contact_num"
                                         >Contact Number</label
                                     ><label
@@ -582,6 +562,7 @@
                                         type="text"
                                         onkeyup="if(this.value<0){this.value= this.value * -1}"
                                         v-model="form.contact_num"
+                                        @keydown.enter="onRegisterClick"
                                     />
                                     <label
                                         style="color: red"
@@ -603,7 +584,9 @@
                                         v-model="form.selected_block"
                                         :options="block"
                                         optionLabel="block_number"
+                                        optionValue="value"
                                         placeholder="Select Block"
+                                        @change="getBlockLot"
                                     />
                                     <label
                                         style="color: red"
@@ -625,6 +608,7 @@
                                         v-model="form.selected_lot"
                                         :options="lot"
                                         optionLabel="lot_number"
+                                        optionValue="value"
                                         placeholder="Select Lot"
                                     />
                                     <label
@@ -659,6 +643,7 @@
                                         type="text"
                                         name="email"
                                         v-model="form.email"
+                                        @keydown.enter="onRegisterClick"
                                     />
                                     <label
                                         style="color: red"
@@ -679,6 +664,7 @@
                                         type="password"
                                         name="password"
                                         v-model="form.password"
+                                        @keydown.enter="onRegisterClick"
                                     />
                                     <label
                                         style="color: red"
@@ -701,6 +687,7 @@
                                         type="password"
                                         name="confirmpassword"
                                         v-model="form.confirm_password"
+                                        @keydown.enter="onRegisterClick"
                                     />
                                     <label
                                         style="color: red"
@@ -722,7 +709,7 @@
                                 label="Register"
                                 icon="pi pi-check"
                                 class="p-button-text p-button-success"
-                                @click="onRegisterClick()"
+                                @click="onRegisterClick"
                             />
                         </template>
                     </Dialog>
@@ -760,7 +747,6 @@ export default {
     name: "RegisterUsersComponent",
     data() {
         return {
-            invalidMsg: "asd",
             isInvalid: false,
             filters: {},
             id: null,
@@ -786,6 +772,7 @@ export default {
             block: null,
             lot: null,
             user: null,
+            role: ["officer", "resident"],
 
             error_first_name: "",
             error_last_name: "",
@@ -797,19 +784,21 @@ export default {
             error_confirm_password: "",
             error_age: "",
             error_contact_num: "",
+            error_role: "",
         };
     },
     methods: {
         async getUsers() {
-            try {
-                const { data } = await axios({
-                    method: "get",
-                    url: "/api/user/",
+            await axios({
+                method: "get",
+                url: "/api/user",
+            })
+                .then((res) => {
+                    this.user = res.data;
+                })
+                .catch((err) => {
+                    console.log(err);
                 });
-                this.user = data;
-            } catch (err) {
-                console.log(err);
-            }
         },
         showSuccess() {
             this.$toast.add({
@@ -838,31 +827,25 @@ export default {
             this.name = first_name + " " + last_name;
             this.deleteUserDialog = true;
         },
-        async confirmDeleteItem(id) {
+        async confirmDeleteItem() {
             try {
                 this.deleteUserDialog = false;
                 this.process = true;
                 await axios({
                     method: "delete",
-                    url: "/api/device-condition/" + id,
+                    url: "/api/user/" + this.id,
                 });
                 this.getUsers();
                 this.process = false;
                 this.$toast.add({
                     severity: "success",
                     summary: "Successful Request",
-                    detail: "Deleted Condition",
+                    detail: "Deleted User",
                     life: 3000,
                 });
             } catch (err) {
                 this.process = false;
                 console.log(err.response);
-                this.$toast.add({
-                    severity: "error",
-                    summary: "Invalid Request",
-                    detail: err.response.data.errors.name[0],
-                    life: 3000,
-                });
             }
         },
         updateUser(
@@ -872,12 +855,13 @@ export default {
             block_id,
             lot_number,
             email,
-            password,
-            confirm_password,
             age,
             contact_num,
+            role,
             id
         ) {
+            this.resetFields();
+            this.resetErrors();
             this.id = id;
             this.updateUserDialog = true;
             this.form.first_name = first_name;
@@ -886,63 +870,106 @@ export default {
             this.form.selected_block = block_id;
             this.form.selected_lot = lot_number;
             this.form.email = email;
-            this.form.password = password;
-            this.form.confirm_password = confirm_password;
             this.form.age = age;
             this.form.contact_num = contact_num;
+            this.form.selected_role = role;
         },
-        async confirmUpdateUser(id) {
-            try {
-                this.updateUserDialog = false;
-                this.process = true;
-                await axios({
-                    method: "put",
-                    url: "/api/user/" + id,
-                    data: {
-                        form: this.form,
-                    },
+        async confirmUpdateUser() {
+            this.process = true;
+
+            await axios({
+                method: "put",
+                url: "/api/user/" + this.id,
+                data: {
+                    id: this.id,
+                    first_name: this.form.first_name,
+                    last_name: this.form.last_name,
+                    gender: this.form.gender,
+                    block: this.form.selected_block,
+                    lot: this.form.selected_lot,
+                    age: this.form.age,
+                    contact_num: this.form.contact_num,
+                    email: this.form.email,
+                    role: this.form.selected_role,
+                },
+            })
+                .then(() => {
+                    this.$toast.add({
+                        severity: "success",
+                        summary: "Successful Request",
+                        detail: "Updated User",
+                        life: 3000,
+                    });
+                    this.getUsers();
+                    this.resetFields();
+                    this.updateUserDialog = false;
+                    this.process = false;
+                })
+                .catch((err) => {
+                    this.validate(err);
+                    this.process = false;
                 });
-                this.getUsers();
-                this.process = false;
-                this.$toast.add({
-                    severity: "success",
-                    summary: "Successful Request",
-                    detail: "Edited Condition",
-                    life: 3000,
-                });
-            } catch (err) {
-                this.process = false;
-                console.log(err.response);
-                this.$toast.add({
-                    severity: "error",
-                    summary: "Invalid Request",
-                    detail: err.response.data.errors.name[0],
-                    life: 3000,
-                });
-            }
         },
         //REGISTER USER
         registerUser() {
             this.registerUserDialog = true;
+            this.resetFields();
+            this.resetErrors();
         },
         async onRegisterClick() {
-            try {
-                await axios
-                    .post("/api/register", this.form)
-                    .then(() => {
-                        console.log("Successfully Registered");
-                    })
-                    .catch((err) => {
-                        this.resetFields();
-                        this.validate(err);
-                        console.log(error.response.data);
+            this.process = true;
+            await axios({
+                method: "post",
+                url: "api/user",
+                data: {
+                    first_name: this.form.first_name,
+                    last_name: this.form.last_name,
+                    gender: this.form.gender,
+                    block_number: this.form.selected_block,
+                    lot_number: this.form.selected_lot,
+                    age: this.form.age,
+                    contact_num: this.form.contact_num,
+                    email: this.form.email,
+                    password: this.form.password,
+                    confirm_password: this.form.confirm_password,
+                    role: this.form.role,
+                },
+            })
+                .then(() => {
+                    this.registerUserDialog = false;
+                    this.resetFields();
+                    this.getUsers();
+                    this.$toast.add({
+                        severity: "success",
+                        summary: "Successful Request",
+                        detail: "Registered User",
+                        life: 3000,
                     });
-            } catch (error) {
-                console.log(error.response.data);
-                this.validate(error);
-            }
+                    this.process = false;
+                })
+                .catch((err) => {
+                    this.resetErrors();
+                    this.validate(err);
+                    this.process = false;
+                });
         },
+
         resetFields() {
+            this.form = {
+                first_name: "",
+                last_name: "",
+                gender: "",
+                selected_block: "",
+                selected_lot: "",
+                email: "",
+                password: "",
+                confirm_password: "",
+                age: "",
+                contact_num: "",
+                role: "resident",
+            };
+        },
+        resetErrors() {
             this.error_first_name = "";
             this.error_last_name = "";
             this.error_gender = "";
@@ -953,6 +980,7 @@ export default {
             this.error_confirm_password = "";
             this.error_age = "";
             this.error_contact_num = "";
+            this.error_role = "";
         },
         validate(error) {
             if (error.response.data.errors.first_name)
@@ -980,27 +1008,59 @@ export default {
             if (error.response.data.errors.contact_num)
                 this.error_contact_num =
                     error.response.data.errors.contact_num[0];
+            if (error.response.data.errors.role)
+                this.error_role = error.response.data.errors.role[0];
+        },
+        async getBlock() {
+            var temp = [];
+            const blocks = await axios({
+                method: "get",
+                url: "/api/block",
+            });
+            blocks.data.forEach((elem) => {
+                temp.push({
+                    block_number: elem.block_number,
+                    value: elem.block_number,
+                });
+            });
+            this.block = temp;
+        },
+        async getLot() {
+            var temp = [];
+            const lots = await axios({
+                method: "get",
+                url: "/api/lot",
+            });
+            lots.data.forEach((elem) => {
+                temp.push({
+                    lot_number: elem.lot_number,
+                    value: elem.lot_number,
+                });
+            });
+            this.lot = temp;
+        },
+        async getBlockLot() {
+            var temp = [];
+            const lots = await axios({
+                method: "get",
+                url: "/api/lot/" + this.form.selected_block,
+            });
+            lots.data.forEach((elem) => {
+                temp.push({
+                    lot_number: elem.lot_number,
+                    value: elem.lot_number,
+                });
+            });
+            this.lot = temp;
         },
     },
     created() {
         this.initFilters();
     },
     mounted() {
-        this.block = [
-            { block_number: "1", value: 1 },
-            { block_number: "2", value: 2 },
-            { block_number: "3", value: 3 },
-            { block_number: "4", value: 4 },
-            { block_number: "5", value: 5 },
-        ];
-        this.lot = [
-            { lot_number: "1", value: 1 },
-            { lot_number: "2", value: 2 },
-            { lot_number: "3", value: 3 },
-            { lot_number: "4", value: 4 },
-            { lot_number: "5", value: 5 },
-        ];
         this.getUsers();
+        this.getBlock();
+        this.getLot();
     },
 };
 </script>

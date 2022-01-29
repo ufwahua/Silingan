@@ -10,6 +10,7 @@
                             src="https://i.ibb.co/V3B8NBM/silingan-icon.png"
                     /></router-link>
                 </div>
+
                 <div class="col-12 mb-2 lg:col-12 lg:mb-0">
                     <span class="p-input-icon-left">
                         <i class="pi pi-user" />
@@ -108,14 +109,30 @@ export default {
                 .post("/api/login", this.form)
                 .then((response) => {
                     axios
-                        .get("/api/user")
+                        .get("/api/user/logged")
                         .then((response) => {
-                            if (response.data.role == "resident")
-                                this.$router.push("/user/dashboard");
-                            else this.$router.push("/admin/dashboard");
+                            if (response.data.role == "resident") {
+                                this.$router.push({
+                                    name: "userDashboard",
+                                    params: {
+                                        id: response.data.id,
+                                        first_name: response.data.first_name,
+                                        last_name: response.data.last_name,
+                                    },
+                                });
+                            } else {
+                                this.$router.push({
+                                    name: "adminDashboard",
+                                    params: {
+                                        id: response.data.id,
+                                        first_name: response.data.first_name,
+                                        last_name: response.data.last_name,
+                                    },
+                                });
+                            }
                         })
-                        .catch(() => {
-                            return next({ path: "login" });
+                        .catch((err) => {
+                            console.log(err);
                         });
                 })
                 .catch((err) => {

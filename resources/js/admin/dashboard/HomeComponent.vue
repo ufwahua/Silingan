@@ -1,6 +1,11 @@
 <template>
     <div :class="containerClass" @click="onWrapperClick">
-        <AppTopBar @menu-toggle="onMenuToggle" />
+        <AppTopBar
+            @menu-toggle="onMenuToggle"
+            id="id"
+            first_name="first_name"
+            last_name="last_name"
+        />
         <div class="layout-sidebar" @click="onSidebarClick">
             <AppMenu :model="menu" @menuitem-click="onMenuItemClick" />
         </div>
@@ -30,6 +35,7 @@ import AppFooter from "../AppFooter.vue";
 
 export default {
     name: "HomeComponent",
+    props: ["id", "first_name", "last_name"],
     data() {
         return {
             layoutMode: "static",

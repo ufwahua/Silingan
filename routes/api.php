@@ -1,10 +1,9 @@
 <?php
 
-use App\Http\Controllers\admin\BlockController;
-use App\Http\Controllers\admin\LotController;
-use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\admin\LotController;
+use App\Http\Controllers\admin\BlockController;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,22 +17,20 @@ use Illuminate\Support\Facades\Route;
 */
 
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
+
 Route::middleware('auth:sanctum')->get('/authenticated', function (Request $request) {
     return true;
 });
 
-Route::post('register', [UserController::class, 'register']);
 Route::post('login', [UserController::class, 'login']);
 Route::post('logout', [UserController::class, 'logout']);
-
 //Check if User is Logged in
-Route::get('/verify',[UserController::class,'index']);
+Route::get('/user/logged', [UserController::class, 'getUserLogged']);
 
- Route::apiResources([
-        'block'             => BlockController::class,
-        'lot'             => LotController::class,
-        'user'             => UserController::class,
-    ]);
+Route::apiResources([
+    'block'             => BlockController::class,
+    'lot'             => LotController::class,
+    'user'             => UserController::class,
+]);
+
+

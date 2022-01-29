@@ -25,7 +25,7 @@ class BlockRequest extends FormRequest
     public function rules()
     {
         return [
-            'block_number' => ['required','integer', 'max:255','gt:0'],
+            'block_number' => ['required','integer', 'max:255','gt:0',Rule::unique('blocks')->ignore($this->route('block'))],
         ];
     }
 }

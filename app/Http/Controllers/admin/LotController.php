@@ -18,18 +18,18 @@ class LotController extends Controller
     public function index(Request $request) : JsonResponse
     {
         return response()->json(
-            Lot::query()->orderBy('block_id','asc')->get()
+            Lot::query()->orderBy('block_id','asc')->orderBy('lot_number','asc')->get()
         );
     }
 
     /**
-     * @param Lot $lot
+     * @param Request $request
      * @return JsonResponse
-     */
-    public function show(Lot $lot) : JsonResponse
+    */
+    public function show(Request $request) : JsonResponse
     {
-        return response()->json(
-            Lot::query()->where('block_id',$lot['id'])->orderBy('block_id','asc')->get()
+            return response()->json(  
+                DB::table('lots')->where('block_id' , $request->route('lot'))->orderBy('block_id','asc')->orderBy('lot_number','asc')->get()
         );
     }
 
@@ -79,24 +79,26 @@ class LotController extends Controller
      * @param LotRequest $request
      * @return JsonResponse
      */
-    public function update(Request $request , $id) : JsonResponse
+    public function update(Lot $lot,Request $request ) : JsonResponse
     {
         $found = false;
-        $lots =  Lot::query()->where('block_id',$request['id'])->get();
-        foreach ($lots as $lot)
+        $lots =   DB::table('lots')->where('block_id',$request['block_id'])->get();
+        $lots = json_decode($lots, true);
+        foreach ($lots as $lt) // find lot number duplicate
         {
-            if($lot->lot_number === $request['lot_number']){
+            if($lt['lot_number'] === $request['lot_number']){
                 $found = true;
+                break;
             }
         }
        if(!$found){
-            Lot::where('id', $id)
-                ->update(['block_id' => $request->input('block_id'),
-                         'lot_number'=>$request->input('lot_number')]);
-        return response()->json($lots);
+            $lot->update( $request->validate([
+                'lot_number' => ['required','integer', 'max:255','gt:0']
+            ]));
+            return response()->json($lot);
        }
-      
-       return response()->json("Lot number is exist");
+       else
+            return response()->json(['message' => 'The lot number has already been taken.'], 404);
         
     }
 
@@ -107,7 +109,7 @@ class LotController extends Controller
     public function destroy(Lot $lot) : JsonResponse
     {
         $lot->delete();
-
+        // Lot::query()->where('block_id',$request['block_id'])->where('lot_number',$request['lot_number'])->delete();
         return response()->json(['ok']);
     }
 }

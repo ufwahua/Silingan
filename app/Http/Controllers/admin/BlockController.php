@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\admin;
 
+use App\Models\admin\Lot;
 use App\Models\admin\Block;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
@@ -84,7 +85,7 @@ class BlockController extends Controller
     public function destroy(Block $block) : JsonResponse
     {
         $block->delete();
-
+        Lot::query()->where('block_id',$block['id'])->delete();
         return response()->json(['ok']);
     }
 }

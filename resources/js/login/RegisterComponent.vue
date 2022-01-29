@@ -141,8 +141,8 @@
                         >
                         <InputText
                             id="contact_num"
-                            type="text"
-                            onkeyup="if(this.value<0){this.value= this.value * -1}"
+                            type="number"
+                            oninput="validity.valid||(value='');"
                             v-model="form.contact_num"
                         />
                         <label
@@ -165,7 +165,9 @@
                             v-model="form.selected_block"
                             :options="block"
                             optionLabel="block_number"
+                            optionValue="value"
                             placeholder="Select Block"
+                            @change="getBlockLot"
                         />
                         <label
                             style="color: red"
@@ -187,6 +189,7 @@
                             v-model="form.selected_lot"
                             :options="lot"
                             optionLabel="lot_number"
+                            optionValue="value"
                             placeholder="Select Lot"
                         />
                         <label
@@ -271,7 +274,7 @@
                     </div>
                     <div class="col-12 mb-2 lg:col-12 lg:mb-0">
                         <Button
-                            @click.prevent="onRegisterClick()"
+                            @click.prevent="onRegisterClick"
                             type="submit"
                             label="Register"
                         />
@@ -334,24 +337,49 @@ export default {
     computed: {},
     methods: {
         async onRegisterClick() {
-            try {
-                await axios
-                    .post("/api/register", this.form)
-                    .then(() => {
-                        console.log("Successfully Registered");
-                        this.$router.push({ name: "login" });
-                    })
-                    .catch((err) => {
-                        this.resetFields();
-                        this.validate(err);
-                        console.log(error.response.data);
-                    });
-            } catch (error) {
-                console.log(error.response.data);
-                this.validate(error);
-            }
+            await axios({
+                method: "post",
+                url: "api/user",
+                data: {
+                    first_name: this.form.first_name,
+                    last_name: this.form.last_name,
+                    gender: this.form.gender,
+                    block_number: this.form.selected_block,
+                    lot_number: this.form.selected_lot,
+                    age: this.form.age,
+                    contact_num: this.form.contact_num,
+                    email: this.form.email,
+                    password: this.form.password,
+                    confirm_password: this.form.confirm_password,
+                    role: this.form.role,
+                },
+            })
+                .then(() => {
+                    console.log("Successfully Registered");
+                    this.$router.push({ name: "login" });
+                })
+                .catch((err) => {
+                    this.resetErrors();
+                    this.validate(err);
+                    console.log(err.response.data);
+                });
         },
         resetFields() {
+            this.form = {
+                first_name: "",
+                last_name: "",
+                gender: "",
+                selected_block: "",
+                selected_lot: "",
+                email: "",
+                password: "",
+                confirm_password: "",
+                age: "",
+                contact_num: "",
+                role: "resident",
+            };
+        },
+        resetErrors() {
             this.error_first_name = "";
             this.error_last_name = "";
             this.error_gender = "";
@@ -390,53 +418,52 @@ export default {
                 this.error_contact_num =
                     error.response.data.errors.contact_num[0];
         },
-        // //GET Lot
-        // async getLot() {
-        //     try {
-        //         const { data } = axios({
-        //             method: "get",
-        //             url: "/api/lot/",
-        //         });
-        //         this.lot = data;
-        //     } catch (error) {
-        //         console.log("error");
-        //     }
-        // },
-        // //GET BLOCK
-        // async getBlock() {
-        //     try {
-        //         const { data } = await axios({
-        //             method: "get",
-        //             url: "/api/block/",
-        //         });
-        //         this.block = data;
-        //     } catch (error) {
-        //         console.log(error);
-        //     }
-        // },
+        async getBlock() {
+            var temp = [];
+            const blocks = await axios({
+                method: "get",
+                url: "/api/block",
+            });
+            blocks.data.forEach((elem) => {
+                temp.push({
+                    block_number: elem.block_number,
+                    value: elem.block_number,
+                });
+            });
+            this.block = temp;
+        },
+        async getLot() {
+            var temp = [];
+            const lots = await axios({
+                method: "get",
+                url: "/api/lot",
+            });
+            lots.data.forEach((elem) => {
+                temp.push({
+                    lot_number: elem.lot_number,
+                    value: elem.lot_number,
+                });
+            });
+            this.lot = temp;
+        },
+        async getBlockLot() {
+            var temp = [];
+            const lots = await axios({
+                method: "get",
+                url: "/api/lot/" + this.form.selected_block,
+            });
+            lots.data.forEach((elem) => {
+                temp.push({
+                    lot_number: elem.lot_number,
+                    value: elem.lot_number,
+                });
+            });
+            this.lot = temp;
+        },
     },
-    // watch: {
-    //     selected_block: function (val, oldVal) {
-    //         this.getLot(val.block_number);
-    //     },
-    // },
     mounted() {
-        this.block = [
-            { block_number: "1", value: 1 },
-            { block_number: "2", value: 2 },
-            { block_number: "3", value: 3 },
-            { block_number: "4", value: 4 },
-            { block_number: "5", value: 5 },
-        ];
-        this.lot = [
-            { lot_number: "1", value: 1 },
-            { lot_number: "2", value: 2 },
-            { lot_number: "3", value: 3 },
-            { lot_number: "4", value: 4 },
-            { lot_number: "5", value: 5 },
-        ];
-        // this.getBlock();
-        // this.getLot();
+        this.getBlock();
+        this.getLot();
     },
 };
 </script>

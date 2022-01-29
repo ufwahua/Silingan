@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use Illuminate\Http\JsonResponse;
+
 use App\Http\Requests\LoginRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -18,7 +20,7 @@ class UserController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function login(LoginRequest $request){
+    public function login(LoginRequest $request): JsonResponse{
         $user = User::where('email', $request->email)->first();
 
         if ( $user ||  Hash::check($request->password, $user->password)) {
@@ -31,15 +33,15 @@ class UserController extends Controller
         return $user->createToken('silingan')->plainTextToken;
                 
     }
-    public function register(RegisterRequest $request)
+    public function store(RegisterRequest $request)
     {
 
         if($user = User::create([
             'first_name'=> $request['first_name'],
             'last_name'=> $request['last_name'],
             'gender'=> $request['gender'],
-            'block'=> $request->input("selected_block.block_number"),
-            'lot'=> $request->input("selected_lot.lot_number"),
+            'block'=> $request['block_number'],
+            'lot'=> $request['lot_number'],
             'age'=> $request['age'] ,
             'contact_num'=> $request['contact_num'] ,
             'role'=> $request['role'] ,
@@ -79,23 +81,34 @@ class UserController extends Controller
     {
         return response()->json($user);
     }
-
-
     /**
-     * @param User        $user
-     * @param BlockRequest $request
+     * @param Request $request
      * @return JsonResponse
      */
-    public function update(User $user, RegisterRequest $request) : JsonResponse
+    public function update(User $user, Request $request): JsonResponse
     {
-        $request->validate([
-        'block_number' => ['required','integer', 'max:255','gt:0','unique:blocks' ]
-        ]);
-        $user->update($request->validated());
-
+       $user->update($request->validate([
+           'first_name' => ['required','string' , 'max:255'],
+            'last_name' => ['required','string' , 'max:255'],
+            'gender' => ['required'],
+            'block' => ['required'],
+            'lot' => ['required'],
+            'age' => ['required','integer','numeric','gt:0', 'max:150'],
+            'contact_num' => ['required','string'],
+            'email' => ['required','string' ,'email', 'unique:users,email,'.$request['id']],
+            'role' => ['required','string'],
+       ]));
         return response()->json($user);
+  
     }
-
+    /**
+     * @param User $user
+     * @return JsonResponse
+     */
+    public function getUserLogged(User $user) : JsonResponse
+    {
+        return response()->json(auth()->user());
+    }
     /**
      * @param User $user
      * @return JsonResponse
