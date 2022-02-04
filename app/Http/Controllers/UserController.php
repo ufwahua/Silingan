@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
 use Illuminate\Http\JsonResponse;
 
 use App\Http\Requests\LoginRequest;
@@ -20,17 +19,27 @@ class UserController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function login(LoginRequest $request): JsonResponse{
+    public function login(LoginRequest $request) : JsonResponse
+    {
         $user = User::where('email', $request->email)->first();
 
         if ( $user ||  Hash::check($request->password, $user->password)) {
             Auth::login($user,$request['remember']);
-             $request->session()->regenerate();  
+            $request->session()->regenerate();  
+            $token = $user->createToken('silingan')->plainTextToken;
+            
+            $return=[
+                'auth' => true,
+                'user' => $user,
+                'token'=> $token
+            ];
+            return response()->json($return);
         }
-         else
-            return response(["error"=>"Invalid Credentials, please try again"],401);
-
-        return $user->createToken('silingan')->plainTextToken;
+        return response()->json(["error"=>"Invalid Credentials, please try again"],401);
+        
+        
+        
+  
                 
     }
     public function store(RegisterRequest $request)
@@ -49,8 +58,10 @@ class UserController extends Controller
             'password'=> Hash::make($request['password']),
             'profile_pic'=> $request['profile_pic'],
             ])
-        )
-        return response($user,201);
+        ){
+            return response($user,201);
+        }
+        
     }
     public function logout(Request $request)
     {

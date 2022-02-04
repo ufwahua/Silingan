@@ -330,7 +330,7 @@
                         </template>
                     </Dialog>
                     <Dialog
-                        v-model:visible="process"
+                        v-model:visible="loading"
                         :style="{ width: '450px' }"
                         :modal="true"
                         :closeOnEscape="true"
@@ -426,7 +426,7 @@
                 </template>
             </Dialog>
             <Dialog
-                v-model:visible="process"
+                v-model:visible="loading"
                 :style="{ width: '450px' }"
                 :modal="true"
                 :closeOnEscape="true"
@@ -487,7 +487,7 @@ export default {
             lot_number: null,
             filters: {},
             search: null,
-            process: false,
+            loading: false,
             actions: null,
             form_block_number: null,
             form_lot_number: null,
@@ -552,7 +552,7 @@ export default {
         },
 
         async confirmCreateBlock() {
-            this.process = true;
+            this.loading = true;
             await axios({
                 method: "post",
                 url: "/api/block",
@@ -564,12 +564,12 @@ export default {
                     this.addBlockModal = false;
                     this.getBlock();
                     this.showAddBlockToast();
-                    this.process = false;
+                    this.loading = false;
                 })
                 .catch((error) => {
                     if (error.response.data.errors.block_number)
                         this.error = error.response.data.errors.block_number[0];
-                    this.process = false;
+                    this.loading = false;
                 });
         },
         // Edit Block Modal
@@ -592,7 +592,7 @@ export default {
             this.resetFields();
         },
         async confirmEditBlock() {
-            this.process = true;
+            this.loading = true;
             await axios({
                 method: "put",
                 url: "/api/block/" + this.block_id,
@@ -604,12 +604,12 @@ export default {
                     this.updateBlockModal = false;
                     this.getBlock();
                     this.showUpdateBlockToast();
-                    this.process = false;
+                    this.loading = false;
                 })
                 .catch((error) => {
                     if (error.response.data.errors.block_number)
                         this.error = error.response.data.errors.block_number[0];
-                    this.process = false;
+                    this.loading = false;
                 });
         },
         // Delete Block Modal
@@ -630,7 +630,7 @@ export default {
         },
 
         async confirmDeleteBlock() {
-            this.process = true;
+            this.loading = true;
             await axios({
                 method: "delete",
                 url: "/api/block/" + this.block_id,
@@ -639,11 +639,11 @@ export default {
                     this.deleteModal = false;
                     this.getBlock();
                     this.showDeleteBlockToast();
-                    this.process = false;
+                    this.loading = false;
                 })
                 .catch((error) => {
                     console.log(error);
-                    this.process = false;
+                    this.loading = false;
                 });
         },
 
@@ -693,7 +693,7 @@ export default {
             this.resetFields();
         },
         async confirmCreateLot() {
-            this.process = true;
+            this.loading = true;
             await axios({
                 method: "post",
                 url: "/api/lot",
@@ -706,13 +706,13 @@ export default {
                     this.addLotModal = false;
                     this.getLot();
                     this.showAddLotToast();
-                    this.process = false;
+                    this.loading = false;
                 })
                 .catch((error) => {
                     if (error.response.data.errors.lot)
                         this.error = error.response.data.errors.lot_number[0];
                     this.lot = [];
-                    this.process = false;
+                    this.loading = false;
                 });
         },
 
@@ -723,6 +723,7 @@ export default {
             this.block_id = block_id;
             this.form_lot_number = lot_number;
             this.updateLotModal = true;
+            console.log(this.lot_id, this.block_id, this.form_lot_number);
         },
         closeUpdateLotModal() {
             this.updateLotModal = false;
@@ -739,34 +740,24 @@ export default {
             this.resetFields();
         },
         async confirmEditLot() {
-            this.process = true;
+            this.loading = true;
             await axios({
                 method: "put",
                 url: "/api/lot/" + this.lot_id,
                 data: {
-                    id: this.lot_id,
                     block_id: this.block_id,
                     lot_number: this.form_lot_number,
                 },
             })
-                .then(() => {
-                    console.log(
-                        "id",
-                        this.lot_id,
-                        "block_id",
-                        this.block_id,
-                        "lot_number",
-                        this.form_lot_number
-                    );
+                .then((res) => {
                     this.updateLotModal = false;
                     this.getLot();
                     this.showUpdateLotToast();
-                    this.process = false;
+                    this.loading = false;
                 })
                 .catch((error) => {
-                    console.log(error);
-                    this.error = "The lot number has already been taken.";
-                    this.process = false;
+                    this.error = error.response.data;
+                    this.loading = false;
                 });
         },
         // Delete Lot Modal
@@ -787,7 +778,7 @@ export default {
         },
 
         async confirmDeleteLot() {
-            this.process = true;
+            this.loading = true;
             await axios({
                 method: "delete",
                 url: "/api/lot/" + this.lot_id,
@@ -796,12 +787,12 @@ export default {
                     this.deleteLotModal = false;
                     this.getLot();
                     this.showDeleteToast();
-                    this.process = false;
+                    this.loading = false;
                 })
                 .catch((error) => {
                     this.lot = [];
                     console.log(error);
-                    this.process = false;
+                    this.loading = false;
                 });
         },
     },

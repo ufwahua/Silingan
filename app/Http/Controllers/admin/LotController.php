@@ -79,28 +79,34 @@ class LotController extends Controller
      * @param LotRequest $request
      * @return JsonResponse
      */
-    public function update(Lot $lot,Request $request ) : JsonResponse
+
+      public function update(Request $request ) : JsonResponse
     {
         $found = false;
-        $lots =   DB::table('lots')->where('block_id',$request['block_id'])->get();
+        $lots =  Lot::query()->where('block_id',$request['block_id'])->get();
         $lots = json_decode($lots, true);
         foreach ($lots as $lt) // find lot number duplicate
         {
-            if($lt['lot_number'] === $request['lot_number']){
+            if($lt['lot_number'] === (int)$request['lot_number']){
                 $found = true;
                 break;
             }
         }
        if(!$found){
-            $lot->update( $request->validate([
-                'lot_number' => ['required','integer', 'max:255','gt:0']
+            Lot::query()->where('id',$request->route('lot'))->update( $request->validate([
+            'lot_number' => ['required','integer', 'max:255','gt:0']
             ]));
+            $lot = Lot::findOrFail($request->route('lot'));
             return response()->json($lot);
        }
-       else
-            return response()->json(['message' => 'The lot number has already been taken.'], 404);
+        return response()->json("The lot number has already been taken. ",404);
+     
+      
+      
         
     }
+
+    
 
     /**
      * @param Lot $lot

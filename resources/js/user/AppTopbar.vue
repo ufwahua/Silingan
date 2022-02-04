@@ -62,13 +62,20 @@
 </template>
 
 <script>
-import Image from "primevue/image";
+import { computed } from "vue";
+import { useStore } from "vuex";
 export default {
+    setup() {
+        const store = useStore();
+        return {
+            user: computed(() => store.state.user),
+        };
+    },
     data() {
         return {
             profile_menu: [
                 {
-                    label: "Username",
+                    label: this.user.first_name + " " + this.user.last_name,
                     items: [
                         {
                             label: "Profile",
@@ -91,13 +98,12 @@ export default {
                             icon: "pi pi-sign-out",
                             command: async () => {
                                 await axios({
-                                    method: "get",
-                                    url: "api/logout",
+                                    method: "post",
+                                    url: "/api/logout",
                                 })
                                     .then((response) => {
-                                        this.$router.push({
-                                            path: "login",
-                                        });
+                                        this.$router.push("/login");
+                                        this.$store.dispatch("getUser", null);
                                     })
                                     .catch((error) => {
                                         console.log(error);

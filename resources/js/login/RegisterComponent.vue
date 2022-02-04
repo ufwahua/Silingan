@@ -1,7 +1,12 @@
 <template>
-    <div class="grid p-fluid">
-        <div class="col-12 md:col-12">
-            <div class="login100-form">
+    <div
+        class="surface-0 flex align-items-center justify-content-center min-h-screen min-w-screen overflow-hidden"
+    >
+        <div class="card">
+            <div
+                class="grid justify-content-center p-2 lg:p-0"
+                style="width: 60vw"
+            >
                 <div class="col-12 mb-2 lg:col-12 lg:mb-3 text-center">
                     <router-link to="/" :key="$route.fullPath">
                         <img
@@ -165,7 +170,7 @@
                             v-model="form.selected_block"
                             :options="block"
                             optionLabel="block_number"
-                            optionValue="value"
+                            optionValue="block_number"
                             placeholder="Select Block"
                             @change="getBlockLot"
                         />
@@ -187,9 +192,9 @@
                         >
                         <Dropdown
                             v-model="form.selected_lot"
-                            :options="lot"
+                            :options="filteredLots"
                             optionLabel="lot_number"
-                            optionValue="value"
+                            optionValue="lot_number"
                             placeholder="Select Lot"
                         />
                         <label
@@ -240,11 +245,11 @@
                             v-if="!form.password"
                             >*</label
                         >
-                        <InputText
-                            type="password"
+                        <Password
                             name="password"
                             v-model="form.password"
-                        />
+                            toggleMask
+                        ></Password>
                         <label
                             style="color: red"
                             for="form.password"
@@ -260,11 +265,11 @@
                             v-if="!form.confirm_password"
                             >*</label
                         >
-                        <InputText
-                            type="password"
+                        <Password
                             name="confirmpassword"
                             v-model="form.confirm_password"
-                        />
+                            toggleMask
+                        ></Password>
                         <label
                             style="color: red"
                             for="confirm_password"
@@ -279,26 +284,34 @@
                             label="Register"
                         />
                     </div>
-                    <div class="col-12 mb-2 lg:col-12 lg:mb-0 text-center">
-                        <router-link to="/login"
-                            ><a class="custom-link" href="#">
-                                Login
-                                <i aria-hidden="true"></i> </a
-                        ></router-link>
+                    <div class="col-12 mb-2 lg:col-12 lg:mb-0">
+                        <p class="custom-text">
+                            Already have an account?
+                            <router-link to="login" :key="$route.fullPath">
+                                <a class="custom-link" href="#"
+                                    >Login
+                                </a></router-link
+                            >
+                        </p>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </template>
-
 <script>
-import RadioButton from "primevue/radiobutton";
-import InputText from "primevue/inputtext";
-import Dropdown from "primevue/dropdown";
 import axios from "axios";
-
+import { computed } from "vue";
+import { useStore } from "vuex";
 export default {
+    setup() {
+        const store = useStore();
+        return {
+            block: computed(() => store.state.block.block),
+            lot: computed(() => store.state.lot.lot),
+            filteredLots: computed(() => store.state.lot.filteredLots),
+        };
+    },
     data() {
         return {
             form: {
@@ -314,8 +327,6 @@ export default {
                 contact_num: "",
                 role: "resident",
             },
-            block: null,
-            lot: null,
 
             error_first_name: "",
             error_last_name: "",
@@ -329,11 +340,7 @@ export default {
             error_contact_num: "",
         };
     },
-    components: {
-        RadioButton,
-        InputText,
-        Dropdown,
-    },
+
     computed: {},
     methods: {
         async onRegisterClick() {
@@ -418,52 +425,53 @@ export default {
                 this.error_contact_num =
                     error.response.data.errors.contact_num[0];
         },
-        async getBlock() {
-            var temp = [];
-            const blocks = await axios({
-                method: "get",
-                url: "/api/block",
-            });
-            blocks.data.forEach((elem) => {
-                temp.push({
-                    block_number: elem.block_number,
-                    value: elem.block_number,
-                });
-            });
-            this.block = temp;
-        },
-        async getLot() {
-            var temp = [];
-            const lots = await axios({
-                method: "get",
-                url: "/api/lot",
-            });
-            lots.data.forEach((elem) => {
-                temp.push({
-                    lot_number: elem.lot_number,
-                    value: elem.lot_number,
-                });
-            });
-            this.lot = temp;
-        },
+        // async getBlock() {
+        //     var temp = [];
+        //     const blocks = await axios({
+        //         method: "get",
+        //         url: "/api/block",
+        //     });
+        //     blocks.data.forEach((elem) => {
+        //         temp.push({
+        //             block_number: elem.block_number,
+        //             value: elem.block_number,
+        //         });
+        //     });
+        //     this.block = temp;
+        // },
+        // async getLot() {
+        //     var temp = [];
+        //     const lots = await axios({
+        //         method: "get",
+        //         url: "/api/lot",
+        //     });
+        //     lots.data.forEach((elem) => {
+        //         temp.push({
+        //             lot_number: elem.lot_number,
+        //             value: elem.lot_number,
+        //         });
+        //     });
+        //     this.lot = temp;
+        // },
         async getBlockLot() {
-            var temp = [];
-            const lots = await axios({
-                method: "get",
-                url: "/api/lot/" + this.form.selected_block,
-            });
-            lots.data.forEach((elem) => {
-                temp.push({
-                    lot_number: elem.lot_number,
-                    value: elem.lot_number,
-                });
-            });
-            this.lot = temp;
+            this.$store.dispatch("lot/getBlockLots", this.form.selected_block);
+            // var temp = [];
+            // const lots = await axios({
+            //     method: "get",
+            //     url: "/api/lot/" + this.form.selected_block,
+            // });
+            // lots.data.forEach((elem) => {
+            //     temp.push({
+            //         lot_number: elem.lot_number,
+            //         value: elem.lot_number,
+            //     });
+            // });
+            // this.lot = temp;
         },
     },
-    mounted() {
-        this.getBlock();
-        this.getLot();
+    created() {
+        this.$store.dispatch("block/getAll");
+        this.$store.dispatch("lot/getAll");
     },
 };
 </script>

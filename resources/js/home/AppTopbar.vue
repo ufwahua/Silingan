@@ -27,12 +27,26 @@
             <i class="pi pi-ellipsis-v"></i>
         </button>
 
-        <ul class="layout-topbar-menu hidden lg:flex origin-top">
-            <router-link to="login">
-                <li>
-                    <Button label="Log in" class="mr-2 mb-2 p-button"></Button>
-                </li>
-            </router-link>
+        <ul
+            class="layout-topbar-menu hidden lg:flex align-items-center justify-content-center origin-top"
+        >
+            <li>
+                <router-link to="login">
+                    <Button
+                        label="Login"
+                        class="p-button-text p-button-rounded border-none font-light line-height-2 text-blue-500"
+                    ></Button>
+                </router-link>
+            </li>
+
+            <li>
+                <router-link to="register">
+                    <Button
+                        label="Register"
+                        class="p-button-rounded border-none ml-2 font-light text-white line-height-2 bg-blue-500"
+                    ></Button>
+                </router-link>
+            </li>
         </ul>
     </div>
 </template>
@@ -43,11 +57,17 @@ export default {
         return {};
     },
     methods: {
+        toggle(event) {
+            this.$refs.menu.toggle(event);
+        },
         onMenuToggle(event) {
             this.$emit("menu-toggle", event);
         },
         onTopbarMenuToggle(event) {
             this.$emit("topbar-menu-toggle", event);
+        },
+        topbarImage() {
+            return "silingan-icon.png";
         },
     },
 };

@@ -1,8 +1,9 @@
 // import "../css/app.scss";
 require("./bootstrap");
 import { createApp } from "vue";
+import store from "./store/store";
 import Index from "./Index.vue";
-import router from "./index";
+import router from "./router/index";
 import PrimeVue from "primevue/config";
 import ToastService from "primevue/toastservice";
 
@@ -104,6 +105,7 @@ import TriStateCheckbox from "primevue/tristatecheckbox";
 createApp(Index)
     .use(ToastService)
     .use(router)
+    .use(store)
     .use(PrimeVue, { ripple: true, inputStyle: "outlined" })
     .use(ConfirmationService)
     .directive("tooltip", Tooltip)

@@ -5,7 +5,6 @@
                 alt="Silingan-Logo"
                 src="https://i.ibb.co/V3B8NBM/silingan-icon.png"
             />
-            <!--<span>Silingan</span>-->
         </router-link>
         <button
             class="p-link layout-menu-button layout-topbar-button"
@@ -63,17 +62,15 @@
 </template>
 
 <script>
-import Menu from "primevue/menu";
 export default {
-    props: ["id", "first_name", "last_name"],
     data() {
         return {
             profile_menu: [
                 {
+                    label: localStorage.full_name,
                     items: [
-                        { label: this.first_name + " " + this.last_name },
                         {
-                            label: "Profiles",
+                            label: "Profile",
                             icon: "pi pi-pencil",
                             command: () => {
                                 this.$toast.add({
@@ -94,6 +91,7 @@ export default {
                                 })
                                     .then((response) => {
                                         this.$router.push("/login");
+                                        this.$store.dispatch("getUser", null);
                                     })
                                     .catch((error) => {
                                         console.log(error);
@@ -114,9 +112,6 @@ export default {
         },
         onTopbarMenuToggle(event) {
             this.$emit("topbar-menu-toggle", event);
-        },
-        topbarImage() {
-            return "silingan-icon.png";
         },
     },
 };

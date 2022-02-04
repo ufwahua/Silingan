@@ -1,8 +1,13 @@
 <template>
-    <div class="grid p-fluid">
-        <div class="col-12 md:col-12">
-            <div class="login100-form">
-                <div class="col-12 mb-2 lg:col-12 lg:mb-3 text-center">
+    <div
+        class="surface-0 flex align-items-center justify-content-center min-h-screen min-w-screen overflow-hidden"
+    >
+        <div class="card">
+            <div
+                class="grid justify-content-center p-2 lg:p-0"
+                style="min-width: 80%"
+            >
+                <div class="col-12 mt-5 xl:mt-0 text-center">
                     <router-link to="/" :key="$route.fullPath">
                         <img
                             class="Silingan-logo"
@@ -11,60 +16,65 @@
                     /></router-link>
                 </div>
 
-                <div class="col-12 mb-2 lg:col-12 lg:mb-0">
-                    <span class="p-input-icon-left">
-                        <i class="pi pi-user" />
-                        <InputText
-                            type="text"
-                            placeholder="Email"
-                            name="email"
-                            v-model="form.email"
-                        />
-                    </span>
-                </div>
-
-                <div class="col-12 mb-2 lg:col-12 lg:mb-0">
-                    <span class="p-input-icon-left">
-                        <i class="pi pi-lock" />
-                        <InputText
-                            type="password"
-                            placeholder="Password"
-                            name="password"
-                            v-model="form.password"
-                        />
-                    </span>
-                </div>
-
-                <div class="grid formgrid">
-                    <div class="col-6">
-                        <div class="field-checkbox mb-0 ch-remember">
-                            <Checkbox
-                                id="remember"
-                                name="remember"
-                                v-model="form.remember"
-                            />
-                            <label class="mb-0 ml-1" for="remember"
-                                >Remember me</label
-                            >
-                        </div>
-                    </div>
-                    <div class="col-6">
-                        <a class="custom-link link-forgot" href="#"
-                            >Forgot Password?
-                        </a>
-                    </div>
-                </div>
-                <br />
-
-                <div class="col-12 mb-2 lg:col-12 lg:mb-0">
-                    <Button
-                        label="Login"
-                        class="p-button-info mr-2 mb-2 login-btn"
-                        @click="onLoginSubmit"
-                        type="submit"
+                <div class="w-full md:w-10 mx-auto">
+                    <label
+                        for="email1"
+                        class="block text-900 text-xl font-medium mb-2"
+                        >Email</label
+                    >
+                    <InputText
+                        id="email1"
+                        :class="{ 'p-invalid': error }"
+                        v-model="form.email"
+                        type="text"
+                        class="w-full mb-3"
+                        placeholder="Email"
+                        style="padding: 1rem"
                     />
-                </div>
 
+                    <label
+                        for="password1"
+                        class="block text-900 font-medium text-xl mb-2"
+                        >Password</label
+                    >
+                    <Password
+                        id="password1"
+                        :class="{ 'p-invalid': error }"
+                        v-model="form.password"
+                        placeholder="Password"
+                        :toggleMask="true"
+                        class="w-full mb-3"
+                        inputClass="w-full"
+                        inputStyle="padding:1rem"
+                    ></Password>
+                    <label style="color: red" v-if="error">{{
+                        this.error
+                    }}</label>
+                    <div
+                        class="flex align-items-center justify-content-between mb-5"
+                    >
+                        <div class="flex align-items-center">
+                            <Checkbox
+                                id="rememberme1"
+                                v-model="form.remember"
+                                :binary="true"
+                                class="mr-2"
+                            ></Checkbox>
+                            <label for="rememberme1">Remember me</label>
+                        </div>
+                        <a
+                            href="#"
+                            class="font-medium no-underline ml-2 text-right cursor-pointer"
+                            style="color: var(--primary-color)"
+                            >Forgot password?</a
+                        >
+                    </div>
+                    <Button
+                        label="Sign In"
+                        @click="onLoginSubmit"
+                        class="w-full p-3 text-xl"
+                    ></Button>
+                </div>
                 <div class="col-12 mb-2 lg:col-12 lg:mb-0">
                     <p class="custom-text">
                         Don't have an account?
@@ -81,15 +91,19 @@
 </template>
 
 <script>
-import Checkbox from "primevue/checkbox";
-import Button from "primevue/button";
-
+import { computed } from "vue";
+import { useStore } from "vuex";
 import axios from "axios";
 
 export default {
-    components: {
-        Checkbox,
-        Button,
+    setup() {
+        const store = useStore();
+        return {
+            user: computed(() => store.state.user),
+        };
+    },
+    state: {
+        user: null,
     },
     data() {
         return {
@@ -108,35 +122,28 @@ export default {
             axios
                 .post("/api/login", this.form)
                 .then((response) => {
-                    axios
-                        .get("/api/user/logged")
-                        .then((response) => {
-                            if (response.data.role == "resident") {
-                                this.$router.push({
-                                    name: "userDashboard",
-                                    params: {
-                                        id: response.data.id,
-                                        first_name: response.data.first_name,
-                                        last_name: response.data.last_name,
-                                    },
-                                });
-                            } else {
-                                this.$router.push({
-                                    name: "adminDashboard",
-                                    params: {
-                                        id: response.data.id,
-                                        first_name: response.data.first_name,
-                                        last_name: response.data.last_name,
-                                    },
-                                });
-                            }
-                        })
-                        .catch((err) => {
-                            console.log(err);
+                    this.error = "";
+                    this.$store.dispatch("getUser", response.data.user);
+                    if (response.data.user.role == "resident") {
+                        localStorage.full_name =
+                            response.data.user.first_name +
+                            " " +
+                            response.data.user.last_name;
+                        this.$router.push({
+                            name: "userDashboard",
                         });
+                    } else {
+                        this.$router.push({
+                            name: "adminDashboard",
+                        });
+                    }
                 })
                 .catch((err) => {
-                    this.error = err.response.data.error;
+                    this.error = "";
+                    console.log(err);
+                    if (err.response.data.errors) {
+                        this.error = "Invalid Credentials";
+                    }
                 });
         },
     },

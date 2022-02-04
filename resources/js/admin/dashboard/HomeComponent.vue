@@ -1,11 +1,6 @@
 <template>
     <div :class="containerClass" @click="onWrapperClick">
-        <AppTopBar
-            @menu-toggle="onMenuToggle"
-            id="id"
-            first_name="first_name"
-            last_name="last_name"
-        />
+        <AppTopBar @menu-toggle="onMenuToggle" />
         <div class="layout-sidebar" @click="onSidebarClick">
             <AppMenu :model="menu" @menuitem-click="onMenuItemClick" />
         </div>
@@ -16,8 +11,6 @@
             </div>
             <AppFooter />
         </div>
-
-        <!-- <AppConfig :layoutMode="layoutMode" :layoutColorMode="layoutColorMode" @layout-change="onLayoutChange" @layout-color-change="onLayoutColorChange" /> -->
         <transition name="layout-mask">
             <div
                 class="layout-mask p-component-overlay"
@@ -30,12 +23,10 @@
 <script>
 import AppTopBar from "../AppTopbar.vue";
 import AppMenu from "../AppMenu.vue";
-// import AppConfig from './AppConfig.vue';
 import AppFooter from "../AppFooter.vue";
 
 export default {
     name: "HomeComponent",
-    props: ["id", "first_name", "last_name"],
     data() {
         return {
             layoutMode: "static",
@@ -55,45 +46,49 @@ export default {
                     ],
                 },
                 {
-                    label: "Maintain",
-                    icon: "pi pi-fw pi-sitemap",
                     items: [
                         {
-                            label: "Block and Lot",
-                            icon: "pi pi-info-circle",
-                            to: "/block-lot",
-                        },
-                        {
-                            label: "Users",
-                            icon: "pi pi-info-circle",
-                            to: "/registered-users",
-                        },
+                            label: "Maintain",
+                            icon: "pi pi-fw pi-sitemap",
+                            items: [
+                                {
+                                    label: "Block and Lot",
+                                    icon: "pi pi-info-circle",
+                                    to: "/block-lot",
+                                },
+                                {
+                                    label: "Users",
+                                    icon: "pi pi-info-circle",
+                                    to: "/registered-users",
+                                },
 
-                        // {
-                        //     label: "Device Status",
-                        //     icon: "pi pi-info-circle",
-                        //     to: "/devicestatus",
-                        // },
-                        // {
-                        //     label: "Device Condition",
-                        //     icon: "pi pi-info-circle",
-                        //     to: "/devicecondition",
-                        // },
-                        // {
-                        //     label: "Make",
-                        //     icon: "pi pi-info-circle",
-                        //     to: "/make",
-                        // },
-                        // {
-                        //     label: "Type",
-                        //     icon: "pi pi-info-circle",
-                        //     to: "/type",
-                        // },
-                        // {
-                        //     label: "Vendor",
-                        //     icon: "pi pi-info-circle",
-                        //     to: "/vendor",
-                        // },
+                                // {
+                                //     label: "Device Status",
+                                //     icon: "pi pi-info-circle",
+                                //     to: "/devicestatus",
+                                // },
+                                // {
+                                //     label: "Device Condition",
+                                //     icon: "pi pi-info-circle",
+                                //     to: "/devicecondition",
+                                // },
+                                // {
+                                //     label: "Make",
+                                //     icon: "pi pi-info-circle",
+                                //     to: "/make",
+                                // },
+                                // {
+                                //     label: "Type",
+                                //     icon: "pi pi-info-circle",
+                                //     to: "/type",
+                                // },
+                                // {
+                                //     label: "Vendor",
+                                //     icon: "pi pi-info-circle",
+                                //     to: "/vendor",
+                                // },
+                            ],
+                        },
                     ],
                 },
                 // {
@@ -305,6 +300,7 @@ export default {
         // 'AppConfig': AppConfig,
         AppFooter: AppFooter,
     },
+    created() {},
 };
 </script>
 

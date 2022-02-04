@@ -38,9 +38,7 @@
                     <DataTable
                         :value="user"
                         :filters="filters"
-                        :resizableColumns="true"
-                        columnResizeMode="fit"
-                        responsiveLayout="scroll"
+                        breakpoint="1230px"
                     >
                         <template #empty> No registered users found </template>
                         <template #loading> Loading Users </template>
