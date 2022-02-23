@@ -8,28 +8,68 @@ import RegisteredUsersComponent from "../admin/dashboard/RegisterUsersComponent.
 
 import UserHome from "../user/dashboard/UserHomeComponent.vue";
 import UserDashboard from "../user/dashboard/UserDashboardComponent.vue";
-import DeviceStatusComponent from "../user/contents/DeviceStatusComponent.vue";
-import DeviceConditionComponent from "../user/contents/DeviceConditionComponent.vue";
-import MakeComponent from "../user/contents/MakeComponent.vue";
-import TypeComponent from "../user/contents/TypeComponent.vue";
-import VendorComponent from "../user/contents/VendorComponent.vue";
 
 import NotFound from "../not-found-components/NotFoundComponent.vue";
 import { createRouter, createWebHistory } from "vue-router";
 import { computed } from "vue";
 import { useStore } from "vuex";
 
-const toEnter = async (to, from, next) => {
-    const store = useStore();
-    const user = computed(() => store.state.user);
-    if (user != null) {
-        next({ name: "adminDashboard" });
+function checkRole(to, from, next) {
+    var isAuthenticated = false;
+    var role = localStorage.role;
+    if (localStorage.getItem("user")) isAuthenticated = true;
+    else isAuthenticated = false;
+    if (isAuthenticated) {
+        next();
     } else {
-        next({ name: "login" });
+        next("/login");
     }
-};
 
-export default createRouter({
+    // let isAuthenticated = false;
+    // let userLogged = store.state.userLogged;
+    // if (userLogged) isAuthenticated = true;
+    // else isAuthenticated = false;
+
+    // if (!isAuthenticated) {
+    //     next({ name: "login" });
+    // } else {
+    //     console.log(to.name);
+    //     if (userLogged.type === "admin" && to.meta.role === "employee") {
+    //         next("/admin/dashboard");
+    //     }
+    //     if (userLogged.type === "employee" && to.meta.role === "admin") {
+    //         next("/employee/dashboard");
+    //     }
+    //     next();
+    // }
+}
+function checkLogged(to, from, next) {
+    var isAuthenticated = false;
+    var role = localStorage.role;
+    if (localStorage.getItem("user")) isAuthenticated = true;
+    else isAuthenticated = false;
+    if (isAuthenticated && role === "admin") {
+        next("/admin/dashboard");
+    } else if (isAuthenticated && role === "resident") {
+        next("/user/dashboard");
+    } else {
+        next();
+    }
+
+    //  let isAuthenticated = false;
+    //  let userLogged = store.state.userLogged;
+    //  if (userLogged) isAuthenticated = true;
+    //  else isAuthenticated = false;
+
+    //  if (isAuthenticated && userLogged.type === "admin") {
+    //      next("/admin/dashboard");
+    //  } else if (isAuthenticated && userLogged.type === "employee") {
+    //      next("/employee/dashboard");
+    //  } else {
+    //      next();
+    //  }
+}
+const router = createRouter({
     history: createWebHistory(),
     linkActiveClass: "active",
     routes: [
@@ -37,6 +77,7 @@ export default createRouter({
         {
             path: "/",
             component: IndexComponent,
+            beforeEnter: checkLogged,
             name: "index",
             meta: {
                 reload: true,
@@ -45,74 +86,45 @@ export default createRouter({
         {
             path: "/login",
             component: Login,
+            beforeEnter: checkLogged,
             name: "login",
         },
         {
             path: "/register",
             component: Register,
+            beforeEnter: checkLogged,
             name: "register",
         },
         {
             path: "/admin",
             component: HomeComponent,
+            beforeEnter: checkRole,
             name: "adminHome",
+
             children: [
                 {
                     path: "/admin/dashboard",
-                    name: "adminDashboard",
+                    beforeEnter: checkRole,
+
                     components: {
                         default: NotFound,
                         contents: DashboardComponent,
                     },
                 },
                 {
-                    path: "/block-lot",
+                    path: "block-lot",
+                    beforeEnter: checkRole,
                     components: {
                         default: NotFound,
                         contents: Block_Lot,
                     },
                 },
                 {
-                    path: "/registered-users",
+                    path: "registered-users",
+                    beforeEnter: checkRole,
                     components: {
                         default: NotFound,
                         contents: RegisteredUsersComponent,
-                    },
-                },
-
-                {
-                    path: "/devicestatus",
-                    components: {
-                        default: NotFound,
-                        contents: DeviceStatusComponent,
-                    },
-                },
-                {
-                    path: "/devicecondition",
-                    components: {
-                        default: NotFound,
-                        contents: DeviceConditionComponent,
-                    },
-                },
-                {
-                    path: "/make",
-                    components: {
-                        default: NotFound,
-                        contents: MakeComponent,
-                    },
-                },
-                {
-                    path: "/type",
-                    components: {
-                        default: NotFound,
-                        contents: TypeComponent,
-                    },
-                },
-                {
-                    path: "/vendor",
-                    components: {
-                        default: NotFound,
-                        contents: VendorComponent,
                     },
                 },
             ],
@@ -120,67 +132,23 @@ export default createRouter({
         {
             path: "/user",
             component: UserHome,
+            beforeEnter: checkRole,
             name: "userhome",
             children: [
                 {
-                    path: "/dashboard",
-                    name: "userDashboard",
+                    path: "/user/dashboard",
+                    beforeEnter: checkRole,
+                    meta: {
+                        reload: true,
+                    },
                     components: {
                         default: NotFound,
                         contents: UserDashboard,
-                    },
-                },
-                {
-                    path: "/block-lot",
-                    components: {
-                        default: NotFound,
-                        contents: Block_Lot,
-                    },
-                },
-                {
-                    path: "/registered-users",
-                    components: {
-                        default: NotFound,
-                        contents: RegisteredUsersComponent,
-                    },
-                },
-
-                {
-                    path: "/devicestatus",
-                    components: {
-                        default: NotFound,
-                        contents: DeviceStatusComponent,
-                    },
-                },
-                {
-                    path: "/devicecondition",
-                    components: {
-                        default: NotFound,
-                        contents: DeviceConditionComponent,
-                    },
-                },
-                {
-                    path: "/make",
-                    components: {
-                        default: NotFound,
-                        contents: MakeComponent,
-                    },
-                },
-                {
-                    path: "/type",
-                    components: {
-                        default: NotFound,
-                        contents: TypeComponent,
-                    },
-                },
-                {
-                    path: "/vendor",
-                    components: {
-                        default: NotFound,
-                        contents: VendorComponent,
                     },
                 },
             ],
         },
     ],
 });
+
+export default router;

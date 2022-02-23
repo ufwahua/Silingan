@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\admin\LotController;
 use App\Http\Controllers\admin\BlockController;
@@ -17,13 +18,8 @@ use App\Http\Controllers\admin\BlockController;
 */
 
 
-
-Route::middleware('auth:sanctum')->get('/authenticated', function (Request $request) {
-    return true;
-});
-
 Route::post('login', [UserController::class, 'login']);
-Route::post('logout', [UserController::class, 'logout']);
+Route::post('logout', [UserController::class, 'logout'])->middleware('auth:sanctum');
 //Check if User is Logged in
 Route::get('/user/logged', [UserController::class, 'getUserLogged']);
 

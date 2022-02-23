@@ -123,19 +123,17 @@ export default {
                 .post("/api/login", this.form)
                 .then((response) => {
                     this.error = "";
-                    this.$store.dispatch("getUser", response.data.user);
-                    if (response.data.user.role == "resident") {
-                        localStorage.full_name =
-                            response.data.user.first_name +
-                            " " +
-                            response.data.user.last_name;
-                        this.$router.push({
-                            name: "userDashboard",
-                        });
+                    this.$store.dispatch("getUser", response.data);
+                    localStorage.user = response.data;
+                    localStorage.role = response.data.role;
+                    localStorage.full_name =
+                        response.data.first_name +
+                        " " +
+                        response.data.last_name;
+                    if (response.data.role == "resident") {
+                        this.$router.push("/user/dashboard");
                     } else {
-                        this.$router.push({
-                            name: "adminDashboard",
-                        });
+                        this.$router.push("/admin/dashboard");
                     }
                 })
                 .catch((err) => {
@@ -147,12 +145,10 @@ export default {
                 });
         },
     },
-    mounted() {},
 };
 </script>
 
 <style scoped>
-@import "./App.scss";
 @import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap");
 
 /* div {

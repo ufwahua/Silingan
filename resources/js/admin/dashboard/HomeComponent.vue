@@ -11,6 +11,7 @@
             </div>
             <AppFooter />
         </div>
+        <!-- <AppConfig :layoutMode="layoutMode" @layout-change="onLayoutChange" @change-theme="changeTheme" /> -->
         <transition name="layout-mask">
             <div
                 class="layout-mask p-component-overlay"
@@ -24,6 +25,7 @@
 import AppTopBar from "../AppTopbar.vue";
 import AppMenu from "../AppMenu.vue";
 import AppFooter from "../AppFooter.vue";
+// import AppConfig from "../AppConfig.vue";
 
 export default {
     name: "HomeComponent",
@@ -54,135 +56,17 @@ export default {
                                 {
                                     label: "Block and Lot",
                                     icon: "pi pi-info-circle",
-                                    to: "/block-lot",
+                                    to: "/admin/block-lot",
                                 },
                                 {
                                     label: "Users",
                                     icon: "pi pi-info-circle",
-                                    to: "/registered-users",
+                                    to: "/admin/registered-users",
                                 },
-
-                                // {
-                                //     label: "Device Status",
-                                //     icon: "pi pi-info-circle",
-                                //     to: "/devicestatus",
-                                // },
-                                // {
-                                //     label: "Device Condition",
-                                //     icon: "pi pi-info-circle",
-                                //     to: "/devicecondition",
-                                // },
-                                // {
-                                //     label: "Make",
-                                //     icon: "pi pi-info-circle",
-                                //     to: "/make",
-                                // },
-                                // {
-                                //     label: "Type",
-                                //     icon: "pi pi-info-circle",
-                                //     to: "/type",
-                                // },
-                                // {
-                                //     label: "Vendor",
-                                //     icon: "pi pi-info-circle",
-                                //     to: "/vendor",
-                                // },
                             ],
                         },
                     ],
                 },
-                // {
-                //     label: "Test",
-                //     items: [
-                //         {
-                //             label: "Master List",
-                //             icon: "pi pi-list",
-                //             to: "/home/device",
-                //         },
-                //     ],
-                // },
-                // {
-                //     label: "Group Name",
-                //     icon: "pi pi-fw pi-search",
-                //     items: [
-                //         {
-                //             label: "Submenu 1",
-                //             icon: "pi pi-fw pi-bookmark",
-                //             items: [
-                //                 {
-                //                     label: "Submenu 1.1",
-                //                     icon: "pi pi-fw pi-bookmark",
-                //                     items: [
-                //                         {
-                //                             label: "Submenu 1.1.1",
-                //                             icon: "pi pi-fw pi-bookmark",
-                //                         },
-                //                         {
-                //                             label: "Submenu 1.1.2",
-                //                             icon: "pi pi-fw pi-bookmark",
-                //                         },
-                //                         {
-                //                             label: "Submenu 1.1.3",
-                //                             icon: "pi pi-fw pi-bookmark",
-                //                         },
-                //                     ],
-                //                 },
-                //                 {
-                //                     label: "Submenu 1.2",
-                //                     icon: "pi pi-fw pi-bookmark",
-                //                     items: [
-                //                         {
-                //                             label: "Submenu 1.2.1",
-                //                             icon: "pi pi-fw pi-bookmark",
-                //                         },
-                //                         {
-                //                             label: "Submenu 1.2.2",
-                //                             icon: "pi pi-fw pi-bookmark",
-                //                         },
-                //                     ],
-                //                 },
-                //             ],
-                //         },
-                //         {
-                //             label: "Submenu 2",
-                //             icon: "pi pi-fw pi-bookmark",
-                //             items: [
-                //                 {
-                //                     label: "Submenu 2.1",
-                //                     icon: "pi pi-fw pi-bookmark",
-                //                     items: [
-                //                         {
-                //                             label: "Submenu 2.1.1",
-                //                             icon: "pi pi-fw pi-bookmark",
-                //                         },
-                //                         {
-                //                             label: "Submenu 2.1.2",
-                //                             icon: "pi pi-fw pi-bookmark",
-                //                         },
-                //                         {
-                //                             label: "Submenu 2.1.3",
-                //                             icon: "pi pi-fw pi-bookmark",
-                //                         },
-                //                     ],
-                //                 },
-                //                 {
-                //                     label: "Submenu 2.2",
-                //                     icon: "pi pi-fw pi-bookmark",
-                //                     items: [
-                //                         {
-                //                             label: "Submenu 2.2.1",
-                //                             icon: "pi pi-fw pi-bookmark",
-                //                         },
-                //                         {
-                //                             label: "Submenu 2.2.2",
-                //                             icon: "pi pi-fw pi-bookmark",
-                //                         },
-                //                     ],
-                //                 },
-                //             ],
-                //         },
-                //     ],
-                // },
             ],
         };
     },
@@ -252,7 +136,7 @@ export default {
                 );
         },
         isDesktop() {
-            return window.innerWidth >= 992;
+            return window.innerWidth >= 1200;
         },
         isSidebarVisible() {
             if (this.isDesktop()) {
@@ -297,7 +181,7 @@ export default {
     components: {
         AppTopBar: AppTopBar,
         AppMenu: AppMenu,
-        // 'AppConfig': AppConfig,
+        // AppConfig: AppConfig,
         AppFooter: AppFooter,
     },
     created() {},

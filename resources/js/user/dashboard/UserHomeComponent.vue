@@ -14,7 +14,7 @@
             </div>
             <AppFooter />
         </div>
-
+        <AppConfig :layoutMode="layoutMode" />
         <transition name="layout-mask">
             <div
                 class="layout-mask p-component-overlay"
@@ -27,7 +27,7 @@
 <script>
 import AppTopBar from "../AppTopbar.vue";
 import AppMenu from "../AppMenu.vue";
-
+import AppConfig from "../AppConfig.vue";
 import AppFooter from "../AppFooter.vue";
 
 export default {
@@ -45,12 +45,12 @@ export default {
                         {
                             label: "Home",
                             icon: "pi pi-fw pi-home",
-                            to: "/home/news_feed",
+                            to: "/user/dashboard",
                         },
                         {
                             label: "Neighbourhood",
                             icon: "pi pi-fw pi-map",
-                            to: "/home/devicestatus",
+                            to: "/user/neighbourhood",
                         },
                     ],
                 },
@@ -64,11 +64,11 @@ export default {
                             items: [
                                 {
                                     label: "Group 1",
-                                    to: "/home/devicecondition",
+                                    to: "/user/test",
                                 },
                                 {
                                     label: "Group 2",
-                                    to: "/home/make",
+                                    to: "/user/test2",
                                 },
                             ],
                         },
@@ -121,9 +121,7 @@ export default {
                 this.mobileMenuActive = false;
             }
         },
-        onLayoutChange(layoutMode) {
-            this.layoutMode = layoutMode;
-        },
+
         onLayoutColorChange(layoutColorMode) {
             this.layoutColorMode = layoutColorMode;
         },
@@ -143,7 +141,7 @@ export default {
                 );
         },
         isDesktop() {
-            return window.innerWidth >= 992;
+            return window.innerWidth >= 1200;
         },
         isSidebarVisible() {
             if (this.isDesktop()) {
@@ -188,7 +186,7 @@ export default {
     components: {
         AppTopBar: AppTopBar,
         AppMenu: AppMenu,
-
+        AppConfig: AppConfig,
         AppFooter: AppFooter,
     },
 };

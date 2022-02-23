@@ -91,6 +91,9 @@ export default {
                                 })
                                     .then((response) => {
                                         this.$router.push("/login");
+                                        localStorage.removeItem("full_name");
+                                        localStorage.removeItem("user");
+                                        localStorage.removeItem("role");
                                         this.$store.dispatch("getUser", null);
                                     })
                                     .catch((error) => {

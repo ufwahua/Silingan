@@ -26,14 +26,8 @@ class UserController extends Controller
         if ( $user ||  Hash::check($request->password, $user->password)) {
             Auth::login($user,$request['remember']);
             $request->session()->regenerate();  
-            $token = $user->createToken('silingan')->plainTextToken;
-            
-            $return=[
-                'auth' => true,
-                'user' => $user,
-                'token'=> $token
-            ];
-            return response()->json($return);
+ 
+            return response()->json($user);
         }
         return response()->json(["error"=>"Invalid Credentials, please try again"],401);
         
@@ -118,7 +112,7 @@ class UserController extends Controller
      */
     public function getUserLogged(User $user) : JsonResponse
     {
-        return response()->json(auth()->user());
+        return response()->json(Auth::user());
     }
     /**
      * @param User $user

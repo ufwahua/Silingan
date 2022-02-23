@@ -1,6 +1,6 @@
 <template>
     <div class="layout-topbar">
-        <router-link to="/home/dashboard" class="layout-topbar-logo">
+        <router-link to="/admin/dashboard" class="layout-topbar-logo">
             <img
                 alt="Silingan-Logo"
                 src="https://i.ibb.co/V3B8NBM/silingan-icon.png"
@@ -29,14 +29,14 @@
         <ul class="layout-topbar-menu hidden lg:flex origin-top">
             <li>
                 <button class="p-link layout-topbar-button">
-                    <i class="pi pi-bell"></i>
-                    <span>Activity</span>
+                    <i class="pi pi-calendar"></i>
+                    <span>Events</span>
                 </button>
             </li>
             <li>
                 <button class="p-link layout-topbar-button">
-                    <i class="pi pi-comment"></i>
-                    <span>Chat</span>
+                    <i class="pi pi-cog"></i>
+                    <span>Settings</span>
                 </button>
             </li>
             <li>
@@ -62,20 +62,12 @@
 </template>
 
 <script>
-import { computed } from "vue";
-import { useStore } from "vuex";
 export default {
-    setup() {
-        const store = useStore();
-        return {
-            user: computed(() => store.state.user),
-        };
-    },
     data() {
         return {
             profile_menu: [
                 {
-                    label: this.user.first_name + " " + this.user.last_name,
+                    label: localStorage.full_name,
                     items: [
                         {
                             label: "Profile",
@@ -90,10 +82,6 @@ export default {
                             },
                         },
                         {
-                            label: "Settings",
-                            icon: "pi pi-cog",
-                        },
-                        {
                             label: "Logout",
                             icon: "pi pi-sign-out",
                             command: async () => {
@@ -103,6 +91,9 @@ export default {
                                 })
                                     .then((response) => {
                                         this.$router.push("/login");
+                                        localStorage.removeItem("full_name");
+                                        localStorage.removeItem("user");
+                                        localStorage.removeItem("role");
                                         this.$store.dispatch("getUser", null);
                                     })
                                     .catch((error) => {
@@ -125,20 +116,6 @@ export default {
         onTopbarMenuToggle(event) {
             this.$emit("topbar-menu-toggle", event);
         },
-        topbarImage() {
-            return "images/silingan-icon.png";
-        },
-    },
-
-    components: {
-        Image,
     },
 };
 </script>
-<style>
-@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap");
-
-#overlay_menu {
-    font-family: "Poppins", sans-serif;
-}
-</style>
