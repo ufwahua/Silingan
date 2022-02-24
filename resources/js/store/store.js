@@ -2,6 +2,7 @@ import { createStore } from "vuex";
 import registeredUsers from "./admin-maintain/registeredUsers";
 import block from "./admin-maintain/block";
 import lot from "./admin-maintain/lot";
+import news from "./news-api/news";
 export default createStore({
     state: {
         user: null,
@@ -22,5 +23,6 @@ export default createStore({
         registeredUsers,
         block,
         lot,
+        news,
     },
 });

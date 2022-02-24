@@ -13,15 +13,6 @@ const lot = {
         getBlockLots(state, payload) {
             state.filteredLots = payload;
         },
-        push(state, payload) {
-            state.lot.push(payload);
-        },
-        delete(state, payload) {
-            const index = state.lot.findIndex(function (obj) {
-                return obj.id === payload;
-            });
-            if (index !== -1) state.lot.splice(index, 1);
-        },
     },
     actions: {
         async getAll({ commit }) {
@@ -48,12 +39,6 @@ const lot = {
                 .catch((err) => {
                     console.log(err.response.data);
                 });
-        },
-        async push({ commit }, payload) {
-            await commit("push", payload);
-        },
-        async delete({ commit }, payload) {
-            await commit("delete", payload);
         },
     },
     getters: {},

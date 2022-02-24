@@ -18,6 +18,7 @@ use App\Http\Controllers\admin\BlockController;
 */
 
 
+Route::post('forgot-password', [UserController::class, 'forgotPassword']);
 Route::post('login', [UserController::class, 'login']);
 Route::post('logout', [UserController::class, 'logout'])->middleware('auth:sanctum');
 //Check if User is Logged in

@@ -189,6 +189,9 @@ export default {
         AppConfig: AppConfig,
         AppFooter: AppFooter,
     },
+    created() {
+        // this.$store.dispatch("news/getAll");
+    },
 };
 </script>
 

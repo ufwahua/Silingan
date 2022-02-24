@@ -106,22 +106,22 @@ class UserController extends Controller
         return response()->json($user);
   
     }
-    /**
-     * @param User $user
-     * @return JsonResponse
-     */
+  
     public function getUserLogged(User $user) : JsonResponse
     {
         return response()->json(Auth::user());
     }
-    /**
-     * @param User $user
-     * @return JsonResponse
-     */
+
+    public function forgotPassword(User $user) : JsonResponse
+    {
+        return response()->json(Auth::user());
+    }
+
     public function destroy(User $user) : JsonResponse
     {
         $user->delete();
 
         return response()->json(['ok']);
     }
+  
 }

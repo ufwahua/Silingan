@@ -1,5 +1,7 @@
 import Login from "../login/LoginComponent.vue";
 import Register from "../login/RegisterComponent.vue";
+import ForgotPassword from "../login/ForgotPasswordComponent.vue";
+
 import IndexComponent from "../home/IndexComponent.vue";
 import HomeComponent from "../admin/dashboard/HomeComponent.vue";
 import DashboardComponent from "../admin/dashboard/DashboardComponent.vue";
@@ -88,6 +90,12 @@ const router = createRouter({
             component: Login,
             beforeEnter: checkLogged,
             name: "login",
+        },
+        {
+            path: "/forgotpassword",
+            component: ForgotPassword,
+            beforeEnter: checkLogged,
+            name: "forgotpassword",
         },
         {
             path: "/register",

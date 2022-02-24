@@ -15,8 +15,11 @@
                             src="https://i.ibb.co/V3B8NBM/silingan-icon.png"
                     /></router-link>
                 </div>
-
-                <div class="w-full md:w-10 mx-auto">
+                <form
+                    @submit.prevent="onLoginSubmit"
+                    class="w-full md:w-10 mx-auto"
+                    autocomplete="on"
+                >
                     <label
                         for="email1"
                         class="block text-900 text-xl font-medium mb-2"
@@ -38,7 +41,6 @@
                         >Password</label
                     >
                     <Password
-                        id="password1"
                         :class="{ 'p-invalid': error }"
                         v-model="form.password"
                         placeholder="Password"
@@ -46,6 +48,7 @@
                         class="w-full mb-3"
                         inputClass="w-full"
                         inputStyle="padding:1rem"
+                        autocomplete="off"
                     ></Password>
                     <label style="color: red" v-if="error">{{
                         this.error
@@ -62,24 +65,31 @@
                             ></Checkbox>
                             <label for="rememberme1">Remember me</label>
                         </div>
-                        <a
-                            href="#"
-                            class="font-medium no-underline ml-2 text-right cursor-pointer"
-                            style="color: var(--primary-color)"
-                            >Forgot password?</a
+
+                        <router-link to="forgotpassword" :key="$route.fullPath">
+                            <a
+                                class="font-medium no-underline ml-2 text-right cursor-pointer"
+                                style="color: var(--primary-color)"
+                                href="#"
+                                >Forgot password?
+                            </a></router-link
                         >
                     </div>
                     <Button
                         label="Sign In"
-                        @click="onLoginSubmit"
+                        type="submit"
                         class="w-full p-3 text-xl"
                     ></Button>
-                </div>
+                </form>
+
                 <div class="col-12 mb-2 lg:col-12 lg:mb-0">
                     <p class="custom-text">
                         Don't have an account?
                         <router-link to="register" :key="$route.fullPath">
-                            <a class="custom-link" href="#"
+                            <a
+                                class="font-medium no-underline ml-2 text-right cursor-pointer"
+                                style="color: var(--primary-color)"
+                                href="#"
                                 >Register
                             </a></router-link
                         >
