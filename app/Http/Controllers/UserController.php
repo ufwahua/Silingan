@@ -40,17 +40,18 @@ class UserController extends Controller
     {
 
         if($user = User::create([
-            'first_name'=> $request['first_name'],
-            'last_name'=> $request['last_name'],
-            'gender'=> $request['gender'],
-            'block'=> $request['block_number'],
-            'lot'=> $request['lot_number'],
-            'age'=> $request['age'] ,
-            'contact_num'=> $request['contact_num'] ,
-            'role'=> $request['role'] ,
-            'email'=> $request['email'] ,
-            'password'=> Hash::make($request['password']),
-            'profile_pic'=> $request['profile_pic'],
+            'first_name'=> $request->first_name,
+            'last_name'=> $request->last_name,
+            'gender'=> $request->gender,
+            'block_lot_id'=> $request->block_number,
+            'age'=> $request->age,
+            'contact_num'=> $request->contact_num,
+            'role'=> $request->role,
+            'verified'=> $request->verified,
+            'has_voted'=> $request->has_voted,
+            'email'=> $request->email,
+            'password'=> Hash::make($request->password),
+            'profile_pic'=> $request->profile_pic,
             ])
         ){
             return response($user,201);

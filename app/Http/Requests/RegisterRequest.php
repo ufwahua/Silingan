@@ -28,14 +28,16 @@ class RegisterRequest extends FormRequest
             'first_name' => ['required','string' , 'max:255'],
             'last_name' => ['required','string' , 'max:255'],
             'gender' => ['required'],
-            'block_number' => ['required'],
-            'lot_number' => ['required'],
+            'block_lot_id' => ['sometimes'],
             'age' => ['required','integer','numeric','gt:0', 'max:130'],
             'contact_num' => ['required','string','min:11'],
+            'role' => ['required'],
+            'verified' => ['required'],
+            'has_voted' => ['required'],
             'email' => ['required','string' ,'email', 'max:255',Rule::unique('users')->ignore($this->route('user'))],
             'password' => ['required' , 'min:8'],
             'confirm_password' => ['required','same:password' , 'min:8'],
-            'profile_pic'=> ['sometimes','required','blob'],
+            'profile_pic'=> ['sometimes'],
         ];
 }
     

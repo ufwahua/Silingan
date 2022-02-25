@@ -112,9 +112,6 @@ export default {
             user: computed(() => store.state.user),
         };
     },
-    state: {
-        user: null,
-    },
     data() {
         return {
             form: {
