@@ -2,35 +2,6 @@
     <!-- post and comment -->
     <div>
         <div class="card">
-            <div class="p-inputgroup mb-2">
-                <Avatar
-                    image="https://www.primefaces.org/wp-content/uploads/2020/05/placeholder.png"
-                    class="mr-2"
-                    size="xlarge"
-                    shape="circle"
-                    alt="Image"
-                />
-                <Textarea class="w-full"> </Textarea>
-            </div>
-            <FileUpload
-                name="demo[]"
-                mode="basic"
-                url="./upload.php"
-                accept="image/*"
-                :customUpload="true"
-                @uploader="myUploader"
-                :maxFileSize="2000000"
-                :fileLimit="3"
-                :showUploadButton="false"
-                :showCancelButton="false"
-            >
-                <template #empty>
-                    <p>Drag and drop files to here to upload.</p>
-                </template>
-            </FileUpload>
-        </div>
-
-        <div class="card">
             <div class="card-header">
                 <div class="p-inputgroup mb-2">
                     <Avatar
@@ -79,49 +50,54 @@
                     </template>
                 </Galleria>
             </div>
-            <div class="p-inputgroup mb-2">
-                <Avatar
-                    image="https://www.primefaces.org/wp-content/uploads/2020/05/placeholder.png"
-                    class="mr-2"
-                    size="large"
-                    shape="circle"
-                />
-                <Textarea class="w-full"> </Textarea>
-            </div>
-            <div class="p-inputgroup mb-2">
-                <Avatar
-                    image="https://www.primefaces.org/wp-content/uploads/2020/05/placeholder.png"
-                    class="mr-2"
-                    size="large"
-                    shape="circle"
-                />
-                <div class="card w-full">
-                    Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-                    Aliquam doloremque quo explicabo voluptatum ratione sunt ex
-                    facere a consequuntur quasi. Impedit eum iste laboriosam
-                    ipsam voluptate molestias molestiae in modi?
-                </div>
-            </div>
-            <div class="p-inputgroup mb-2">
-                <Avatar
-                    image="https://www.primefaces.org/wp-content/uploads/2020/05/placeholder.png"
-                    class="mr-2"
-                    size="large"
-                    shape="circle"
-                />
-                <div class="card w-full">
-                    Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-                    Aliquam doloremque quo explicabo voluptatum ratione sunt ex
-                    facere a consequuntur quasi. Impedit eum iste laboriosam
-                    ipsam voluptate molestias molestiae in modi?
-                </div>
-            </div>
-
-            <!-- <add-comment
-                                :userid="{{Auth::user()->id}}"
-                                :postid="{{$post->id}}"
-                            ></add-comment> -->
             <hr />
+            <Button
+                label="Comment"
+                class="p-button-outlined p-button-secondary m-2"
+                @click="commentShow"
+            />
+            <hr />
+            <div v-if="comment_show">
+                <div class="p-inputgroup mb-2">
+                    <Avatar
+                        image="https://www.primefaces.org/wp-content/uploads/2020/05/placeholder.png"
+                        class="mr-2"
+                        size="large"
+                        shape="circle"
+                    />
+                    <Textarea class="w-full"> </Textarea>
+                </div>
+                <div class="p-inputgroup mb-2">
+                    <Avatar
+                        image="https://www.primefaces.org/wp-content/uploads/2020/05/placeholder.png"
+                        class="mr-2"
+                        size="large"
+                        shape="circle"
+                    />
+                    <div class="card w-full">
+                        Lorem ipsum dolor, sit amet consectetur adipisicing
+                        elit. Aliquam doloremque quo explicabo voluptatum
+                        ratione sunt ex facere a consequuntur quasi. Impedit eum
+                        iste laboriosam ipsam voluptate molestias molestiae in
+                        modi?
+                    </div>
+                </div>
+                <div class="p-inputgroup mb-2">
+                    <Avatar
+                        image="https://www.primefaces.org/wp-content/uploads/2020/05/placeholder.png"
+                        class="mr-2"
+                        size="large"
+                        shape="circle"
+                    />
+                    <div class="card w-full">
+                        Lorem ipsum dolor, sit amet consectetur adipisicing
+                        elit. Aliquam doloremque quo explicabo voluptatum
+                        ratione sunt ex facere a consequuntur quasi. Impedit eum
+                        iste laboriosam ipsam voluptate molestias molestiae in
+                        modi?
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </template>
@@ -135,6 +111,7 @@ export default {
     },
     data() {
         return {
+            comment_show: false,
             responsiveOptions: [
                 {
                     breakpoint: "1700px",
@@ -257,8 +234,11 @@ export default {
             ],
         };
     },
+
     methods: {
-        myUploader() {},
+        commentShow() {
+            this.comment_show = !this.comment_show;
+        },
     },
 };
 </script>

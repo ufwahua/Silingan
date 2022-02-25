@@ -403,8 +403,8 @@ export default {
         },
     },
     created() {
-        this.$store.dispatch("block/getAll");
-        this.$store.dispatch("lot/getAll");
+        // this.$store.dispatch("block/getAll");
+        // this.$store.dispatch("lot/getAll");
     },
 };
 </script>
