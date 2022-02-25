@@ -101,17 +101,9 @@
 </template>
 
 <script>
-import { computed } from "vue";
-import { useStore } from "vuex";
 import axios from "axios";
 
 export default {
-    setup() {
-        const store = useStore();
-        return {
-            user: computed(() => store.state.user),
-        };
-    },
     data() {
         return {
             form: {
@@ -129,16 +121,11 @@ export default {
             axios
                 .post("/api/login", this.form)
                 .then((response) => {
+                    console.log(response.data);
                     this.error = "";
-                    this.$store.dispatch("getUser", response.data);
-                    localStorage.user = response.data;
-                    localStorage.role = response.data.role;
-                    localStorage.full_name =
-                        response.data.first_name +
-                        " " +
-                        response.data.last_name;
-                    if (response.data.role == "resident") {
-                        this.$router.push("/user/dashboard");
+                    this.$store.dispatch("getUserLogged", response.data);
+                    if (response.data.role === "resident") {
+                        this.$router.push("/resident/dashboard");
                     } else {
                         this.$router.push("/admin/dashboard");
                     }

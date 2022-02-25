@@ -334,7 +334,6 @@ export default {
                 },
             })
                 .then(() => {
-                    console.log("Successfully Registered");
                     this.$router.push({ name: "login" });
                 })
                 .catch((err) => {

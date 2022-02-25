@@ -62,12 +62,16 @@
 </template>
 
 <script>
+import store from "../store/store";
 export default {
     data() {
         return {
             profile_menu: [
                 {
-                    label: localStorage.full_name,
+                    label:
+                        store.state.userLogged.first_name +
+                        " " +
+                        store.state.userLogged.last_name,
                     items: [
                         {
                             label: "Profile",
@@ -91,10 +95,10 @@ export default {
                                 })
                                     .then((response) => {
                                         this.$router.push("/login");
-                                        localStorage.removeItem("full_name");
-                                        localStorage.removeItem("user");
-                                        localStorage.removeItem("role");
-                                        this.$store.dispatch("getUser", null);
+                                        this.$store.dispatch(
+                                            "getUserLogged",
+                                            null
+                                        );
                                     })
                                     .catch((error) => {
                                         console.log(error);

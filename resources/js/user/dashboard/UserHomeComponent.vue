@@ -45,12 +45,12 @@ export default {
                         {
                             label: "Home",
                             icon: "pi pi-fw pi-home",
-                            to: "/user/dashboard",
+                            to: "/resident/dashboard",
                         },
                         {
                             label: "Neighbourhood",
                             icon: "pi pi-fw pi-map",
-                            to: "/user/neighbourhood",
+                            to: "/resident/neighbourhood",
                         },
                     ],
                 },
@@ -64,11 +64,11 @@ export default {
                             items: [
                                 {
                                     label: "Group 1",
-                                    to: "/user/test",
+                                    to: "/resident/test",
                                 },
                                 {
                                     label: "Group 2",
-                                    to: "/user/test2",
+                                    to: "/resident/test2",
                                 },
                             ],
                         },

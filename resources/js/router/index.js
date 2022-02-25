@@ -13,63 +13,40 @@ import UserDashboard from "../user/dashboard/UserDashboardComponent.vue";
 
 import NotFound from "../not-found-components/NotFoundComponent.vue";
 import { createRouter, createWebHistory } from "vue-router";
-import { computed } from "vue";
-import { useStore } from "vuex";
+import store from "../store/store";
 
 function checkRole(to, from, next) {
-    var isAuthenticated = false;
-    var role = localStorage.role;
-    if (localStorage.getItem("user")) isAuthenticated = true;
+    let isAuthenticated = false;
+    let userLogged = store.state.userLogged;
+    if (userLogged) isAuthenticated = true;
     else isAuthenticated = false;
-    if (isAuthenticated) {
-        next();
+
+    if (!isAuthenticated) {
+        next({ name: "login" });
     } else {
-        next("/login");
+        if (userLogged.role === "admin" && to.meta.role === "resident") {
+            next("/admin/dashboard");
+        }
+        if (userLogged.role === "resident" && to.meta.role === "admin") {
+            next("/resident/dashboard");
+        }
+        next();
     }
-
-    // let isAuthenticated = false;
-    // let userLogged = store.state.userLogged;
-    // if (userLogged) isAuthenticated = true;
-    // else isAuthenticated = false;
-
-    // if (!isAuthenticated) {
-    //     next({ name: "login" });
-    // } else {
-    //     console.log(to.name);
-    //     if (userLogged.type === "admin" && to.meta.role === "employee") {
-    //         next("/admin/dashboard");
-    //     }
-    //     if (userLogged.type === "employee" && to.meta.role === "admin") {
-    //         next("/employee/dashboard");
-    //     }
-    //     next();
-    // }
 }
 function checkLogged(to, from, next) {
-    var isAuthenticated = false;
-    var role = localStorage.role;
-    if (localStorage.getItem("user")) isAuthenticated = true;
+    let isAuthenticated = false;
+    let userLogged = store.state.userLogged;
+    console.log(userLogged);
+    if (userLogged) isAuthenticated = true;
     else isAuthenticated = false;
-    if (isAuthenticated && role === "admin") {
+
+    if (isAuthenticated && userLogged.role === "admin") {
         next("/admin/dashboard");
-    } else if (isAuthenticated && role === "resident") {
-        next("/user/dashboard");
+    } else if (isAuthenticated && userLogged.role === "resident") {
+        next("/resident/dashboard");
     } else {
         next();
     }
-
-    //  let isAuthenticated = false;
-    //  let userLogged = store.state.userLogged;
-    //  if (userLogged) isAuthenticated = true;
-    //  else isAuthenticated = false;
-
-    //  if (isAuthenticated && userLogged.type === "admin") {
-    //      next("/admin/dashboard");
-    //  } else if (isAuthenticated && userLogged.type === "employee") {
-    //      next("/employee/dashboard");
-    //  } else {
-    //      next();
-    //  }
 }
 const router = createRouter({
     history: createWebHistory(),
@@ -108,12 +85,16 @@ const router = createRouter({
             component: HomeComponent,
             beforeEnter: checkRole,
             name: "adminHome",
-
+            meta: {
+                role: "admin",
+            },
             children: [
                 {
                     path: "/admin/dashboard",
                     beforeEnter: checkRole,
-
+                    meta: {
+                        role: "admin",
+                    },
                     components: {
                         default: NotFound,
                         contents: DashboardComponent,
@@ -122,6 +103,9 @@ const router = createRouter({
                 {
                     path: "block-lot",
                     beforeEnter: checkRole,
+                    meta: {
+                        role: "admin",
+                    },
                     components: {
                         default: NotFound,
                         contents: Block_Lot,
@@ -129,6 +113,9 @@ const router = createRouter({
                 },
                 {
                     path: "registered-users",
+                    meta: {
+                        role: "admin",
+                    },
                     beforeEnter: checkRole,
                     components: {
                         default: NotFound,
@@ -138,13 +125,19 @@ const router = createRouter({
             ],
         },
         {
-            path: "/user",
+            path: "/resident",
             component: UserHome,
+            meta: {
+                role: "resident",
+            },
             beforeEnter: checkRole,
             name: "userhome",
             children: [
                 {
-                    path: "/user/dashboard",
+                    path: "/resident/dashboard",
+                    meta: {
+                        role: "resident",
+                    },
                     beforeEnter: checkRole,
                     meta: {
                         reload: true,

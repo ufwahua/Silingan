@@ -36,26 +36,12 @@ class UserController extends Controller
   
                 
     }
-    public function store(RegisterRequest $request)
+    public function store(User $user,RegisterRequest $request) : JsonResponse
     {
 
-        if($user = User::create([
-            'first_name'=> $request->first_name,
-            'last_name'=> $request->last_name,
-            'gender'=> $request->gender,
-            'block_lot_id'=> $request->block_number,
-            'age'=> $request->age,
-            'contact_num'=> $request->contact_num,
-            'role'=> $request->role,
-            'verified'=> $request->verified,
-            'has_voted'=> $request->has_voted,
-            'email'=> $request->email,
-            'password'=> Hash::make($request->password),
-            'profile_pic'=> $request->profile_pic,
-            ])
-        ){
-            return response($user,201);
-        }
+        $user = User::create([$request->validated()]);
+        return response()->json($user);
+        
         
     }
     public function logout(Request $request)
