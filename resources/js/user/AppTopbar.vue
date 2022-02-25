@@ -62,12 +62,16 @@
 </template>
 
 <script>
+import store from "../store/store";
 export default {
     data() {
         return {
             profile_menu: [
                 {
-                    label: localStorage.full_name,
+                    label:
+                        store.state.userLogged.first_name +
+                        " " +
+                        store.state.userLogged.last_name,
                     items: [
                         {
                             label: "Profile",
