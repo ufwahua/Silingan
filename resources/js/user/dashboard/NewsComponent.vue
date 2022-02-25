@@ -5,7 +5,7 @@
             v-for="article in news"
             :key="article.id"
         >
-            <a :href="article.url">
+            <a :href="article.url" style="text-decoration: none">
                 <Card>
                     <template #header>
                         <img

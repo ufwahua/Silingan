@@ -191,6 +191,7 @@ export default {
     },
     created() {
         // this.$store.dispatch("news/getAll");
+        this.$store.dispatch("posts/getAll");
     },
 };
 </script>

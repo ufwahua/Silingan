@@ -31,6 +31,7 @@ import Breadcrumb from "primevue/breadcrumb";
 import Calendar from "primevue/calendar";
 import Card from "primevue/card";
 import Carousel from "primevue/carousel";
+import Image from "primevue/image";
 // import Chart from 'primevue/chart';
 import Checkbox from "primevue/checkbox";
 import Chip from "primevue/chip";
@@ -123,6 +124,7 @@ createApp(Index)
     .component("Calendar", Calendar)
     .component("Card", Card)
     .component("Carousel", Carousel)
+    .component("Image", Image)
     // .component('Chart', Chart)
     .component("Checkbox", Checkbox)
     .component("Chip", Chip)

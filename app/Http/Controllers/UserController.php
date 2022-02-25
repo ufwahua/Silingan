@@ -61,7 +61,7 @@ class UserController extends Controller
     public function index(Request $request) : JsonResponse
     {
         return response()->json(
-            User::query()->where('role','resident')->orWhere('role','officer')->orderBy('id','asc')->get()
+            User::all()
         );
     }
 

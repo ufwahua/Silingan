@@ -121,7 +121,6 @@ export default {
             axios
                 .post("/api/login", this.form)
                 .then((response) => {
-                    console.log(response.data);
                     this.error = "";
                     this.$store.dispatch("getUserLogged", response.data);
                     if (response.data.role === "resident") {

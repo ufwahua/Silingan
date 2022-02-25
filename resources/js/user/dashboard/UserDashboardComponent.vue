@@ -1,6 +1,6 @@
 <template>
     <div class="grid">
-        <div class="sm:col-12 md:col-8 lg:col-9">
+        <div class="col-12 sm:col-12 md:col-8 lg:col-9">
             <div class="row justify-content-center">
                 <div class="col">
                     <Fieldset class="mb-3" legend="Announcement">
@@ -16,115 +16,11 @@
                             deserunt mollit anim id est laborum.
                         </p>
                     </Fieldset>
-                    <div class="card">
-                        <div class="p-inputgroup mb-2">
-                            <Avatar
-                                image="https://www.primefaces.org/wp-content/uploads/2020/05/placeholder.png"
-                                class="mr-2"
-                                size="xlarge"
-                                shape="circle"
-                            />
-                            <Textarea class="w-full"> </Textarea>
-                        </div>
-                        <FileUpload
-                            name="demo[]"
-                            mode="basic"
-                            url="./upload.php"
-                            accept="image/*"
-                            :customUpload="true"
-                            @uploader="myUploader"
-                            :maxFileSize="2000000"
-                            :fileLimit="3"
-                            :showUploadButton="false"
-                            :showCancelButton="false"
-                        >
-                            <template #empty>
-                                <p>Drag and drop files to here to upload.</p>
-                            </template>
-                        </FileUpload>
-                    </div>
-
-                    <div class="card">
-                        <div class="card-header">
-                            <div class="p-inputgroup mb-2">
-                                <Avatar
-                                    image="https://www.primefaces.org/wp-content/uploads/2020/05/placeholder.png"
-                                    class="mr-2"
-                                    size="large"
-                                    shape="circle"
-                                />
-                                <div class="grid grid-nogutter">
-                                    <div class="col-12">
-                                        <b class="p-0 m-0">
-                                            Joshua Henry G. Diamos
-                                        </b>
-                                    </div>
-                                    <div class="col-12">
-                                        <p>Today 9:06pm</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            <p>
-                                Lorem ipsum dolor sit amet consectetur,
-                                adipisicing elit. Facere nobis officiis
-                                similique impedit quae ex quas vel recusandae?
-                                Qui exercitationem, corrupti provident
-                                laudantium consectetur rem quibusdam ratione
-                                tempore assumenda dignissimos.
-                            </p>
-                            <img
-                                src="https://img.freepik.com/free-photo/scene-with-minimal-blue-podium_23-2149269983.jpg?w=826"
-                                alt="Image"
-                                class="w-full p-0 m-0 h-20rem"
-                            />
-                        </div>
-                        <div class="p-inputgroup mb-2">
-                            <Avatar
-                                image="https://www.primefaces.org/wp-content/uploads/2020/05/placeholder.png"
-                                class="mr-2"
-                                size="large"
-                                shape="circle"
-                            />
-                            <Textarea class="w-full"> </Textarea>
-                        </div>
-                        <div class="p-inputgroup mb-2">
-                            <Avatar
-                                image="https://www.primefaces.org/wp-content/uploads/2020/05/placeholder.png"
-                                class="mr-2"
-                                size="large"
-                                shape="circle"
-                            />
-                            <div class="card w-full">
-                                Lorem ipsum dolor, sit amet consectetur
-                                adipisicing elit. Aliquam doloremque quo
-                                explicabo voluptatum ratione sunt ex facere a
-                                consequuntur quasi. Impedit eum iste laboriosam
-                                ipsam voluptate molestias molestiae in modi?
-                            </div>
-                        </div>
-                        <div class="p-inputgroup mb-2">
-                            <Avatar
-                                image="https://www.primefaces.org/wp-content/uploads/2020/05/placeholder.png"
-                                class="mr-2"
-                                size="large"
-                                shape="circle"
-                            />
-                            <div class="card w-full">
-                                Lorem ipsum dolor, sit amet consectetur
-                                adipisicing elit. Aliquam doloremque quo
-                                explicabo voluptatum ratione sunt ex facere a
-                                consequuntur quasi. Impedit eum iste laboriosam
-                                ipsam voluptate molestias molestiae in modi?
-                            </div>
-                        </div>
-
-                        <!-- <add-comment
-                                :userid="{{Auth::user()->id}}"
-                                :postid="{{$post->id}}"
-                            ></add-comment> -->
-                        <hr />
+                    <div v-for="post in posts" :key="post.id">
+                        <PostComponent
+                            v-if="post.group_id === 1"
+                            v-bind:post="post"
+                        />
                     </div>
                 </div>
             </div>
@@ -136,11 +32,21 @@
 </template>
 
 <script>
+import { computed } from "vue";
+import { useStore } from "vuex";
 import NewsComponent from "./NewsComponent.vue";
+import PostComponent from "./PostComponent.vue";
 export default {
     name: "UserDashboardComponent",
     components: {
         NewsComponent,
+        PostComponent,
+    },
+    setup() {
+        const store = useStore();
+        return {
+            posts: computed(() => store.state.posts.posts),
+        };
     },
     data() {
         return {
@@ -168,9 +74,6 @@ export default {
                 },
             ],
         };
-    },
-    methods: {
-        myUploader() {},
     },
 };
 </script>

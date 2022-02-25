@@ -1,9 +1,10 @@
 import { createStore } from "vuex";
 import createPersistedState from "vuex-persistedstate";
 import registeredUsers from "./admin-maintain/registeredUsers";
-import block from "./admin-maintain/block";
-import lot from "./admin-maintain/lot";
-import news from "./news-api/news";
+import blocks from "./admin-maintain/blocks";
+import lots from "./admin-maintain/lots";
+import news from "./request/news";
+import posts from "./request/post";
 export default createStore({
     state: {
         users: null,
@@ -13,7 +14,6 @@ export default createStore({
     mutations: {
         getUserLogged(state, payload) {
             state.userLogged = payload;
-            console.log(state.userLogged);
         },
     },
     actions: {
@@ -24,9 +24,10 @@ export default createStore({
     getters: {},
     modules: {
         registeredUsers,
-        block,
-        lot,
+        blocks,
+        lots,
         news,
+        posts,
     },
     plugins: [createPersistedState()],
 });
