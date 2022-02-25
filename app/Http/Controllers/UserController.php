@@ -4,8 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Http\JsonResponse;
+use Illuminate\Validation\Rule;
 
+use Illuminate\Http\JsonResponse;
 use App\Http\Requests\LoginRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -30,17 +31,33 @@ class UserController extends Controller
             return response()->json($user);
         }
         return response()->json(["error"=>"Invalid Credentials, please try again"],401);
-        
-        
-        
-  
-                
+               
     }
-    public function store(User $user,RegisterRequest $request) : JsonResponse
+    
+    public function store(RegisterRequest $request) : JsonResponse
     {
+        // $user = User::query()->create($request->validate([
+        //     'block_lot_id' => ['required',Rule::exists('lots', 'id')],
+             
+        //     'first_name' => ['required','string' , 'max:255'],
+        //     'last_name' => ['required','string' , 'max:255'],
+        //     'gender' => ['required'],
+        //     'block_lot_id' => ['sometimes'],
+        //     'age' => ['required','integer','numeric','gt:0', 'max:130'],
+        //     'contact_num' => ['required','string','min:11'],
+        //     'role' => ['required'],
+        //     'verified' => ['required'],
+        //     'has_voted' => ['required'],
 
-        $user = User::create([$request->validated()]);
+        //    'email' => ['required','string' ,'email', 'max:255',Rule::unique('users')->ignore($this->route('user'))],
+        //     'password' => ['required' , 'min:8'],
+        //     'confirm_password' => ['required','same:password' , 'min:8'],
+        //     'profile_pic'=> ['sometimes'],
+        // ]));
+        $user = User::query()->create($request->validated());
+
         return response()->json($user);
+       
         
         
     }
@@ -80,11 +97,11 @@ class UserController extends Controller
     public function update(User $user, Request $request): JsonResponse
     {
        $user->update($request->validate([
-           'first_name' => ['required','string' , 'max:255'],
+            'first_name' => ['required','string' , 'max:255'],
             'last_name' => ['required','string' , 'max:255'],
             'gender' => ['required'],
-            'block' => ['required'],
-            'lot' => ['required'],
+            'block_lot_id' => ['required'],
+
             'age' => ['required','integer','numeric','gt:0', 'max:150'],
             'contact_num' => ['required','string'],
             'email' => ['required','string' ,'email', 'unique:users,email,'.$request['id']],

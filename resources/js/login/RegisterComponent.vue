@@ -30,7 +30,6 @@
                         <div class="field col-12 md:col-6">
                             <label for="first_name">Firstname</label>
                             <InputText
-                                id="firstname"
                                 :class="{ 'p-invalid': error_first_name }"
                                 type="text"
                                 v-model="first_name"
@@ -46,14 +45,13 @@
                         <div class="field col-12 md:col-6">
                             <label for="last_name">Lastname</label>
                             <InputText
-                                id="last_name"
                                 :class="{ 'p-invalid': error_last_name }"
                                 type="text"
                                 v-model="last_name"
                             />
                             <label
                                 style="color: red"
-                                for="first_name"
+                                for="last_name"
                                 v-if="error_last_name"
                                 >{{ error_last_name }}</label
                             >
@@ -100,12 +98,9 @@
                         <div
                             class="formgroup-inline flex justify-content-around"
                         >
-                            <label
-                                style="color: red"
-                                for="first_name"
-                                v-if="error_gender"
-                                >{{ error_gender }}</label
-                            >
+                            <label style="color: red" v-if="error_gender">{{
+                                error_gender
+                            }}</label>
                         </div>
 
                         <div class="field col-12 md:col-6">
@@ -155,9 +150,9 @@
                             <Dropdown
                                 v-model="selected_block"
                                 :class="{ 'p-invalid': error_selected_block }"
-                                :options="block"
-                                optionLabel="block_number"
-                                optionValue="block_number"
+                                :options="blocks"
+                                optionLabel="number"
+                                optionValue="id"
                                 placeholder="Select Block"
                                 @change="getBlockLot"
                             />
@@ -176,8 +171,8 @@
                                 v-model="block_lot_id"
                                 :class="{ 'p-invalid': error_selected_lot }"
                                 :options="filteredLots"
-                                optionLabel="lot_number"
-                                optionValue="lot_number"
+                                optionLabel="number"
+                                optionValue="id"
                                 placeholder="Select Lot"
                             />
                             <label
@@ -218,7 +213,6 @@
                         <div class="field col-12 md:col-4">
                             <label for="password">Password</label>
                             <Password
-                                name="password"
                                 :class="{ 'p-invalid': error_password }"
                                 v-model="password"
                                 autocomplete="off"
@@ -235,9 +229,7 @@
                             <label for="confirm_password"
                                 >Confirm Password</label
                             >
-
                             <Password
-                                name="confirmpassword"
                                 :class="{ 'p-invalid': error_confirm_password }"
                                 autocomplete="off"
                                 v-model="confirm_password"
@@ -277,9 +269,9 @@ export default {
     setup() {
         const store = useStore();
         return {
-            block: computed(() => store.state.block.block),
-            lot: computed(() => store.state.lot.lot),
-            filteredLots: computed(() => store.state.lot.filteredLots),
+            blocks: computed(() => store.state.blocks.blocks),
+            lots: computed(() => store.state.lots.lots),
+            filteredLots: computed(() => store.state.lots.filteredLots),
         };
     },
     data() {
@@ -291,8 +283,8 @@ export default {
             email: null,
             password: null,
             confirm_password: null,
-            verified: true,
-            has_voted: false,
+            verified: 1,
+            has_voted: 0,
             age: null,
             contact_num: null,
             role: "resident",
@@ -326,8 +318,8 @@ export default {
                     email: this.email,
                     password: this.password,
                     confirm_password: this.confirm_password,
-                    verified: true,
-                    has_voted: false,
+                    verified: 1,
+                    has_voted: 0,
                     age: this.age,
                     contact_num: this.contact_num,
                     role: "resident",
@@ -337,26 +329,24 @@ export default {
                     this.$router.push({ name: "login" });
                 })
                 .catch((err) => {
+                    console.log(err.response.data);
                     this.resetErrors();
                     this.validate(err);
-                    console.log(err.response.data);
                 });
         },
         resetFields() {
-            this.form = {
-                first_name: null,
-                last_name: null,
-                gender: null,
-                block_lot_id: null,
-                email: null,
-                password: null,
-                confirm_password: null,
-                verified: true,
-                has_voted: false,
-                age: null,
-                contact_num: null,
-                role: "resident",
-            };
+            this.first_name = null;
+            this.last_name = null;
+            this.gender = null;
+            this.block_lot_id = null;
+            this.email = null;
+            this.password = null;
+            this.confirm_password = null;
+            this.verified = true;
+            this.has_voted = false;
+            this.age = null;
+            this.contact_num = null;
+            this.role = "resident";
         },
         resetErrors() {
             this.error_first_name = null;
@@ -399,12 +389,12 @@ export default {
         },
 
         async getBlockLot() {
-            this.$store.dispatch("lot/getBlockLots", this.selected_block);
+            this.$store.dispatch("lots/getBlockLots", this.selected_block);
         },
     },
     created() {
-        // this.$store.dispatch("block/getAll");
-        // this.$store.dispatch("lot/getAll");
+        this.$store.dispatch("blocks/getAll");
+        this.$store.dispatch("lots/getAll");
     },
 };
 </script>

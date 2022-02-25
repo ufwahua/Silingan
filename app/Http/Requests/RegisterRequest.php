@@ -25,6 +25,8 @@ class RegisterRequest extends FormRequest
     public function rules()
     {
         return [
+            'block_lot_id' => ['required',Rule::exists('lots', 'id')],
+             
             'first_name' => ['required','string' , 'max:255'],
             'last_name' => ['required','string' , 'max:255'],
             'gender' => ['required'],
@@ -34,11 +36,13 @@ class RegisterRequest extends FormRequest
             'role' => ['required'],
             'verified' => ['required'],
             'has_voted' => ['required'],
-            'email' => ['required','string' ,'email', 'max:255',Rule::unique('users')->ignore($this->route('user'))],
+
+           'email' => ['required','string' ,'email', 'max:255',Rule::unique('users')->ignore($this->route('user'))],
             'password' => ['required' , 'min:8'],
             'confirm_password' => ['required','same:password' , 'min:8'],
             'profile_pic'=> ['sometimes'],
         ];
+
 }
     
 }

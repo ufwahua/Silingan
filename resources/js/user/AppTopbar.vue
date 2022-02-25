@@ -90,18 +90,16 @@ export default {
                             icon: "pi pi-sign-out",
                             command: async () => {
                                 await axios({
-                                    method: "post",
+                                    method: "get",
                                     url: "/api/logout",
                                 })
                                     .then((response) => {
+                                        console.log(response);
                                         this.$router.push("/login");
-                                        this.$store.dispatch(
-                                            "getUserLogged",
-                                            null
-                                        );
+                                        this.$store.dispatch("logout", null);
                                     })
                                     .catch((error) => {
-                                        console.log(error);
+                                        console.log(error.response);
                                     });
                             },
                         },

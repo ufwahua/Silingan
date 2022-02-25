@@ -2,7 +2,7 @@
     <!-- post and comment -->
     <div>
         <div class="card">
-            <div class="card-header">
+            <div class="card-header" style="background-color: var(--blue-50)">
                 <div class="p-inputgroup mb-2">
                     <Avatar
                         image="https://www.primefaces.org/wp-content/uploads/2020/05/placeholder.png"
@@ -53,61 +53,27 @@
             <hr />
             <Button
                 label="Comment"
-                class="p-button-outlined p-button-secondary m-2"
+                class="p-button-outlined p-button-primary m-2"
                 @click="commentShow"
             />
             <hr />
             <div v-if="comment_show">
-                <div class="p-inputgroup mb-2">
-                    <Avatar
-                        image="https://www.primefaces.org/wp-content/uploads/2020/05/placeholder.png"
-                        class="mr-2"
-                        size="large"
-                        shape="circle"
-                    />
-                    <Textarea class="w-full"> </Textarea>
-                </div>
-                <div class="p-inputgroup mb-2">
-                    <Avatar
-                        image="https://www.primefaces.org/wp-content/uploads/2020/05/placeholder.png"
-                        class="mr-2"
-                        size="large"
-                        shape="circle"
-                    />
-                    <div class="card w-full">
-                        Lorem ipsum dolor, sit amet consectetur adipisicing
-                        elit. Aliquam doloremque quo explicabo voluptatum
-                        ratione sunt ex facere a consequuntur quasi. Impedit eum
-                        iste laboriosam ipsam voluptate molestias molestiae in
-                        modi?
-                    </div>
-                </div>
-                <div class="p-inputgroup mb-2">
-                    <Avatar
-                        image="https://www.primefaces.org/wp-content/uploads/2020/05/placeholder.png"
-                        class="mr-2"
-                        size="large"
-                        shape="circle"
-                    />
-                    <div class="card w-full">
-                        Lorem ipsum dolor, sit amet consectetur adipisicing
-                        elit. Aliquam doloremque quo explicabo voluptatum
-                        ratione sunt ex facere a consequuntur quasi. Impedit eum
-                        iste laboriosam ipsam voluptate molestias molestiae in
-                        modi?
-                    </div>
-                </div>
+                <CommentComponent></CommentComponent>
             </div>
         </div>
     </div>
 </template>
 
 <script>
+import CommentComponent from "./CommentComponent.vue";
 export default {
     props: {
         post: {
             type: Object,
         },
+    },
+    components: {
+        CommentComponent,
     },
     data() {
         return {
