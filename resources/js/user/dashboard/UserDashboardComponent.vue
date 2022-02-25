@@ -1,6 +1,6 @@
 <template>
     <div class="grid">
-        <div class="col-12 sm:col-12 md:col-8 lg:col-9">
+        <div class="col-10 sm:col-10 md:col-10 lg:col-6 xl:col-7 col-offset-1">
             <div class="row justify-content-center">
                 <div class="col">
                     <Fieldset class="mb-3" legend="Announcement">
@@ -16,6 +16,34 @@
                             deserunt mollit anim id est laborum.
                         </p>
                     </Fieldset>
+                    <div class="card">
+                        <div class="p-inputgroup mb-2">
+                            <Avatar
+                                image="https://www.primefaces.org/wp-content/uploads/2020/05/placeholder.png"
+                                class="mr-2"
+                                size="xlarge"
+                                shape="circle"
+                                alt="Image"
+                            />
+                            <Textarea class="w-full"> </Textarea>
+                        </div>
+                        <FileUpload
+                            name="demo[]"
+                            mode="basic"
+                            url="./upload.php"
+                            accept="image/*"
+                            :customUpload="true"
+                            @uploader="myUploader"
+                            :maxFileSize="2000000"
+                            :fileLimit="3"
+                            :showUploadButton="false"
+                            :showCancelButton="false"
+                        >
+                            <template #empty>
+                                <p>Drag and drop files to here to upload.</p>
+                            </template>
+                        </FileUpload>
+                    </div>
                     <div v-for="post in posts" :key="post.id">
                         <PostComponent
                             v-if="post.group_id === 1"
@@ -25,7 +53,7 @@
                 </div>
             </div>
         </div>
-        <div class="sm:col-12 md:col-4 lg:col-3">
+        <div class="col-10 sm:col-10 md:col-10 lg:col-4 xl:col-3 col-offset-1">
             <NewsComponent />
         </div>
     </div>
@@ -74,6 +102,9 @@ export default {
                 },
             ],
         };
+    },
+    methods: {
+        myUploader() {},
     },
 };
 </script>
