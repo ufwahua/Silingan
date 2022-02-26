@@ -2,8 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Reply extends Model
 {
@@ -11,10 +12,21 @@ class Reply extends Model
 
     protected $fillable = [
         'comment_id',
+        'user_id',
         'message',
     ];
     public function comment(){
         return $this->hasMany(Comment::class,'id','comment_id');
     }
-
+    public function user(){
+        return $this->hasMany(User::class,'id','user_id');
+    }
+     public function getCreatedAtAttribute(){
+        
+        return Carbon::createFromTimeStamp(strtotime($this->attributes['created_at']) )->diffForHumans();
+    }
+    public function getUpdatedAtAttribute(){
+        
+        return Carbon::createFromTimeStamp(strtotime($this->attributes['updated_at']) )->diffForHumans();
+    }
 }

@@ -190,7 +190,7 @@ export default {
         AppFooter: AppFooter,
     },
     created() {
-        // this.$store.dispatch("news/getAll");
+        this.$store.dispatch("news/getAll");
         this.$store.dispatch("posts/getAll");
     },
 };

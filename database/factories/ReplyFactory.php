@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\User;
 use App\Models\Reply;
 use App\Models\Comment;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -24,6 +25,7 @@ class ReplyFactory extends Factory
     {
         return [
             'comment_id' => Comment::all()->random()->id,
+            'user_id' => User::all()->random()->id,
             'message' => $this->faker->text(200),
         ];
     }

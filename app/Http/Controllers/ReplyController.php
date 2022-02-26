@@ -16,7 +16,7 @@ class ReplyController extends Controller
     public function index(Request $request) : JsonResponse
     {
         return response()->json(
-            Reply::with(['comment'])->latest()->get()
+            Reply::with(['comment','user'])->latest()->get()
         );
     }
 

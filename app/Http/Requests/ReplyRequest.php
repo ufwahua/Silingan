@@ -26,6 +26,7 @@ class ReplyRequest extends FormRequest
     {
         return [
             'comment_id' => ['required',Rule::exists('comments', 'id')],
+            'user_id' => ['required',Rule::exists('users', 'id')],
             'message' => ['required'],
            
         ];
