@@ -15,10 +15,16 @@ export default createStore({
         getUserLogged(state, payload) {
             state.userLogged = payload;
         },
+        logout(state, payload) {
+            state.userLogged = payload;
+        },
     },
     actions: {
         getUserLogged({ commit }, payload) {
             commit("getUserLogged", payload);
+        },
+        logout({ commit }, payload) {
+            commit("logout", payload);
         },
     },
     getters: {},

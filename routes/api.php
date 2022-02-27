@@ -4,9 +4,11 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\GroupController;
-use App\Http\Controllers\admin\LotController;
-use App\Http\Controllers\admin\BlockController;
 
+use App\Http\Controllers\ReplyController;
+use App\Http\Controllers\CommentController;
+use App\Http\Controllers\LotController;
+use App\Http\Controllers\BlockController;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,9 +25,9 @@ Route::middleware(['auth:sanctum'])->group(function () {
   
 });
 //PUBLIC
-Route::post('forgot-password', [UserController::class, 'forgotPassword']);
-Route::post('login', [UserController::class, 'login']);
-Route::post('logout', [UserController::class, 'logout'])->middleware('auth:sanctum');
+Route::post('/forgot-password', [UserController::class, 'forgotPassword']);
+Route::post('/login', [UserController::class, 'login']);
+Route::get('/logout', [UserController::class, 'logout']);
 
 
  Route::apiResources([
@@ -34,6 +36,8 @@ Route::post('logout', [UserController::class, 'logout'])->middleware('auth:sanct
     'user'             => UserController::class,
     'group'             => GroupController::class,
     'post'             => PostController::class,
+    'comment'             => CommentController::class,
+    'reply'             => ReplyController::class,
 ]);
 
     //Check if User is Logged in

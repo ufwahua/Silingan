@@ -16,7 +16,7 @@ class CreateLotsTable extends Migration
         Schema::create('lots', function (Blueprint $table) {
             $table->id();
             $table->foreignId('block_id');
-            $table->integer('lot_number');
+            $table->integer('number');
             $table->timestamps();
         });
     }

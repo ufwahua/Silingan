@@ -3,6 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Post;
+use App\Models\User;
+
+use App\Models\Reply;
+use App\Models\Comment;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use App\Http\Requests\PostRequest;
@@ -15,9 +19,11 @@ class PostController extends Controller
      */
     public function index(Request $request) : JsonResponse
     {
+        $posts = Post::with(['user','group','comment','comment.user','comment.reply.user'])->latest()->get();        
         return response()->json(
-            Post::with(['user','group'])->latest()->get()
+            $posts
         );
+        
     }
 
     /**

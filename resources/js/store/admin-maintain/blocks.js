@@ -17,6 +17,7 @@ const blocks = {
                 url: "/api/block/",
             })
                 .then((res) => {
+                    console.log(res.data);
                     commit("getAll", res.data);
                 })
                 .catch((err) => {
