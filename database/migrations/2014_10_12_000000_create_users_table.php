@@ -21,7 +21,7 @@ class CreateUsersTable extends Migration
             $table->string('gender');
             $table->integer('age');
             $table->string('contact_num');
-            $table->enum('role' , ['admin','officer','resident','security_guard']);
+            $table->enum('role' , ['admin','officer','resident','security_officer']);
             $table->boolean('verified');
             $table->boolean('has_voted');
             $table->string('email')->unique();   

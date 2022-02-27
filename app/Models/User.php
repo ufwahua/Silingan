@@ -35,6 +35,9 @@ class User extends Authenticatable
     public function post(){
         return $this->hasMany(Post::class,'id','user_id');
     }
+    public function blockLot(){
+        return $this->hasOne(Lot::class,'id','block_lot_id');
+    }
     /**
      * The attributes that should be hidden for serialization.
      *

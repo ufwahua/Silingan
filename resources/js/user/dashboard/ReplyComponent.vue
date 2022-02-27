@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="col-12 pb-0 mb-0">
+        <div class="col-12 p-0 m-0">
             <div class="p-inputgroup pt-1 pb-0 my-0">
                 <Avatar
                     image="https://www.primefaces.org/wp-content/uploads/2020/05/placeholder.png"

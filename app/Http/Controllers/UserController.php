@@ -78,7 +78,7 @@ class UserController extends Controller
     public function index(Request $request) : JsonResponse
     {
         return response()->json(
-            User::all()
+            User::with('blockLot.block')->get()
         );
     }
 

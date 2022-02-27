@@ -21,6 +21,19 @@
                             <p>{{ post.updated_at }}</p>
                         </div>
                     </div>
+                    <Button
+                        class="p-button-lg-primary"
+                        icon="pi pi-ellipsis-v"
+                        @click="toggle"
+                        aria-haspopup="true"
+                        aria-controls="overlay_menu"
+                    />
+                    <Menu
+                        id="overlay_menu"
+                        ref="menu"
+                        :model="items"
+                        :popup="true"
+                    />
                 </div>
             </div>
             <div class="card-body mx-0 px-0">
@@ -65,7 +78,8 @@
                         size="large"
                         shape="circle"
                     />
-                    <Textarea class="w-full"> </Textarea>
+                    <Textarea :autoResize="true" rows="1" class="w-full">
+                    </Textarea>
                 </div>
                 <div v-for="comment in post.comment" :key="comment.id">
                     <CommentComponent
@@ -92,7 +106,6 @@ export default {
     data() {
         return {
             comment_show: false,
-            reply_show: false,
             responsiveOptions: [
                 {
                     breakpoint: "1700px",
@@ -147,9 +160,6 @@ export default {
     methods: {
         commentShow() {
             this.comment_show = !this.comment_show;
-        },
-        replyShow() {
-            this.reply_show = !this.reply_show;
         },
     },
 };

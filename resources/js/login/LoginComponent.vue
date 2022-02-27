@@ -131,7 +131,6 @@ export default {
                 })
                 .catch((err) => {
                     this.error = "";
-                    console.log(err);
                     if (err.response.data.errors) {
                         this.error = "Invalid Credentials";
                     }
