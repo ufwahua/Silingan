@@ -65,6 +65,11 @@ export default {
                                     to: "/admin/block-lot",
                                 },
                                 {
+                                    label: "Residents",
+                                    icon: "pi pi-info-circle",
+                                    to: "/admin/residents",
+                                },
+                                {
                                     label: "Users",
                                     icon: "pi pi-info-circle",
                                     to: "/admin/registered-users",
