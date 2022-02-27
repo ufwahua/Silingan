@@ -70,11 +70,6 @@ export default {
                                     to: "/admin/registered-users",
                                 },
                                 {
-                                    label: "Position",
-                                    icon: "pi pi-info-circle",
-                                    to: "/admin/position",
-                                },
-                                {
                                     label: "Announcement",
                                     icon: "pi pi-info-circle",
                                     to: "/admin/announcement",
