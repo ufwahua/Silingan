@@ -8,6 +8,8 @@ import DashboardComponent from "../admin/dashboard/DashboardComponent.vue";
 import Block_Lot from "../admin/dashboard/Block_LotComponent.vue";
 import RegisteredUsersComponent from "../admin/dashboard/RegisterUsersComponent.vue";
 import Announcement from "../admin/dashboard/Announcement.vue";
+import Position from "../admin/dashboard/PositionComponent.vue";
+
 //user
 import UserHome from "../user/dashboard/UserHomeComponent.vue";
 import UserDashboard from "../user/dashboard/UserDashboardComponent.vue";
@@ -121,6 +123,17 @@ const router = createRouter({
                     components: {
                         default: NotFound,
                         contents: RegisteredUsersComponent,
+                    },
+                },
+                {
+                    path: "position",
+                    meta: {
+                        role: "admin",
+                    },
+                    beforeEnter: checkRole,
+                    components: {
+                        default: NotFound,
+                        contents: Position,
                     },
                 },
                 {
