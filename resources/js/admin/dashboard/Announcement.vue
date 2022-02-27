@@ -115,18 +115,38 @@
                         <div class="grid">
                             <div class="col-12">
                                 <div class="field">
-                                    <label for="firstname1">Title</label>
-                                    <InputText v-model="title" class="w-full" />
+                                    <label>Title</label>
+                                    <InputText
+                                        v-model="title"
+                                        :class="{
+                                            'p-invalid': error_title,
+                                        }"
+                                        class="w-full"
+                                    />
+                                    <label
+                                        style="color: red"
+                                        for="form.password"
+                                        v-if="error_title"
+                                        >{{ error_title }}</label
+                                    >
                                 </div>
                             </div>
                             <div class="col-12">
                                 <div class="field">
-                                    <label for="firstname1">Content</label>
+                                    <label>Content</label>
                                     <Textarea
                                         v-model="content"
                                         :autoResize="true"
+                                        :class="{
+                                            'p-invalid': error_content,
+                                        }"
                                         class="w-full"
                                     />
+                                    <label
+                                        style="color: red"
+                                        v-if="error_content"
+                                        >{{ error_content }}</label
+                                    >
                                 </div>
                             </div>
                         </div>
@@ -154,18 +174,38 @@
                         <div class="grid">
                             <div class="col-12">
                                 <div class="field">
-                                    <label for="firstname1">Title</label>
-                                    <InputText v-model="title" class="w-full" />
+                                    <label>Title</label>
+                                    <InputText
+                                        v-model="title"
+                                        :class="{
+                                            'p-invalid': error_title,
+                                        }"
+                                        class="w-full"
+                                    />
+                                    <label
+                                        style="color: red"
+                                        for="form.password"
+                                        v-if="error_title"
+                                        >{{ error_title }}</label
+                                    >
                                 </div>
                             </div>
                             <div class="col-12">
                                 <div class="field">
-                                    <label for="firstname1">Content</label>
+                                    <label>Content</label>
                                     <Textarea
                                         v-model="content"
                                         :autoResize="true"
+                                        :class="{
+                                            'p-invalid': error_content,
+                                        }"
                                         class="w-full"
                                     />
+                                    <label
+                                        style="color: red"
+                                        v-if="error_content"
+                                        >{{ error_content }}</label
+                                    >
                                 </div>
                             </div>
                         </div>
@@ -242,8 +282,8 @@ export default {
             title: null,
             content: null,
 
-            error_title: "",
-            error_content: "",
+            error_title: null,
+            error_content: null,
         };
     },
     methods: {
@@ -326,12 +366,12 @@ export default {
                     this.updateAnnouncementDialog = false;
                     this.resetFields();
                     this.$store.dispatch("announcements/getAll");
-                    this.showCreateAnnouncementToast();
+                    this.showUpdateAnnouncementToast();
                     this.loading = false;
                 })
                 .catch((err) => {
-                    console.log(err.response);
-                    // this.validate(err);
+                    this.resetErrors();
+                    this.validate(err.response.data.errors);
                     this.loading = false;
                 });
         },
@@ -362,52 +402,30 @@ export default {
             })
                 .then(() => {
                     this.createAnnouncementDialog = false;
-                    this.resetFields();
                     this.$store.dispatch("announcements/getAll");
                     this.showCreateAnnouncementToast();
                     this.loading = false;
                 })
                 .catch((err) => {
-                    console.log(err.response);
                     this.resetErrors();
-                    // this.validate(err);
+                    this.validate(err.response.data.errors);
                     this.loading = false;
                 });
         },
 
-        resetFields() {},
+        resetFields() {
+            this.id = null;
+            this.user_id = null;
+            this.title = null;
+            this.content = null;
+        },
         resetErrors() {
             this.error_title = "";
             this.error_content = "";
         },
         validate(error) {
-            if (error.response.data.errors.first_name)
-                this.error_first_name =
-                    error.response.data.errors.first_name[0];
-            if (error.response.data.errors.last_name)
-                this.error_last_name = error.response.data.errors.last_name[0];
-            if (error.response.data.errors.gender)
-                this.error_gender = error.response.data.errors.gender[0];
-            if (error.response.data.errors.selected_block)
-                this.error_selected_block =
-                    error.response.data.errors.selected_block[0];
-            if (error.response.data.errors.selected_lot)
-                this.error_selected_lot =
-                    error.response.data.errors.selected_lot[0];
-            if (error.response.data.errors.email)
-                this.error_email = error.response.data.errors.email[0];
-            if (error.response.data.errors.password)
-                this.error_password = error.response.data.errors.password[0];
-            if (error.response.data.errors.confirm_password)
-                this.error_confirm_password =
-                    error.response.data.errors.confirm_password[0];
-            if (error.response.data.errors.age)
-                this.error_age = error.response.data.errors.age[0];
-            if (error.response.data.errors.contact_num)
-                this.error_contact_num =
-                    error.response.data.errors.contact_num[0];
-            if (error.response.data.errors.role)
-                this.error_role = error.response.data.errors.role[0];
+            if (error.content) this.error_content = error.content[0];
+            if (error.title) this.error_title = error.title[0];
         },
     },
     created() {
