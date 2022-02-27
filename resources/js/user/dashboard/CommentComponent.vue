@@ -27,9 +27,33 @@
             </div>
         </div>
         <div class="col-12 pl-7 p-0 m-0">
-            {{ comment.updated_at }}
+            <ul class="m-0 p-0" style="list-style-type: none">
+                <li style="display: inline">
+                    <Button
+                        label="Reply"
+                        class="p-button-secondary p-button-text m-0 p-0 mr-2"
+                        @click="showReply"
+                    />
+                </li>
+                <li style="display: inline">
+                    <span>{{ comment.updated_at }}</span>
+                </li>
+            </ul>
         </div>
-        <div class="col-11 col-offset-1">
+
+        <div v-if="show_reply" class="col-11 col-offset-1 pt-2 mt-2">
+            <div class="p-inputgroup mb-2">
+                <Avatar
+                    image="https://www.primefaces.org/wp-content/uploads/2020/05/placeholder.png"
+                    class="mr-2"
+                    size="large"
+                    shape="circle"
+                />
+                <Textarea :autoResize="true" rows="1" class="w-full">
+                </Textarea>
+            </div>
+        </div>
+        <div v-if="show_reply" class="col-11 col-offset-1 py-0 my-0">
             <div v-for="reply in comment.reply" :key="reply.id">
                 <ReplyComponent v-if="reply.id" v-bind:reply="reply" />
             </div>
@@ -46,6 +70,16 @@ export default {
     },
     components: {
         ReplyComponent,
+    },
+    data() {
+        return {
+            show_reply: false,
+        };
+    },
+    methods: {
+        showReply() {
+            this.show_reply = !this.show_reply;
+        },
     },
 };
 </script>

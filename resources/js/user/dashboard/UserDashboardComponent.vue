@@ -24,11 +24,11 @@
                             shape="circle"
                             alt="Image"
                         />
-                        <Textarea class="w-full"> </Textarea>
+                        <Textarea :autoResize="true" class="w-full"> </Textarea>
                     </div>
+                    <hr />
                     <FileUpload
                         name="demo[]"
-                        mode="basic"
                         url="./upload.php"
                         accept="image/*"
                         :customUpload="true"

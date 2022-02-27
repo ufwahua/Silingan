@@ -36,7 +36,7 @@
             <div class="grid">
                 <div class="col-12">
                     <DataTable
-                        :value="user"
+                        :value="registeredUsers"
                         :filters="filters"
                         breakpoint="1230px"
                     >
@@ -57,16 +57,9 @@
                                 {{ data.email }}
                             </template>
                         </Column>
-                        <Column header="Block" field="block">
-                            <template #body="{ data }">
-                                {{ data.block }}
-                            </template>
+                        <Column header="Block" field="block_lot.block.number">
                         </Column>
-                        <Column header="Lot" field="lot">
-                            <template #body="{ data }">
-                                {{ data.lot }}
-                            </template>
-                        </Column>
+                        <Column header="Lot" field="block_lot.number"> </Column>
                         <Column header="Role" field="role">
                             <template #body="{ data }">
                                 <Badge :class="badgecolor(data.role)">{{
@@ -79,20 +72,7 @@
                                 <Button
                                     icon="pi pi-pencil"
                                     class="p-button-rounded p-button-primary mr-2"
-                                    @click="
-                                        updateUser(
-                                            data.first_name,
-                                            data.last_name,
-                                            data.gender,
-                                            data.block,
-                                            data.lot,
-                                            data.email,
-                                            data.age,
-                                            data.contact_num,
-                                            data.role,
-                                            data.id
-                                        )
-                                    "
+                                    @click="updateUser(data)"
                                 />
                                 <Button
                                     icon="pi pi-trash"
@@ -273,6 +253,8 @@
                                     <Dropdown
                                         v-model="form.selected_role"
                                         :options="role"
+                                        optionLabel="type"
+                                        optionValue="value"
                                         placeholder="Select Role"
                                     />
                                     <label
@@ -715,6 +697,7 @@
                         v-model:visible="process"
                         :style="{ width: '450px' }"
                         :modal="true"
+                        :closable="false"
                         :closeOnEscape="true"
                     >
                         <div class="grid">
@@ -741,8 +724,19 @@
 <script>
 import axios from "axios";
 import { FilterMatchMode } from "primevue/api";
+import { computed } from "vue";
+import { useStore } from "vuex";
 export default {
     name: "RegisterUsersComponent",
+    setup() {
+        const store = useStore();
+
+        return {
+            registeredUsers: computed(
+                () => store.state.registeredUsers.registeredUsers
+            ),
+        };
+    },
     data() {
         return {
             isInvalid: false,
@@ -770,7 +764,12 @@ export default {
             block: null,
             lot: null,
             user: null,
-            role: ["officer", "resident"],
+            role: [
+                { type: "officer", value: "officer" },
+                { type: "resident", value: "resident" },
+                { type: "security_officer", value: "security_officer" },
+                { type: "admin", value: "admin" },
+            ],
 
             error_first_name: "",
             error_last_name: "",
@@ -816,6 +815,8 @@ export default {
                 return "bg-gray-500";
             } else if (color == "resident") {
                 return "bg-orange-500";
+            } else if (color == "security_officer") {
+                return "bg-yellow-500";
             } else {
                 return "bg-yellow-800";
             }
@@ -846,35 +847,23 @@ export default {
                 console.log(err.response);
             }
         },
-        updateUser(
-            first_name,
-            last_name,
-            gender,
-            block_id,
-            lot_number,
-            email,
-            age,
-            contact_num,
-            role,
-            id
-        ) {
+        updateUser(data) {
             this.resetFields();
             this.resetErrors();
-            this.id = id;
+            this.id = data.id;
             this.updateUserDialog = true;
-            this.form.first_name = first_name;
-            this.form.last_name = last_name;
-            this.form.gender = gender;
-            this.form.selected_block = block_id;
-            this.form.selected_lot = lot_number;
-            this.form.email = email;
-            this.form.age = age;
-            this.form.contact_num = contact_num;
-            this.form.selected_role = role;
+            this.form.first_name = data.first_name;
+            this.form.last_name = data.last_name;
+            this.form.gender = data.gender;
+            // this.form.selected_block = block_id;
+            // this.form.selected_lot = lot_number;
+            this.form.email = data.email;
+            this.form.age = data.age;
+            this.form.contact_num = data.contact_num;
+            this.form.selected_role = data.role;
         },
         async confirmUpdateUser() {
             this.process = true;
-
             await axios({
                 method: "put",
                 url: "/api/user/" + this.id,
@@ -1054,11 +1043,6 @@ export default {
     },
     created() {
         this.initFilters();
-    },
-    mounted() {
-        this.getUsers();
-        this.getBlock();
-        this.getLot();
     },
 };
 </script>

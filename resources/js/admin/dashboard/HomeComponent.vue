@@ -29,6 +29,12 @@ import AppFooter from "../AppFooter.vue";
 
 export default {
     name: "HomeComponent",
+    components: {
+        AppTopBar,
+        AppMenu,
+        // AppConfig: AppConfig,
+        AppFooter,
+    },
     data() {
         return {
             layoutMode: "static",
@@ -62,6 +68,11 @@ export default {
                                     label: "Users",
                                     icon: "pi pi-info-circle",
                                     to: "/admin/registered-users",
+                                },
+                                {
+                                    label: "Announcement",
+                                    icon: "pi pi-info-circle",
+                                    to: "/admin/announcement",
                                 },
                             ],
                         },
@@ -178,13 +189,13 @@ export default {
             this.addClass(document.body, "body-overflow-hidden");
         else this.removeClass(document.body, "body-overflow-hidden");
     },
-    components: {
-        AppTopBar: AppTopBar,
-        AppMenu: AppMenu,
-        // AppConfig: AppConfig,
-        AppFooter: AppFooter,
+
+    created() {
+        this.$store.dispatch("blocks/getAll");
+        this.$store.dispatch("lots/getAll");
+        this.$store.dispatch("registeredUsers/getAll");
+        this.$store.dispatch("announcements/getAll");
     },
-    created() {},
 };
 </script>
 

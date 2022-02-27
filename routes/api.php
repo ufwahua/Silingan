@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AnnouncementController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\UserController;
@@ -38,6 +39,7 @@ Route::get('/logout', [UserController::class, 'logout']);
     'post'             => PostController::class,
     'comment'             => CommentController::class,
     'reply'             => ReplyController::class,
+    'announcement'             => AnnouncementController::class,
 ]);
 
     //Check if User is Logged in

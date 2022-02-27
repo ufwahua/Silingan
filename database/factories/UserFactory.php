@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Lot;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -26,8 +27,9 @@ class UserFactory extends Factory
         return [
             'first_name' => $this->faker->name(),
             'last_name' => $this->faker->name(),
-            'role' => $this->faker->randomElement(['admin', 'officer', 'resident','security_guard']),
+            'role' => $this->faker->randomElement(['admin', 'officer', 'resident','security_officer']),
             'gender' => $this->faker->randomElement(['male','female']),
+            'block_lot_id' =>  Lot::all()->random()->id,
             'age' => rand(1,100),     
             'verified' => rand(0,1),
             'has_voted' => 0,

@@ -1,13 +1,14 @@
 import Login from "../login/LoginComponent.vue";
 import Register from "../login/RegisterComponent.vue";
 import ForgotPassword from "../login/ForgotPasswordComponent.vue";
-
+//admin
 import IndexComponent from "../home/IndexComponent.vue";
 import HomeComponent from "../admin/dashboard/HomeComponent.vue";
 import DashboardComponent from "../admin/dashboard/DashboardComponent.vue";
 import Block_Lot from "../admin/dashboard/Block_LotComponent.vue";
 import RegisteredUsersComponent from "../admin/dashboard/RegisterUsersComponent.vue";
-
+import Announcement from "../admin/dashboard/Announcement.vue";
+//user
 import UserHome from "../user/dashboard/UserHomeComponent.vue";
 import UserDashboard from "../user/dashboard/UserDashboardComponent.vue";
 
@@ -36,7 +37,7 @@ function checkRole(to, from, next) {
 function checkLogged(to, from, next) {
     let isAuthenticated = false;
     let userLogged = store.state.userLogged;
-    console.log(userLogged);
+
     if (userLogged) isAuthenticated = true;
     else isAuthenticated = false;
 
@@ -120,6 +121,17 @@ const router = createRouter({
                     components: {
                         default: NotFound,
                         contents: RegisteredUsersComponent,
+                    },
+                },
+                {
+                    path: "announcement",
+                    meta: {
+                        role: "admin",
+                    },
+                    beforeEnter: checkRole,
+                    components: {
+                        default: NotFound,
+                        contents: Announcement,
                     },
                 },
             ],

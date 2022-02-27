@@ -35,13 +35,13 @@
             </div>
             <div class="grid">
                 <div class="col-12">
-                    <DataTable :value="block" :filters="filters">
+                    <DataTable :value="blocks" :filters="filters">
                         <template #empty> No Blocks found </template>
                         <template #loading> Loading </template>
 
-                        <Column field="block_number" header="Block Number">
+                        <Column field="number" header="Block Number">
                             <template #body="{ data }">
-                                Block {{ data.block_number }}
+                                Block {{ data.number }}
                             </template></Column
                         >
 
@@ -51,17 +51,14 @@
                                     icon="pi pi-plus"
                                     class="p-button-rounded p-button-success mr-1"
                                     v-tooltip="'Add lots'"
-                                    @click="openLotModal(data.block_number)"
+                                    @click="openLotModal(data.number)"
                                 />
                                 <Button
                                     icon="pi pi-pencil"
                                     class="p-button-rounded p-button-primary mr-1"
                                     v-tooltip="'Edit'"
                                     @click="
-                                        openEditBlockModal(
-                                            data.block_number,
-                                            data.id
-                                        )
+                                        openEditBlockModal(data.number, data.id)
                                     "
                                 />
                                 <Button
@@ -70,7 +67,7 @@
                                     v-tooltip="'Delete'"
                                     @click="
                                         openDeleteBlockModal(
-                                            data.block_number,
+                                            data.number,
                                             data.id
                                         )
                                     "
@@ -93,7 +90,7 @@
                         <div class="p-fluid">
                             <h5>Block</h5>
                             <InputText
-                                id="block_number"
+                                id="number"
                                 type="number"
                                 min="0"
                                 step="1"
@@ -106,7 +103,7 @@
                             />
                             <label
                                 style="color: red"
-                                for="block_number"
+                                for="number"
                                 v-if="error"
                                 >{{ this.error }}</label
                             >
@@ -133,7 +130,7 @@
             <Dialog
                 v-model:visible="lotModal"
                 :style="{ width: '800px' }"
-                :header="block_number"
+                :header="number"
                 :modal="true"
                 :closeOnEscape="true"
             >
@@ -169,13 +166,13 @@
 
                     <div class="grid">
                         <div class="col-12">
-                            <DataTable :value="lot" :filters="filters">
+                            <DataTable :value="lots" :filters="filters">
                                 <template #empty> No Lots found </template>
                                 <template #loading> Loading </template>
 
-                                <Column field="lot_number" header="Lot Houses">
+                                <Column field="number" header="Lot Houses">
                                     <template #body="{ data }">
-                                        Lot {{ data.lot_number }}
+                                        Lot {{ data.number }}
                                     </template></Column
                                 >
 
@@ -189,7 +186,7 @@
                                                 openEditLotModal(
                                                     data.id,
                                                     data.block_id,
-                                                    data.lot_number
+                                                    data.number
                                                 )
                                             "
                                         />
@@ -200,7 +197,7 @@
                                             @click="
                                                 openDeleteLotModal(
                                                     data.id,
-                                                    data.lot_number
+                                                    data.number
                                                 )
                                             "
                                         />
@@ -222,7 +219,7 @@
                                 <div class="p-fluid">
                                     <h5>Lots</h5>
                                     <InputText
-                                        id="lot_number"
+                                        id="number"
                                         type="number"
                                         min="0"
                                         step="1"
@@ -235,7 +232,7 @@
                                     />
                                     <label
                                         style="color: red"
-                                        for="lot_number"
+                                        for="number"
                                         v-if="error"
                                         >{{ this.error }}</label
                                     >
@@ -308,7 +305,7 @@
                                     />
                                     <span
                                         >Are you sure you want to delete
-                                        <b>Lot {{ lot_number }}</b
+                                        <b>Lot {{ number }}</b
                                         >?</span
                                     >
                                 </div>
@@ -333,6 +330,7 @@
                         v-model:visible="loading"
                         :style="{ width: '450px' }"
                         :modal="true"
+                        :closable="false"
                         :closeOnEscape="true"
                     >
                         <div class="grid">
@@ -362,10 +360,10 @@
                     <div class="col-12">
                         <div class="p-fluid">
                             <h5>Block Number</h5>
-                            <InputText v-model="block_number" />
+                            <InputText v-model="number" />
                             <label
                                 style="color: red"
-                                for="block_number"
+                                for="number"
                                 v-if="error"
                                 >{{ this.error }}</label
                             >
@@ -404,7 +402,7 @@
                             />
                             <span
                                 >Are you sure you want to delete
-                                <b>Block {{ block_number }}</b
+                                <b>Block {{ number }}</b
                                 >?</span
                             >
                         </div>
@@ -429,6 +427,7 @@
                 v-model:visible="loading"
                 :style="{ width: '450px' }"
                 :modal="true"
+                :closable="false"
                 :closeOnEscape="true"
             >
                 <div class="grid">
@@ -458,14 +457,21 @@ import Toolbar from "primevue/toolbar";
 import { FilterMatchMode } from "primevue/api";
 import InputText from "primevue/inputtext";
 import Dialog from "primevue/dialog";
-
 import Card from "primevue/card";
-
 import axios from "axios";
+import { computed } from "vue";
+import { useStore } from "vuex";
 
 export default {
-    block_number: "DeviceBlockComponent",
-    setup() {},
+    number: "DeviceBlockComponent",
+    setup() {
+        const store = useStore();
+
+        return {
+            blocks: computed(() => store.state.blocks.blocks),
+            lots: computed(() => store.state.lots.lots),
+        };
+    },
     components: {
         DataTable,
         InputText,
@@ -480,11 +486,11 @@ export default {
         return {
             block: null,
             block_id: null,
-            block_number: null,
+            number: null,
 
             lot: null,
             lot_id: null,
-            lot_number: null,
+            number: null,
             filters: {},
             search: null,
             loading: false,
@@ -557,7 +563,7 @@ export default {
                 method: "post",
                 url: "/api/block",
                 data: {
-                    block_number: this.form_block_number,
+                    number: this.form_block_number,
                 },
             })
                 .then((res) => {
@@ -567,15 +573,15 @@ export default {
                     this.loading = false;
                 })
                 .catch((error) => {
-                    if (error.response.data.errors.block_number)
-                        this.error = error.response.data.errors.block_number[0];
+                    if (error.response.data.errors.number)
+                        this.error = error.response.data.errors.number[0];
                     this.loading = false;
                 });
         },
         // Edit Block Modal
-        openEditBlockModal(block_number, block_id) {
+        openEditBlockModal(number, block_id) {
             this.block_id = block_id;
-            this.block_number = block_number;
+            this.number = number;
             this.updateBlockModal = true;
         },
         closeUpdateBlockModal() {
@@ -597,7 +603,7 @@ export default {
                 method: "put",
                 url: "/api/block/" + this.block_id,
                 data: {
-                    block_number: this.block_number,
+                    number: this.number,
                 },
             })
                 .then((res) => {
@@ -607,15 +613,15 @@ export default {
                     this.loading = false;
                 })
                 .catch((error) => {
-                    if (error.response.data.errors.block_number)
-                        this.error = error.response.data.errors.block_number[0];
+                    if (error.response.data.errors.number)
+                        this.error = error.response.data.errors.number[0];
                     this.loading = false;
                 });
         },
         // Delete Block Modal
-        openDeleteBlockModal(block_number, block_id) {
+        openDeleteBlockModal(number, block_id) {
             this.block_id = block_id;
-            this.block_number = block_number;
+            this.number = number;
             this.deleteModal = true;
         },
 
@@ -663,9 +669,9 @@ export default {
         },
 
         // Open Lot Modal
-        openLotModal(block_number) {
-            this.block_id = block_number;
-            this.block_number = "Block " + block_number;
+        openLotModal(number) {
+            this.block_id = number;
+            this.number = "Block " + number;
             this.lotModal = true;
             this.getLot();
         },
@@ -699,7 +705,7 @@ export default {
                 url: "/api/lot",
                 data: {
                     block_id: this.block_id,
-                    lot_number: this.form_lot_number,
+                    number: this.form_lot_number,
                 },
             })
                 .then((res) => {
@@ -710,18 +716,18 @@ export default {
                 })
                 .catch((error) => {
                     if (error.response.data.errors.lot)
-                        this.error = error.response.data.errors.lot_number[0];
+                        this.error = error.response.data.errors.number[0];
                     this.lot = [];
                     this.loading = false;
                 });
         },
 
         //Open  Edit Lot Modal
-        openEditLotModal(lot_id, block_id, lot_number) {
+        openEditLotModal(lot_id, block_id, number) {
             this.resetFields();
             this.lot_id = lot_id;
             this.block_id = block_id;
-            this.form_lot_number = lot_number;
+            this.form_lot_number = number;
             this.updateLotModal = true;
             console.log(this.lot_id, this.block_id, this.form_lot_number);
         },
@@ -746,7 +752,7 @@ export default {
                 url: "/api/lot/" + this.lot_id,
                 data: {
                     block_id: this.block_id,
-                    lot_number: this.form_lot_number,
+                    number: this.form_lot_number,
                 },
             })
                 .then((res) => {
@@ -761,9 +767,9 @@ export default {
                 });
         },
         // Delete Lot Modal
-        openDeleteLotModal(lot_id, lot_number) {
+        openDeleteLotModal(lot_id, number) {
             this.lot_id = lot_id;
-            this.lot_number = lot_number;
+            this.number = number;
             this.deleteLotModal = true;
         },
 
@@ -799,9 +805,6 @@ export default {
 
     created() {
         this.initFilters();
-    },
-    mounted() {
-        this.getBlock();
     },
 };
 </script>
