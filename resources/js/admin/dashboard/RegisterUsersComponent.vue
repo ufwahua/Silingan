@@ -36,7 +36,7 @@
             <div class="grid">
                 <div class="col-12">
                     <DataTable
-                        :value="registeredUsers"
+                        :value="user"
                         :filters="filters"
                         breakpoint="1230px"
                     >
@@ -57,9 +57,16 @@
                                 {{ data.email }}
                             </template>
                         </Column>
-                        <Column header="Block" field="block_lot.block.number">
+                        <Column header="Block" field="block">
+                            <template #body="{ data }" >
+                                {{ data.block_lot_id }}
+                            </template>
                         </Column>
-                        <Column header="Lot" field="block_lot.number"> </Column>
+                        <Column header="Lot" field="lot">
+                            <template #body="{ data }">
+                                {{ data.block_lot_id }}
+                            </template>
+                        </Column>
                         <Column header="Role" field="role">
                             <template #body="{ data }">
                                 <Badge :class="badgecolor(data.role)">{{
@@ -72,7 +79,20 @@
                                 <Button
                                     icon="pi pi-pencil"
                                     class="p-button-rounded p-button-primary mr-2"
-                                    @click="updateUser(data)"
+                                    @click="
+                                        updateUser(
+                                            data.first_name,
+                                            data.last_name,
+                                            data.gender,
+                                            data.block,
+                                            data.block_lot_id,
+                                            data.email,
+                                            data.age,
+                                            data.contact_num,
+                                            data.role,
+                                            data.id
+                                        )
+                                    "
                                 />
                                 <Button
                                     icon="pi pi-trash"
@@ -253,8 +273,6 @@
                                     <Dropdown
                                         v-model="form.selected_role"
                                         :options="role"
-                                        optionLabel="type"
-                                        optionValue="value"
                                         placeholder="Select Role"
                                     />
                                     <label
@@ -311,7 +329,7 @@
                                     >
                                 </div>
 
-                                <div class="field col-12 md:col-6">
+                                <!-- div class="field col-12 md:col-6">
                                     <label for="selected_block">Block</label>
                                     <label
                                         style="color: red"
@@ -356,7 +374,47 @@
                                         v-if="error_selected_lot"
                                         >{{ error_selected_lot }}</label
                                     >
-                                </div>
+                                </div> -->
+
+                                <div class="field col-12 md:col-6">
+                            <label for="selected_block">Block</label>
+
+                            <Dropdown
+                                v-model="form.selected_block"
+                                :options="blocks"
+                                optionLabel="number"
+                                optionValue="id"
+                                placeholder="Select Block"
+                                @change="getBlockLot"
+                            />
+                            <label
+                                style="color: red"
+                                for="form.selected_block"
+                                v-if="error_selected_block"
+                                >{{ error_selected_block }}</label
+                            >
+                        </div>
+
+                        <div class="field col-12 md:col-6">
+                            <label for="selected_lot">Lot</label>
+
+                            <Dropdown
+                                v-model="form.selected_lot"
+                                :class="{ 'p-invalid': error_selected_lot }"
+                                :options="filteredLots"
+                                optionLabel="number"
+                                optionValue="id"
+                                placeholder="Select Lot"
+                                @change="getBlockLot"
+                            />
+                            <label
+                                style="color: red"
+                                for="form.selected_lot"
+                                v-if="error_selected_lot"
+                                >{{ error_selected_lot }}</label
+                            >
+                        </div>
+
                                 <div class="field col-12 md:col-12">
                                     <label for="form.email">Email</label
                                     ><label
@@ -552,7 +610,7 @@
                                     >
                                 </div>
 
-                                <div class="field col-12 md:col-6">
+                                <!-- <div class="field col-12 md:col-6">
                                     <label for="selected_block">Block</label>
                                     <label
                                         style="color: red"
@@ -574,9 +632,9 @@
                                         v-if="error_selected_block"
                                         >{{ error_selected_block }}</label
                                     >
-                                </div>
+                                </div> -->
 
-                                <div class="field col-12 md:col-6">
+                               <!--  <div class="field col-12 md:col-6">
                                     <label for="selected_lot">Lot</label>
                                     <label
                                         style="color: red"
@@ -593,11 +651,52 @@
                                     />
                                     <label
                                         style="color: red"
-                                        for="form.selected_lot"
+                                        for="selected_lot"
                                         v-if="error_selected_lot"
                                         >{{ error_selected_lot }}</label
                                     >
-                                </div>
+                                </div>-->
+
+                        <div class="field col-12 md:col-6">
+                            <label for="selected_block">Block</label>
+
+                            <Dropdown
+                                v-model="form.selected_block"
+                                :class="{ 'p-invalid': error_selected_block }"
+                                :options="blocks"
+                                optionLabel="number"
+                                optionValue="id"
+                                placeholder="Select Block"
+                                @change="getBlockLot"
+                            />
+                            <label
+                                style="color: red"
+                                for="form.selected_block"
+                                v-if="error_selected_block"
+                                >{{ error_selected_block }}</label
+                            >
+                        </div>
+
+                        <div class="field col-12 md:col-6">
+                            <label for="selected_lot">Lot</label>
+
+                            <Dropdown
+                                v-model="form.selected_lot"
+                                :class="{ 'p-invalid': error_selected_lot }"
+                                :options="filteredLots"
+                                optionLabel="number"
+                                optionValue="id"
+                                placeholder="Select Lot"
+                                @change="getBlockLot"
+                            />
+                            <label
+                                style="color: red"
+                                for="form.selected_lot"
+                                v-if="error_selected_lot"
+                                >{{ error_selected_lot }}</label
+                            >
+                        </div>
+
 
                                 <br />
 
@@ -615,7 +714,7 @@
                                     <label for="form.email">Email</label
                                     ><label
                                         style="color: red"
-                                        for="form.form.email"
+                                        for="form.email"
                                         v-if="!form.email"
                                         >*</label
                                     >
@@ -697,7 +796,6 @@
                         v-model:visible="process"
                         :style="{ width: '450px' }"
                         :modal="true"
-                        :closable="false"
                         :closeOnEscape="true"
                     >
                         <div class="grid">
@@ -715,6 +813,7 @@
                             </div>
                         </div>
                     </Dialog>
+                    
                 </div>
             </div>
         </div>
@@ -726,15 +825,15 @@ import axios from "axios";
 import { FilterMatchMode } from "primevue/api";
 import { computed } from "vue";
 import { useStore } from "vuex";
+
 export default {
     name: "RegisterUsersComponent",
     setup() {
         const store = useStore();
-
         return {
-            registeredUsers: computed(
-                () => store.state.registeredUsers.registeredUsers
-            ),
+            blocks: computed(() => store.state.blocks.blocks),
+            lots: computed(() => store.state.lots.lots),
+            filteredLots: computed(() => store.state.lots.filteredLots),
         };
     },
     data() {
@@ -764,12 +863,7 @@ export default {
             block: null,
             lot: null,
             user: null,
-            role: [
-                { type: "officer", value: "officer" },
-                { type: "resident", value: "resident" },
-                { type: "security_officer", value: "security_officer" },
-                { type: "admin", value: "admin" },
-            ],
+            role: ["officer", "resident", "security_guard"],
 
             error_first_name: "",
             error_last_name: "",
@@ -784,6 +878,7 @@ export default {
             error_role: "",
         };
     },
+    
     methods: {
         async getUsers() {
             await axios({
@@ -815,8 +910,6 @@ export default {
                 return "bg-gray-500";
             } else if (color == "resident") {
                 return "bg-orange-500";
-            } else if (color == "security_officer") {
-                return "bg-yellow-500";
             } else {
                 return "bg-yellow-800";
             }
@@ -847,23 +940,35 @@ export default {
                 console.log(err.response);
             }
         },
-        updateUser(data) {
+        updateUser(
+            first_name,
+            last_name,
+            gender,
+            block_id,
+            block_lot_id,
+            email,
+            age,
+            contact_num,
+            role,
+            id
+        ) {
             this.resetFields();
             this.resetErrors();
-            this.id = data.id;
+            this.id = id;
             this.updateUserDialog = true;
-            this.form.first_name = data.first_name;
-            this.form.last_name = data.last_name;
-            this.form.gender = data.gender;
-            // this.form.selected_block = block_id;
-            // this.form.selected_lot = lot_number;
-            this.form.email = data.email;
-            this.form.age = data.age;
-            this.form.contact_num = data.contact_num;
-            this.form.selected_role = data.role;
+            this.form.first_name = first_name;
+            this.form.last_name = last_name;
+            this.form.gender = gender;
+            this.form.selected_block = block_id;
+            this.form.selected_lot = block_lot_id;
+            this.form.email = email;
+            this.form.age = age;
+            this.form.contact_num = contact_num;
+            this.form.selected_role = role;
         },
         async confirmUpdateUser() {
             this.process = true;
+
             await axios({
                 method: "put",
                 url: "/api/user/" + this.id,
@@ -920,6 +1025,7 @@ export default {
                     password: this.form.password,
                     confirm_password: this.form.confirm_password,
                     role: this.form.role,
+
                 },
             })
                 .then(() => {
@@ -1025,25 +1131,28 @@ export default {
                 });
             });
             this.lot = temp;
+
+            //for(this.lot.)
+            //console.log(this.lot);
+            
+            console.log("test");
         },
         async getBlockLot() {
-            var temp = [];
-            const lots = await axios({
-                method: "get",
-                url: "/api/lot/" + this.form.selected_block,
-            });
-            lots.data.forEach((elem) => {
-                temp.push({
-                    lot_number: elem.lot_number,
-                    value: elem.lot_number,
-                });
-            });
-            this.lot = temp;
+            this.$store.dispatch("lots/getBlockLots", this.form.selected_block);
         },
     },
+    
     created() {
         this.initFilters();
+        this.$store.dispatch("blocks/getAll");
+        this.$store.dispatch("lots/getAll");
     },
+    mounted() {
+        this.getUsers();
+        this.getBlock();
+        this.getLot();
+    },
+    
 };
 </script>
 
