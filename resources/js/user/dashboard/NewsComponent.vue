@@ -1,7 +1,7 @@
 <template>
     <div class="grid">
         <div
-            class="col-12 sm:col-6 md:col-12 lg:col-12 mb-4"
+            class="col-12 sm:col-6 md:col-6 lg:col-12 xl:col-12 mb-4"
             v-for="article in news"
             :key="article.id"
         >

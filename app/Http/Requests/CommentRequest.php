@@ -14,7 +14,7 @@ class CommentRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -25,8 +25,8 @@ class CommentRequest extends FormRequest
     public function rules()
     {
         return [
-            'post_id' => ['required',Rule::exists('post', 'id')],
-            'user_id' => ['required',Rule::exists('user_id', 'id')],
+            'post_id' => ['required',Rule::exists('posts', 'id')],
+            'user_id' => ['required',Rule::exists('users', 'id')],
             'message' => ['required'],  
         ];
     }

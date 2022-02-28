@@ -12,7 +12,7 @@
                         <img
                             class="Silingan-logo"
                             alt="Silingan-Logo"
-                            src="https://i.ibb.co/V3B8NBM/silingan-icon.png"
+                            src="http://127.0.0.1:8000/storage/images/silingan-icon.png"
                     /></router-link>
                 </div>
 
@@ -259,6 +259,26 @@
                 </form>
             </div>
         </div>
+        <Dialog
+            v-model:visible="loading"
+            :style="{ width: '450px' }"
+            :modal="true"
+            :closable="false"
+            :closeOnEscape="true"
+        >
+            <div class="grid">
+                <div class="col-12 text-center">
+                    <ProgressSpinner
+                        class="block mb-4"
+                        style="width: 100px; height: 100px"
+                        strokeWidth="4"
+                        fill="#EEEEEE"
+                        animationDuration="1s"
+                    />
+                    <span class="block">Processing Request...</span>
+                </div>
+            </div>
+        </Dialog>
     </div>
 </template>
 <script>
@@ -276,6 +296,7 @@ export default {
     },
     data() {
         return {
+            loading: null,
             first_name: null,
             last_name: null,
             gender: null,
@@ -307,14 +328,15 @@ export default {
     computed: {},
     methods: {
         async onRegisterClick() {
+            this.loading = true;
             await axios({
                 method: "post",
-                url: "api/user",
+                url: "/api/user",
                 data: {
                     first_name: this.first_name,
                     last_name: this.last_name,
                     gender: this.gender,
-                    block_lot_id: this.block_lot_id,
+                    block_lot_id: this.selected_block_lot,
                     email: this.email,
                     password: this.password,
                     confirm_password: this.confirm_password,
@@ -326,12 +348,14 @@ export default {
                 },
             })
                 .then(() => {
+                    this.loading = false;
                     this.$router.push({ name: "login" });
                 })
                 .catch((err) => {
                     console.log(err.response.data);
                     this.resetErrors();
                     this.validate(err);
+                    this.loading = false;
                 });
         },
         resetFields() {
@@ -388,14 +412,11 @@ export default {
                     error.response.data.errors.contact_num[0];
         },
 
-        async getBlockLot() {
+        getBlockLot() {
             this.$store.dispatch("lots/getBlockLots", this.selected_block);
         },
     },
-    created() {
-        this.$store.dispatch("blocks/getAll");
-        this.$store.dispatch("lots/getAll");
-    },
+    created() {},
 };
 </script>
 

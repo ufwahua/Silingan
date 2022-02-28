@@ -12,7 +12,7 @@
                         <img
                             class="Silingan-logo"
                             alt="Silingan-Logo"
-                            src="https://i.ibb.co/V3B8NBM/silingan-icon.png"
+                            src="http://127.0.0.1:8000/storage/images/silingan-icon.png"
                     /></router-link>
                 </div>
                 <form
@@ -97,6 +97,25 @@
                 </div>
             </div>
         </div>
+        <Dialog
+            v-model:visible="loading"
+            :style="{ width: '450px' }"
+            :modal="true"
+            :closable="false"
+            :closeOnEscape="true"
+        >
+            <div class="grid">
+                <div class="col-12 text-center">
+                    <ProgressSpinner
+                        class="block mb-4"
+                        style="width: 100px; height: 100px"
+                        strokeWidth="4"
+                        fill="#EEEEEE"
+                        animationDuration="1s"
+                    />
+                </div>
+            </div>
+        </Dialog>
     </div>
 </template>
 
@@ -106,6 +125,7 @@ import axios from "axios";
 export default {
     data() {
         return {
+            loading: false,
             form: {
                 email: null,
                 password: null,
@@ -117,23 +137,28 @@ export default {
         };
     },
     methods: {
-        onLoginSubmit() {
-            axios
+        async onLoginSubmit() {
+            this.loading = true;
+            await axios
                 .post("/api/login", this.form)
                 .then((response) => {
                     this.error = "";
                     this.$store.dispatch("getUserLogged", response.data);
                     if (response.data.role === "resident") {
+                        this.loading = false;
                         this.$router.push("/resident/dashboard");
                     } else {
+                        this.loading = false;
                         this.$router.push("/admin/dashboard");
                     }
                 })
                 .catch((err) => {
                     this.error = "";
+
                     if (err.response.data.errors) {
                         this.error = "Invalid Credentials";
                     }
+                    this.loading = false;
                 });
         },
     },
@@ -142,11 +167,6 @@ export default {
 
 <style scoped>
 @import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap");
-
-/* div {
-    display: block;
-    margin: auto;
-} */
 
 .login100-form {
     height: 475px;

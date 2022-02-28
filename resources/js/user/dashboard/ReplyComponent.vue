@@ -2,14 +2,16 @@
     <div>
         <div class="col-12 p-0 m-0">
             <div class="p-inputgroup pt-1 pb-0 my-0">
-                <Avatar
-                    image="https://www.primefaces.org/wp-content/uploads/2020/05/placeholder.png"
-                    class="mr-2"
-                    size="large"
-                    shape="circle"
-                />
+                <div>
+                    <Avatar
+                        image="https://www.primefaces.org/wp-content/uploads/2020/05/placeholder.png"
+                        class="mr-2"
+                        size="large"
+                        shape="circle"
+                    />
+                </div>
                 <div
-                    class="card w-full pb-0 pt-1 px-2 mb-0 mt-1"
+                    class="card pb-0 pt-1 px-2 mb-0 mt-1"
                     style="background-color: var(--blue-50)"
                 >
                     <div class="grid grid-nogutter">

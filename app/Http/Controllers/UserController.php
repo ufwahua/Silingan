@@ -94,19 +94,23 @@ class UserController extends Controller
      * @param Request $request
      * @return JsonResponse
      */
-    public function update(User $user, Request $request): JsonResponse
+    public function update(Request $request): JsonResponse
     {
-       $user->update($request->validate([
-            'first_name' => ['required','string' , 'max:255'],
-            'last_name' => ['required','string' , 'max:255'],
-            'gender' => ['required'],
-            'block_lot_id' => ['required'],
-
-            'age' => ['required','integer','numeric','gt:0', 'max:150'],
-            'contact_num' => ['required','string'],
-            'email' => ['required','string' ,'email', 'unique:users,email,'.$request['id']],
-            'role' => ['required','string'],
-       ]));
+  
+    $user = User::query()->where('id',$request->route('user'))->update($request->validate([
+        'block_lot_id' => ['required',Rule::exists('lots', 'id')],
+        'first_name' => ['required','string' , 'max:255'],
+        'last_name' => ['required','string' , 'max:255'],
+        'gender' => ['required'],
+        'block_lot_id' => ['sometimes'],
+        'age' => ['required','integer','numeric','gt:0', 'max:130'],
+        'contact_num' => ['required','string','min:11'],
+        'role' => ['required'],
+        'verified' => ['required'],
+        'has_voted' => ['required'],
+        'email' => ['required','string' ,'email', 'max:255',Rule::unique('users')->ignore($request->route('user'))],
+        'profile_pic'=> ['sometimes'],
+    ]));
         return response()->json($user);
   
     }
