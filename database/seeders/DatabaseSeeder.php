@@ -22,6 +22,7 @@ class DatabaseSeeder extends Seeder
             CommentSeeder::class,
             ReplySeeder::class,
             AnnouncementSeeder::class,
+            PositionSeeder::class
         ]);
     }
 }

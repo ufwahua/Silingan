@@ -6,6 +6,8 @@ use App\Models\Position;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use App\Http\Requests\PositionRequest;
+use Illuminate\Validation\Rule;
+
 
 class PositionController extends Controller
 {
