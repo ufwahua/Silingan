@@ -3,7 +3,7 @@
         <Toast />
         <div class="grid">
             <div class="col-12">
-                <h1>Registered Users</h1>
+                <h1>Residents</h1>
             </div>
         </div>
         <div class="card">
