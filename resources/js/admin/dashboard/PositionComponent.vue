@@ -36,7 +36,7 @@
             <div class="grid">
                 <div class="col-12">
                     <DataTable
-                        :value="announcements"
+                        :value="positions"
                         :filters="filters"
                         breakpoint="1230px"
                     >
@@ -77,7 +77,7 @@
                                     />
                                     <span
                                         >Are you sure you want to delete
-                                        announcement <b>{{ title }}</b
+                                        position <b>{{ name }}</b
                                         >?</span
                                     >
                                 </div>
@@ -94,14 +94,14 @@
                                 label="Delete"
                                 icon="pi pi-check"
                                 class="p-button-text p-button-danger"
-                                @click="confirmDeleteAnnouncement"
+                                @click="confirmDeletePosition"
                             />
                         </template>
                     </Dialog>
                     <Dialog
-                        v-model:visible="updateAnnouncementDialog"
+                        v-model:visible="updatePositionDialog"
                         :style="{ width: '500px' }"
-                        header="Update Announcement"
+                        header="Update Position"
                         :modal="true"
                     >
                         <div class="grid">
@@ -109,35 +109,16 @@
                                 <div class="field">
                                     <label>Title</label>
                                     <InputText
-                                        v-model="title"
+                                        v-model="name"
                                         :class="{
-                                            'p-invalid': error_title,
+                                            'p-invalid': error_name,
                                         }"
                                         class="w-full"
                                     />
                                     <label
                                         style="color: red"
-                                        for="form.password"
-                                        v-if="error_title"
-                                        >{{ error_title }}</label
-                                    >
-                                </div>
-                            </div>
-                            <div class="col-12">
-                                <div class="field">
-                                    <label>Content</label>
-                                    <Textarea
-                                        v-model="content"
-                                        :autoResize="true"
-                                        :class="{
-                                            'p-invalid': error_content,
-                                        }"
-                                        class="w-full"
-                                    />
-                                    <label
-                                        style="color: red"
-                                        v-if="error_content"
-                                        >{{ error_content }}</label
+                                        v-if="error_name"
+                                        >{{ error_name }}</label
                                     >
                                 </div>
                             </div>
@@ -147,13 +128,13 @@
                                 label="Cancel"
                                 icon="pi pi-times"
                                 class="p-button-text"
-                                @click="updateAnnouncementDialog = false"
+                                @click="updatePositionDialog = false"
                             />
                             <Button
                                 label="Update"
                                 icon="pi pi-check"
                                 class="p-button-text p-button-warning"
-                                @click="confirmUpdateUser"
+                                @click="confirmUpdatePosition"
                             />
                         </template>
                     </Dialog>
@@ -194,7 +175,7 @@
                                 label="Create"
                                 icon="pi pi-check"
                                 class="p-button-text p-button-success"
-                                @click="onCreateAnnouncementClick"
+                                @click="onCreatePositionsClick"
                             />
                         </template>
                     </Dialog>
@@ -242,16 +223,14 @@ export default {
     data() {
         return {
             filters: {},
-            // announcements: this.$store.state.announcements.announcements,
 
-            name: null,
             loading: false,
             createPositionDialog: false,
             deletePositionDialog: false,
-            updateAnnouncementDialog: false,
+            updatePositionDialog: false,
+
             id: null,
             name: null,
-
             error_name: null,
         };
     },
@@ -270,73 +249,67 @@ export default {
             };
         },
 
-        deleteAnnouncement(data) {
+        deletePosition(data) {
             this.id = data.id;
-            this.title = data.title;
+            this.name = data.name;
             this.deletePositionDialog = true;
         },
-        showDeleteAnnouncementToast() {
+        showDeletePositiontToast() {
             this.$toast.add({
                 severity: "success",
                 summary: "Successful Request",
-                detail: "Deleted Announcement",
+                detail: "Deleted Position",
                 life: 3000,
             });
         },
-        async confirmDeleteAnnouncement() {
+        async confirmDeletePosition() {
             this.loading = true;
             await axios({
                 method: "delete",
-                url: "/api/announcement/" + this.id,
+                url: "/api/position/" + this.id,
             })
                 .then(() => {
                     this.deletePositionDialog = false;
-                    this.resetFields();
-                    this.$store.dispatch("announcements/getAll");
-                    this.showDeleteAnnouncementToast();
+                    this.$store.dispatch("positions/getAll");
+                    this.showDeletePositiontToast();
                     this.loading = false;
                 })
                 .catch((err) => {
                     console.log(err.response);
                     this.resetErrors();
-                    // this.validate(err);
                     this.loading = false;
                 });
         },
-        updateAnnouncement(data) {
+
+        updatePosition(data) {
             this.resetFields();
             this.resetErrors();
             this.id = data.id;
-            this.user_id = this.$store.state.userLogged.id;
-            this.title = data.title;
-            this.content = data.content;
-            this.updateAnnouncementDialog = true;
+            this.name = data.name;
+            this.updatePositionDialog = true;
         },
-        showUpdateAnnouncementToast() {
+        showUpdatePositionToast() {
             this.$toast.add({
                 severity: "success",
                 summary: "Successful Request",
-                detail: "Updated Announcement",
+                detail: "Updated Position",
                 life: 3000,
             });
         },
-        async confirmUpdateUser() {
+        async confirmUpdatePosition() {
             this.loading = true;
             await axios({
                 method: "put",
-                url: "/api/announcement/" + this.id,
+                url: "/api/position/" + this.id,
                 data: {
-                    user_id: this.user_id,
-                    title: this.title,
-                    content: this.content,
+                    name: this.name,
                 },
             })
                 .then(() => {
-                    this.updateAnnouncementDialog = false;
-                    this.resetFields();
-                    this.$store.dispatch("announcements/getAll");
-                    this.showUpdateAnnouncementToast();
+                    this.updatePositionDialog = false;
+                    this.$store.dispatch("positions/getAll");
                     this.loading = false;
+                    this.showUpdatePositionToast();
                 })
                 .catch((err) => {
                     this.resetErrors();
@@ -344,11 +317,11 @@ export default {
                     this.loading = false;
                 });
         },
-        showCreateAnnouncementToast() {
+        showCreatePositionToast() {
             this.$toast.add({
                 severity: "success",
                 summary: "Successful Request",
-                detail: "Created Announcement",
+                detail: "Created Position",
                 life: 3000,
             });
         },
@@ -358,21 +331,19 @@ export default {
             this.resetFields();
             this.resetErrors();
         },
-        async onCreateAnnouncementClick() {
+        async onCreatePositionsClick() {
             this.loading = true;
             await axios({
                 method: "post",
-                url: "/api/announcement",
+                url: "/api/position",
                 data: {
-                    user_id: this.$store.state.userLogged.id,
-                    title: this.title,
-                    content: this.content,
+                    name: this.name,
                 },
             })
                 .then(() => {
                     this.createPositionDialog = false;
-                    this.$store.dispatch("announcements/getAll");
-                    this.showCreateAnnouncementToast();
+                    this.$store.dispatch("positions/getAll");
+                    this.showCreatePositionToast();
                     this.loading = false;
                 })
                 .catch((err) => {
@@ -384,17 +355,13 @@ export default {
 
         resetFields() {
             this.id = null;
-            this.user_id = null;
-            this.title = null;
-            this.content = null;
+            this.name = null;
         },
         resetErrors() {
-            this.error_title = "";
-            this.error_content = "";
+            this.error_name = "";
         },
         validate(error) {
-            if (error.content) this.error_content = error.content[0];
-            if (error.title) this.error_title = error.title[0];
+            if (error.name) this.error_name = error.name[0];
         },
     },
     created() {
