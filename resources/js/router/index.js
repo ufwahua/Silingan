@@ -9,6 +9,7 @@ import Block_Lot from "../admin/dashboard/Block_LotComponent.vue";
 import RegisteredUsersComponent from "../admin/dashboard/RegisterUsersComponent.vue";
 import Announcement from "../admin/dashboard/Announcement.vue";
 import ResidentComponent from "../admin/dashboard/ResidentComponent.vue";
+import OfficerComponent from "../admin/dashboard/OfficerComponent.vue";
 
 
 //user
@@ -146,6 +147,17 @@ const router = createRouter({
                     components: {
                         default: NotFound,
                         contents: Announcement,
+                    },
+                },
+                {
+                    path: "officers",
+                    meta: {
+                        role: "admin",
+                    },
+                    beforeEnter: checkRole,
+                    components: {
+                        default: NotFound,
+                        contents: OfficerComponent,
                     },
                 },
             ],

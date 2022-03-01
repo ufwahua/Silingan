@@ -81,10 +81,10 @@ export default {
                                     {
                                         label: "Officers",
                                         icon: "pi pi-info-circle",
-                                        to: "/admin/",
+                                        to: "/admin/officers",
                                     },
                                     {
-                                        label: "Admin",
+                                        label: "All Users",
                                         icon: "pi pi-info-circle",
                                         to: "/admin/registered-users",
                                     },
