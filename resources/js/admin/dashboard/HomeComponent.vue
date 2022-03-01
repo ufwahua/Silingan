@@ -67,7 +67,6 @@ export default {
                                 {
                                     label: "Users",
                                     icon: "pi pi-info-circle",
-                                    to: "/admin/registered-users",
                                     items: [
                                     {
                                         label: "Residents",
@@ -79,10 +78,15 @@ export default {
                                         icon: "pi pi-info-circle",
                                         to: "/admin/",
                                     },
-                                     {
+                                    {
                                         label: "Officers",
                                         icon: "pi pi-info-circle",
                                         to: "/admin/",
+                                    },
+                                    {
+                                        label: "Admin",
+                                        icon: "pi pi-info-circle",
+                                        to: "/admin/registered-users",
                                     },
                                 ],
                                 },
