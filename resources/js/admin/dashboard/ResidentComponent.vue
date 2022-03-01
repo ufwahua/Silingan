@@ -3,7 +3,7 @@
         <Toast />
         <div class="grid">
             <div class="col-12">
-                <h1>Registered Users</h1>
+                <h1>Residents List</h1>
             </div>
         </div>
         <div class="card">
@@ -42,29 +42,35 @@
                     >
                         <template #empty> No registered users found </template>
                         <template #loading> Loading Users </template>
-                        <Column header="Id" field="id">
+                        <Column header="Id" field="id" :sortable="true">
                             <template #body="{ data }">
                                 {{ data.id }}
                             </template>
                         </Column>
-                        <Column header="Name" field="name">
+                        <Column header="Name" field="name" :sortable="true">
                             <template #body="{ data }">
                                 {{ data.first_name }} {{ data.last_name }}
                             </template>
                         </Column>
-                        <Column header="Email" field="email">
+                        <Column header="Email" field="email" :sortable="true">
                             <template #body="{ data }">
                                 {{ data.email }}
                             </template>
                         </Column>
-                        <Column header="Block" field="block_lot.block.number">
+                        <Column header="Block" field="block_lot.block.number" :sortable="true">
                         </Column>
-                        <Column header="Lot" field="block_lot.number"> </Column>
-                        <Column header="Role" field="role">
+                        <Column header="Lot" field="block_lot.number" :sortable="true"> </Column>
+                        <Column header="Role" field="role" :sortable="true"> 
                             <template #body="{ data }">
                                 <Badge :class="badgecolor(data.role)">{{
                                     data.role
                                 }}</Badge>
+                            </template>
+                        </Column>
+                        <Column header="Verified" field="verified" :sortable="true">
+                            <template #body="{ data }">
+                                <h5 v-if="data.verified == 1 ">Yes</h5>
+                                <h5 v-else>No</h5>
                             </template>
                         </Column>
                         <Column header="Actions" field="actions">
@@ -150,13 +156,13 @@
                                     <label
                                         style="color: red"
                                         for="first_name"
-                                        v-if="!first_name"
+                                        v-if="!form.first_name"
                                         >*</label
                                     >
                                     <InputText
                                         id="firstname"
                                         type="text"
-                                        v-model="first_name"
+                                        v-model="form.first_name"
                                     />
                                     <label
                                         style="color: red"
@@ -171,13 +177,13 @@
                                     <label
                                         style="color: red"
                                         for="last_name"
-                                        v-if="!last_name"
+                                        v-if="!form.last_name"
                                         >*</label
                                     >
                                     <InputText
                                         id="last_name"
                                         type="text"
-                                        v-model="last_name"
+                                        v-model="form.last_name"
                                     />
                                     <label
                                         style="color: red"
@@ -193,7 +199,7 @@
                                         <label
                                             style="color: red"
                                             for="gender"
-                                            v-if="!gender"
+                                            v-if="!form.gender"
                                             >*</label
                                         >
                                     </div>
@@ -203,7 +209,7 @@
                                             <RadioButton
                                                 name="gender"
                                                 value="male"
-                                                v-model="gender"
+                                                v-model="form.gender"
                                                 @keydown.enter="onRegisterClick"
                                             />
                                             <label
@@ -214,7 +220,7 @@
                                             <RadioButton
                                                 name="gender"
                                                 value="female"
-                                                v-model="gender"
+                                                v-model="form.gender"
                                                 @keydown.enter="onRegisterClick"
                                             />
                                             <label
@@ -247,11 +253,11 @@
                                     <label>Role</label>
                                     <label
                                         style="color: red"
-                                        v-if="!selected_role"
+                                        v-if="!form.selected_role"
                                         >*</label
                                     >
                                     <Dropdown
-                                        v-model="selected_role"
+                                        v-model="form.selected_role"
                                         :options="role"
                                         optionLabel="type"
                                         optionValue="value"
@@ -266,8 +272,8 @@
                                 </div>
 
                                 <div class="field col-12 md:col-12">
-                                    <label for="age">Age</label
-                                    ><label style="color: red" v-if="!age"
+                                    <label for="form.age">Age</label
+                                    ><label style="color: red" v-if="!form.age"
                                         >*</label
                                     >
                                     <InputText
@@ -278,34 +284,34 @@
                                         onfocus="this.previousValue = this.value"
                                         onkeydown="this.previousValue = this.value"
                                         oninput="validity.valid || (value = this.previousValue)"
-                                        v-model="age"
+                                        v-model="form.age"
                                     />
                                     <label
                                         style="color: red"
-                                        for="age"
+                                        for="form.age"
                                         v-if="error_age"
                                         >{{ error_age }}</label
                                     >
                                 </div>
 
                                 <div class="field col-12 md:col-12">
-                                    <label for="contact_num"
+                                    <label for="form.contact_num"
                                         >Contact Number</label
                                     ><label
                                         style="color: red"
-                                        for="contact_num"
-                                        v-if="!contact_num"
+                                        for="form.contact_num"
+                                        v-if="!form.contact_num"
                                         >*</label
                                     >
                                     <InputText
                                         id="contact_num"
                                         type="text"
                                         onkeyup="if(this.value<0){this.value= this.value * -1}"
-                                        v-model="contact_num"
+                                        v-model="form.contact_num"
                                     />
                                     <label
                                         style="color: red"
-                                        for="contact_num"
+                                        for="form.contact_num"
                                         v-if="error_contact_num"
                                         >{{ error_contact_num }}</label
                                     >
@@ -316,12 +322,12 @@
                                     <label
                                         style="color: red"
                                         for="selected_block"
-                                        v-if="!selected_block"
+                                        v-if="!form.selected_block"
                                         >*</label
                                     >
                                     <Dropdown
-                                        v-model="selected_block"
-                                        :options="blocks"
+                                        v-model="form.selected_block"
+                                        :options="block"
                                         optionLabel="number"
                                         optionValue="id"
                                         placeholder="Select Block"
@@ -329,50 +335,50 @@
                                     />
                                     <label
                                         style="color: red"
-                                        for="selected_block"
+                                        for="form.selected_block"
                                         v-if="error_selected_block"
                                         >{{ error_selected_block }}</label
                                     >
                                 </div>
 
                                 <div class="field col-12 md:col-6">
-                                    <label for="selected_block_lot">Lot</label>
+                                    <label for="selected_lot">Lot</label>
                                     <label
                                         style="color: red"
-                                        for="selected_block_lot"
-                                        v-if="!selected_block_lot"
+                                        for="selected_lot"
+                                        v-if="!form.selected_lot"
                                         >*</label
                                     >
                                     <Dropdown
-                                        v-model="selected_block_lot"
-                                        :options="filteredLots"
-                                        optionLabel="number"
-                                        optionValue="id"
+                                        v-model="form.selected_lot"
+                                        :options="lot"
+                                        optionLabel="lot_number"
+                                        optionValue="value"
                                         placeholder="Select Lot"
                                     />
                                     <label
                                         style="color: red"
-                                        for="selected_block_lot"
+                                        for="form.selected_lot"
                                         v-if="error_selected_lot"
                                         >{{ error_selected_lot }}</label
                                     >
                                 </div>
                                 <div class="field col-12 md:col-12">
-                                    <label for="email">Email</label
+                                    <label for="form.email">Email</label
                                     ><label
                                         style="color: red"
-                                        for="email"
-                                        v-if="!email"
+                                        for="form.form.email"
+                                        v-if="!form.email"
                                         >*</label
                                     >
                                     <InputText
                                         type="text"
                                         name="email"
-                                        v-model="email"
+                                        v-model="form.email"
                                     />
                                     <label
                                         style="color: red"
-                                        for="email"
+                                        for="form.email"
                                         v-if="error_email"
                                         >{{ error_email }}</label
                                     >
@@ -417,13 +423,13 @@
                                     <label
                                         style="color: red"
                                         for="first_name"
-                                        v-if="!first_name"
+                                        v-if="!form.first_name"
                                         >*</label
                                     >
                                     <InputText
                                         id="firstname"
                                         type="text"
-                                        v-model="first_name"
+                                        v-model="form.first_name"
                                         @keydown.enter="onRegisterClick"
                                     />
                                     <label
@@ -439,13 +445,13 @@
                                     <label
                                         style="color: red"
                                         for="last_name"
-                                        v-if="!last_name"
+                                        v-if="!form.last_name"
                                         >*</label
                                     >
                                     <InputText
                                         id="last_name"
                                         type="text"
-                                        v-model="last_name"
+                                        v-model="form.last_name"
                                         @keydown.enter="onRegisterClick"
                                     />
                                     <label
@@ -457,11 +463,11 @@
                                 </div>
 
                                 <div class="field col-12 md:col-12">
-                                    <label for="age">Age</label
+                                    <label for="form.age">Age</label
                                     ><label
                                         style="color: red"
-                                        for="age"
-                                        v-if="!age"
+                                        for="form.age"
+                                        v-if="!form.age"
                                         >*</label
                                     >
                                     <InputText
@@ -472,12 +478,12 @@
                                         onfocus="this.previousValue = this.value"
                                         onkeydown="this.previousValue = this.value"
                                         oninput="validity.valid || (value = this.previousValue)"
-                                        v-model="age"
+                                        v-model="form.age"
                                         @keydown.enter="onRegisterClick"
                                     />
                                     <label
                                         style="color: red"
-                                        for="age"
+                                        for="form.age"
                                         v-if="error_age"
                                         >{{ error_age }}</label
                                     >
@@ -488,7 +494,7 @@
                                         <label
                                             style="color: red"
                                             for="gender"
-                                            v-if="!gender"
+                                            v-if="!form.gender"
                                             >*</label
                                         >
                                     </div>
@@ -498,7 +504,7 @@
                                             <RadioButton
                                                 name="gender"
                                                 value="male"
-                                                v-model="gender"
+                                                v-model="form.gender"
                                                 @keydown.enter="onRegisterClick"
                                             />
                                             <label
@@ -509,7 +515,7 @@
                                             <RadioButton
                                                 name="gender"
                                                 value="female"
-                                                v-model="gender"
+                                                v-model="form.gender"
                                                 @keydown.enter="onRegisterClick"
                                             />
                                             <label
@@ -529,24 +535,24 @@
                                     </div>
                                 </div>
                                 <div class="field col-12 md:col-12">
-                                    <label for="contact_num"
+                                    <label for="form.contact_num"
                                         >Contact Number</label
                                     ><label
                                         style="color: red"
-                                        for="contact_num"
-                                        v-if="!contact_num"
+                                        for="form.contact_num"
+                                        v-if="!form.contact_num"
                                         >*</label
                                     >
                                     <InputText
                                         id="contact_num"
                                         type="text"
                                         onkeyup="if(this.value<0){this.value= this.value * -1}"
-                                        v-model="contact_num"
+                                        v-model="form.contact_num"
                                         @keydown.enter="onRegisterClick"
                                     />
                                     <label
                                         style="color: red"
-                                        for="contact_num"
+                                        for="form.contact_num"
                                         v-if="error_contact_num"
                                         >{{ error_contact_num }}</label
                                     >
@@ -557,11 +563,11 @@
                                     <label
                                         style="color: red"
                                         for="selected_block"
-                                        v-if="!selected_block"
+                                        v-if="!form.selected_block"
                                         >*</label
                                     >
                                     <Dropdown
-                                        v-model="selected_block"
+                                        v-model="form.selected_block"
                                         :options="blocks"
                                         optionLabel="number"
                                         optionValue="id"
@@ -570,30 +576,30 @@
                                     />
                                     <label
                                         style="color: red"
-                                        for="selected_block"
+                                        for="form.selected_block"
                                         v-if="error_selected_block"
                                         >{{ error_selected_block }}</label
                                     >
                                 </div>
 
                                 <div class="field col-12 md:col-6">
-                                    <label for="selected_block_lot">Lot</label>
+                                    <label for="selected_lot">Lot</label>
                                     <label
                                         style="color: red"
-                                        for="selected_block_lot"
-                                        v-if="!selected_block_lot"
+                                        for="selected_lot"
+                                        v-if="!form.selected_lot"
                                         >*</label
                                     >
                                     <Dropdown
-                                        v-model="selected_block_lot"
-                                        :options="filteredLots"
+                                        v-model="form.selected_lot"
+                                        :options="lots"
                                         optionLabel="number"
                                         optionValue="id"
                                         placeholder="Select Lot"
                                     />
                                     <label
                                         style="color: red"
-                                        for="selected_block_lot"
+                                        for="form.selected_lot"
                                         v-if="error_selected_lot"
                                         >{{ error_selected_lot }}</label
                                     >
@@ -612,43 +618,43 @@
                                 </div>
 
                                 <div class="field col-12 md:col-4">
-                                    <label for="email">Email</label
+                                    <label for="form.email">Email</label
                                     ><label
                                         style="color: red"
-                                        for="email"
-                                        v-if="!email"
+                                        for="form.form.email"
+                                        v-if="!form.email"
                                         >*</label
                                     >
                                     <InputText
                                         type="text"
                                         name="email"
-                                        v-model="email"
+                                        v-model="form.email"
                                         @keydown.enter="onRegisterClick"
                                     />
                                     <label
                                         style="color: red"
-                                        for="email"
+                                        for="form.email"
                                         v-if="error_email"
                                         >{{ error_email }}</label
                                     >
                                 </div>
                                 <div class="field col-12 md:col-4">
-                                    <label for="password">Password</label
+                                    <label for="form.password">Password</label
                                     ><label
                                         style="color: red"
-                                        for="password"
-                                        v-if="!password"
+                                        for="form.password"
+                                        v-if="!form.password"
                                         >*</label
                                     >
                                     <InputText
                                         type="password"
                                         name="password"
-                                        v-model="password"
+                                        v-model="form.password"
                                         @keydown.enter="onRegisterClick"
                                     />
                                     <label
                                         style="color: red"
-                                        for="password"
+                                        for="form.password"
                                         v-if="error_password"
                                         >{{ error_password }}</label
                                     >
@@ -660,13 +666,13 @@
                                     <label
                                         style="color: red"
                                         for="confirm_password"
-                                        v-if="!confirm_password"
+                                        v-if="!form.confirm_password"
                                         >*</label
                                     >
                                     <InputText
                                         type="password"
                                         name="confirmpassword"
-                                        v-model="confirm_password"
+                                        v-model="form.confirm_password"
                                         @keydown.enter="onRegisterClick"
                                     />
                                     <label
@@ -709,9 +715,13 @@
                                     fill="#EEEEEE"
                                     animationDuration="1s"
                                 />
+                                <span class="block"
+                                    >Processeing Request...</span
+                                >
                             </div>
                         </div>
                     </Dialog>
+                    
                 </div>
             </div>
         </div>
@@ -720,20 +730,19 @@
 
 <script>
 import axios from "axios";
-import { FilterMatchMode } from "primevue/api";
+import {FilterMatchMode,FilterOperator} from 'primevue/api';
 import { computed } from "vue";
 import { useStore } from "vuex";
+import blocks from '../../store/admin/blocks';
 export default {
     name: "RegisterUsersComponent",
     setup() {
         const store = useStore();
         return {
+            registeredUsers: computed(() => store.state.registeredUsers.registeredUsers),
             blocks: computed(() => store.state.blocks.blocks),
-            filteredLots: computed(() => store.state.lots.filteredLots),
             lots: computed(() => store.state.lots.lots),
-            registeredUsers: computed(
-                () => store.state.registeredUsers.registeredUsers
-            ),
+            filteredLots: computed(() => store.state.lots.filteredLots),
         };
     },
     data() {
@@ -746,7 +755,6 @@ export default {
             registerUserDialog: false,
             deleteUserDialog: false,
             updateUserDialog: false,
-<<<<<<< HEAD
             form: {
                 first_name: "",
                 last_name: "",
@@ -762,23 +770,6 @@ export default {
             },
             block: null,
             lot: null,
-=======
-            selected_block: null,
-            selected_block_lot: null,
-            first_name: null,
-            last_name: null,
-            gender: null,
-            block_lot_id: null,
-            email: null,
-            password: null,
-            confirm_password: null,
-            verified: 1,
-            has_voted: 0,
-            age: null,
-            contact_num: null,
-            role: "resident",
-            selected_role: null,
->>>>>>> 6baa6b44db33df6b0c2d59fff2ea85bd05999459
             user: null,
             role: [
                 { type: "officer", value: "officer" },
@@ -800,6 +791,18 @@ export default {
         };
     },
     methods: {
+        async getUsers() {
+            await axios({
+                method: "get",
+                url: "/api/user",
+            })
+                .then((res) => {
+                    this.user = res.data;
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+        },
         showSuccess() {
             this.$toast.add({
                 severity: "success",
@@ -811,6 +814,9 @@ export default {
         initFilters() {
             this.filters = {
                 global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+                //'role': { value: 'resident', matchMode: FilterMatchMode.EQUALS },
+                //'role': { value: 'resident', matchMode: FilterMatchMode.CONTAINS },
+                'role': { value: 'resident', matchMode: FilterMatchMode.EQUALS },//{operator: FilterOperator.OR, constraints: [{value: 'resident', matchMode: FilterMatchMode.EQUALS}, {value: 'officer', matchMode: FilterMatchMode.EQUALS},{value: 'security_officer', matchMode: FilterMatchMode.EQUALS}]},
             };
         },
         badgecolor(color) {
@@ -837,7 +843,7 @@ export default {
                     method: "delete",
                     url: "/api/user/" + this.id,
                 });
-                this.$store.dispatch("registeredUsers/getAll");
+                this.getUsers();
                 this.process = false;
                 this.$toast.add({
                     severity: "success",
@@ -851,21 +857,19 @@ export default {
             }
         },
         updateUser(data) {
-            console.log(data);
             this.resetFields();
             this.resetErrors();
             this.id = data.id;
             this.updateUserDialog = true;
-            this.first_name = data.first_name;
-            this.last_name = data.last_name;
-            this.gender = data.gender;
-            this.selected_block = data.block_lot.block.id;
-            this.getBlockLot();
-            this.selected_block_lot = data.block_lot.id;
-            this.email = data.email;
-            this.age = data.age;
-            this.contact_num = data.contact_num;
-            this.selected_role = data.role;
+            this.form.first_name = data.first_name;
+            this.form.last_name = data.last_name;
+            this.form.gender = data.gender;
+            //this.form.selected_block = block_lot.block.number;
+            //this.form.selected_lot = lot_number;
+            this.form.email = data.email;
+            this.form.age = data.age;
+            this.form.contact_num = data.contact_num;
+            this.form.selected_role = data.role;
         },
         async confirmUpdateUser() {
             this.process = true;
@@ -873,16 +877,16 @@ export default {
                 method: "put",
                 url: "/api/user/" + this.id,
                 data: {
-                    first_name: this.first_name,
-                    last_name: this.last_name,
-                    gender: this.gender,
-                    block_lot_id: this.selected_block_lot,
-                    email: this.email,
-                    verified: 1,
-                    has_voted: 0,
-                    age: this.age,
-                    contact_num: this.contact_num,
-                    role: this.selected_role,
+                    id: this.id,
+                    first_name: this.form.first_name,
+                    last_name: this.form.last_name,
+                    gender: this.form.gender,
+                    block: this.form.selected_block,
+                    lot: this.form.selected_lot,
+                    age: this.form.age,
+                    contact_num: this.form.contact_num,
+                    email: this.form.email,
+                    role: this.form.selected_role,
                 },
             })
                 .then(() => {
@@ -892,14 +896,13 @@ export default {
                         detail: "Updated User",
                         life: 3000,
                     });
-                    this.$store.dispatch("registeredUsers/getAll");
+                    this.getUsers();
                     this.resetFields();
                     this.updateUserDialog = false;
                     this.process = false;
                 })
                 .catch((err) => {
-                    console.log(err.response);
-                    // this.validate(err);
+                    this.validate(err);
                     this.process = false;
                 });
         },
@@ -913,26 +916,25 @@ export default {
             this.process = true;
             await axios({
                 method: "post",
-                url: "/api/user",
+                url: "api/user",
                 data: {
-                    first_name: this.first_name,
-                    last_name: this.last_name,
-                    gender: this.gender,
-                    block_lot_id: this.selected_block_lot,
-                    email: this.email,
-                    password: this.password,
-                    confirm_password: this.confirm_password,
-                    verified: 1,
-                    has_voted: 0,
-                    age: this.age,
-                    contact_num: this.contact_num,
-                    role: "resident",
+                    first_name: this.form.first_name,
+                    last_name: this.form.last_name,
+                    gender: this.form.gender,
+                    block_number: this.form.selected_block,
+                    lot_number: this.form.selected_lot,
+                    age: this.form.age,
+                    contact_num: this.form.contact_num,
+                    email: this.form.email,
+                    password: this.form.password,
+                    confirm_password: this.form.confirm_password,
+                    role: this.form.role,
                 },
             })
                 .then(() => {
                     this.registerUserDialog = false;
                     this.resetFields();
-                    this.$store.dispatch("registeredUsers/getAll");
+                    this.getUsers();
                     this.$toast.add({
                         severity: "success",
                         summary: "Successful Request",
@@ -953,7 +955,7 @@ export default {
                 last_name: "",
                 gender: "",
                 selected_block: "",
-                selected_block_lot: "",
+                selected_lot: "",
                 email: "",
                 password: "",
                 confirm_password: "",
@@ -986,9 +988,9 @@ export default {
             if (error.response.data.errors.selected_block)
                 this.error_selected_block =
                     error.response.data.errors.selected_block[0];
-            if (error.response.data.errors.selected_block_lot)
+            if (error.response.data.errors.selected_lot)
                 this.error_selected_lot =
-                    error.response.data.errors.selected_block_lot[0];
+                    error.response.data.errors.selected_lot[0];
             if (error.response.data.errors.email)
                 this.error_email = error.response.data.errors.email[0];
             if (error.response.data.errors.password)
@@ -1004,8 +1006,49 @@ export default {
             if (error.response.data.errors.role)
                 this.error_role = error.response.data.errors.role[0];
         },
+        /* async getBlock() {
+            var temp = [];
+            const blocks = await axios({
+                method: "get",
+                url: "/api/block",
+            });
+            blocks.data.forEach((elem) => {
+                temp.push({
+                    block_number: elem.block_number,
+                    value: elem.block_number,
+                });
+            });
+            this.block = temp;
+            //console.log(this.block);
+        },
+        async getLot() {
+            var temp = [];
+            const lots = await axios({
+                method: "get",
+                url: "/api/lot",
+            });
+            lots.data.forEach((elem) => {
+                temp.push({
+                    lot_number: elem.lot_number,
+                    value: elem.lot_number,
+                });
+            });
+            this.lot = temp;
+        }, */
+        async getBlockLot() {
+            var temp = [];
+            const lots = await axios({
+                method: "get",
+                url: "/api/lot/" + this.form.selected_block,
+            });
+            lots.data.forEach((elem) => {
+                temp.push({
+                    lot_number: elem.lot_number,
+                    value: elem.lot_number,
+                });
+            });
+            this.lot = temp;
 
-        getBlockLot() {
             this.$store.dispatch("lots/getBlockLots", this.selected_block);
         },
     },

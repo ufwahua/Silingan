@@ -68,6 +68,23 @@ export default {
                                     label: "Users",
                                     icon: "pi pi-info-circle",
                                     to: "/admin/registered-users",
+                                    items: [
+                                    {
+                                        label: "Residents",
+                                        icon: "pi pi-info-circle",
+                                        to: "/admin/residents",
+                                    },
+                                    {
+                                        label: "Security Officers",
+                                        icon: "pi pi-info-circle",
+                                        to: "/admin/",
+                                    },
+                                     {
+                                        label: "Officers",
+                                        icon: "pi pi-info-circle",
+                                        to: "/admin/",
+                                    },
+                                ],
                                 },
                                 {
                                     label: "Announcement",
