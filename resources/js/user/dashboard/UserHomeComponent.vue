@@ -14,7 +14,7 @@
             </div>
             <AppFooter />
         </div>
-        <AppConfig :layoutMode="layoutMode" />
+        <ChatComponent :layoutMode="layoutMode" />
         <transition name="layout-mask">
             <div
                 class="layout-mask p-component-overlay"
@@ -27,7 +27,7 @@
 <script>
 import AppTopBar from "../AppTopbar.vue";
 import AppMenu from "../AppMenu.vue";
-import AppConfig from "../AppConfig.vue";
+import ChatComponent from "../ChatComponent.vue";
 import AppFooter from "../AppFooter.vue";
 
 export default {
@@ -186,7 +186,7 @@ export default {
     components: {
         AppTopBar: AppTopBar,
         AppMenu: AppMenu,
-        AppConfig: AppConfig,
+        ChatComponent: ChatComponent,
         AppFooter: AppFooter,
     },
     created() {
