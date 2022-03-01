@@ -42,32 +42,32 @@
                     >
                         <template #empty> No registered users found </template>
                         <template #loading> Loading Users </template>
-                        <Column header="Id" field="id">
+                        <Column header="Id" field="id" :sortable="true">
                             <template #body="{ data }">
                                 {{ data.id }}
                             </template>
                         </Column>
-                        <Column header="Name" field="name">
+                        <Column header="Name" field="name" :sortable="true">
                             <template #body="{ data }">
                                 {{ data.first_name }} {{ data.last_name }}
                             </template>
                         </Column>
-                        <Column header="Email" field="email">
+                        <Column header="Email" field="email" :sortable="true">
                             <template #body="{ data }">
                                 {{ data.email }}
                             </template>
                         </Column>
-                        <Column header="Block" field="block_lot.block.number">
+                        <Column header="Block" field="block_lot.block.number" :sortable="true">
                         </Column>
-                        <Column header="Lot" field="block_lot.number"> </Column>
-                        <Column header="Role" field="role">
+                        <Column header="Lot" field="block_lot.number" :sortable="true"> </Column>
+                        <Column header="Role" field="role" :sortable="true"> 
                             <template #body="{ data }">
                                 <Badge :class="badgecolor(data.role)">{{
                                     data.role
                                 }}</Badge>
                             </template>
                         </Column>
-                        <Column header="Verified" field="verified">
+                        <Column header="Verified" field="verified" :sortable="true">
                             <template #body="{ data }">
                                 <h5 v-if="data.verified == 1 ">Yes</h5>
                                 <h5 v-else>No</h5>
@@ -328,8 +328,8 @@
                                     <Dropdown
                                         v-model="form.selected_block"
                                         :options="block"
-                                        optionLabel="block_number"
-                                        optionValue="value"
+                                        optionLabel="number"
+                                        optionValue="id"
                                         placeholder="Select Block"
                                         @change="getBlockLot"
                                     />
@@ -568,9 +568,9 @@
                                     >
                                     <Dropdown
                                         v-model="form.selected_block"
-                                        :options="block"
-                                        optionLabel="block_number"
-                                        optionValue="value"
+                                        :options="blocks"
+                                        optionLabel="number"
+                                        optionValue="id"
                                         placeholder="Select Block"
                                         @change="getBlockLot"
                                     />
@@ -592,9 +592,9 @@
                                     >
                                     <Dropdown
                                         v-model="form.selected_lot"
-                                        :options="lot"
-                                        optionLabel="lot_number"
-                                        optionValue="value"
+                                        :options="lots"
+                                        optionLabel="number"
+                                        optionValue="id"
                                         placeholder="Select Lot"
                                     />
                                     <label
@@ -721,6 +721,7 @@
                             </div>
                         </div>
                     </Dialog>
+                    
                 </div>
             </div>
         </div>
@@ -732,14 +733,16 @@ import axios from "axios";
 import {FilterMatchMode,FilterOperator} from 'primevue/api';
 import { computed } from "vue";
 import { useStore } from "vuex";
+import blocks from '../../store/admin/blocks';
 export default {
     name: "RegisterUsersComponent",
     setup() {
         const store = useStore();
         return {
-            registeredUsers: computed(
-                () => store.state.registeredUsers.registeredUsers
-            ),
+            registeredUsers: computed(() => store.state.registeredUsers.registeredUsers),
+            blocks: computed(() => store.state.blocks.blocks),
+            lots: computed(() => store.state.lots.lots),
+            filteredLots: computed(() => store.state.lots.filteredLots),
         };
     },
     data() {
@@ -813,7 +816,7 @@ export default {
                 global: { value: null, matchMode: FilterMatchMode.CONTAINS },
                 //'role': { value: 'resident', matchMode: FilterMatchMode.EQUALS },
                 //'role': { value: 'resident', matchMode: FilterMatchMode.CONTAINS },
-                'role': {operator: FilterOperator.OR, constraints: [{value: 'resident', matchMode: FilterMatchMode.EQUALS}, {value: 'officer', matchMode: FilterMatchMode.EQUALS},{value: 'security_officer', matchMode: FilterMatchMode.EQUALS}]},
+                'role': { value: 'resident', matchMode: FilterMatchMode.EQUALS },//{operator: FilterOperator.OR, constraints: [{value: 'resident', matchMode: FilterMatchMode.EQUALS}, {value: 'officer', matchMode: FilterMatchMode.EQUALS},{value: 'security_officer', matchMode: FilterMatchMode.EQUALS}]},
             };
         },
         badgecolor(color) {
@@ -861,8 +864,8 @@ export default {
             this.form.first_name = data.first_name;
             this.form.last_name = data.last_name;
             this.form.gender = data.gender;
-            // this.form.selected_block = block_id;
-            // this.form.selected_lot = lot_number;
+            //this.form.selected_block = block_lot.block.number;
+            //this.form.selected_lot = lot_number;
             this.form.email = data.email;
             this.form.age = data.age;
             this.form.contact_num = data.contact_num;
@@ -1003,7 +1006,7 @@ export default {
             if (error.response.data.errors.role)
                 this.error_role = error.response.data.errors.role[0];
         },
-        async getBlock() {
+        /* async getBlock() {
             var temp = [];
             const blocks = await axios({
                 method: "get",
@@ -1016,6 +1019,7 @@ export default {
                 });
             });
             this.block = temp;
+            //console.log(this.block);
         },
         async getLot() {
             var temp = [];
@@ -1030,7 +1034,7 @@ export default {
                 });
             });
             this.lot = temp;
-        },
+        }, */
         async getBlockLot() {
             var temp = [];
             const lots = await axios({
@@ -1044,6 +1048,8 @@ export default {
                 });
             });
             this.lot = temp;
+
+            this.$store.dispatch("lots/getBlockLots", this.selected_block);
         },
     },
     created() {
