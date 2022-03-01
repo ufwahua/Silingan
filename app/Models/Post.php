@@ -12,7 +12,7 @@ class Post extends Model
     protected $fillable = [
         'group_id',
         'user_id',
-        'image',
+        'images',
         'content',
     ];
     public function group(){
@@ -22,7 +22,10 @@ class Post extends Model
         return $this->hasOne(User::class,'id','user_id');
     }
     public function comment(){
-        return $this->hasMany(Comment::class,'post_id','id');
+        return $this->hasMany(Comment::class);
+    }
+    public function reply(){
+         return $this->hasManyThrough(Reply::class,Comment::class);
     }
 
     public function getCreatedAtAttribute(){

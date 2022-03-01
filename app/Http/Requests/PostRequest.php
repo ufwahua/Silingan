@@ -14,7 +14,7 @@ class PostRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -27,8 +27,8 @@ class PostRequest extends FormRequest
         return [
             'group_id' => ['required',Rule::exists('groups', 'id')],
             'user_id' => ['required',Rule::exists('users', 'id')],
-            'image' => ['sometimes'],
-            'content' => ['required'],  
+            'images' => ['sometimes'],
+            'content' => ['sometimes'],  
         ];
     }
 }

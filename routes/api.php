@@ -1,15 +1,16 @@
 <?php
 
-use App\Http\Controllers\AnnouncementController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\LotController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\GroupController;
-
-use App\Http\Controllers\ReplyController;
-use App\Http\Controllers\CommentController;
-use App\Http\Controllers\LotController;
 use App\Http\Controllers\BlockController;
+
+use App\Http\Controllers\GroupController;
+use App\Http\Controllers\ReplyController;
+use App\Http\Controllers\UploadController;
+use App\Http\Controllers\CommentController;
+use App\Http\Controllers\AnnouncementController;
 
 /*
 |--------------------------------------------------------------------------

@@ -19,7 +19,7 @@ class PostController extends Controller
      */
     public function index(Request $request) : JsonResponse
     {
-        $posts = Post::with(['user','group','comment','comment.user','comment.reply.user'])->latest()->get();        
+        $posts = Post::with(['user','group','comment','comment.user','comment.reply.user'])->withCount(['comment','reply'])->latest()->get();        
         return response()->json(
             $posts
         );

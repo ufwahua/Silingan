@@ -240,7 +240,6 @@
                                     fill="#EEEEEE"
                                     animationDuration="1s"
                                 />
-                                <span class="block">Processing Request...</span>
                             </div>
                         </div>
                     </Dialog>

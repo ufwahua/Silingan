@@ -1,6 +1,8 @@
 <template>
     <div class="grid">
-        <div class="col-10 sm:col-10 md:col-10 lg:col-6 xl:col-6 col-offset-1">
+        <div
+            class="col-12 sm:col-12 md:col-10 md:col-offset-1 lg:col-6 lg:col-offset-1 xl:col-6 xl:col-offset-1"
+        >
             <div class="col justify-content-center pt-0">
                 <Fieldset class="mb-3" legend="Announcement">
                     <p>
@@ -15,26 +17,64 @@
                         anim id est laborum.
                     </p>
                 </Fieldset>
-                <div class="card">
+                <div class="card p-3">
                     <div class="p-inputgroup mb-2">
                         <Avatar
                             image="https://www.primefaces.org/wp-content/uploads/2020/05/placeholder.png"
                             class="mr-2"
-                            size="xlarge"
+                            size="large"
                             shape="circle"
                             alt="Image"
                         />
-                        <Textarea :autoResize="true" class="w-full"> </Textarea>
+                        <Textarea
+                            @click="openAddLotModal"
+                            :autoResize="true"
+                            class="w-full"
+                            placeholder="What's on you mind?"
+                            rows="1"
+                        >
+                        </Textarea>
                     </div>
-                    <hr />
+                </div>
+                <div v-for="post in posts" :key="post.id">
+                    <PostComponent
+                        v-if="post.group.name.toUpperCase() === 'TIMELINE'"
+                        v-bind:post="post"
+                    />
+                </div>
+            </div>
+        </div>
+        <div
+            class="col-12 sm:col-12 md:col-10 md:col-offset-1 lg:col-4 lg:col-offset-1 xl:col-4 xl:col-offset-1"
+        >
+            <Fieldset class="mb-3" legend="Local News">
+                <NewsComponent />
+            </Fieldset>
+        </div>
+        <Dialog
+            v-model:visible="openPostModal"
+            :style="{ width: '500px' }"
+            header="Create Post"
+            :modal="true"
+            :closeOnEscape="true"
+        >
+            <div class="grid">
+                <div class="col-12">
+                    <Textarea
+                        v-model="content"
+                        :autoResize="true"
+                        class="w-full"
+                        placeholder="What's on you mind?"
+                    >
+                    </Textarea>
                     <FileUpload
                         name="demo[]"
-                        url="./upload.php"
                         accept="image/*"
+                        :multiple="true"
                         :customUpload="true"
-                        @uploader="myUploader"
+                        @uploader="onUpload"
+                        :auto="true"
                         :maxFileSize="2000000"
-                        :fileLimit="3"
                         :showUploadButton="false"
                         :showCancelButton="false"
                     >
@@ -43,17 +83,39 @@
                         </template>
                     </FileUpload>
                 </div>
-                <div v-for="post in posts" :key="post.id">
-                    <PostComponent
-                        v-if="post.group_id === 1"
-                        v-bind:post="post"
+            </div>
+
+            <template #footer>
+                <div v-if="content || images">
+                    <Button
+                        label="Post"
+                        icon="pi pi-check"
+                        class="p-button-text p-button-post"
+                        @click="enterPost"
+                    />
+                </div>
+            </template>
+        </Dialog>
+        <Dialog
+            v-model:visible="loading"
+            :style="{ width: '450px' }"
+            :modal="true"
+            :closable="false"
+            :closeOnEscape="true"
+        >
+            <div class="grid">
+                <div class="col-12 text-center">
+                    <ProgressSpinner
+                        class="block mb-4"
+                        style="width: 100px; height: 100px"
+                        strokeWidth="4"
+                        fill="#EEEEEE"
+                        animationDuration="1s"
                     />
                 </div>
             </div>
-        </div>
-        <div class="col-10 sm:col-10 md:col-10 lg:col-4 xl:col-4 col-offset-1">
-            <NewsComponent />
-        </div>
+        </Dialog>
+        <Toast />
     </div>
 </template>
 
@@ -76,6 +138,12 @@ export default {
     },
     data() {
         return {
+            loading: null,
+            user_id: null,
+            groud_id: null,
+            images: null,
+            content: null,
+            openPostModal: false,
             data: [
                 {
                     name: "Jayson Cadiz",
@@ -102,7 +170,70 @@ export default {
         };
     },
     methods: {
-        myUploader() {},
+        // Open Add Lot Modal
+        openAddLotModal() {
+            this.resetFields();
+            this.openPostModal = true;
+        },
+        resetFields() {
+            this.images = null;
+            this.content = null;
+            this.user_id = null;
+        },
+        showPostedToast() {
+            this.$toast.add({
+                severity: "success",
+                summary: "Success Message",
+                detail: "Successfully posted",
+                life: 3000,
+            });
+        },
+        async onUpload(event) {
+            let formData = new FormData();
+            this.images = event.files;
+            for (let file of this.images) {
+                formData.append("images[]", file);
+            }
+            formData.append("user_id", this.$store.state.userLogged.id);
+
+            if (this.images) {
+                await axios
+                    .post("/upload", formData, {
+                        headers: {
+                            "Content-Type": "multipart/form-data",
+                        },
+                    })
+                    .then((res) => {
+                        this.images = res.data;
+                    })
+                    .catch((e) => {
+                        console.log(e.response);
+                    });
+            }
+        },
+        async enterPost() {
+            this.loading = true;
+            await axios({
+                method: "post",
+                url: "/api/post",
+                data: {
+                    group_id: 1,
+                    user_id: this.$store.state.userLogged.id,
+                    images: JSON.stringify(this.images),
+                    content: this.content,
+                },
+            })
+                .then((res) => {
+                    this.openPostModal = false;
+                    this.$store.dispatch("posts/getAll");
+                    this.showPostedToast();
+                    this.loading = false;
+                })
+                .catch((error) => {
+                    console.log(error.response);
+                    this.loading = false;
+                });
+        },
     },
 };
 </script>
