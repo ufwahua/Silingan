@@ -76,7 +76,7 @@ export default {
                                     {
                                         label: "Security Officers",
                                         icon: "pi pi-info-circle",
-                                        to: "/admin/",
+                                        to: "/admin/security-officers",
                                     },
                                     {
                                         label: "Officers",

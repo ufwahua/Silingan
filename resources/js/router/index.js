@@ -10,6 +10,7 @@ import RegisteredUsersComponent from "../admin/dashboard/RegisterUsersComponent.
 import Announcement from "../admin/dashboard/Announcement.vue";
 import ResidentComponent from "../admin/dashboard/ResidentComponent.vue";
 import OfficerComponent from "../admin/dashboard/OfficerComponent.vue";
+import SecurityOfficerComponent from "../admin/dashboard/SecurityOfficerComponent.vue";
 
 
 //user
@@ -158,6 +159,17 @@ const router = createRouter({
                     components: {
                         default: NotFound,
                         contents: OfficerComponent,
+                    },
+                },
+                {
+                    path: "security-officers",
+                    meta: {
+                        role: "admin",
+                    },
+                    beforeEnter: checkRole,
+                    components: {
+                        default: NotFound,
+                        contents: SecurityOfficerComponent,
                     },
                 },
             ],
