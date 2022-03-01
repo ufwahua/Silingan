@@ -746,23 +746,6 @@ export default {
             registerUserDialog: false,
             deleteUserDialog: false,
             updateUserDialog: false,
-<<<<<<< HEAD
-            form: {
-                first_name: "",
-                last_name: "",
-                gender: "",
-                selected_block: "",
-                selected_lot: "",
-                email: "",
-                password: "",
-                confirm_password: "",
-                age: "",
-                contact_num: "",
-                role: "resident",
-            },
-            block: null,
-            lot: null,
-=======
             selected_block: null,
             selected_block_lot: null,
             first_name: null,
@@ -778,7 +761,6 @@ export default {
             contact_num: null,
             role: "resident",
             selected_role: null,
->>>>>>> 6baa6b44db33df6b0c2d59fff2ea85bd05999459
             user: null,
             role: [
                 { type: "officer", value: "officer" },
