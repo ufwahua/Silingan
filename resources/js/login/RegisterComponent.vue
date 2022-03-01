@@ -304,7 +304,7 @@ export default {
             email: null,
             password: null,
             confirm_password: null,
-            verified: 1,
+            verified: 0,
             has_voted: 0,
             age: null,
             contact_num: null,

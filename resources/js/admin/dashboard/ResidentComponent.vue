@@ -3,7 +3,7 @@
         <Toast />
         <div class="grid">
             <div class="col-12">
-                <h1>Residents List</h1>
+                <h1>Registered Users</h1>
             </div>
         </div>
         <div class="card">
@@ -42,35 +42,45 @@
                     >
                         <template #empty> No registered users found </template>
                         <template #loading> Loading Users </template>
-                        <Column header="Id" field="id" :sortable="true">
+                        <Column header="Id" field="id">
                             <template #body="{ data }">
                                 {{ data.id }}
                             </template>
                         </Column>
-                        <Column header="Name" field="name" :sortable="true">
+                        <Column header="Name" field="name">
                             <template #body="{ data }">
                                 {{ data.first_name }} {{ data.last_name }}
                             </template>
                         </Column>
-                        <Column header="Email" field="email" :sortable="true">
+                        <Column header="Email" field="email">
                             <template #body="{ data }">
                                 {{ data.email }}
                             </template>
                         </Column>
-                        <Column header="Block" field="block_lot.block.number" :sortable="true">
+                        <Column header="Block" field="block_lot.block.number">
                         </Column>
-                        <Column header="Lot" field="block_lot.number" :sortable="true"> </Column>
-                        <Column header="Role" field="role" :sortable="true"> 
+                        <Column header="Lot" field="block_lot.number"> </Column>
+                        <!-- <Column header="Role" field="role">
                             <template #body="{ data }">
                                 <Badge :class="badgecolor(data.role)">{{
                                     data.role
                                 }}</Badge>
                             </template>
-                        </Column>
-                        <Column header="Verified" field="verified" :sortable="true">
+                        </Column> -->
+                        <Column header="Status" field="status">
                             <template #body="{ data }">
-                                <h5 v-if="data.verified == 1 ">Yes</h5>
-                                <h5 v-else>No</h5>
+                                <Badge v-if="data.verified == 1 " :class="badgecolor(data.verified)">{{
+                                    "Approved"
+                                }}</Badge>
+                                <Badge v-if="data.verified == 0 " :class="badgecolor(data.verified)">{{
+                                    "Pending"
+                                }}</Badge>
+                            </template>
+                        </Column>
+                        <Column header="Verify" field="verify">
+                            <template #body="{ data }">
+                                <Button v-if="data.verified == 0" label="Accept" icon="pi pi-check" class="p-button-sm"  @click="verify(data)"/>
+                                <Button v-if="data.verified == 1" label="Accept" icon="pi pi-check" class="p-button-sm" disabled="isDisabled"/>
                             </template>
                         </Column>
                         <Column header="Actions" field="actions">
@@ -156,13 +166,13 @@
                                     <label
                                         style="color: red"
                                         for="first_name"
-                                        v-if="!form.first_name"
+                                        v-if="!first_name"
                                         >*</label
                                     >
                                     <InputText
                                         id="firstname"
                                         type="text"
-                                        v-model="form.first_name"
+                                        v-model="first_name"
                                     />
                                     <label
                                         style="color: red"
@@ -177,17 +187,17 @@
                                     <label
                                         style="color: red"
                                         for="last_name"
-                                        v-if="!form.last_name"
+                                        v-if="!last_name"
                                         >*</label
                                     >
                                     <InputText
                                         id="last_name"
                                         type="text"
-                                        v-model="form.last_name"
+                                        v-model="last_name"
                                     />
                                     <label
                                         style="color: red"
-                                        for="first_name"
+                                        for="lastname"
                                         v-if="error_last_name"
                                         >{{ error_last_name }}</label
                                     >
@@ -195,11 +205,11 @@
 
                                 <div class="field col-12 md:col-6">
                                     <div>
-                                        <label for="last_name">Gender</label>
+                                        <label for="gender">Gender</label>
                                         <label
                                             style="color: red"
                                             for="gender"
-                                            v-if="!form.gender"
+                                            v-if="!gender"
                                             >*</label
                                         >
                                     </div>
@@ -209,7 +219,7 @@
                                             <RadioButton
                                                 name="gender"
                                                 value="male"
-                                                v-model="form.gender"
+                                                v-model="gender"
                                                 @keydown.enter="onRegisterClick"
                                             />
                                             <label
@@ -220,7 +230,7 @@
                                             <RadioButton
                                                 name="gender"
                                                 value="female"
-                                                v-model="form.gender"
+                                                v-model="gender"
                                                 @keydown.enter="onRegisterClick"
                                             />
                                             <label
@@ -253,11 +263,11 @@
                                     <label>Role</label>
                                     <label
                                         style="color: red"
-                                        v-if="!form.selected_role"
+                                        v-if="!selected_role"
                                         >*</label
                                     >
                                     <Dropdown
-                                        v-model="form.selected_role"
+                                        v-model="selected_role"
                                         :options="role"
                                         optionLabel="type"
                                         optionValue="value"
@@ -272,8 +282,8 @@
                                 </div>
 
                                 <div class="field col-12 md:col-12">
-                                    <label for="form.age">Age</label
-                                    ><label style="color: red" v-if="!form.age"
+                                    <label for="age">Age</label
+                                    ><label style="color: red" v-if="!age"
                                         >*</label
                                     >
                                     <InputText
@@ -284,34 +294,34 @@
                                         onfocus="this.previousValue = this.value"
                                         onkeydown="this.previousValue = this.value"
                                         oninput="validity.valid || (value = this.previousValue)"
-                                        v-model="form.age"
+                                        v-model="age"
                                     />
                                     <label
                                         style="color: red"
-                                        for="form.age"
+                                        for="age"
                                         v-if="error_age"
                                         >{{ error_age }}</label
                                     >
                                 </div>
 
                                 <div class="field col-12 md:col-12">
-                                    <label for="form.contact_num"
+                                    <label for="contact_num"
                                         >Contact Number</label
                                     ><label
                                         style="color: red"
-                                        for="form.contact_num"
-                                        v-if="!form.contact_num"
+                                        for="contact_num"
+                                        v-if="!contact_num"
                                         >*</label
                                     >
                                     <InputText
                                         id="contact_num"
                                         type="text"
                                         onkeyup="if(this.value<0){this.value= this.value * -1}"
-                                        v-model="form.contact_num"
+                                        v-model="contact_num"
                                     />
                                     <label
                                         style="color: red"
-                                        for="form.contact_num"
+                                        for="contact_num"
                                         v-if="error_contact_num"
                                         >{{ error_contact_num }}</label
                                     >
@@ -322,12 +332,12 @@
                                     <label
                                         style="color: red"
                                         for="selected_block"
-                                        v-if="!form.selected_block"
+                                        v-if="!selected_block"
                                         >*</label
                                     >
                                     <Dropdown
-                                        v-model="form.selected_block"
-                                        :options="block"
+                                        v-model="selected_block"
+                                        :options="blocks"
                                         optionLabel="number"
                                         optionValue="id"
                                         placeholder="Select Block"
@@ -335,50 +345,50 @@
                                     />
                                     <label
                                         style="color: red"
-                                        for="form.selected_block"
+                                        for="selected_block"
                                         v-if="error_selected_block"
                                         >{{ error_selected_block }}</label
                                     >
                                 </div>
 
                                 <div class="field col-12 md:col-6">
-                                    <label for="selected_lot">Lot</label>
+                                    <label for="selected_block_lot">Lot</label>
                                     <label
                                         style="color: red"
-                                        for="selected_lot"
-                                        v-if="!form.selected_lot"
+                                        for="selected_block_lot"
+                                        v-if="!selected_block_lot"
                                         >*</label
                                     >
                                     <Dropdown
-                                        v-model="form.selected_lot"
-                                        :options="lot"
-                                        optionLabel="lot_number"
-                                        optionValue="value"
+                                        v-model="selected_block_lot"
+                                        :options="filteredLots"
+                                        optionLabel="number"
+                                        optionValue="id"
                                         placeholder="Select Lot"
                                     />
                                     <label
                                         style="color: red"
-                                        for="form.selected_lot"
+                                        for="selected_block_lot"
                                         v-if="error_selected_lot"
                                         >{{ error_selected_lot }}</label
                                     >
                                 </div>
                                 <div class="field col-12 md:col-12">
-                                    <label for="form.email">Email</label
+                                    <label for="email">Email</label
                                     ><label
                                         style="color: red"
-                                        for="form.form.email"
-                                        v-if="!form.email"
+                                        for="email"
+                                        v-if="!email"
                                         >*</label
                                     >
                                     <InputText
                                         type="text"
                                         name="email"
-                                        v-model="form.email"
+                                        v-model="email"
                                     />
                                     <label
                                         style="color: red"
-                                        for="form.email"
+                                        for="email"
                                         v-if="error_email"
                                         >{{ error_email }}</label
                                     >
@@ -400,7 +410,8 @@
                             />
                         </template>
                     </Dialog>
-                    <Dialog
+
+                     <Dialog
                         v-model:visible="registerUserDialog"
                         :style="{ width: '500px' }"
                         header="Register User"
@@ -456,45 +467,19 @@
                                     />
                                     <label
                                         style="color: red"
-                                        for="first_name"
+                                        for="last_name"
                                         v-if="error_last_name"
                                         >{{ error_last_name }}</label
                                     >
                                 </div>
 
-                                <div class="field col-12 md:col-12">
-                                    <label for="form.age">Age</label
-                                    ><label
-                                        style="color: red"
-                                        for="form.age"
-                                        v-if="!form.age"
-                                        >*</label
-                                    >
-                                    <InputText
-                                        id="age"
-                                        type="number"
-                                        min="0"
-                                        step="1"
-                                        onfocus="this.previousValue = this.value"
-                                        onkeydown="this.previousValue = this.value"
-                                        oninput="validity.valid || (value = this.previousValue)"
-                                        v-model="form.age"
-                                        @keydown.enter="onRegisterClick"
-                                    />
-                                    <label
-                                        style="color: red"
-                                        for="form.age"
-                                        v-if="error_age"
-                                        >{{ error_age }}</label
-                                    >
-                                </div>
-                                <div class="field col-12 md:col-12">
+                                <div class="field col-12 md:col-6">
                                     <div>
-                                        <label for="last_name">Gender</label>
+                                        <label for="gender">Gender</label>
                                         <label
                                             style="color: red"
                                             for="gender"
-                                            v-if="!form.gender"
+                                            v-if="!gender"
                                             >*</label
                                         >
                                     </div>
@@ -527,12 +512,64 @@
                                         <div>
                                             <label
                                                 style="color: red"
-                                                for="first_name"
+                                                for="form.gender"
                                                 v-if="error_gender"
                                                 >{{ error_gender }}</label
                                             >
                                         </div>
                                     </div>
+                                </div>
+                                <div class="formgroup-inline flex justify-content-around">
+                                    <label
+                                        style="color: red"
+                                        for="form.gender"
+                                        v-if="error_gender"
+                                        >{{ error_gender }}</label
+                                    >
+                                </div>
+                                <div class="field col-12 md:col-6">
+                                    <label>Role</label>
+                                    <label
+                                        style="color: red"
+                                        v-if="!selected_role"
+                                        >*</label
+                                    >
+                                    <Dropdown
+                                        v-model="form.selected_role"
+                                        :options="role"
+                                        optionLabel="type"
+                                        optionValue="value"
+                                        placeholder="Select Role"
+                                    />
+                                    <label
+                                        style="color: red"
+                                        for="form.role"
+                                        v-if="error_role"
+                                        >{{ error_role }}</label
+                                    >
+                                </div>
+
+                                <div class="field col-12 md:col-12">
+                                    <label for="age">Age</label
+                                    ><label style="color: red" v-if="!age"
+                                        >*</label
+                                    >
+                                    <InputText
+                                        id="age"
+                                        type="number"
+                                        min="0"
+                                        step="1"
+                                        onfocus="this.previousValue = this.value"
+                                        onkeydown="this.previousValue = this.value"
+                                        oninput="validity.valid || (value = this.previousValue)"
+                                        v-model="form.age"
+                                    />
+                                    <label
+                                        style="color: red"
+                                        for="form.age"
+                                        v-if="error_age"
+                                        >{{ error_age }}</label
+                                    >
                                 </div>
                                 <div class="field col-12 md:col-12">
                                     <label for="form.contact_num"
@@ -563,11 +600,11 @@
                                     <label
                                         style="color: red"
                                         for="selected_block"
-                                        v-if="!form.selected_block"
+                                        v-if="!selected_block"
                                         >*</label
                                     >
                                     <Dropdown
-                                        v-model="form.selected_block"
+                                        v-model="selected_block"
                                         :options="blocks"
                                         optionLabel="number"
                                         optionValue="id"
@@ -576,35 +613,34 @@
                                     />
                                     <label
                                         style="color: red"
-                                        for="form.selected_block"
+                                        for="selected_block"
                                         v-if="error_selected_block"
                                         >{{ error_selected_block }}</label
                                     >
                                 </div>
 
                                 <div class="field col-12 md:col-6">
-                                    <label for="selected_lot">Lot</label>
+                                    <label for="selected_block_lot">Lot</label>
                                     <label
                                         style="color: red"
-                                        for="selected_lot"
-                                        v-if="!form.selected_lot"
+                                        for="selected_block_lot"
+                                        v-if="!selected_block_lot"
                                         >*</label
                                     >
                                     <Dropdown
-                                        v-model="form.selected_lot"
-                                        :options="lots"
+                                        v-model="selected_block_lot"
+                                        :options="filteredLots"
                                         optionLabel="number"
                                         optionValue="id"
                                         placeholder="Select Lot"
                                     />
                                     <label
                                         style="color: red"
-                                        for="form.selected_lot"
+                                        for="selected_block_lot"
                                         v-if="error_selected_lot"
                                         >{{ error_selected_lot }}</label
                                     >
                                 </div>
-
                                 <br />
 
                                 <div class="col-12 title-form">
@@ -715,13 +751,9 @@
                                     fill="#EEEEEE"
                                     animationDuration="1s"
                                 />
-                                <span class="block"
-                                    >Processeing Request...</span
-                                >
                             </div>
                         </div>
                     </Dialog>
-                    
                 </div>
             </div>
         </div>
@@ -730,19 +762,20 @@
 
 <script>
 import axios from "axios";
-import {FilterMatchMode,FilterOperator} from 'primevue/api';
+import { FilterMatchMode } from "primevue/api";
 import { computed } from "vue";
 import { useStore } from "vuex";
-import blocks from '../../store/admin/blocks';
 export default {
     name: "RegisterUsersComponent",
     setup() {
         const store = useStore();
         return {
-            registeredUsers: computed(() => store.state.registeredUsers.registeredUsers),
             blocks: computed(() => store.state.blocks.blocks),
-            lots: computed(() => store.state.lots.lots),
             filteredLots: computed(() => store.state.lots.filteredLots),
+            lots: computed(() => store.state.lots.lots),
+            registeredUsers: computed(
+                () => store.state.registeredUsers.registeredUsers
+            ),
         };
     },
     data() {
@@ -766,16 +799,28 @@ export default {
                 confirm_password: "",
                 age: "",
                 contact_num: "",
-                role: "resident",
+                role: "",
             },
             block: null,
             lot: null,
+            selected_block: null,
+            selected_block_lot: null,
+            first_name: null,
+            last_name: null,
+            gender: null,
+            block_lot_id: null,
+            email: null,
+            password: null,
+            confirm_password: null,
+            verified: 1,
+            has_voted: 0,
+            age: null,
+            contact_num: null,
+            role: null,
+            selected_role: null,
             user: null,
             role: [
-                { type: "officer", value: "officer" },
                 { type: "resident", value: "resident" },
-                { type: "security_officer", value: "security_officer" },
-                { type: "admin", value: "admin" },
             ],
             error_first_name: "",
             error_last_name: "",
@@ -791,18 +836,6 @@ export default {
         };
     },
     methods: {
-        async getUsers() {
-            await axios({
-                method: "get",
-                url: "/api/user",
-            })
-                .then((res) => {
-                    this.user = res.data;
-                })
-                .catch((err) => {
-                    console.log(err);
-                });
-        },
         showSuccess() {
             this.$toast.add({
                 severity: "success",
@@ -814,9 +847,7 @@ export default {
         initFilters() {
             this.filters = {
                 global: { value: null, matchMode: FilterMatchMode.CONTAINS },
-                //'role': { value: 'resident', matchMode: FilterMatchMode.EQUALS },
-                //'role': { value: 'resident', matchMode: FilterMatchMode.CONTAINS },
-                'role': { value: 'resident', matchMode: FilterMatchMode.EQUALS },//{operator: FilterOperator.OR, constraints: [{value: 'resident', matchMode: FilterMatchMode.EQUALS}, {value: 'officer', matchMode: FilterMatchMode.EQUALS},{value: 'security_officer', matchMode: FilterMatchMode.EQUALS}]},
+                'role': { value: 'resident', matchMode: FilterMatchMode.EQUALS },
             };
         },
         badgecolor(color) {
@@ -826,7 +857,12 @@ export default {
                 return "bg-orange-500";
             } else if (color == "security_officer") {
                 return "bg-yellow-500";
-            } else {
+            } else if (color == 1) {
+                return "bg-green-500";
+            }else if (color == 0) {
+                return "bg-gray-500";
+            }else 
+            {
                 return "bg-yellow-800";
             }
         },
@@ -843,7 +879,7 @@ export default {
                     method: "delete",
                     url: "/api/user/" + this.id,
                 });
-                this.getUsers();
+                this.$store.dispatch("registeredUsers/getAll");
                 this.process = false;
                 this.$toast.add({
                     severity: "success",
@@ -857,19 +893,21 @@ export default {
             }
         },
         updateUser(data) {
+            console.log(data);
             this.resetFields();
             this.resetErrors();
             this.id = data.id;
             this.updateUserDialog = true;
-            this.form.first_name = data.first_name;
-            this.form.last_name = data.last_name;
-            this.form.gender = data.gender;
-            //this.form.selected_block = block_lot.block.number;
-            //this.form.selected_lot = lot_number;
-            this.form.email = data.email;
-            this.form.age = data.age;
-            this.form.contact_num = data.contact_num;
-            this.form.selected_role = data.role;
+            this.first_name = data.first_name;
+            this.last_name = data.last_name;
+            this.gender = data.gender;
+            this.selected_block = data.block_lot.block.id;
+            this.getBlockLot();
+            this.selected_block_lot = data.block_lot.id;
+            this.email = data.email;
+            this.age = data.age;
+            this.contact_num = data.contact_num;
+            this.selected_role = data.role;
         },
         async confirmUpdateUser() {
             this.process = true;
@@ -877,16 +915,16 @@ export default {
                 method: "put",
                 url: "/api/user/" + this.id,
                 data: {
-                    id: this.id,
-                    first_name: this.form.first_name,
-                    last_name: this.form.last_name,
-                    gender: this.form.gender,
-                    block: this.form.selected_block,
-                    lot: this.form.selected_lot,
-                    age: this.form.age,
-                    contact_num: this.form.contact_num,
-                    email: this.form.email,
-                    role: this.form.selected_role,
+                    first_name: this.first_name,
+                    last_name: this.last_name,
+                    gender: this.gender,
+                    block_lot_id: this.selected_block_lot,
+                    email: this.email,
+                    verified: 1,
+                    has_voted: 0,
+                    age: this.age,
+                    contact_num: this.contact_num,
+                    role: this.selected_role,
                 },
             })
                 .then(() => {
@@ -896,12 +934,48 @@ export default {
                         detail: "Updated User",
                         life: 3000,
                     });
-                    this.getUsers();
+                    this.$store.dispatch("registeredUsers/getAll");
                     this.resetFields();
                     this.updateUserDialog = false;
                     this.process = false;
                 })
                 .catch((err) => {
+                    console.log(err.response);
+                    this.validate(err);
+                    this.process = false;
+                });
+        },
+        async verify(data) {
+            this.process = true;
+            await axios({
+                method: "put",
+                url: "/api/user/" + data.id,
+                data: {
+                    first_name: data.first_name,
+                    last_name: data.last_name,
+                    gender: data.gender,
+                    block_lot_id: data.selected_block_lot,
+                    email: data.email,
+                    verified: 1,
+                    has_voted: 0,
+                    age: data.age,
+                    contact_num: data.contact_num,
+                    role: data.role,
+                },
+            })
+                .then(() => {
+                    this.$toast.add({
+                        severity: "success",
+                        summary: "Successful",
+                        detail: "Resident Verified",
+                        life: 3000,
+                    });
+                    this.$store.dispatch("registeredUsers/getAll");
+                    this.resetFields();
+                    this.process = false;
+                })
+                .catch((err) => {
+                    console.log(err.response);
                     this.validate(err);
                     this.process = false;
                 });
@@ -909,6 +983,7 @@ export default {
         //REGISTER USER
         registerUser() {
             this.registerUserDialog = true;
+            this.form.email = null;
             this.resetFields();
             this.resetErrors();
         },
@@ -916,25 +991,26 @@ export default {
             this.process = true;
             await axios({
                 method: "post",
-                url: "api/user",
+                url: "/api/user",
                 data: {
                     first_name: this.form.first_name,
                     last_name: this.form.last_name,
                     gender: this.form.gender,
-                    block_number: this.form.selected_block,
-                    lot_number: this.form.selected_lot,
-                    age: this.form.age,
-                    contact_num: this.form.contact_num,
+                    block_lot_id: this.selected_block_lot,
                     email: this.form.email,
                     password: this.form.password,
                     confirm_password: this.form.confirm_password,
-                    role: this.form.role,
+                    verified: 0,
+                    has_voted: 0,
+                    age: this.form.age,
+                    contact_num: this.form.contact_num,
+                    role: this.form.selected_role,
                 },
             })
                 .then(() => {
                     this.registerUserDialog = false;
                     this.resetFields();
-                    this.getUsers();
+                    this.$store.dispatch("registeredUsers/getAll");
                     this.$toast.add({
                         severity: "success",
                         summary: "Successful Request",
@@ -950,18 +1026,20 @@ export default {
                 });
         },
         resetFields() {
+            this.selected_block = null;
+            this.selected_block_lot= null;
             this.form = {
                 first_name: "",
                 last_name: "",
                 gender: "",
                 selected_block: "",
-                selected_lot: "",
+                selected_block_lot: "",
                 email: "",
                 password: "",
                 confirm_password: "",
                 age: "",
                 contact_num: "",
-                role: "resident",
+                selected_role: "resident",
             };
         },
         resetErrors() {
@@ -988,9 +1066,9 @@ export default {
             if (error.response.data.errors.selected_block)
                 this.error_selected_block =
                     error.response.data.errors.selected_block[0];
-            if (error.response.data.errors.selected_lot)
+            if (error.response.data.errors.selected_block_lot)
                 this.error_selected_lot =
-                    error.response.data.errors.selected_lot[0];
+                    error.response.data.errors.selected_block_lot[0];
             if (error.response.data.errors.email)
                 this.error_email = error.response.data.errors.email[0];
             if (error.response.data.errors.password)
@@ -1006,49 +1084,8 @@ export default {
             if (error.response.data.errors.role)
                 this.error_role = error.response.data.errors.role[0];
         },
-        /* async getBlock() {
-            var temp = [];
-            const blocks = await axios({
-                method: "get",
-                url: "/api/block",
-            });
-            blocks.data.forEach((elem) => {
-                temp.push({
-                    block_number: elem.block_number,
-                    value: elem.block_number,
-                });
-            });
-            this.block = temp;
-            //console.log(this.block);
-        },
-        async getLot() {
-            var temp = [];
-            const lots = await axios({
-                method: "get",
-                url: "/api/lot",
-            });
-            lots.data.forEach((elem) => {
-                temp.push({
-                    lot_number: elem.lot_number,
-                    value: elem.lot_number,
-                });
-            });
-            this.lot = temp;
-        }, */
-        async getBlockLot() {
-            var temp = [];
-            const lots = await axios({
-                method: "get",
-                url: "/api/lot/" + this.form.selected_block,
-            });
-            lots.data.forEach((elem) => {
-                temp.push({
-                    lot_number: elem.lot_number,
-                    value: elem.lot_number,
-                });
-            });
-            this.lot = temp;
 
+        getBlockLot() {
             this.$store.dispatch("lots/getBlockLots", this.selected_block);
         },
     },
