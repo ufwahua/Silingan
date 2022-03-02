@@ -87,6 +87,11 @@ export default {
                                 ],
                                 },
                                 {
+                                    label: "Position",
+                                    icon: "pi pi-info-circle",
+                                    to: "/admin/position",
+                                },
+                                {
                                     label: "Announcement",
                                     icon: "pi pi-info-circle",
                                     to: "/admin/announcement",

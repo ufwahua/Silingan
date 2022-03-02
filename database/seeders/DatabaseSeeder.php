@@ -25,6 +25,7 @@ class DatabaseSeeder extends Seeder
             AnnouncementSeeder::class,
             ChatRoomSeeder::class,
             ChatSeeder::class,
+            PositionSeeder::class
         ]);
     }
 }
