@@ -53,6 +53,8 @@
                     :responsiveOptions="responsiveOptions"
                     :numVisible="4"
                     class="w-full mx-0 px-0"
+                    :showItemNavigators="true"
+                    :showItemNavigatorsOnHover="true"
                 >
                     <template #item="slotProps">
                         <img
@@ -149,6 +151,8 @@
                         :responsiveOptions="responsiveOptions"
                         :numVisible="4"
                         class="w-full mx-0 px-0"
+                        :showItemNavigators="true"
+                        :showItemNavigatorsOnHover="true"
                     >
                         <template #item="slotProps">
                             <img

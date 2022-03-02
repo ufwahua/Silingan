@@ -19,178 +19,80 @@
             </div>
 
             <div class="col-12">
-                <Button
-                    label="Primary"
-                    class="p-button-text w-full"
-                    @click="openPosition('bottom')"
-                >
-                    <Avatar
-                        image="http://127.0.0.1:8000/storage/images/default-prof-pic.png"
-                        class="mr-2"
-                        size="large"
-                        shape="circle"
-                    />
-                    <p class="m-0 p-0">Joshua Henry G. Diamos</p>
-                </Button>
-                <div class="p-inputgroup mb-2"></div>
-            </div>
-            <div class="col-12">
-                <Button
-                    label="Primary"
-                    class="p-button-text w-full"
-                    @click="openPosition('bottom')"
-                >
-                    <Avatar
-                        image="http://127.0.0.1:8000/storage/images/default-prof-pic.png"
-                        class="mr-2"
-                        size="large"
-                        shape="circle"
-                    />
-                    <p class="m-0 p-0">Joshua Henry G. Diamos</p>
-                </Button>
-                <div class="p-inputgroup mb-2"></div>
-            </div>
-            <div class="col-12">
-                <Button
-                    label="Primary"
-                    class="p-button-text w-full"
-                    @click="openPosition('bottom')"
-                >
-                    <Avatar
-                        image="http://127.0.0.1:8000/storage/images/default-prof-pic.png"
-                        class="mr-2"
-                        size="large"
-                        shape="circle"
-                    />
-                    <p class="m-0 p-0">Joshua Henry G. Diamos</p>
-                </Button>
-                <div class="p-inputgroup mb-2"></div>
+                <TabView ref="tabview1" :scrollable="true" lazy>
+                    <TabPanel header="Residents">
+                        <div v-for="resident in residents" :key="resident.id">
+                            <ChatSideBarComponent
+                                @click="openChatRoom(resident)"
+                                v-bind:user="resident"
+                            />
+                        </div>
+                    </TabPanel>
+                    <TabPanel header="Security Officers">
+                        <div
+                            v-for="security_officer in security_officers"
+                            :key="security_officer.id"
+                        >
+                            <ChatSideBarComponent
+                                @click="openChatRoom(security_officer)"
+                                v-bind:user="security_officer"
+                            />
+                        </div>
+                    </TabPanel>
+                    <TabPanel header="Officers">
+                        <div v-for="officer in officers" :key="officer.id">
+                            <ChatSideBarComponent
+                                @click="openChatRoom(resident)"
+                                v-bind:user="officer"
+                            />
+                        </div>
+                    </TabPanel>
+
+                    <TabPanel header="Admins">
+                        <div v-for="admin in admins" :key="admin.id">
+                            <ChatSideBarComponent
+                                @click="openChatRoom(admin)"
+                                v-bind:user="admin"
+                            />
+                        </div>
+                    </TabPanel>
+                </TabView>
             </div>
         </div>
         <Dialog
-            v-model:visible="displayPosition"
-            style="width: 350px; height: 500px"
-            :position="position"
+            v-model:visible="chatRoomModal"
+            style="max-height: 550px; width: 400px"
+            position="bottom"
         >
             <template #header>
                 <div class="col-11 p-0 m-0">
                     <Button
                         label="Primary"
                         class="p-button-text p-0 m-0 w-full"
-                        @click="openPosition('bottom')"
                     >
-                        <Avatar
-                            image="http://127.0.0.1:8000/storage/images/default-prof-pic.png"
-                            class="mr-2"
-                            size="large"
-                            shape="circle"
-                        />
-                        <p class="m-0 p-0">Joshua Henry G. Diamos</p>
+                        <div
+                            class="col-fixed p-0 m-0"
+                            style="width: 48px; height: 48px"
+                        >
+                            <Avatar
+                                image="http://127.0.0.1:8000/storage/images/default-prof-pic.png"
+                                class="mr-2 w-full h-full"
+                                shape="circle"
+                            />
+                        </div>
+                        <div class="col p-0 m-0">
+                            {{ user.first_name }} {{ user.last_name }}
+                        </div>
                     </Button>
-                    <div class="p-inputgroup mb-2"></div>
                 </div>
             </template>
-            <div class="grid">
-                <div class="col-12 pt-2 p-0 m-0">
-                    <div class="p-inputgroup pt-1 pb-0 my-0">
-                        <div>
-                            <Avatar
-                                image="http://127.0.0.1:8000/storage/images/default-prof-pic.png"
-                                class="mr-2"
-                                size="large"
-                                shape="circle"
-                            />
-                        </div>
 
-                        <div
-                            class="card pb-0 pt-1 px-2 mb-0 mt-1"
-                            style="background-color: var(--blue-50)"
-                        >
-                            <div class="grid grid-nogutter">
-                                <div class="col-12">
-                                    <b> Joshua Henry G. Diamos</b>
-                                </div>
-                                <div
-                                    class="col-12 pb-1"
-                                    v-tooltip="'8 hrs ago'"
-                                >
-                                    Lorem ipsum dolor sit amet consectetur
-                                    adipisicing elit. Fuga aspernatur ducimus
-                                    odio consequatur libero, excepturi pariatur
-                                    est! Impedit eum dolores repudiandae fugiat
-                                    minus voluptatum, animi accusamus sequi quae
-                                    nulla saepe.
-                                </div>
-                            </div>
-                        </div>
-                        <div>
-                            <Button
-                                class="p-button-text"
-                                icon="pi pi-ellipsis-v"
-                                @click="toggle"
-                                aria-haspopup="true"
-                                aria-controls="overlay_menu"
-                            />
-                            <Menu
-                                id="overlay_menu"
-                                ref="menu"
-                                :model="items"
-                                :popup="true"
-                            />
-                        </div>
-                    </div>
-                </div>
-                <div class="col-12 pt-2 p-0 m-0">
-                    <div class="p-inputgroup pt-1 pb-0 my-0">
-                        <div>
-                            <Button
-                                class="p-button-text"
-                                icon="pi pi-ellipsis-v"
-                                @click="toggle"
-                                aria-haspopup="true"
-                                aria-controls="overlay_menu"
-                            />
-                            <Menu
-                                id="overlay_menu"
-                                ref="menu"
-                                :model="items"
-                                :popup="true"
-                            />
-                        </div>
-
-                        <div
-                            class="card pb-0 pt-1 px-2 mb-0 mt-1"
-                            style="background-color: var(--blue-50)"
-                        >
-                            <div class="grid grid-nogutter">
-                                <div class="col-12">
-                                    <b> Guila Bagolor</b>
-                                </div>
-                                <div
-                                    class="col-12 pb-1"
-                                    v-tooltip="'8 hrs ago'"
-                                >
-                                    Lorem ipsum dolor sit amet consectetur
-                                    adipisicing elit. Fuga aspernatur ducimus
-                                    odio consequatur libero, excepturi pariatur
-                                    est! Impedit eum dolores repudiandae fugiat
-                                    minus voluptatum, animi accusamus sequi quae
-                                    nulla saepe.
-                                </div>
-                            </div>
-                        </div>
-                        <div>
-                            <Avatar
-                                image="http://127.0.0.1:8000/storage/images/default-prof-pic.png"
-                                class="mr-2"
-                                size="large"
-                                shape="circle"
-                            />
-                        </div>
-                    </div>
-                </div>
+            <div v-if="!chat_room">Say Hi</div>
+            <div v-else v-for="chat in chat_room.chats" :key="chat.id">
+                <ChatMessagesComponent :chat="chat" />
             </div>
-            <template #footer>
+
+            <template v-if="!loading" #footer>
                 <div class="col-12">
                     <Textarea
                         v-model="message"
@@ -206,7 +108,23 @@
 </template>
 
 <script>
+import { computed } from "vue";
+import { useStore } from "vuex";
+import ChatSideBarComponent from "./ChatSideBarComponent.vue";
+import ChatMessagesComponent from "./ChatMessagesComponent.vue";
 export default {
+    name: "ChatComponent",
+    setup() {
+        const store = useStore();
+        return {
+            residents: computed(() => store.state.registeredUsers.residents),
+            officers: computed(() => store.state.registeredUsers.officers),
+            admins: computed(() => store.state.registeredUsers.admins),
+            security_officers: computed(
+                () => store.state.registeredUsers.security_officers
+            ),
+        };
+    },
     props: {
         layoutMode: {
             type: String,
@@ -217,26 +135,25 @@ export default {
             default: null,
         },
     },
+    components: {
+        ChatSideBarComponent,
+        ChatMessagesComponent,
+    },
     data() {
         return {
+            chatRoomModal: false,
+            chosenRoom: null,
+            chat_room: null,
+            chats: null,
+            user: null,
+            loading: false,
             message: null,
             position: null,
-            displayPosition: false,
             active: false,
             d_layoutMode: this.layoutMode,
             d_layoutColorMode: this.layoutColorMode,
             scale: 16,
             scales: [12, 13, 14, 15, 16],
-            items: [
-                {
-                    label: "Remove",
-                    icon: "pi pi-trash",
-                    command: () => {
-                        this.editModal = true;
-                        this.content = this.post.content;
-                    },
-                },
-            ],
         };
     },
     watch: {
@@ -255,13 +172,27 @@ export default {
     },
     outsideClickListener: null,
     methods: {
-        toggle(event) {
-            this.$refs.menu.toggle(event);
+        async openChatRoom(user) {
+            this.chatRoomModal = true;
+            this.loading = true;
+            this.user = user;
+            this.chosenRoom = this.$store.state.userLogged.id + " " + user.id;
+            await axios({
+                method: "get",
+                url: "/api/chat_room/" + this.chosenRoom,
+            })
+                .then((res) => {
+                    console.log(res.data[0]);
+                    this.chat_room = res.data[0];
+                    this.loading = false;
+                })
+                .catch((error) => {
+                    console.log(error.response);
+                    this.chats = [];
+                    this.loading = false;
+                });
         },
-        openPosition(position) {
-            this.position = position;
-            this.displayPosition = true;
-        },
+
         toggleChatContainer(event) {
             this.active = !this.active;
             event.preventDefault();
@@ -350,6 +281,9 @@ export default {
         inputStyle() {
             return this.$appState.inputStyle;
         },
+    },
+    mounted() {
+        console.log(this.chat_room);
     },
 };
 </script>

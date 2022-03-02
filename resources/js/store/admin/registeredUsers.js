@@ -4,10 +4,38 @@ const registeredUsers = {
     namespaced: true,
     state: {
         registeredUsers: null,
+        residents: null,
+        officers: null,
+        admins: null,
+        security_officers: null,
     },
     mutations: {
         getAll(state, payload) {
             state.registeredUsers = payload;
+        },
+        getResidents(state) {
+            let temp = state.registeredUsers.filter(function (e) {
+                return e.role.toUpperCase() === "RESIDENT";
+            });
+            state.residents = temp;
+        },
+        getOfficers(state) {
+            let temp = state.registeredUsers.filter(function (e) {
+                return e.role.toUpperCase() === "OFFICER";
+            });
+            state.officers = temp;
+        },
+        getAdmins(state) {
+            let temp = state.registeredUsers.filter(function (e) {
+                return e.role.toUpperCase() === "ADMIN";
+            });
+            state.admins = temp;
+        },
+        getSecurityOfficers(state) {
+            let temp = state.registeredUsers.filter(function (e) {
+                return e.role.toUpperCase() === "SECURITY_OFFICER";
+            });
+            state.security_officers = temp;
         },
     },
     actions: {

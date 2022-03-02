@@ -11,6 +11,10 @@ use App\Http\Controllers\ReplyController;
 use App\Http\Controllers\UploadController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\AnnouncementController;
+use App\Http\Controllers\ChatController;
+use App\Http\Controllers\ChatRoomController;
+use App\Models\Chat;
+use App\Models\ChatRoom;
 
 /*
 |--------------------------------------------------------------------------
@@ -41,6 +45,8 @@ Route::get('/logout', [UserController::class, 'logout']);
     'comment'             => CommentController::class,
     'reply'             => ReplyController::class,
     'announcement'             => AnnouncementController::class,
+    'chat_room'             => ChatRoomController::class,
+    'chat'             => ChatController::class,
 ]);
 
     //Check if User is Logged in

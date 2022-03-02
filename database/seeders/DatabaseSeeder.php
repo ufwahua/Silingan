@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\ChatRoom;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -22,6 +23,8 @@ class DatabaseSeeder extends Seeder
             CommentSeeder::class,
             ReplySeeder::class,
             AnnouncementSeeder::class,
+            ChatRoomSeeder::class,
+            ChatSeeder::class,
         ]);
     }
 }

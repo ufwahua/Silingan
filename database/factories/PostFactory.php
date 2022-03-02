@@ -28,7 +28,7 @@ class PostFactory extends Factory
         return [
             'group_id' => Group::all()->random()->id,
             'user_id' => User::all()->random()->id,
-            'content' =>  $this->faker->text(200),
+            'content' =>  $this->faker->text(rand(20,200)),
            
         ];
     }

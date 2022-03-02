@@ -13,12 +13,16 @@ export default createStore({
     state: {
         users: null,
         userLogged: null,
+        chat_room: null,
     },
 
     //synchronous
     mutations: {
         getUserLogged(state, payload) {
             state.userLogged = payload;
+        },
+        getChatRoom(state, payload) {
+            state.chat_room = payload;
         },
         logout(state, payload) {
             state.userLogged = payload;
@@ -28,6 +32,9 @@ export default createStore({
     actions: {
         async getUserLogged({ commit }, payload) {
             await commit("getUserLogged", payload);
+        },
+        async getChatRoom({ commit }, payload) {
+            await commit("getChatRoom", payload);
         },
         async logout({ commit }, payload) {
             await commit("logout", payload);
