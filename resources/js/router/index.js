@@ -12,6 +12,7 @@ import ResidentComponent from "../admin/dashboard/ResidentComponent.vue";
 import OfficerComponent from "../admin/dashboard/OfficerComponent.vue";
 import SecurityOfficerComponent from "../admin/dashboard/SecurityOfficerComponent.vue";
 import AppProfile from "../admin/AppProfile.vue";
+import EmergencyContactDetail from "../admin/dashboard/EmergencyContactDetail.vue";
 
 import Position from "../admin/dashboard/PositionComponent.vue";
 
@@ -196,6 +197,18 @@ const router = createRouter({
                         contents: AppProfile,
                     },
                 },
+                {
+                    path: "emergency-contact-detail",
+                    meta: {
+                        role: "admin",
+                    },
+                    beforeEnter: checkRole,
+                    components: {
+                        default: NotFound,
+                        contents: EmergencyContactDetail,
+                    },
+                },
+                
             ],
         },
         {

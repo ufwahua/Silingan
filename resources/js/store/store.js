@@ -6,6 +6,7 @@ import blocks from "./admin/blocks";
 import lots from "./admin/lots";
 import announcements from "./admin/announcements";
 import positions from "./admin/positions";
+import emergency_contact_details from "./admin/emergency_contact_details";
 
 //user
 import news from "./user/news";
@@ -51,6 +52,7 @@ export default createStore({
         posts,
         announcements,
         positions,
+        emergency_contact_details,
     },
 
     plugins: [createPersistedState()],

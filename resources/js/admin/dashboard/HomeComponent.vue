@@ -110,6 +110,11 @@ export default {
                                     icon: "pi pi-info-circle",
                                     to: "/admin/announcement",
                                 },
+                                {
+                                    label: "Emergency Details",
+                                    icon: "pi pi-info-circle",
+                                    to: "/admin/emergency-contact-detail",
+                                },
                             ],
                         },
                     ],
@@ -232,6 +237,7 @@ export default {
         this.$store.dispatch("registeredUsers/getAll");
         this.$store.dispatch("announcements/getAll");
         this.$store.dispatch("positions/getAll");
+        this.$store.dispatch("emergency_contact_details/getAll");
     },
 };
 </script>

@@ -16,6 +16,7 @@ use App\Http\Controllers\ChatController;
 use App\Http\Controllers\ChatRoomController;
 use App\Models\Chat;
 use App\Models\ChatRoom;
+use App\Http\Controllers\EmergencyContactDetailController;
 
 use App\Http\Controllers\PositionController;
 //use App\Http\Controllers\AnnouncementController;
@@ -53,6 +54,7 @@ Route::get('/logout', [UserController::class, 'logout']);
     'chat_room'             => ChatRoomController::class,
     'chat'             => ChatController::class,
     'position'             => PositionController::class,
+    'emergency_contact_detail' => EmergencyContactDetailController::class,
 
 ]);
 
