@@ -76,6 +76,7 @@ export default {
                         {
                             label: "Profile",
                             icon: "pi pi-pencil",
+                            to: "/admin/profile",
                             command: () => {
                                 this.$toast.add({
                                     severity: "success",

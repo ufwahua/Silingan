@@ -5,6 +5,8 @@ import registeredUsers from "./admin/registeredUsers";
 import blocks from "./admin/blocks";
 import lots from "./admin/lots";
 import announcements from "./admin/announcements";
+import positions from "./admin/positions";
+
 //user
 import news from "./user/news";
 import posts from "./user/post";
@@ -13,12 +15,16 @@ export default createStore({
     state: {
         users: null,
         userLogged: null,
+        chat_room: null,
     },
 
     //synchronous
     mutations: {
         getUserLogged(state, payload) {
             state.userLogged = payload;
+        },
+        getChatRoom(state, payload) {
+            state.chat_room = payload;
         },
         logout(state, payload) {
             state.userLogged = payload;
@@ -28,6 +34,9 @@ export default createStore({
     actions: {
         async getUserLogged({ commit }, payload) {
             await commit("getUserLogged", payload);
+        },
+        async getChatRoom({ commit }, payload) {
+            await commit("getChatRoom", payload);
         },
         async logout({ commit }, payload) {
             await commit("logout", payload);
@@ -41,6 +50,7 @@ export default createStore({
         news,
         posts,
         announcements,
+        positions,
     },
 
     plugins: [createPersistedState()],

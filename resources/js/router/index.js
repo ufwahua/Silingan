@@ -11,7 +11,9 @@ import Announcement from "../admin/dashboard/Announcement.vue";
 import ResidentComponent from "../admin/dashboard/ResidentComponent.vue";
 import OfficerComponent from "../admin/dashboard/OfficerComponent.vue";
 import SecurityOfficerComponent from "../admin/dashboard/SecurityOfficerComponent.vue";
+import AppProfile from "../admin/AppProfile.vue";
 
+import Position from "../admin/dashboard/PositionComponent.vue";
 
 //user
 import UserHome from "../user/dashboard/UserHomeComponent.vue";
@@ -140,6 +142,17 @@ const router = createRouter({
                     },
                 },
                 {
+                    path: "position",
+                    meta: {
+                        role: "admin",
+                    },
+                    beforeEnter: checkRole,
+                    components: {
+                        default: NotFound,
+                        contents: Position,
+                    },
+                },
+                {
                     path: "announcement",
                     meta: {
                         role: "admin",
@@ -170,6 +183,17 @@ const router = createRouter({
                     components: {
                         default: NotFound,
                         contents: SecurityOfficerComponent,
+                    },
+                },
+                {
+                    path: "profile",
+                    meta: {
+                        role: "admin",
+                    },
+                    beforeEnter: checkRole,
+                    components: {
+                        default: NotFound,
+                        contents: AppProfile,
                     },
                 },
             ],

@@ -51,6 +51,16 @@ export default {
                             icon: "pi pi-fw pi-home",
                             to: "/admin/dashboard",
                         },
+                        {
+                            label: "Timeline",
+                            icon: "pi pi-fw pi-send",
+                            to: "/admin/timeline",
+                        },
+                        {
+                            label: "Marketplace",
+                            icon: "pi pi-shopping-cart",
+                            to: "/admin/marketplace",
+                        },
                     ],
                 },
                 {
@@ -60,35 +70,40 @@ export default {
                             icon: "pi pi-fw pi-sitemap",
                             items: [
                                 {
+                                    label: "Users",
+                                    icon: "pi pi-users",
+                                    items: [
+                                    {
+                                        label: "Residents",
+                                        icon: "pi pi-user-edit",
+                                        to: "/admin/residents",
+                                    },
+                                    {
+                                        label: "Security Officers",
+                                        icon: "pi pi-user-edit",
+                                        to: "/admin/security-officers",
+                                    },
+                                    {
+                                        label: "Officers",
+                                        icon: "pi pi-user-edit",
+                                        to: "/admin/officers",
+                                    },
+                                    {
+                                        label: "All Users",
+                                        icon: "pi pi-user-edit",
+                                        to: "/admin/registered-users",
+                                    },
+                                ],
+                                },
+                                {
                                     label: "Block and Lot",
                                     icon: "pi pi-info-circle",
                                     to: "/admin/block-lot",
                                 },
                                 {
-                                    label: "Users",
+                                    label: "Position",
                                     icon: "pi pi-info-circle",
-                                    items: [
-                                    {
-                                        label: "Residents",
-                                        icon: "pi pi-info-circle",
-                                        to: "/admin/residents",
-                                    },
-                                    {
-                                        label: "Security Officers",
-                                        icon: "pi pi-info-circle",
-                                        to: "/admin/security-officers",
-                                    },
-                                    {
-                                        label: "Officers",
-                                        icon: "pi pi-info-circle",
-                                        to: "/admin/officers",
-                                    },
-                                    {
-                                        label: "All Users",
-                                        icon: "pi pi-info-circle",
-                                        to: "/admin/registered-users",
-                                    },
-                                ],
+                                    to: "/admin/position",
                                 },
                                 {
                                     label: "Announcement",
@@ -216,6 +231,7 @@ export default {
         this.$store.dispatch("lots/getAll");
         this.$store.dispatch("registeredUsers/getAll");
         this.$store.dispatch("announcements/getAll");
+        this.$store.dispatch("positions/getAll");
     },
 };
 </script>

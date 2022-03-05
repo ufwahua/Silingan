@@ -8,7 +8,7 @@
                         <div class="p-inputgroup">
                             <div>
                                 <Avatar
-                                    image="http://127.0.0.1:8000/storage/images/home-pic.jpg"
+                                    image="http://127.0.0.1:8000/storage/images/default-prof-pic.png"
                                     class="mr-2"
                                     size="large"
                                     shape="circle"
@@ -53,6 +53,8 @@
                     :responsiveOptions="responsiveOptions"
                     :numVisible="4"
                     class="w-full mx-0 px-0"
+                    :showItemNavigators="true"
+                    :showItemNavigatorsOnHover="true"
                 >
                     <template #item="slotProps">
                         <img
@@ -101,7 +103,7 @@
                 <div class="p-inputgroup mb-2">
                     <div>
                         <Avatar
-                            image="https://www.primefaces.org/wp-content/uploads/2020/05/placeholder.png"
+                            image="http://127.0.0.1:8000/storage/images/default-prof-pic.png"
                             class="mr-2"
                             size="large"
                             shape="circle"
@@ -149,6 +151,8 @@
                         :responsiveOptions="responsiveOptions"
                         :numVisible="4"
                         class="w-full mx-0 px-0"
+                        :showItemNavigators="true"
+                        :showItemNavigatorsOnHover="true"
                     >
                         <template #item="slotProps">
                             <img
