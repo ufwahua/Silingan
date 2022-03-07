@@ -9,10 +9,14 @@
             >
                 <div class="col-12 mb-2 lg:col-12 lg:mb-3 text-center">
                     <router-link to="/" :key="$route.fullPath">
-                        <img
+                        <!-- <img
                             class="Silingan-logo"
                             alt="Silingan-Logo"
-                            src="http://127.0.0.1:8000/storage/images/silingan-icon.png"
+                            src="http://127.0.0.1:8000/storage/images/silingan-icon.png" -->
+                                <img
+                            class="Silingan-logo"
+                            alt="Silingan-Logo"
+                            src="https://i.ibb.co/V3B8NBM/silingan-icon.png"
                     /></router-link>
                 </div>
 

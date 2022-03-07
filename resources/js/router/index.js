@@ -15,6 +15,7 @@ import AppProfile from "../admin/AppProfile.vue";
 import EmergencyContactDetail from "../admin/dashboard/EmergencyContactDetail.vue";
 
 import Position from "../admin/dashboard/PositionComponent.vue";
+import Candidate from "../admin/dashboard/CandidateComponent.vue";
 
 //user
 import UserHome from "../user/dashboard/UserHomeComponent.vue";
@@ -152,6 +153,17 @@ const router = createRouter({
                     components: {
                         default: NotFound,
                         contents: Position,
+                    },
+                },
+                {
+                    path: "candidate",
+                    meta: {
+                        role: "admin",
+                    },
+                    beforeEnter: checkRole,
+                    components: {
+                        default: NotFound,
+                        contents: Candidate,
                     },
                 },
                 {

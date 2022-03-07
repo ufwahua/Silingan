@@ -3,7 +3,7 @@
         <Toast />
         <div class="grid">
             <div class="col-12">
-                <h1>Position</h1>
+                <h1>Positions</h1>
             </div>
         </div>
         <div class="card">
@@ -41,7 +41,7 @@
                         breakpoint="1230px"
                     >
                         <template #empty> No positions found </template>
-                        <Column header="ID" field="id"> </Column>
+                        <!-- <Column header="ID" field="id"> </Column> -->
                         <Column header="Position name" field="name"> </Column>
 
                         <Column header="Actions" field="actions">
@@ -107,7 +107,7 @@
                         <div class="grid">
                             <div class="col-12">
                                 <div class="field">
-                                    <label>Title</label>
+                                    <label>Position name</label>
                                     <InputText
                                         v-model="name"
                                         :class="{
@@ -210,6 +210,7 @@ import axios from "axios";
 import { FilterMatchMode } from "primevue/api";
 import { computed } from "vue";
 import { useStore } from "vuex";
+// import store from "../store/store";
 
 export default {
     name: "PositionComponent",
@@ -218,6 +219,7 @@ export default {
 
         return {
             positions: computed(() => store.state.positions.positions),
+            users: computed(() => store.state.registeredUsers.registeredUsers),
         };
     },
     data() {
@@ -231,6 +233,7 @@ export default {
 
             id: null,
             name: null,
+            selected_user: null,
             error_name: null,
         };
     },
@@ -351,6 +354,15 @@ export default {
                     this.validate(err.response.data.errors);
                     this.loading = false;
                 });
+
+            await axios({
+                method: "post",
+                url: "/api/candidate",
+                data: {
+                    pos_id: this.id,
+                    user_id: this.getBlockLot(),
+                },
+            });
         },
 
         resetFields() {
@@ -363,10 +375,16 @@ export default {
         validate(error) {
             if (error.name) this.error_name = error.name[0];
         },
+        refreshList() {},
+
+        getBlockLot() {
+            this.$store.dispatch("users/getAll", this.selected_user);
+        },
     },
     created() {
         this.initFilters();
     },
+    mounted() {},
 };
 </script>
 

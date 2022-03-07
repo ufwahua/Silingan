@@ -99,11 +99,33 @@ export default {
                                     label: "Block and Lot",
                                     icon: "pi pi-info-circle",
                                     to: "/admin/block-lot",
+                                    items: [
+                                        {
+                                            label: "Residents",
+                                            icon: "pi pi-info-circle",
+                                            to: "/admin/residents",
+                                        },
+                                        {
+                                            label: "Security Officers",
+                                            icon: "pi pi-info-circle",
+                                            to: "/admin/",
+                                        },
+                                        {
+                                            label: "Officers",
+                                            icon: "pi pi-info-circle",
+                                            to: "/admin/",
+                                        },
+                                    ],
                                 },
                                 {
-                                    label: "Position",
+                                    label: "Positions",
                                     icon: "pi pi-info-circle",
                                     to: "/admin/position",
+                                },
+                                {
+                                    label: "Candidates",
+                                    icon: "pi pi-info-circle",
+                                    to: "/admin/candidate",
                                 },
                                 {
                                     label: "Announcement",
@@ -238,6 +260,8 @@ export default {
         this.$store.dispatch("announcements/getAll");
         this.$store.dispatch("positions/getAll");
         this.$store.dispatch("emergency_contact_details/getAll");
+        this.$store.dispatch("candidates/getAll");
+        this.$store.dispatch("registeredUsersFname/getAll");
     },
 };
 </script>
