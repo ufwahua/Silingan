@@ -33,7 +33,6 @@ const lots = {
                 url: "/api/lot/" + payload,
             })
                 .then((res) => {
-                    console.log(res.data);
                     commit("getBlockLots", res.data);
                 })
                 .catch((err) => {

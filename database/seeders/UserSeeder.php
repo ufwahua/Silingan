@@ -49,5 +49,18 @@ class UserSeeder extends Seeder
             'email' => 'varbie.sumido@gmail.com',
             'password'=> Hash::make("12345678"),
         ]);
+
+        User::create([
+            'first_name' => "Reynard",
+            'last_name' => "Dahunan",
+            'role' => 'resident',
+            'gender' =>'male',
+            'age' => rand(1,100),     
+            'verified' => 1,
+            'has_voted' => 0,
+            'contact_num' => rand(11111111111,9999999999),
+            'email' => 'reynard.dahunan@gmail.com',
+            'password'=> Hash::make("12345678"),
+        ]);
     }
 }

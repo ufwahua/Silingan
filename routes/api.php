@@ -1,25 +1,19 @@
 <?php
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LotController;
+use App\Http\Controllers\ChatController;
 use App\Http\Controllers\PostController;
+
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\BlockController;
-
 use App\Http\Controllers\GroupController;
 use App\Http\Controllers\ReplyController;
-use App\Http\Controllers\UploadController;
 use App\Http\Controllers\CommentController;
-<<<<<<< HEAD
-use App\Http\Controllers\AnnouncementController;
-use App\Http\Controllers\ChatController;
 use App\Http\Controllers\ChatRoomController;
-use App\Models\Chat;
-use App\Models\ChatRoom;
-=======
 use App\Http\Controllers\PositionController;
 use App\Http\Controllers\AnnouncementController;
->>>>>>> e1d63fa3b6b695c0b563e30370473d9bb7feb897
 
 /*
 |--------------------------------------------------------------------------
@@ -39,7 +33,10 @@ Route::middleware(['auth:sanctum'])->group(function () {
 Route::post('/forgot-password', [UserController::class, 'forgotPassword']);
 Route::post('/login', [UserController::class, 'login']);
 Route::get('/logout', [UserController::class, 'logout']);
-
+  //Check if User is Logged in
+    Route::get('/user_logged', function(){
+        return Auth::user();
+    });
 
  Route::apiResources([
     'block'             => BlockController::class,
@@ -56,7 +53,6 @@ Route::get('/logout', [UserController::class, 'logout']);
 
 ]);
 
-    //Check if User is Logged in
-    Route::get('/user/logged', [UserController::class, 'getUserLogged']);
+  
 
 

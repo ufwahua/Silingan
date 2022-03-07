@@ -22,6 +22,7 @@ import store from "../store/store";
 
 function checkRole(to, from, next) {
     let isAuthenticated = false;
+    store.dispatch("getUserLogged");
     let userLogged = store.state.userLogged;
     if (userLogged) isAuthenticated = true;
     else isAuthenticated = false;
@@ -40,8 +41,8 @@ function checkRole(to, from, next) {
 }
 function checkLogged(to, from, next) {
     let isAuthenticated = false;
+    store.dispatch("getUserLogged");
     let userLogged = store.state.userLogged;
-
     if (userLogged) isAuthenticated = true;
     else isAuthenticated = false;
 

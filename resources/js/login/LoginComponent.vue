@@ -143,7 +143,7 @@ export default {
                 .post("/api/login", this.form)
                 .then((response) => {
                     this.error = "";
-                    this.$store.dispatch("getUserLogged", response.data);
+                    this.$store.commit("getUserLogged", response.data);
                     if (response.data.role === "resident") {
                         this.loading = false;
                         this.$router.push("/resident/dashboard");

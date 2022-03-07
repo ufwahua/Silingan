@@ -61,7 +61,7 @@
         </div>
         <Dialog
             v-model:visible="chatRoomModal"
-            style="max-height: 550px; width: 400px"
+            style="height: 600px; width: 400px"
             position="bottom"
         >
             <template #header>
@@ -86,10 +86,16 @@
                     </Button>
                 </div>
             </template>
-
-            <div v-if="!chat_room">Say Hi</div>
-            <div v-else v-for="chat in chat_room.chats" :key="chat.id">
-                <ChatMessagesComponent :chat="chat" />
+            <div class="flex flex-column-reverse" style="min-height: 370px">
+                <p v-if="!this.chats" class="text-right">Say Hi</p>
+                <div
+                    v-else
+                    v-for="chat in this.chats"
+                    :key="chat.id"
+                    class="grid"
+                >
+                    <ChatMessagesComponent v-if="chat.id" :chat="chat" />
+                </div>
             </div>
 
             <template v-if="!loading" #footer>
@@ -99,6 +105,7 @@
                         :autoResize="true"
                         rows="1"
                         class="w-full"
+                        @keypress.enter="sendMessage"
                     >
                     </Textarea>
                 </div>
@@ -123,18 +130,10 @@ export default {
             security_officers: computed(
                 () => store.state.registeredUsers.security_officers
             ),
+            chats: computed(() => store.state.chats),
         };
     },
-    props: {
-        layoutMode: {
-            type: String,
-            default: null,
-        },
-        layoutColorMode: {
-            type: String,
-            default: null,
-        },
-    },
+
     components: {
         ChatSideBarComponent,
         ChatMessagesComponent,
@@ -142,18 +141,13 @@ export default {
     data() {
         return {
             chatRoomModal: false,
-            chosenRoom: null,
-            chat_room: null,
             chats: null,
             user: null,
+
             loading: false,
             message: null,
             position: null,
             active: false,
-            d_layoutMode: this.layoutMode,
-            d_layoutColorMode: this.layoutColorMode,
-            scale: 16,
-            scales: [12, 13, 14, 15, 16],
         };
     },
     watch: {
@@ -163,32 +157,41 @@ export default {
                 this.unbindOutsideClickListener();
             }
         },
-        layoutMode(newValue) {
-            this.d_layoutMode = newValue;
-        },
-        layoutColorMode(newValue) {
-            this.d_layoutColorMode = newValue;
-        },
     },
     outsideClickListener: null,
     methods: {
-        async openChatRoom(user) {
-            this.chatRoomModal = true;
-            this.loading = true;
-            this.user = user;
-            this.chosenRoom = this.$store.state.userLogged.id + " " + user.id;
+        async sendMessage() {
             await axios({
-                method: "get",
-                url: "/api/chat_room/" + this.chosenRoom,
+                method: "post",
+                url: "/api/chat/",
+                data: {
+                    user_id: this.user.id,
+                    message: this.message,
+                },
             })
                 .then((res) => {
-                    console.log(res.data[0]);
-                    this.chat_room = res.data[0];
-                    this.loading = false;
+                    this.message = null;
+                    console.log(res.data[0].chats);
+                    this.$store.commit("getChats", res.data[0].chats);
                 })
                 .catch((error) => {
+                    this.$store.commit("getChats", null);
                     console.log(error.response);
-                    this.chats = [];
+                });
+        },
+        openChatRoom(user) {
+            this.chatRoomModal = true;
+            this.message = null;
+            this.user = user;
+            axios({
+                method: "get",
+                url: "/api/chat_room/" + this.user.id,
+            })
+                .then((res) => {
+                    this.$store.commit("getChats", res.data[0].chats);
+                })
+                .catch((error) => {
+                    this.$store.commit("getChats", null);
                     this.loading = false;
                 });
         },
@@ -200,25 +203,7 @@ export default {
             if (this.active) this.bindOutsideClickListener();
             else this.unbindOutsideClickListener();
         },
-        hideConfigurator(event) {
-            this.active = false;
-            this.unbindOutsideClickListener();
-            event.preventDefault();
-        },
-        changeInputStyle(value) {
-            this.$primevue.config.inputStyle = value;
-        },
-        changeRipple(value) {
-            this.$primevue.config.ripple = value;
-        },
-        changeLayout(event, layoutMode) {
-            this.$emit("layout-change", layoutMode);
-            event.preventDefault();
-        },
-        changeLayoutColor(event, layoutColor) {
-            this.$emit("layout-color-change", layoutColor);
-            event.preventDefault();
-        },
+
         bindOutsideClickListener() {
             if (!this.outsideClickListener) {
                 this.outsideClickListener = (event) => {
@@ -244,46 +229,11 @@ export default {
                 this.$el.contains(event.target)
             );
         },
-        decrementScale() {
-            this.scale--;
-            this.applyScale();
-        },
-        incrementScale() {
-            this.scale++;
-            this.applyScale();
-        },
-        applyScale() {
-            document.documentElement.style.fontSize = this.scale + "px";
-        },
-        changeTheme(event, theme, dark = false) {
-            let themeElement = document.getElementById("theme-link");
-            themeElement.setAttribute(
-                "href",
-                themeElement
-                    .getAttribute("href")
-                    .replace(this.$appState.theme, theme)
-            );
-            this.$appState.theme = theme;
-            this.$appState.darkTheme = dark;
-
-            if (theme.startsWith("md")) {
-                this.$primevue.config.ripple = true;
-            }
-        },
     },
     computed: {
         containerClass() {
             return ["layout-config", { "layout-config-active": this.active }];
         },
-        rippleActive() {
-            return this.$primevue.config.ripple;
-        },
-        inputStyle() {
-            return this.$appState.inputStyle;
-        },
-    },
-    mounted() {
-        console.log(this.chat_room);
     },
 };
 </script>

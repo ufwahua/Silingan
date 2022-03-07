@@ -115,10 +115,6 @@ class UserController extends Controller
   
     }
   
-    public function getUserLogged(User $user) : JsonResponse
-    {
-        return response()->json(Auth::user());
-    }
 
     public function forgotPassword(User $user) : JsonResponse
     {

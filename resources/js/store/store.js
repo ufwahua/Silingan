@@ -9,13 +9,14 @@ import positions from "./admin/positions";
 
 //user
 import news from "./user/news";
-import posts from "./user/post";
+import posts from "./user/posts";
 
 export default createStore({
     state: {
         users: null,
         userLogged: null,
         chat_room: null,
+        chats: null,
     },
 
     //synchronous
@@ -26,17 +27,41 @@ export default createStore({
         getChatRoom(state, payload) {
             state.chat_room = payload;
         },
+        getChats(state, payload) {
+            state.chats = payload;
+        },
         logout(state, payload) {
             state.userLogged = payload;
         },
     },
 
     actions: {
-        async getUserLogged({ commit }, payload) {
-            await commit("getUserLogged", payload);
+        async getUserLogged({ commit }) {
+            await axios({
+                method: "get",
+                url: "/api/user_logged",
+            })
+                .then((res) => {
+                    commit("getUserLogged", res.data);
+                })
+                .catch((err) => {
+                    console.log(err.response);
+                });
         },
         async getChatRoom({ commit }, payload) {
             await commit("getChatRoom", payload);
+        },
+        async getChats({ commit }, id) {
+            await axios({
+                method: "get",
+                url: "/api/chat_room/" + id,
+            })
+                .then((res) => {
+                    commit("getChats", res.data[0].chats);
+                })
+                .catch((err) => {
+                    console.log(err.response);
+                });
         },
         async logout({ commit }, payload) {
             await commit("logout", payload);
