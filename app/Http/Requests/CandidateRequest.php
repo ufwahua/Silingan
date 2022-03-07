@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class CandidateRequest extends FormRequest
@@ -13,7 +14,7 @@ class CandidateRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +25,10 @@ class CandidateRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'pos_id' => ['required',Rule::exists('positions', 'id')],
+            'user_id' => ['required',Rule::exists('users', 'id')],
+
+       
         ];
     }
 }

@@ -107,7 +107,7 @@
                         <div class="grid">
                             <div class="col-12">
                                 <div class="field">
-                                    <label>Title</label>
+                                    <label>Position name</label>
                                     <InputText
                                         v-model="name"
                                         :class="{
@@ -219,6 +219,7 @@ export default {
 
         return {
             positions: computed(() => store.state.positions.positions),
+            users: computed(() => store.state.registeredUsers.registeredUsers),
         };
     },
     data() {
@@ -232,6 +233,7 @@ export default {
 
             id: null,
             name: null,
+            selected_user: null,
             error_name: null,
         };
     },
@@ -352,6 +354,15 @@ export default {
                     this.validate(err.response.data.errors);
                     this.loading = false;
                 });
+
+            await axios({
+                method: "post",
+                url: "/api/candidate",
+                data: {
+                    pos_id: this.id,
+                    user_id: this.getBlockLot(),
+                },
+            });
         },
 
         resetFields() {
@@ -365,6 +376,10 @@ export default {
             if (error.name) this.error_name = error.name[0];
         },
         refreshList() {},
+
+        getBlockLot() {
+            this.$store.dispatch("users/getAll", this.selected_user);
+        },
     },
     created() {
         this.initFilters();

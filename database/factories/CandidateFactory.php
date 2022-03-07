@@ -2,6 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Models\Position;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class CandidateFactory extends Factory
@@ -14,7 +16,9 @@ class CandidateFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'pos_id' => Position::all()->random()->id,
+            'user_id' => User::all()->random()->id,
+
         ];
     }
 }

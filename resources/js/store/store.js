@@ -1,11 +1,14 @@
 import { createStore } from "vuex";
 import createPersistedState from "vuex-persistedstate";
 import registeredUsers from "./admin/registeredUsers";
+import registeredUsersFname from "./admin/registeredUsersFname";
+
 //admin
 import blocks from "./admin/blocks";
 import lots from "./admin/lots";
 import announcements from "./admin/announcements";
 import positions from "./admin/positions";
+import candidates from "./admin/candidates";
 
 //user
 import news from "./user/news";
@@ -51,6 +54,8 @@ export default createStore({
         posts,
         announcements,
         positions,
+        candidates,
+        registeredUsersFname
     },
 
     plugins: [createPersistedState()],

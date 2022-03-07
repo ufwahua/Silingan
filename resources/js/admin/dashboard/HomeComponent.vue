@@ -222,6 +222,9 @@ export default {
         this.$store.dispatch("lots/getAll");
         this.$store.dispatch("registeredUsers/getAll");
         this.$store.dispatch("announcements/getAll");
+        this.$store.dispatch("positions/getAll");
+        this.$store.dispatch("candidates/getAll");
+        this.$store.dispatch("registeredUsersFname/getAll");
     },
 };
 </script>

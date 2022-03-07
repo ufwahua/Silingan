@@ -15,6 +15,7 @@ use App\Http\Controllers\UploadController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\ChatRoomController;
 use App\Http\Controllers\PositionController;
+use App\Http\Controllers\CandidateController;
 use App\Http\Controllers\AnnouncementController;
 
 /*
@@ -35,6 +36,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
 Route::post('/forgot-password', [UserController::class, 'forgotPassword']);
 Route::post('/login', [UserController::class, 'login']);
 Route::get('/logout', [UserController::class, 'logout']);
+Route::get('/user/index2', [UserController::class, 'index2']);
+
 
 
  Route::apiResources([
@@ -49,6 +52,8 @@ Route::get('/logout', [UserController::class, 'logout']);
     'chat_room'             => ChatRoomController::class,
     'chat'             => ChatController::class,
     'position'             => PositionController::class,
+    'candidate'             => CandidateController::class,
+
 
 ]);
 

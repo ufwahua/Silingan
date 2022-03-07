@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\ChatRoom;
 use Illuminate\Database\Seeder;
+use Database\Seeders\CandidateSeeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -25,7 +26,8 @@ class DatabaseSeeder extends Seeder
             AnnouncementSeeder::class,
             ChatRoomSeeder::class,
             ChatSeeder::class,
-            PositionSeeder::class
+            PositionSeeder::class,
+            CandidateSeeder::class
         ]);
     }
 }

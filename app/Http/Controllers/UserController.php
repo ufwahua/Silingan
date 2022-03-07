@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\DB;
 use App\Http\Requests\LoginRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -81,6 +82,36 @@ class UserController extends Controller
             User::with('blockLot.block')->get()
         );
     }
+    
+
+    // public function index2(Request $request) : JsonResponse
+    // {
+    //     $users = User::select("*", DB::raw("CONCAT(users.first_name,' ',users.last_name) as full_name"))
+    //     ->get();
+
+    //     foreach ($users as $user)
+    //     $full_name = $user->first_name. " " .$user->last_name;
+    //     return response()->json($full_name)
+            
+    //     ;
+    // }
+
+    public function index2(User $user) : JsonResponse
+    {   
+         $users =User::all();
+         $req= [];
+         foreach($users as $user){
+             $request = [
+                 'user'=> $user,
+                 'full_name' => $user->first_name ." ". $user->last_name,
+             ];
+             array_push($req,$request);
+         }
+            return response()->json(
+            $req
+        );
+    }
+
 
     /**
      * @param User $user
