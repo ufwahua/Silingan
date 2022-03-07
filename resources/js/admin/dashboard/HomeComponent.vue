@@ -51,6 +51,16 @@ export default {
                             icon: "pi pi-fw pi-home",
                             to: "/admin/dashboard",
                         },
+                        {
+                            label: "Timeline",
+                            icon: "pi pi-fw pi-send",
+                            to: "/admin/timeline",
+                        },
+                        {
+                            label: "Marketplace",
+                            icon: "pi pi-shopping-cart",
+                            to: "/admin/marketplace",
+                        },
                     ],
                 },
                 {
@@ -60,31 +70,35 @@ export default {
                             icon: "pi pi-fw pi-sitemap",
                             items: [
                                 {
+                                    label: "Users",
+                                    icon: "pi pi-users",
+                                    items: [
+                                        {
+                                            label: "Residents",
+                                            icon: "pi pi-user-edit",
+                                            to: "/admin/residents",
+                                        },
+                                        {
+                                            label: "Security Officers",
+                                            icon: "pi pi-user-edit",
+                                            to: "/admin/security-officers",
+                                        },
+                                        {
+                                            label: "Officers",
+                                            icon: "pi pi-user-edit",
+                                            to: "/admin/officers",
+                                        },
+                                        {
+                                            label: "All Users",
+                                            icon: "pi pi-user-edit",
+                                            to: "/admin/registered-users",
+                                        },
+                                    ],
+                                },
+                                {
                                     label: "Block and Lot",
                                     icon: "pi pi-info-circle",
                                     to: "/admin/block-lot",
-                                },
-                                {
-                                    label: "Users",
-                                    icon: "pi pi-info-circle",
-                                    to: "/admin/registered-users",
-                                    items: [
-                                    {
-                                        label: "Residents",
-                                        icon: "pi pi-info-circle",
-                                        to: "/admin/residents",
-                                    },
-                                    {
-                                        label: "Security Officers",
-                                        icon: "pi pi-info-circle",
-                                        to: "/admin/",
-                                    },
-                                     {
-                                        label: "Officers",
-                                        icon: "pi pi-info-circle",
-                                        to: "/admin/",
-                                    },
-                                ],
                                 },
                                 {
                                     label: "Position",
@@ -95,6 +109,11 @@ export default {
                                     label: "Announcement",
                                     icon: "pi pi-info-circle",
                                     to: "/admin/announcement",
+                                },
+                                {
+                                    label: "Emergency Details",
+                                    icon: "pi pi-info-circle",
+                                    to: "/admin/emergency-contact-detail",
                                 },
                             ],
                         },
@@ -217,6 +236,8 @@ export default {
         this.$store.dispatch("lots/getAll");
         this.$store.dispatch("registeredUsers/getAll");
         this.$store.dispatch("announcements/getAll");
+        this.$store.dispatch("positions/getAll");
+        this.$store.dispatch("emergency_contact_details/getAll");
     },
 };
 </script>

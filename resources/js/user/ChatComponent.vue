@@ -134,6 +134,16 @@ export default {
         };
     },
 
+    props: {
+        layoutMode: {
+            type: String,
+            default: null,
+        },
+        layoutColorMode: {
+            type: String,
+            default: null,
+        },
+    },
     components: {
         ChatSideBarComponent,
         ChatMessagesComponent,
@@ -203,7 +213,6 @@ export default {
             if (this.active) this.bindOutsideClickListener();
             else this.unbindOutsideClickListener();
         },
-
         bindOutsideClickListener() {
             if (!this.outsideClickListener) {
                 this.outsideClickListener = (event) => {

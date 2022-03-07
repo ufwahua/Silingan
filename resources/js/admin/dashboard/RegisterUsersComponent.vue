@@ -181,7 +181,7 @@
                                     />
                                     <label
                                         style="color: red"
-                                        for="first_name"
+                                        for="lastname"
                                         v-if="error_last_name"
                                         >{{ error_last_name }}</label
                                     >
@@ -189,7 +189,7 @@
 
                                 <div class="field col-12 md:col-6">
                                     <div>
-                                        <label for="last_name">Gender</label>
+                                        <label for="gender">Gender</label>
                                         <label
                                             style="color: red"
                                             for="gender"
@@ -417,13 +417,13 @@
                                     <label
                                         style="color: red"
                                         for="first_name"
-                                        v-if="!first_name"
+                                        v-if="!form.first_name"
                                         >*</label
                                     >
                                     <InputText
                                         id="firstname"
                                         type="text"
-                                        v-model="first_name"
+                                        v-model="form.first_name"
                                         @keydown.enter="onRegisterClick"
                                     />
                                     <label
@@ -439,52 +439,26 @@
                                     <label
                                         style="color: red"
                                         for="last_name"
-                                        v-if="!last_name"
+                                        v-if="!form.last_name"
                                         >*</label
                                     >
                                     <InputText
                                         id="last_name"
                                         type="text"
-                                        v-model="last_name"
+                                        v-model="form.last_name"
                                         @keydown.enter="onRegisterClick"
                                     />
                                     <label
                                         style="color: red"
-                                        for="first_name"
+                                        for="last_name"
                                         v-if="error_last_name"
                                         >{{ error_last_name }}</label
                                     >
                                 </div>
 
-                                <div class="field col-12 md:col-12">
-                                    <label for="age">Age</label
-                                    ><label
-                                        style="color: red"
-                                        for="age"
-                                        v-if="!age"
-                                        >*</label
-                                    >
-                                    <InputText
-                                        id="age"
-                                        type="number"
-                                        min="0"
-                                        step="1"
-                                        onfocus="this.previousValue = this.value"
-                                        onkeydown="this.previousValue = this.value"
-                                        oninput="validity.valid || (value = this.previousValue)"
-                                        v-model="age"
-                                        @keydown.enter="onRegisterClick"
-                                    />
-                                    <label
-                                        style="color: red"
-                                        for="age"
-                                        v-if="error_age"
-                                        >{{ error_age }}</label
-                                    >
-                                </div>
-                                <div class="field col-12 md:col-12">
+                                <div class="field col-12 md:col-6">
                                     <div>
-                                        <label for="last_name">Gender</label>
+                                        <label for="gender">Gender</label>
                                         <label
                                             style="color: red"
                                             for="gender"
@@ -498,7 +472,7 @@
                                             <RadioButton
                                                 name="gender"
                                                 value="male"
-                                                v-model="gender"
+                                                v-model="form.gender"
                                                 @keydown.enter="onRegisterClick"
                                             />
                                             <label
@@ -509,7 +483,7 @@
                                             <RadioButton
                                                 name="gender"
                                                 value="female"
-                                                v-model="gender"
+                                                v-model="form.gender"
                                                 @keydown.enter="onRegisterClick"
                                             />
                                             <label
@@ -521,32 +495,86 @@
                                         <div>
                                             <label
                                                 style="color: red"
-                                                for="first_name"
+                                                for="form.gender"
                                                 v-if="error_gender"
                                                 >{{ error_gender }}</label
                                             >
                                         </div>
                                     </div>
                                 </div>
+                                <div
+                                    class="formgroup-inline flex justify-content-around"
+                                >
+                                    <label
+                                        style="color: red"
+                                        for="form.gender"
+                                        v-if="error_gender"
+                                        >{{ error_gender }}</label
+                                    >
+                                </div>
+                                <div class="field col-12 md:col-6">
+                                    <label>Role</label>
+                                    <label
+                                        style="color: red"
+                                        v-if="!selected_role"
+                                        >*</label
+                                    >
+                                    <Dropdown
+                                        v-model="form.selected_role"
+                                        :options="role"
+                                        optionLabel="type"
+                                        optionValue="value"
+                                        placeholder="Select Role"
+                                    />
+                                    <label
+                                        style="color: red"
+                                        for="form.role"
+                                        v-if="error_role"
+                                        >{{ error_role }}</label
+                                    >
+                                </div>
+
                                 <div class="field col-12 md:col-12">
-                                    <label for="contact_num"
+                                    <label for="age">Age</label
+                                    ><label style="color: red" v-if="!age"
+                                        >*</label
+                                    >
+                                    <InputText
+                                        id="age"
+                                        type="number"
+                                        min="0"
+                                        step="1"
+                                        onfocus="this.previousValue = this.value"
+                                        onkeydown="this.previousValue = this.value"
+                                        oninput="validity.valid || (value = this.previousValue)"
+                                        v-model="form.age"
+                                    />
+                                    <label
+                                        style="color: red"
+                                        for="form.age"
+                                        v-if="error_age"
+                                        >{{ error_age }}</label
+                                    >
+                                </div>
+                                <div class="field col-12 md:col-12">
+                                    <label for="form.contact_num"
                                         >Contact Number</label
                                     ><label
                                         style="color: red"
-                                        for="contact_num"
-                                        v-if="!contact_num"
+                                        for="form.contact_num"
+                                        v-if="!form.contact_num"
                                         >*</label
                                     >
                                     <InputText
                                         id="contact_num"
                                         type="text"
                                         onkeyup="if(this.value<0){this.value= this.value * -1}"
-                                        v-model="contact_num"
+                                        v-model="form.contact_num"
                                         @keydown.enter="onRegisterClick"
                                     />
                                     <label
                                         style="color: red"
-                                        for="contact_num"
+                                        for="form.contact_num"
                                         v-if="error_contact_num"
                                         >{{ error_contact_num }}</label
                                     >
@@ -598,7 +626,6 @@
                                         >{{ error_selected_lot }}</label
                                     >
                                 </div>
-
                                 <br />
 
                                 <div class="col-12 title-form">
@@ -612,43 +639,43 @@
                                 </div>
 
                                 <div class="field col-12 md:col-4">
-                                    <label for="email">Email</label
+                                    <label for="form.email">Email</label
                                     ><label
                                         style="color: red"
-                                        for="email"
-                                        v-if="!email"
+                                        for="form.form.email"
+                                        v-if="!form.email"
                                         >*</label
                                     >
                                     <InputText
                                         type="text"
                                         name="email"
-                                        v-model="email"
+                                        v-model="form.email"
                                         @keydown.enter="onRegisterClick"
                                     />
                                     <label
                                         style="color: red"
-                                        for="email"
+                                        for="form.email"
                                         v-if="error_email"
                                         >{{ error_email }}</label
                                     >
                                 </div>
                                 <div class="field col-12 md:col-4">
-                                    <label for="password">Password</label
+                                    <label for="form.password">Password</label
                                     ><label
                                         style="color: red"
-                                        for="password"
-                                        v-if="!password"
+                                        for="form.password"
+                                        v-if="!form.password"
                                         >*</label
                                     >
                                     <InputText
                                         type="password"
                                         name="password"
-                                        v-model="password"
+                                        v-model="form.password"
                                         @keydown.enter="onRegisterClick"
                                     />
                                     <label
                                         style="color: red"
-                                        for="password"
+                                        for="form.password"
                                         v-if="error_password"
                                         >{{ error_password }}</label
                                     >
@@ -660,13 +687,13 @@
                                     <label
                                         style="color: red"
                                         for="confirm_password"
-                                        v-if="!confirm_password"
+                                        v-if="!form.confirm_password"
                                         >*</label
                                     >
                                     <InputText
                                         type="password"
                                         name="confirmpassword"
-                                        v-model="confirm_password"
+                                        v-model="form.confirm_password"
                                         @keydown.enter="onRegisterClick"
                                     />
                                     <label
@@ -746,6 +773,21 @@ export default {
             registerUserDialog: false,
             deleteUserDialog: false,
             updateUserDialog: false,
+            form: {
+                first_name: "",
+                last_name: "",
+                gender: "",
+                selected_block: "",
+                selected_lot: "",
+                email: "",
+                password: "",
+                confirm_password: "",
+                age: "",
+                contact_num: "",
+                role: "",
+            },
+            block: null,
+            lot: null,
             selected_block: null,
             selected_block_lot: null,
             first_name: null,
@@ -759,7 +801,7 @@ export default {
             has_voted: 0,
             age: null,
             contact_num: null,
-            role: "resident",
+            role: null,
             selected_role: null,
             user: null,
             role: [
@@ -881,13 +923,14 @@ export default {
                 })
                 .catch((err) => {
                     console.log(err.response);
-                    // this.validate(err);
+                    this.validate(err);
                     this.process = false;
                 });
         },
         //REGISTER USER
         registerUser() {
             this.registerUserDialog = true;
+            this.form.email = null;
             this.resetFields();
             this.resetErrors();
         },
@@ -897,18 +940,18 @@ export default {
                 method: "post",
                 url: "/api/user",
                 data: {
-                    first_name: this.first_name,
-                    last_name: this.last_name,
-                    gender: this.gender,
+                    first_name: this.form.first_name,
+                    last_name: this.form.last_name,
+                    gender: this.form.gender,
                     block_lot_id: this.selected_block_lot,
-                    email: this.email,
-                    password: this.password,
-                    confirm_password: this.confirm_password,
+                    email: this.form.email,
+                    password: this.form.password,
+                    confirm_password: this.form.confirm_password,
                     verified: 1,
                     has_voted: 0,
-                    age: this.age,
-                    contact_num: this.contact_num,
-                    role: "resident",
+                    age: this.form.age,
+                    contact_num: this.form.contact_num,
+                    role: this.form.selected_role,
                 },
             })
                 .then(() => {
@@ -930,6 +973,8 @@ export default {
                 });
         },
         resetFields() {
+            this.selected_block = null;
+            this.selected_block_lot = null;
             this.form = {
                 first_name: "",
                 last_name: "",
@@ -941,7 +986,7 @@ export default {
                 confirm_password: "",
                 age: "",
                 contact_num: "",
-                role: "resident",
+                selected_role: "resident",
             };
         },
         resetErrors() {

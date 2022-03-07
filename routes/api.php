@@ -3,17 +3,19 @@
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LotController;
-use App\Http\Controllers\ChatController;
 use App\Http\Controllers\PostController;
-
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\BlockController;
 use App\Http\Controllers\GroupController;
 use App\Http\Controllers\ReplyController;
 use App\Http\Controllers\CommentController;
-use App\Http\Controllers\ChatRoomController;
-use App\Http\Controllers\PositionController;
 use App\Http\Controllers\AnnouncementController;
+use App\Http\Controllers\ChatController;
+use App\Http\Controllers\ChatRoomController;
+use App\Http\Controllers\EmergencyContactDetailController;
+use App\Http\Controllers\PositionController;
+
+
 
 /*
 |--------------------------------------------------------------------------
@@ -50,7 +52,7 @@ Route::get('/logout', [UserController::class, 'logout']);
     'chat_room'             => ChatRoomController::class,
     'chat'             => ChatController::class,
     'position'             => PositionController::class,
-
+    'emergency_contact_detail' => EmergencyContactDetailController::class,
 ]);
 
   
