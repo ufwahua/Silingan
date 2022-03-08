@@ -28,17 +28,25 @@
         </button>
         <ul class="layout-topbar-menu hidden lg:flex origin-top">
             <li>
-                <button class="p-link layout-topbar-button">
-                    <i class="pi pi-calendar"></i>
-                    <span>Events</span>
-                </button>
+                <Button
+                    type="button"
+                    label="Toggle"
+                    @click="toggleNotification"
+                    aria-haspopup="true"
+                    aria-controls="overlay_menu"
+                    class="p-link layout-topbar-button"
+                >
+                    <i class="pi pi-bell"></i>
+                    <span>Notification</span>
+                </Button>
+                <Menu
+                    id="overlay_menu"
+                    ref="menu2"
+                    :model="items"
+                    :popup="true"
+                />
             </li>
-            <li>
-                <button class="p-link layout-topbar-button">
-                    <i class="pi pi-cog"></i>
-                    <span>Settings</span>
-                </button>
-            </li>
+
             <li>
                 <button
                     class="p-link layout-topbar-button"
@@ -66,6 +74,54 @@ import store from "../store/store";
 export default {
     data() {
         return {
+            items: [
+                {
+                    label: "Options",
+                    items: [
+                        {
+                            label: "Update",
+                            icon: "pi pi-refresh",
+                            command: () => {
+                                this.$toast.add({
+                                    severity: "success",
+                                    summary: "Updated",
+                                    detail: "Data Updated",
+                                    life: 3000,
+                                });
+                            },
+                        },
+                        {
+                            label: "Delete",
+                            icon: "pi pi-times",
+                            command: () => {
+                                this.$toast.add({
+                                    severity: "warn",
+                                    summary: "Delete",
+                                    detail: "Data Deleted",
+                                    life: 3000,
+                                });
+                            },
+                        },
+                    ],
+                },
+                {
+                    label: "Navigate",
+                    items: [
+                        {
+                            label: "Vue Website",
+                            icon: "pi pi-external-link",
+                            url: "https://vuejs.org/",
+                        },
+                        {
+                            label: "Router",
+                            icon: "pi pi-upload",
+                            command: () => {
+                                window.location.hash = "/fileupload";
+                            },
+                        },
+                    ],
+                },
+            ],
             profile_menu: [
                 {
                     label:
@@ -112,6 +168,9 @@ export default {
     methods: {
         toggle(event) {
             this.$refs.menu.toggle(event);
+        },
+        toggleNotification(event) {
+            this.$refs.menu2.toggle(event);
         },
         onMenuToggle(event) {
             this.$emit("menu-toggle", event);

@@ -13,9 +13,9 @@ import OfficerComponent from "../admin/dashboard/OfficerComponent.vue";
 import SecurityOfficerComponent from "../admin/dashboard/SecurityOfficerComponent.vue";
 import AppProfile from "../admin/AppProfile.vue";
 import EmergencyContactDetail from "../admin/dashboard/EmergencyContactDetail.vue";
-
 import Position from "../admin/dashboard/PositionComponent.vue";
 import Candidate from "../admin/dashboard/CandidateComponent.vue";
+import ElectionComponent from "../admin/dashboard/ElectionComponent.vue";
 
 //user
 import UserHome from "../user/dashboard/UserHomeComponent.vue";
@@ -221,7 +221,17 @@ const router = createRouter({
                         contents: EmergencyContactDetail,
                     },
                 },
-                
+                {
+                    path: "election",
+                    meta: {
+                        role: "admin",
+                    },
+                    beforeEnter: checkRole,
+                    components: {
+                        default: NotFound,
+                        contents: ElectionComponent,
+                    },
+                },
             ],
         },
         {

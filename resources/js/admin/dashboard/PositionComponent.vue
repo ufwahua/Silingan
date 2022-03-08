@@ -10,7 +10,7 @@
             <div class="grid mb-4">
                 <div class="col-12">
                     <Toolbar>
-                        <template #left>
+                        <template #start>
                             <span class="p-input-icon-left inline-block">
                                 <i class="pi pi-search" />
                                 <InputText
@@ -20,7 +20,7 @@
                             </span>
                         </template>
 
-                        <template #right>
+                        <template #end>
                             <div class="mr-2">
                                 <Button
                                     label="Add Position"
@@ -195,7 +195,6 @@
                                     fill="#EEEEEE"
                                     animationDuration="1s"
                                 />
-                                <span class="block">Processing Request...</span>
                             </div>
                         </div>
                     </Dialog>

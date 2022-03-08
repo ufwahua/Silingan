@@ -10,7 +10,7 @@
             <div class="grid mb-4">
                 <div class="col-12">
                     <Toolbar>
-                        <template #left>
+                        <template #start>
                             <span class="p-input-icon-left inline-block">
                                 <i class="pi pi-search" />
                                 <InputText
@@ -20,7 +20,7 @@
                             </span>
                         </template>
 
-                        <template #right>
+                        <template #end>
                             <div class="mr-2">
                                 <Button
                                     label="Add"
@@ -715,8 +715,8 @@
                             />
                         </template>
                     </Dialog> -->
-                    
-                     <Dialog
+
+                    <Dialog
                         v-model:visible="registerUserDialog"
                         :style="{ width: '500px' }"
                         header="Register User"
@@ -824,7 +824,9 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="formgroup-inline flex justify-content-around">
+                                <div
+                                    class="formgroup-inline flex justify-content-around"
+                                >
                                     <label
                                         style="color: red"
                                         for="form.gender"
@@ -1124,9 +1126,7 @@ export default {
             role: null,
             selected_role: null,
             user: null,
-            role: [
-                { type: "officer", value: "officer" },
-            ],
+            role: [{ type: "officer", value: "officer" }],
             error_first_name: "",
             error_last_name: "",
             error_gender: "",
@@ -1152,7 +1152,7 @@ export default {
         initFilters() {
             this.filters = {
                 global: { value: null, matchMode: FilterMatchMode.CONTAINS },
-                'role': { value: 'officer', matchMode: FilterMatchMode.EQUALS },
+                role: { value: "officer", matchMode: FilterMatchMode.EQUALS },
             };
         },
         badgecolor(color) {
@@ -1292,7 +1292,7 @@ export default {
         },
         resetFields() {
             this.selected_block = null;
-            this.selected_block_lot= null;
+            this.selected_block_lot = null;
             this.form = {
                 first_name: "",
                 last_name: "",

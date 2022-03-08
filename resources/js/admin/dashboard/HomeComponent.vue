@@ -124,6 +124,15 @@ export default {
                         },
                     ],
                 },
+                {
+                    items: [
+                        {
+                            label: "Election",
+                            icon: "pi pi-fw pi-calendar",
+                            to: "/admin/election",
+                        },
+                    ],
+                },
             ],
         };
     },

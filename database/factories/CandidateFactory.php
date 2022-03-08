@@ -17,7 +17,7 @@ class CandidateFactory extends Factory
     {
         return [
             'pos_id' => Position::all()->random()->id,
-            'user_id' => User::all()->random()->id,
+            'user_id' => User::factory(),
 
         ];
     }

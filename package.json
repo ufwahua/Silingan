@@ -28,9 +28,11 @@
         "webpack-cli": "^4.9.1"
     },
     "dependencies": {
+        "laravel-echo": "^1.11.3",
         "primeflex": "^3.1.2",
         "primeicons": "^5.0.0",
         "primevue": "^3.12.1",
+        "pusher-js": "^7.0.6",
         "vue-axios": "^3.3.7",
         "vue-router": "^4.0.11",
         "vuex": "^4.0.2",

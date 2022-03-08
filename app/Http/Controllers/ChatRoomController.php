@@ -28,15 +28,20 @@ class ChatRoomController extends Controller
      */
     public function show(Request $request) : JsonResponse
     {
-
-        return response()->json(
-            ChatRoom::with(['chats' => function ($query){
-                $query->orderBy('created_at','desc');
-            },'chats.user'])
-            ->where('name',$request->route('chat_room')." ".Auth::id())
-            ->orWhere('name',Auth::id()." ".$request->route('chat_room'))
-            ->get()
-        );
+        if($chat_room= DB::table('chat_rooms')
+        ->where('name',$request->route('chat_room')." ".Auth::id())
+        ->orWhere('name',Auth::id()." ".$request->route('chat_room'))
+        ->first()){
+        }else{
+            $chat_room=ChatRoom::query()->create([
+                "name" => $request->route('chat_room')." ".Auth::id(),
+            ]); 
+        }
+          return response()->json(ChatRoom::with(['chats' => function ($query){
+            $query->orderBy('created_at','desc');
+        },'chats.user'])
+        ->where('id',$chat_room->id) 
+        ->get());
     }
 
     /**

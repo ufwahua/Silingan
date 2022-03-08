@@ -10,7 +10,7 @@
             <div class="grid mb-4">
                 <div class="col-12">
                     <Toolbar>
-                        <template #left>
+                        <template #start>
                             <span class="p-input-icon-left inline-block">
                                 <i class="pi pi-search" />
                                 <InputText
@@ -20,7 +20,7 @@
                             </span>
                         </template>
 
-                        <template #right>
+                        <template #end>
                             <div class="mr-2">
                                 <Button
                                     label="Add Candidate"
@@ -236,29 +236,28 @@
                             />
                         </template>
                     </Dialog>
-                    <Dialog
-                        v-model:visible="loading"
-                        :style="{ width: '450px' }"
-                        :modal="true"
-                        :closable="false"
-                        :closeOnEscape="true"
-                    >
-                        <div class="grid">
-                            <div class="col-12 text-center">
-                                <ProgressSpinner
-                                    class="block mb-4"
-                                    style="width: 100px; height: 100px"
-                                    strokeWidth="4"
-                                    fill="#EEEEEE"
-                                    animationDuration="1s"
-                                />
-                                <span class="block">Processing Request...</span>
-                            </div>
-                        </div>
-                    </Dialog>
                 </div>
             </div>
         </div>
+        <Dialog
+            v-model:visible="loading"
+            :style="{ width: '450px' }"
+            :modal="true"
+            :closable="false"
+            :closeOnEscape="true"
+        >
+            <div class="grid">
+                <div class="col-12 text-center">
+                    <ProgressSpinner
+                        class="block mb-4"
+                        style="width: 100px; height: 100px"
+                        strokeWidth="4"
+                        fill="#EEEEEE"
+                        animationDuration="1s"
+                    />
+                </div>
+            </div>
+        </Dialog>
     </div>
 </template>
 
@@ -398,10 +397,11 @@ export default {
             });
         },
         //REGISTER POSITION
-        createCandidate() {
-            this.createCandidateDialog = true;
+        createCandidate(pos_id) {
             this.resetFields();
             this.resetErrors();
+            this.pos_id = pos_id;
+            this.createCandidateDialog = true;
         },
         async onCreatePositionsClick() {
             this.loading = true;

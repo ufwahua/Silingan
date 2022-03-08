@@ -10,7 +10,7 @@
             <div class="grid mb-4">
                 <div class="col-12">
                     <Toolbar>
-                        <template #left>
+                        <template #start>
                             <span class="p-input-icon-left inline-block">
                                 <i class="pi pi-search" />
                                 <InputText
@@ -20,7 +20,7 @@
                             </span>
                         </template>
 
-                        <template #right>
+                        <template #end>
                             <div class="mr-2">
                                 <Button
                                     label="Add"
@@ -197,8 +197,8 @@
                                 @click="confirmUpdateContact"
                             />
                         </template>
-                    </Dialog>            
-                     <Dialog
+                    </Dialog>
+                    <Dialog
                         v-model:visible="registerUserDialog"
                         :style="{ width: '500px' }"
                         header="Register User"
@@ -314,7 +314,9 @@ export default {
         const store = useStore();
         return {
             emergency_contact_details: computed(
-                () => store.state.emergency_contact_details.emergency_contact_details
+                () =>
+                    store.state.emergency_contact_details
+                        .emergency_contact_details
             ),
         };
     },
@@ -411,7 +413,7 @@ export default {
                     number: this.form.number,
                     user_id: this.$store.state.userLogged.id,
                 },
-                })
+            })
                 .then(() => {
                     this.$toast.add({
                         severity: "success",
@@ -479,8 +481,7 @@ export default {
         },
         validate(error) {
             if (error.response.data.errors.name)
-                this.error_name =
-                    error.response.data.errors.name[0];
+                this.error_name = error.response.data.errors.name[0];
             if (error.response.data.errors.number)
                 this.error_number = error.response.data.errors.number[0];
         },

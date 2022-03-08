@@ -15,6 +15,7 @@ use App\Http\Controllers\ChatRoomController;
 use App\Http\Controllers\EmergencyContactDetailController;
 use App\Http\Controllers\PositionController;
 use App\Http\Controllers\CandidateController;
+use App\Http\Controllers\ElectionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -56,6 +57,7 @@ Route::get('/user/index2', [UserController::class, 'index2']);
     'position'             => PositionController::class,
     'emergency_contact_detail' => EmergencyContactDetailController::class,
     'candidate'             => CandidateController::class,
+    'election'             => ElectionController::class,
 
 
 ]);

@@ -13,7 +13,7 @@
                             class="Silingan-logo"
                             alt="Silingan-Logo"
                             src="http://127.0.0.1:8000/storage/images/silingan-icon.png" -->
-                                <img
+                        <img
                             class="Silingan-logo"
                             alt="Silingan-Logo"
                             src="https://i.ibb.co/V3B8NBM/silingan-icon.png"
@@ -279,7 +279,6 @@
                         fill="#EEEEEE"
                         animationDuration="1s"
                     />
-                    <span class="block">Processing Request...</span>
                 </div>
             </div>
         </Dialog>

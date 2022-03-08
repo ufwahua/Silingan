@@ -10,7 +10,7 @@
             <div class="grid mb-4">
                 <div class="col-12">
                     <Toolbar>
-                        <template #left>
+                        <template #start>
                             <span class="p-input-icon-left inline-block">
                                 <i class="pi pi-search" />
                                 <InputText
@@ -20,7 +20,7 @@
                             </span>
                         </template>
 
-                        <template #right>
+                        <template #end>
                             <div class="mr-2">
                                 <Button
                                     label="Add"
@@ -69,18 +69,34 @@
                         </Column> -->
                         <Column header="Status" field="status">
                             <template #body="{ data }">
-                                <Badge v-if="data.verified == 1 " :class="badgecolor(data.verified)">{{
-                                    "Approved"
-                                }}</Badge>
-                                <Badge v-if="data.verified == 0 " :class="badgecolor(data.verified)">{{
-                                    "Pending"
-                                }}</Badge>
+                                <Badge
+                                    v-if="data.verified == 1"
+                                    :class="badgecolor(data.verified)"
+                                    >{{ "Approved" }}</Badge
+                                >
+                                <Badge
+                                    v-if="data.verified == 0"
+                                    :class="badgecolor(data.verified)"
+                                    >{{ "Pending" }}</Badge
+                                >
                             </template>
                         </Column>
                         <Column header="Verify" field="verify">
                             <template #body="{ data }">
-                                <Button v-if="data.verified == 0" label="Accept" icon="pi pi-check" class="p-button-sm"  @click="verify(data)"/>
-                                <Button v-if="data.verified == 1" label="Accept" icon="pi pi-check" class="p-button-sm" disabled="isDisabled"/>
+                                <Button
+                                    v-if="data.verified == 0"
+                                    label="Accept"
+                                    icon="pi pi-check"
+                                    class="p-button-sm"
+                                    @click="verify(data)"
+                                />
+                                <Button
+                                    v-if="data.verified == 1"
+                                    label="Accept"
+                                    icon="pi pi-check"
+                                    class="p-button-sm"
+                                    disabled="isDisabled"
+                                />
                             </template>
                         </Column>
                         <Column header="Actions" field="actions">
@@ -411,7 +427,7 @@
                         </template>
                     </Dialog>
 
-                     <Dialog
+                    <Dialog
                         v-model:visible="registerUserDialog"
                         :style="{ width: '500px' }"
                         header="Register User"
@@ -519,7 +535,9 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="formgroup-inline flex justify-content-around">
+                                <div
+                                    class="formgroup-inline flex justify-content-around"
+                                >
                                     <label
                                         style="color: red"
                                         for="form.gender"
@@ -819,9 +837,7 @@ export default {
             role: null,
             selected_role: null,
             user: null,
-            role: [
-                { type: "resident", value: "resident" },
-            ],
+            role: [{ type: "resident", value: "resident" }],
             error_first_name: "",
             error_last_name: "",
             error_gender: "",
@@ -847,7 +863,7 @@ export default {
         initFilters() {
             this.filters = {
                 global: { value: null, matchMode: FilterMatchMode.CONTAINS },
-                'role': { value: 'resident', matchMode: FilterMatchMode.EQUALS },
+                role: { value: "resident", matchMode: FilterMatchMode.EQUALS },
             };
         },
         badgecolor(color) {
@@ -859,10 +875,9 @@ export default {
                 return "bg-yellow-500";
             } else if (color == 1) {
                 return "bg-green-500";
-            }else if (color == 0) {
+            } else if (color == 0) {
                 return "bg-gray-500";
-            }else 
-            {
+            } else {
                 return "bg-yellow-800";
             }
         },
@@ -1027,7 +1042,7 @@ export default {
         },
         resetFields() {
             this.selected_block = null;
-            this.selected_block_lot= null;
+            this.selected_block_lot = null;
             this.form = {
                 first_name: "",
                 last_name: "",

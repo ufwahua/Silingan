@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\ChatRoomRequest;
 use Illuminate\Database\Query\Builder;
-
+use App\Events\NewChatMessage;
 class ChatController extends Controller
 {
     /**
@@ -40,12 +40,12 @@ class ChatController extends Controller
 
   
     public function store(Request $request) : JsonResponse
-{
+    {
         if($chat_room= DB::table('chat_rooms')
         ->where('name',$request['user_id']." ".Auth::id())
         ->orWhere('name',Auth::id()." ".$request['user_id'])
         ->first()){
-            Chat::query()->create([
+            $message = Chat::query()->create([
                 "chat_room_id" => $chat_room->id,
                 "user_id" => Auth::id(),
                 "message" => $request['message'],
@@ -54,21 +54,21 @@ class ChatController extends Controller
             $chat_room=ChatRoom::query()->create([
                 "name" => $request['user_id']." ".Auth::id(),
             ]);
-              Chat::query()->create([
-                 "chat_room_id" => $chat_room->id,
-                 "user_id" => Auth::id(),
-                 "message" => $request['message'],
-             ]);
+            $message =  Chat::query()->create([
+                "chat_room_id" => $chat_room->id,
+                "user_id" => Auth::id(),
+                "message" => $request['message'],
+            ]);
+            
         }
        
-
+        broadcast(new NewChatMessage($message))->toOthers();
         return response()->json(ChatRoom::with(['chats' => function ($query){
-                $query->orderBy('created_at','desc');
-            },'chats.user'])
-            ->where('id',$chat_room->id) 
-            ->get());
+            $query->orderBy('created_at','desc');
+        },'chats.user'])
+        ->where('id',$chat_room->id) 
+        ->get());
     }
-
     /**
      * @param Chat        $chat
      * @param ChatRequest $request

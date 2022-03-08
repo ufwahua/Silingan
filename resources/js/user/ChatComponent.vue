@@ -150,6 +150,7 @@ export default {
     },
     data() {
         return {
+            chat_room_id: null,
             chatRoomModal: false,
             chats: null,
             user: null,
@@ -169,6 +170,15 @@ export default {
         },
     },
     outsideClickListener: null,
+    watch: {
+        chat_room_id(val, oldVal) {
+            if (oldVal) {
+                this.disconnect(oldVal);
+            } else {
+                this.connect();
+            }
+        },
+    },
     methods: {
         async sendMessage() {
             await axios({
@@ -189,6 +199,20 @@ export default {
                     console.log(error.response);
                 });
         },
+        connect() {
+            if (this.chat_room_id) {
+                let vm = this;
+                window.Echo.private("chat." + this.chat_room_id).listen(
+                    ".message.new",
+                    (e) => {
+                        vm.openChatRoom(this.user);
+                    }
+                );
+            }
+        },
+        disconnect(chat_room_id) {
+            window.Echo.leave("chat." + chat_room_id);
+        },
         openChatRoom(user) {
             this.chatRoomModal = true;
             this.message = null;
@@ -198,6 +222,7 @@ export default {
                 url: "/api/chat_room/" + this.user.id,
             })
                 .then((res) => {
+                    this.chat_room_id = res.data[0].id;
                     this.$store.commit("getChats", res.data[0].chats);
                 })
                 .catch((error) => {

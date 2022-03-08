@@ -13,7 +13,7 @@ class CandidateController extends Controller
 {
     public function index(Request $request) : JsonResponse
     {
-            $candidate = Candidate::with(['user', 'position'])->get();
+            $candidate = Candidate::with(['user.blockLot', 'position'])->get();
             return response()->json(
                 $candidate
             );
