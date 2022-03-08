@@ -2,13 +2,7 @@
 	<div class="layout-profile">
 		<div class="grid">
 			<div class="col-12 title-form">
-				<Badge
-					:value="1"
-					severity="info"
-					class="mr-2 mb-2"
-					size="large"
-				></Badge>
-				<label><h6>Basic Information</h6></label>
+				<label><h3>Profile Settings</h3></label>
 			</div>
 
 			<div class="p-fluid formgrid grid">
@@ -246,12 +240,12 @@
 				</div>
 			</div>
 		</div>
-		<template >
+		<div align="right">
 			<Button
-				label="Cancel"
-				icon="pi pi-times"
-				class="p-button-text"
-				@click="updateUserDialog = false"
+			label="Cancel"
+			icon="pi pi-times"
+			class="p-button-text"
+			@click="updateUserDialog = false"
 			/>
 			<Button
 				label="Update"
@@ -259,27 +253,258 @@
 				class="p-button-text p-button-warning"
 				@click="confirmUpdateUser"
 			/>
-		</template>
-		
+		</div>
 	</div>
 </template>
 
+
 <script>
-	export default {
-		data() {
-			return {
-				expanded: false
-			}
-		},
-		methods: {
-			onClick(event){
-				this.expanded = !this.expanded;
-				event.preventDefault();
-			}
-		}
-	}
+import axios from "axios";
+import { FilterMatchMode } from "primevue/api";
+import { computed } from "vue";
+import { useStore } from "vuex";
+export default {
+    name: "RegisterUsersComponent",
+    setup() {
+        const store = useStore();
+        return {
+            userLogged: computed(() => this.$store.state.userLogged.id,),
+        };
+		
+    },
+    data() {
+        return {
+            isInvalid: false,
+            filters: {},
+            process: false,
+            registerUserDialog: false,
+            deleteUserDialog: false,
+            updateUserDialog: false,
+            first_name: this.$store.state.userLogged.first_name,
+            last_name: this.$store.state.userLogged.last_name,
+            gender: this.$store.state.userLogged.gender,
+            block_lot_id: null,
+            email: this.$store.state.userLogged.email,
+            password: null,
+            confirm_password: null,
+            verified: 1,
+            has_voted: 0,
+            age: this.$store.state.userLogged.age,
+            contact_num: this.$store.state.userLogged.contact_num,
+            selected_role: this.$store.state.userLogged.role.id,
+			//selected_block:  this.$store.state.userLogged.block_lot.block.id,
+            //selected_block_lot:  this.$store.state.userLogged.block_lot,
+
+            error_first_name: "",
+            error_last_name: "",
+            error_gender: "",
+            error_selected_block: "",
+            error_selected_lot: "",
+            error_email: "",
+            error_password: "",
+            error_confirm_password: "",
+            error_age: "",
+            error_contact_num: "",
+            error_role: "",
+        };
+		
+    },
+    methods: {
+        showSuccess() {
+            this.$toast.add({
+                severity: "success",
+                summary: "Success Message",
+                detail: "Message Content",
+                life: 3000,
+            });
+        },
+        initFilters() {
+            this.filters = {
+                global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+            };
+        },
+        deleteUser(first_name, last_name, id) {
+            this.id = id;
+            this.name = first_name + " " + last_name;
+            this.deleteUserDialog = true;
+        },
+        async confirmDeleteItem() {
+            try {
+                this.deleteUserDialog = false;
+                this.process = true;
+                await axios({
+                    method: "delete",
+                    url: "/api/user/" + this.id,
+                });
+                this.$store.dispatch("registeredUsers/getAll");
+                this.process = false;
+                this.$toast.add({
+                    severity: "success",
+                    summary: "Successful Request",
+                    detail: "Deleted User",
+                    life: 3000,
+                });
+            } catch (err) {
+                this.process = false;
+                console.log(err.response);
+            }
+        },
+        updateUser(data) {
+            console.log(data);
+            this.resetFields();
+            this.resetErrors();
+            this.id = data.id;
+            this.updateUserDialog = true;
+            this.first_name = data.first_name;
+            this.last_name = data.last_name;
+            this.gender = data.gender;
+            this.selected_block = data.block_lot.block.id;
+            this.getBlockLot();
+            this.selected_block_lot = data.block_lot.id;
+            this.email = data.email;
+            this.age = data.age;
+            this.contact_num = data.contact_num;
+            this.selected_role = data.role;
+        },
+        async confirmUpdateUser() {
+            this.process = true;
+            await axios({
+                method: "put",
+                url: "/api/user/" + this.id,
+                data: {
+                    first_name: this.first_name,
+                    last_name: this.last_name,
+                    gender: this.gender,
+                    block_lot_id: this.selected_block_lot,
+                    email: this.email,
+                    verified: 1,
+                    has_voted: 0,
+                    age: this.age,
+                    contact_num: this.contact_num,
+                    role: this.selected_role,
+                },
+            })
+                .then(() => {
+                    this.$toast.add({
+                        severity: "success",
+                        summary: "Successful Request",
+                        detail: "Updated User",
+                        life: 3000,
+                    });
+                    this.$store.dispatch("registeredUsers/getAll");
+                    this.resetFields();
+                    this.updateUserDialog = false;
+                    this.process = false;
+                })
+                .catch((err) => {
+                    console.log(err.response);
+                    this.validate(err);
+                    this.process = false;
+                });
+        },
+        async verify(data) {
+            this.process = true;
+            await axios({
+                method: "put",
+                url: "/api/user/" + data.id,
+                data: {
+                    first_name: data.first_name,
+                    last_name: data.last_name,
+                    gender: data.gender,
+                    block_lot_id: data.selected_block_lot,
+                    email: data.email,
+                    verified: 1,
+                    has_voted: 0,
+                    age: data.age,
+                    contact_num: data.contact_num,
+                    role: data.role,
+                },
+            })
+                .then(() => {
+                    this.$toast.add({
+                        severity: "success",
+                        summary: "Successful",
+                        detail: "Resident Verified",
+                        life: 3000,
+                    });
+                    this.$store.dispatch("registeredUsers/getAll");
+                    this.resetFields();
+                    this.process = false;
+                })
+                .catch((err) => {
+                    console.log(err.response);
+                    this.validate(err);
+                    this.process = false;
+                });
+        },
+        resetFields() {
+            this.selected_block = null;
+            this.selected_block_lot= null;
+            this.form = {
+                first_name: "",
+                last_name: "",
+                gender: "",
+                selected_block: "",
+                selected_block_lot: "",
+                email: "",
+                password: "",
+                confirm_password: "",
+                age: "",
+                contact_num: "",
+                selected_role: "resident",
+            };
+        },
+        resetErrors() {
+            this.error_first_name = "";
+            this.error_last_name = "";
+            this.error_gender = "";
+            this.error_selected_block = "";
+            this.error_selected_lot = "";
+            this.error_email = "";
+            this.error_password = "";
+            this.error_confirm_password = "";
+            this.error_age = "";
+            this.error_contact_num = "";
+            this.error_role = "";
+        },
+        validate(error) {
+            if (error.response.data.errors.first_name)
+                this.error_first_name =
+                    error.response.data.errors.first_name[0];
+            if (error.response.data.errors.last_name)
+                this.error_last_name = error.response.data.errors.last_name[0];
+            if (error.response.data.errors.gender)
+                this.error_gender = error.response.data.errors.gender[0];
+            if (error.response.data.errors.selected_block)
+                this.error_selected_block =
+                    error.response.data.errors.selected_block[0];
+            if (error.response.data.errors.selected_block_lot)
+                this.error_selected_lot =
+                    error.response.data.errors.selected_block_lot[0];
+            if (error.response.data.errors.email)
+                this.error_email = error.response.data.errors.email[0];
+            if (error.response.data.errors.password)
+                this.error_password = error.response.data.errors.password[0];
+            if (error.response.data.errors.confirm_password)
+                this.error_confirm_password =
+                    error.response.data.errors.confirm_password[0];
+            if (error.response.data.errors.age)
+                this.error_age = error.response.data.errors.age[0];
+            if (error.response.data.errors.contact_num)
+                this.error_contact_num =
+                    error.response.data.errors.contact_num[0];
+            if (error.response.data.errors.role)
+                this.error_role = error.response.data.errors.role[0];
+        },
+
+        getBlockLot() {
+            this.$store.dispatch("lots/getBlockLots", this.selected_block);
+        },
+    },
+    created() {
+        this.initFilters();
+    },
+};
 </script>
 
-<style scoped>
-
-</style>
+<style></style>
