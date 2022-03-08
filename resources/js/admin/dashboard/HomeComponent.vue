@@ -99,23 +99,6 @@ export default {
                                     label: "Block and Lot",
                                     icon: "pi pi-info-circle",
                                     to: "/admin/block-lot",
-                                    items: [
-                                        {
-                                            label: "Residents",
-                                            icon: "pi pi-info-circle",
-                                            to: "/admin/residents",
-                                        },
-                                        {
-                                            label: "Security Officers",
-                                            icon: "pi pi-info-circle",
-                                            to: "/admin/",
-                                        },
-                                        {
-                                            label: "Officers",
-                                            icon: "pi pi-info-circle",
-                                            to: "/admin/",
-                                        },
-                                    ],
                                 },
                                 {
                                     label: "Positions",
