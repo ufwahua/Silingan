@@ -358,7 +358,7 @@ export default {
                 method: "post",
                 url: "/api/candidate",
                 data: {
-                    pos_id: this.id,
+                    position_id: this.id,
                     user_id: this.getBlockLot(),
                 },
             });

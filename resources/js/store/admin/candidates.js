@@ -18,6 +18,7 @@ const candidates = {
             })
                 .then((res) => {
                     commit("getAll", res.data);
+                    console.log(res.data);
                 })
                 .catch((err) => {
                     console.log(err.response.data);

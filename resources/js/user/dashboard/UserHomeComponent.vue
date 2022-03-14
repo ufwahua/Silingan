@@ -190,7 +190,7 @@ export default {
         AppFooter: AppFooter,
     },
     created() {
-        // this.$store.dispatch("news/getAll");
+        this.$store.dispatch("news/getAll");
         this.$store.dispatch("posts/getAll");
         this.$store.dispatch("registeredUsers/getAll");
         this.$store.commit("registeredUsers/getResidents");

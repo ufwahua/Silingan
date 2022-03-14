@@ -13,7 +13,7 @@ class CandidateController extends Controller
 {
     public function index(Request $request) : JsonResponse
     {
-            $candidate = Candidate::with(['user.blockLot', 'position'])->get();
+            $candidate = Candidate::with(['user.blockLot', 'position','election'])->get();
             return response()->json(
                 $candidate
             );
@@ -46,6 +46,12 @@ class CandidateController extends Controller
     public function destroy(Candidate $candidate) : JsonResponse
     {
         $candidate->delete();
+
+        return response()->json(['ok']);
+    }
+     public function deleteAllCandidate(Request $request) : JsonResponse
+    {
+        Candidate::query()->where('election_id',$request->route('candidate'))->delete();
 
         return response()->json(['ok']);
     }

@@ -1,17 +1,13 @@
 import axios from "axios";
 
-const registeredUsers = {
+const registeredUsersFname = {
     namespaced: true,
     state: {
-        registeredUsers: null,
-        residents: null,
-        officers: null,
-        admins: null,
-        security_officers: null,
+        registeredUsersFname: null,
     },
     mutations: {
         getAll(state, payload) {
-            state.registeredUsers = payload;
+            state.registeredUsersFname = payload;
         },
     },
     actions: {
@@ -31,4 +27,4 @@ const registeredUsers = {
     },
     getters: {},
 };
-export default registeredUsers;
+export default registeredUsersFname;

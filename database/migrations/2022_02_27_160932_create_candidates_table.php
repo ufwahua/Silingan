@@ -15,8 +15,9 @@ class CreateCandidatesTable extends Migration
     {
         Schema::create('candidates', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('pos_id');
+            $table->foreignId('position_id');
             $table->foreignId('user_id');
+            $table->foreignId('election_id');
             $table->timestamps();
         });
     }

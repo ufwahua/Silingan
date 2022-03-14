@@ -25,8 +25,8 @@ class UserFactory extends Factory
     {
 
         return [
-            'first_name' => $this->faker->name(),
-            'last_name' => $this->faker->name(),
+            'first_name' => $this->faker->firstName(),
+            'last_name' => $this->faker->lastName(),
             'role' => $this->faker->randomElement(['admin', 'officer', 'resident','security_officer']),
             'gender' => $this->faker->randomElement(['male','female']),
             'block_lot_id' =>  Lot::all()->random()->id,

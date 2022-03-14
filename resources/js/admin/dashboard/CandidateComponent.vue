@@ -125,12 +125,12 @@
                                         >
                                         <label
                                             style="color: red"
-                                            for="pos_id"
-                                            v-if="!pos_id"
+                                            for="position_id"
+                                            v-if="!position_id"
                                             >*</label
                                         >
                                         <Dropdown
-                                            v-model="pos_id"
+                                            v-model="position_id"
                                             :options="positions"
                                             optionLabel="name"
                                             optionValue="id"
@@ -188,7 +188,7 @@
                                         <label>Position name</label>
                                         <label style="color: red">*</label>
                                         <Dropdown
-                                            v-model="pos_id"
+                                            v-model="position_id"
                                             :options="positions"
                                             optionLabel="name"
                                             optionValue="id"
@@ -198,8 +198,8 @@
                                     </div>
                                     <label
                                         style="color: red"
-                                        v-if="error_pos_id"
-                                        >{{ error_pos_id }}</label
+                                        v-if="error_position_id"
+                                        >{{ error_position_id }}</label
                                     >
                                     <div class="field col-12 md:col-12">
                                         <label>Candidate name</label>
@@ -294,11 +294,11 @@ export default {
             updateCandidateDialog: false,
 
             id: null,
-            pos_id: null,
+            position_id: null,
             user_id: null,
             name: null,
 
-            error_pos_id: null,
+            error_position_id: null,
             error_user_id: null,
         };
     },
@@ -353,7 +353,7 @@ export default {
             this.resetFields();
             this.resetErrors();
             this.id = data.id;
-            this.pos_id = data.position.id;
+            this.position_id = data.position.id;
             this.user_id = data.user.id;
             this.updateCandidateDialog = true;
         },
@@ -371,7 +371,7 @@ export default {
                 method: "put",
                 url: "/api/candidate/" + this.id,
                 data: {
-                    pos_id: this.pos_id,
+                    position_id: this.position_id,
                     user_id: this.user_id,
                 },
             })
@@ -397,10 +397,10 @@ export default {
             });
         },
         //REGISTER POSITION
-        createCandidate(pos_id) {
+        createCandidate(position_id) {
             this.resetFields();
             this.resetErrors();
-            this.pos_id = pos_id;
+            this.position_id = position_id;
             this.createCandidateDialog = true;
         },
         async onCreatePositionsClick() {
@@ -409,7 +409,7 @@ export default {
                 method: "post",
                 url: "/api/candidate",
                 data: {
-                    pos_id: this.pos_id,
+                    position_id: this.position_id,
                     user_id: this.user_id,
                 },
             })
@@ -428,15 +428,16 @@ export default {
 
         resetFields() {
             this.id = null;
-            this.pos_id = null;
+            this.position_id = null;
             this.user_id = null;
         },
         resetErrors() {
-            this.error_pos_id = "";
+            this.error_position_id = "";
             this.error_user_id = "";
         },
         validate(error) {
-            if (error.pos_id) this.error_pos_id = error.pos_id[0];
+            if (error.position_id)
+                this.error_position_id = error.position_id[0];
             if (error.user_id) this.error_user_id = error.user_id[0];
         },
         refreshList() {},

@@ -9,14 +9,18 @@ class Candidate extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'pos_id',
+        'position_id',
         'user_id',
+        'election_id',
      
     ];
     public function position(){
-        return $this->hasOne(Position::class,'id','pos_id');
+        return $this->hasOne(Position::class,'id','position_id');
     }
     public function user(){
         return $this->hasOne(User::class,'id','user_id');
+    }
+    public function election(){
+        return $this->hasOne(Election::class,'id','election_id');
     }
 }

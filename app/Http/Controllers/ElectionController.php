@@ -12,7 +12,7 @@ class ElectionController extends Controller
     public function index(Request $request) : JsonResponse
     {
         return response()->json(
-            Election::all()
+            Election::latest()->first()
         );
     }
     public function show(Election $election) : JsonResponse

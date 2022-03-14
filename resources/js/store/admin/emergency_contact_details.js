@@ -4,7 +4,6 @@ const emergency_contact_details = {
     namespaced: true,
     state: {
         emergency_contact_details: null,
-        example: null,
     },
     mutations: {
         getAll(state, payload) {

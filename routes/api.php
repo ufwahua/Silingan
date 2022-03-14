@@ -40,6 +40,7 @@ Route::get('/logout', [UserController::class, 'logout']);
         return Auth::user();
     });
 Route::get('/user/index2', [UserController::class, 'index2']);
+Route::delete('/candidate/election/{candidate}', [CandidateController::class, 'deleteAllCandidate']);
 
 
 

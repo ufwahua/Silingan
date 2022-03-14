@@ -10,6 +10,7 @@ import announcements from "./admin/announcements";
 import positions from "./admin/positions";
 import emergency_contact_details from "./admin/emergency_contact_details";
 import candidates from "./admin/candidates";
+import timeNow from "./admin/timeNow";
 
 //user
 import news from "./user/news";
@@ -86,6 +87,7 @@ export default createStore({
         emergency_contact_details,
         candidates,
         registeredUsersFname,
+        timeNow,
     },
 
     plugins: [createPersistedState()],

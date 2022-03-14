@@ -44,6 +44,8 @@
                     ref="menu2"
                     :model="items"
                     :popup="true"
+                    class="overflow-auto"
+                    style="max-height: 300px"
                 />
             </li>
 
@@ -76,48 +78,17 @@ export default {
         return {
             items: [
                 {
-                    label: "Options",
+                    label: "Notification",
                     items: [
                         {
-                            label: "Update",
-                            icon: "pi pi-refresh",
-                            command: () => {
-                                this.$toast.add({
-                                    severity: "success",
-                                    summary: "Updated",
-                                    detail: "Data Updated",
-                                    life: 3000,
-                                });
-                            },
+                            label: "",
+                            icon: "",
+                            command: () => {},
                         },
                         {
-                            label: "Delete",
-                            icon: "pi pi-times",
-                            command: () => {
-                                this.$toast.add({
-                                    severity: "warn",
-                                    summary: "Delete",
-                                    detail: "Data Deleted",
-                                    life: 3000,
-                                });
-                            },
-                        },
-                    ],
-                },
-                {
-                    label: "Navigate",
-                    items: [
-                        {
-                            label: "Vue Website",
-                            icon: "pi pi-external-link",
-                            url: "https://vuejs.org/",
-                        },
-                        {
-                            label: "Router",
-                            icon: "pi pi-upload",
-                            command: () => {
-                                window.location.hash = "/fileupload";
-                            },
+                            label: "",
+                            icon: "s",
+                            command: () => {},
                         },
                     ],
                 },

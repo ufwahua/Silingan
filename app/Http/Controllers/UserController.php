@@ -84,21 +84,9 @@ class UserController extends Controller
     }
     
 
-    // public function index2(Request $request) : JsonResponse
-    // {
-    //     $users = User::select("*", DB::raw("CONCAT(users.first_name,' ',users.last_name) as full_name"))
-    //     ->get();
-
-    //     foreach ($users as $user)
-    //     $full_name = $user->first_name. " " .$user->last_name;
-    //     return response()->json($full_name)
-            
-    //     ;
-    // }
-
     public function index2(User $user) : JsonResponse
     {   
-         $users =User::all();
+         $users =User::where('role','resident')->get();
          $req= [];
          foreach($users as $user){
              $request = [
