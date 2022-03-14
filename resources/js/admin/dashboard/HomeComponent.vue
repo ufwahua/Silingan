@@ -44,7 +44,7 @@ export default {
             mobileMenuActive: false,
             menu: [
                 {
-                    label: "Home",
+                    label: "Admin",
                     items: [
                         {
                             label: "Dashboard",
@@ -246,37 +246,15 @@ export default {
     },
 
     mounted() {
-        // if (!this.$store.state.blocks.blocks) {
-        //     this.$store.dispatch("blocks/getAll");
-        // }
+        this.$store.dispatch("news/getAll");
+
         this.$store.dispatch("blocks/getAll");
-        // if (!this.$store.state.lots.lots) {
-        //     this.$store.dispatch("lots/getAll");
-        // }
         this.$store.dispatch("lots/getAll");
-        // if (!this.$store.state.registeredUsers.registeredUsers) {
-        //     this.$store.dispatch("registeredUsers/getAll");
-        // }
         this.$store.dispatch("registeredUsers/getAll");
-        // if (!this.$store.state.registeredUsersFname.registeredUsersFname) {
-        //     this.$store.dispatch("registeredUsersFname/getAll");
-        // }
         this.$store.dispatch("registeredUsersFname/getAll");
-        // if (!this.$store.state.announcements.announcements) {
-        //     this.$store.dispatch("announcements/getAll");
-        // }
         this.$store.dispatch("announcements/getAll");
-        // if (!this.$store.state.positions.positions) {
-        //     this.$store.dispatch("positions/getAll");
-        // }
         this.$store.dispatch("positions/getAll");
-        // if (!this.$store.state.emergency_contact_details.emergency_contact_details) {
-        //     this.$store.dispatch("emergency_contact_details/getAll");
-        // }
         this.$store.dispatch("emergency_contact_details/getAll");
-        // if (!this.$store.state.candidates.candidates) {
-        //     this.$store.dispatch("candidates/getAll");
-        // }
         this.$store.dispatch("candidates/getAll");
     },
 };

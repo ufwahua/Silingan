@@ -137,11 +137,8 @@
 
                             <div class="p-fluid formgrid grid">
                                 <div class="field col-12 md:col-6">
-                                    <label for="name">Name</label>
-                                    <label
-                                        style="color: red"
-                                        for="name"
-                                        v-if="!form.name"
+                                    <label>Name</label>
+                                    <label style="color: red" v-if="!form.name"
                                         >*</label
                                     >
                                     <InputText
@@ -152,17 +149,15 @@
                                     />
                                     <label
                                         style="color: red"
-                                        for="name"
                                         v-if="error_name"
                                         >{{ error_name }}</label
                                     >
                                 </div>
 
                                 <div class="field col-12 md:col-6">
-                                    <label for="number">Contact Details</label>
+                                    <label>Contact Details</label>
                                     <label
                                         style="color: red"
-                                        for="number"
                                         v-if="!form.number"
                                         >*</label
                                     >
@@ -176,7 +171,6 @@
                                     />
                                     <label
                                         style="color: red"
-                                        for="number"
                                         v-if="error_number"
                                         >{{ error_number }}</label
                                     >
@@ -217,11 +211,8 @@
 
                             <div class="p-fluid formgrid grid">
                                 <div class="field col-12 md:col-6">
-                                    <label for="name">Name</label>
-                                    <label
-                                        style="color: red"
-                                        for="name"
-                                        v-if="!form.name"
+                                    <label>Name</label>
+                                    <label style="color: red" v-if="!form.name"
                                         >*</label
                                     >
                                     <InputText
@@ -232,18 +223,14 @@
                                     />
                                     <label
                                         style="color: red"
-                                        for="name"
                                         v-if="error_name"
                                         >{{ error_name }}</label
                                     >
                                 </div>
 
                                 <div class="field col-12 md:col-6">
-                                    <label for="number">Contact Details</label>
-                                    <label
-                                        style="color: red"
-                                        for="number"
-                                        v-if="!number"
+                                    <label>Contact Details</label>
+                                    <label style="color: red" v-if="!number"
                                         >*</label
                                     >
                                     <Textarea
@@ -256,7 +243,6 @@
                                     />
                                     <label
                                         style="color: red"
-                                        for="number"
                                         v-if="error_number"
                                         >{{ error_number }}</label
                                     >

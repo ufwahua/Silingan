@@ -120,12 +120,9 @@
                             <div class="col-12">
                                 <div class="field">
                                     <div class="field col-12 md:col-12">
-                                        <label for="selected_position"
-                                            >Position name</label
-                                        >
+                                        <label>Position name</label>
                                         <label
                                             style="color: red"
-                                            for="position_id"
                                             v-if="!position_id"
                                             >*</label
                                         >
@@ -139,12 +136,9 @@
                                         />
                                     </div>
                                     <div class="field col-12 md:col-12">
-                                        <label for="user_id"
-                                            >Candidate name</label
-                                        >
+                                        <label>Candidate name</label>
                                         <label
                                             style="color: red"
-                                            for="user_id"
                                             v-if="!user_id"
                                             >*</label
                                         >

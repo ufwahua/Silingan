@@ -47,7 +47,8 @@ export default createStore({
                 url: "/api/user_logged",
             })
                 .then((res) => {
-                    commit("getUserLogged", res.data);
+                    console.log(res.data[0]);
+                    commit("getUserLogged", res.data[0]);
                 })
                 .catch((err) => {
                     console.log(err.response);

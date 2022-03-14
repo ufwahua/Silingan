@@ -23,7 +23,7 @@ class UserController extends Controller
      */
     public function login(LoginRequest $request) : JsonResponse
     {
-        $user = User::where('email', $request->email)->first();
+        $user = User::where('email', $request->email)->with('lot.block')->first();
 
         if ( $user ||  Hash::check($request->password, $user->password)) {
             Auth::login($user,$request['remember']);
@@ -79,10 +79,9 @@ class UserController extends Controller
     public function index(Request $request) : JsonResponse
     {
         return response()->json(
-            User::with('blockLot.block')->get()
+            User::with('lot.block')->get()
         );
     }
-    
 
     public function index2(User $user) : JsonResponse
     {   
@@ -105,9 +104,10 @@ class UserController extends Controller
      * @param User $user
      * @return JsonResponse
      */
-    public function show(User $user) : JsonResponse
+    public function show(Request $request) : JsonResponse
     {
-        return response()->json($user);
+       
+        return response()->json( User::with('lot.block')->where('id',$request->ignore($this->route('user')))->get());
     }
     /**
      * @param Request $request
@@ -116,7 +116,7 @@ class UserController extends Controller
     public function update(Request $request): JsonResponse
     {
   
-    $user = User::query()->where('id',$request->route('user'))->update($request->validate([
+        User::query()->where('id',$request->route('user'))->update($request->validate([
         'block_lot_id' => ['required',Rule::exists('lots', 'id')],
         'first_name' => ['required','string' , 'max:255'],
         'last_name' => ['required','string' , 'max:255'],
@@ -130,7 +130,7 @@ class UserController extends Controller
         'email' => ['required','string' ,'email', 'max:255',Rule::unique('users')->ignore($request->route('user'))],
         'profile_pic'=> ['sometimes'],
     ]));
-        return response()->json($user);
+        return response()->json(User::where('id',$request->route('user'))->with(['lot.block'])->get());
   
     }
   
@@ -138,6 +138,13 @@ class UserController extends Controller
     public function forgotPassword(User $user) : JsonResponse
     {
         return response()->json(Auth::user());
+    }
+    public function userLogged(): JsonResponse{
+        if($id= Auth::user()->id)
+             return response()->json( User::where('id',$id)->with('lot.block')->get());
+        
+        else
+            return null;
     }
 
     public function destroy(User $user) : JsonResponse

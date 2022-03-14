@@ -125,7 +125,6 @@
                                     />
                                     <label
                                         style="color: red"
-                                        for="form.password"
                                         v-if="error_title"
                                         >{{ error_title }}</label
                                     >
@@ -184,7 +183,6 @@
                                     />
                                     <label
                                         style="color: red"
-                                        for="form.password"
                                         v-if="error_title"
                                         >{{ error_title }}</label
                                     >

@@ -1,10 +1,7 @@
 <template>
     <div class="layout-topbar">
         <router-link to="/admin/dashboard" class="layout-topbar-logo">
-            <img
-                alt="Silingan-Logo"
-                src="../admin/silingan-icon.png"
-            />
+            <img alt="Silingan-Logo" src="../admin/silingan-icon.png" />
         </router-link>
         <button
             class="p-link layout-menu-button layout-topbar-button"
@@ -72,10 +69,18 @@
 </template>
 
 <script>
-import store from "../store/store";
+import { computed } from "vue";
+import { useStore } from "vuex";
 export default {
+    setup() {
+        const store = useStore();
+        return {
+            userLogged: computed(() => store.state.userLogged),
+        };
+    },
     data() {
         return {
+            profile_pic: false,
             items: [
                 {
                     label: "Notification",
@@ -96,22 +101,15 @@ export default {
             profile_menu: [
                 {
                     label:
-                        store.state.userLogged.first_name +
+                        this.userLogged.first_name +
                         " " +
-                        store.state.userLogged.last_name,
+                        this.userLogged.last_name,
                     items: [
                         {
                             label: "Profile",
                             icon: "pi pi-pencil",
                             to: "/admin/profile",
-                            command: () => {
-                                this.$toast.add({
-                                    severity: "success",
-                                    summary: "Updated",
-                                    detail: "Data Updated",
-                                    life: 3000,
-                                });
-                            },
+                            command: () => {},
                         },
                         {
                             label: "Logout",

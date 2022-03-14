@@ -19,9 +19,7 @@
                     class="w-full md:w-10 mx-auto"
                     @submit.prevent="sendPasswordLink"
                 >
-                    <label
-                        for="email1"
-                        class="block text-900 text-xl font-medium mb-2"
+                    <label class="block text-900 text-xl font-medium mb-2"
                         >Email</label
                     >
                     <InputText
@@ -33,12 +31,9 @@
                         placeholder="Email"
                         style="padding: 1rem"
                     />
-                    <label
-                        style="color: red"
-                        for="form.password"
-                        v-if="error_email"
-                        >{{ error_email }}</label
-                    >
+                    <label style="color: red" v-if="error_email">{{
+                        error_email
+                    }}</label>
                     <Button
                         label="Send Password Link"
                         type="submit"

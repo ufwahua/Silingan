@@ -25,12 +25,9 @@
                                 @click="showElectionDialog"
                             />
                         </div>
-                        <label
-                            style="color: red"
-                            for="position_id"
-                            v-if="error_date"
-                            >{{ error_date }}</label
-                        >
+                        <label style="color: red" v-if="error_date">{{
+                            error_date
+                        }}</label>
                     </template>
                 </Card>
             </div>

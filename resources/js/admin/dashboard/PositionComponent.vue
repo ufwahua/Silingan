@@ -157,7 +157,6 @@
                                     />
                                     <label
                                         style="color: red"
-                                        for="form.password"
                                         v-if="error_name"
                                         >{{ error_name }}</label
                                     >
@@ -383,7 +382,6 @@ export default {
     created() {
         this.initFilters();
     },
-    mounted() {},
 };
 </script>
 

@@ -27,7 +27,7 @@
 <script>
 import AppTopBar from "../AppTopbar.vue";
 import AppMenu from "../AppMenu.vue";
-import ChatComponent from "../ChatComponent.vue";
+import ChatComponent from "../../components/ChatComponent.vue";
 import AppFooter from "../AppFooter.vue";
 
 export default {
@@ -41,16 +41,22 @@ export default {
             mobileMenuActive: false,
             menu: [
                 {
+                    label: "Resident",
                     items: [
                         {
-                            label: "Home",
+                            label: "Timeline",
                             icon: "pi pi-fw pi-home",
                             to: "/resident/dashboard",
                         },
                         {
-                            label: "Neighbourhood",
-                            icon: "pi pi-fw pi-map",
-                            to: "/resident/neighbourhood",
+                            label: "Marketplace",
+                            icon: "pi pi-fw pi-shopping-cart",
+                            to: "/resident/dashboard",
+                        },
+                        {
+                            label: "Announcement",
+                            icon: "pi pi-fw pi-calendar",
+                            to: "/resident/announcement",
                         },
                     ],
                 },

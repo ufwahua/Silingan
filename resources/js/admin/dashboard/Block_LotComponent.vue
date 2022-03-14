@@ -101,12 +101,9 @@
                                 v-model="form_block_number"
                                 placeholder="How many blocks you want to create"
                             />
-                            <label
-                                style="color: red"
-                                for="number"
-                                v-if="error"
-                                >{{ this.error }}</label
-                            >
+                            <label style="color: red" v-if="error">{{
+                                this.error
+                            }}</label>
                         </div>
                     </div>
                 </div>
@@ -230,12 +227,9 @@
                                         v-model="form_lot_number"
                                         placeholder="How many lots you want to create"
                                     />
-                                    <label
-                                        style="color: red"
-                                        for="number"
-                                        v-if="error"
-                                        >{{ this.error }}</label
-                                    >
+                                    <label style="color: red" v-if="error">{{
+                                        this.error
+                                    }}</label>
                                 </div>
                             </div>
                         </div>
@@ -360,12 +354,9 @@
                         <div class="p-fluid">
                             <h5>Block Number</h5>
                             <InputText v-model="number" />
-                            <label
-                                style="color: red"
-                                for="number"
-                                v-if="error"
-                                >{{ this.error }}</label
-                            >
+                            <label style="color: red" v-if="error">{{
+                                this.error
+                            }}</label>
                         </div>
                     </div>
                 </div>

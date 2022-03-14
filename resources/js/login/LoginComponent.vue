@@ -41,9 +41,7 @@
                         style="padding: 1rem"
                     />
 
-                    <label
-                        for="password1"
-                        class="block text-900 font-medium text-xl mb-2"
+                    <label class="block text-900 font-medium text-xl mb-2"
                         >Password</label
                     >
                     <Password
@@ -69,7 +67,7 @@
                                 :binary="true"
                                 class="mr-2"
                             ></Checkbox>
-                            <label for="rememberme1">Remember me</label>
+                            <label>Remember me</label>
                         </div>
 
                         <router-link to="forgotpassword" :key="$route.fullPath">

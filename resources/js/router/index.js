@@ -11,7 +11,7 @@ import Announcement from "../admin/dashboard/Announcement.vue";
 import ResidentComponent from "../admin/dashboard/ResidentComponent.vue";
 import OfficerComponent from "../admin/dashboard/OfficerComponent.vue";
 import SecurityOfficerComponent from "../admin/dashboard/SecurityOfficerComponent.vue";
-import AppProfile from "../admin/AppProfile.vue";
+import AppProfile from "../components/AppProfile.vue";
 import EmergencyContactDetail from "../admin/dashboard/EmergencyContactDetail.vue";
 import Position from "../admin/dashboard/PositionComponent.vue";
 import Candidate from "../admin/dashboard/CandidateComponent.vue";
@@ -20,8 +20,9 @@ import ElectionComponent from "../admin/dashboard/ElectionComponent.vue";
 //user
 import UserHome from "../user/dashboard/UserHomeComponent.vue";
 import UserDashboard from "../user/dashboard/UserDashboardComponent.vue";
+import AnnouncementComponent from "../components/AnnouncementComponent.vue";
 
-import NotFound from "../not-found-components/NotFoundComponent.vue";
+import NotFound from "../components/NotFoundComponent.vue";
 import { createRouter, createWebHistory } from "vue-router";
 import store from "../store/store";
 
@@ -255,6 +256,28 @@ const router = createRouter({
                     components: {
                         default: NotFound,
                         contents: UserDashboard,
+                    },
+                },
+                {
+                    path: "profile",
+                    meta: {
+                        role: "resident",
+                    },
+                    beforeEnter: checkRole,
+                    components: {
+                        default: NotFound,
+                        contents: AppProfile,
+                    },
+                },
+                {
+                    path: "announcement",
+                    meta: {
+                        role: "resident",
+                    },
+                    beforeEnter: checkRole,
+                    components: {
+                        default: NotFound,
+                        contents: AnnouncementComponent,
                     },
                 },
             ],
