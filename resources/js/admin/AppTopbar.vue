@@ -3,7 +3,7 @@
         <router-link to="/admin/dashboard" class="layout-topbar-logo">
             <img
                 alt="Silingan-Logo"
-                src="http://127.0.0.1:8000/storage/images/silingan-icon.png"
+                src="../admin/silingan-icon.png"
             />
         </router-link>
         <button

@@ -1,113 +1,149 @@
 <template>
     <div class="grid">
-        <div class="col-12">
-            <h1>Dashboard</h1>
+        <div
+            class="col-12 sm:col-12 md:col-10 md:col-offset-1 lg:col-6 lg:col-offset-1 xl:col-6 xl:col-offset-1"
+        >
+            <div class="col justify-content-center pt-0">
+                <!-- <Fieldset class="mb-3" legend="Announcement">
+                    <p>
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+                        sed do eiusmod tempor incididunt ut labore et dolore
+                        magna aliqua. Ut enim ad minim veniam, quis nostrud
+                        exercitation ullamco laboris nisi ut aliquip ex ea
+                        commodo consequat. Duis aute irure dolor in
+                        reprehenderit in voluptate velit esse cillum dolore eu
+                        fugiat nulla pariatur. Excepteur sint occaecat cupidatat
+                        non proident, sunt in culpa qui officia deserunt mollit
+                        anim id est laborum.
+                    </p>
+                </Fieldset> -->
+                <div class="card p-3">
+                    <div class="p-inputgroup mb-2">
+                        <Avatar
+                            image="http://127.0.0.1:8000/storage/images/default-prof-pic.png"
+                            class="mr-2"
+                            size="large"
+                            shape="circle"
+                            alt="Image"
+                        />
+                        <Textarea
+                            @click="openAddLotModal"
+                            :autoResize="true"
+                            class="w-full"
+                            placeholder="What's on you mind?"
+                            rows="1"
+                        >
+                        </Textarea>
+                    </div>
+                </div>
+                <div v-for="post in posts" :key="post.id">
+                    <PostComponent
+                        v-if="post.group.name.toUpperCase() === 'TIMELINE'"
+                        v-bind:post="post"
+                    />
+                </div>
+            </div>
         </div>
+        <div
+            class="col-12 sm:col-12 md:col-10 md:col-offset-1 lg:col-4 lg:col-offset-1 xl:col-4 xl:col-offset-1"
+        >
+            <Fieldset class="mb-3" legend="Local News">
+                <NewsComponent />
+            </Fieldset>
+        </div>
+        <Dialog
+            v-model:visible="openPostModal"
+            :style="{ width: '500px' }"
+            header="Create Post"
+            :modal="true"
+            :closeOnEscape="true"
+        >
+            <div class="grid">
+                <div class="col-12">
+                    <Textarea
+                        v-model="content"
+                        :autoResize="true"
+                        class="w-full"
+                        placeholder="What's on you mind?"
+                    >
+                    </Textarea>
+                    <FileUpload
+                        name="demo[]"
+                        accept="image/*"
+                        :multiple="true"
+                        :customUpload="true"
+                        @uploader="onUpload"
+                        :auto="true"
+                        :maxFileSize="2000000"
+                        :showUploadButton="false"
+                        :showCancelButton="false"
+                    >
+                        <template #empty>
+                            <p>Drag and drop files to here to upload.</p>
+                        </template>
+                    </FileUpload>
+                </div>
+            </div>
 
-        <div class="col-12 lg:col-6 xl:col-3">
-            <div class="card mb-0">
-                <div class="flex justify-content-between mb-3">
-                    <div>
-                        <span class="block text-500 font-medium mb-3"
-                            >Orders</span
-                        >
-                        <div class="text-900 font-medium text-xl">152</div>
-                    </div>
-                    <div
-                        class="flex align-items-center justify-content-center bg-blue-100 border-round"
-                        style="width: 2.5rem; height: 2.5rem"
-                    >
-                        <i
-                            class="pi pi-shopping-cart text-blue-500 text-xl"
-                        ></i>
-                    </div>
+            <template #footer>
+                <div v-if="content || images">
+                    <Button
+                        label="Post"
+                        icon="pi pi-check"
+                        class="p-button-text p-button-post"
+                        @click="enterPost"
+                    />
                 </div>
-                <span class="text-green-500 font-medium">24 new </span>
-                <span class="text-500">since last visit</span>
-            </div>
-        </div>
-        <div class="col-12 lg:col-6 xl:col-3">
-            <div class="card mb-0">
-                <div class="flex justify-content-between mb-3">
-                    <div>
-                        <span class="block text-500 font-medium mb-3"
-                            >Revenue</span
-                        >
-                        <div class="text-900 font-medium text-xl">$2.100</div>
-                    </div>
-                    <div
-                        class="flex align-items-center justify-content-center bg-orange-100 border-round"
-                        style="width: 2.5rem; height: 2.5rem"
-                    >
-                        <i class="pi pi-map-marker text-orange-500 text-xl"></i>
-                    </div>
+            </template>
+        </Dialog>
+        <Dialog
+            v-model:visible="loading"
+            :style="{ width: '450px' }"
+            :modal="true"
+            :closable="false"
+            :closeOnEscape="true"
+        >
+            <div class="grid">
+                <div class="col-12 text-center">
+                    <ProgressSpinner
+                        class="block mb-4"
+                        style="width: 100px; height: 100px"
+                        strokeWidth="4"
+                        fill="#EEEEEE"
+                        animationDuration="1s"
+                    />
                 </div>
-                <span class="text-green-500 font-medium">%52+ </span>
-                <span class="text-500">since last week</span>
             </div>
-        </div>
-        <div class="col-12 lg:col-6 xl:col-3">
-            <div class="card mb-0">
-                <div class="flex justify-content-between mb-3">
-                    <div>
-                        <span class="block text-500 font-medium mb-3"
-                            >Customers</span
-                        >
-                        <div class="text-900 font-medium text-xl">28441</div>
-                    </div>
-                    <div
-                        class="flex align-items-center justify-content-center bg-cyan-100 border-round"
-                        style="width: 2.5rem; height: 2.5rem"
-                    >
-                        <i class="pi pi-inbox text-cyan-500 text-xl"></i>
-                    </div>
-                </div>
-                <span class="text-green-500 font-medium">520 </span>
-                <span class="text-500">newly registered</span>
-            </div>
-        </div>
-        <div class="col-12 lg:col-6 xl:col-3">
-            <div class="card mb-0">
-                <div class="flex justify-content-between mb-3">
-                    <div>
-                        <span class="block text-500 font-medium mb-3"
-                            >Comments</span
-                        >
-                        <div class="text-900 font-medium text-xl">
-                            152 Unread
-                        </div>
-                    </div>
-                    <div
-                        class="flex align-items-center justify-content-center bg-purple-100 border-round"
-                        style="width: 2.5rem; height: 2.5rem"
-                    >
-                        <i class="pi pi-comment text-purple-500 text-xl"></i>
-                    </div>
-                </div>
-                <span class="text-green-500 font-medium">85 </span>
-                <span class="text-500">responded</span>
-            </div>
-        </div>
+        </Dialog>
+        <Toast />
     </div>
 </template>
 
 <script>
-import Card from "primevue/card";
-import DataTable from "primevue/datatable";
-import Column from "primevue/column";
-import ColumnGroup from "primevue/columngroup";
-import InputText from "primevue/inputtext";
+import { computed } from "vue";
+import { useStore } from "vuex";
+import NewsComponent from "./NewsComponent.vue";
+import PostComponent from "./PostComponent.vue";
 export default {
-    name: "DashboardComponent",
+    name: "UserDashboardComponent",
     components: {
-        Card,
-        DataTable,
-        Column,
-        ColumnGroup,
-        InputText,
+        NewsComponent,
+        PostComponent,
+    },
+    setup() {
+        const store = useStore();
+        return {
+            posts: computed(() => store.state.posts.posts),
+        };
     },
     data() {
         return {
+            loading: null,
+            user_id: null,
+            groud_id: null,
+            images: null,
+            content: null,
+            openPostModal: false,
             data: [
                 {
                     name: "Jayson Cadiz",
@@ -133,10 +169,78 @@ export default {
             ],
         };
     },
+    methods: {
+        // Open Add Lot Modal
+        openAddLotModal() {
+            this.resetFields();
+            this.openPostModal = true;
+        },
+        resetFields() {
+            this.images = null;
+            this.content = null;
+            this.user_id = null;
+        },
+        showPostedToast() {
+            this.$toast.add({
+                severity: "success",
+                summary: "Success Message",
+                detail: "Successfully posted",
+                life: 3000,
+            });
+        },
+        async onUpload(event) {
+            let formData = new FormData();
+            this.images = event.files;
+            for (let file of this.images) {
+                formData.append("images[]", file);
+            }
+            formData.append("user_id", this.$store.state.userLogged.id);
+
+            if (this.images) {
+                await axios
+                    .post("/upload", formData, {
+                        headers: {
+                            "Content-Type": "multipart/form-data",
+                        },
+                    })
+                    .then((res) => {
+                        this.images = res.data;
+                    })
+                    .catch((e) => {
+                        console.log(e.response);
+                    });
+            }
+        },
+        async enterPost() {
+            this.loading = true;
+            await axios({
+                method: "post",
+                url: "/api/post",
+                data: {
+                    group_id: 1,
+                    user_id: this.$store.state.userLogged.id,
+                    images: JSON.stringify(this.images),
+                    content: this.content,
+                },
+            })
+                .then((res) => {
+                    this.openPostModal = false;
+                    this.$store.dispatch("posts/getAll");
+                    this.showPostedToast();
+                    this.loading = false;
+                })
+                .catch((error) => {
+                    console.log(error.response);
+                    this.loading = false;
+                });
+        },
+    },
 };
 </script>
 
 <style>
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap");
+
 .container {
     margin-left: 5%;
     margin-right: 5%;

@@ -18,7 +18,7 @@ const emergency_contact_details = {
             })
                 .then((res) => {
                     commit("getAll", res.data);
-                    console.log(res.data);
+                    //console.log(res.data);
                 })
                 .catch((err) => {
                     console.log(err.response.data);
