@@ -104,7 +104,7 @@
 						>{{ error_gender }}</label
 					>
 				</div>
-				<div class="field col-12 md:col-6">
+<!-- 				<div class="field col-12 md:col-6">
 					<label>Role</label>
 					<label
 						style="color: red"
@@ -124,7 +124,7 @@
 						v-if="error_role"
 						>{{ error_role }}</label
 					>
-				</div>
+				</div> -->
 
 				<div class="field col-12 md:col-12">
 					<label for="age">Age</label
@@ -264,10 +264,13 @@ import { FilterMatchMode } from "primevue/api";
 import { computed } from "vue";
 import { useStore } from "vuex";
 export default {
-    name: "RegisterUsersComponent",
+    name: "AppProfile",
     setup() {
         const store = useStore();
         return {
+			blocks: computed(() => store.state.blocks.blocks),
+            filteredLots: computed(() => store.state.lots.filteredLots),
+            lots: computed(() => store.state.lots.lots),
             userLogged: computed(() => this.$store.state.userLogged.id,),
         };
 		
@@ -280,20 +283,27 @@ export default {
             registerUserDialog: false,
             deleteUserDialog: false,
             updateUserDialog: false,
-            first_name: this.$store.state.userLogged.first_name,
-            last_name: this.$store.state.userLogged.last_name,
-            gender: this.$store.state.userLogged.gender,
+            first_name: null,
+            last_name: null,
+            gender: null,
             block_lot_id: null,
-            email: this.$store.state.userLogged.email,
+            email: null,
             password: null,
             confirm_password: null,
             verified: 1,
             has_voted: 0,
-            age: this.$store.state.userLogged.age,
-            contact_num: this.$store.state.userLogged.contact_num,
-            selected_role: this.$store.state.userLogged.role.id,
-			//selected_block:  this.$store.state.userLogged.block_lot.block.id,
-            //selected_block_lot:  this.$store.state.userLogged.block_lot,
+            age: null,
+            contact_num: null,
+            selected_role: null,
+			role: [
+                { type: "officer", value: "officer" },
+                { type: "resident", value: "resident" },
+                { type: "security_officer", value: "security_officer" },
+                { type: "admin", value: "admin" },
+            ],
+
+			selected_block:  null,
+            selected_block_lot:  null,
 
             error_first_name: "",
             error_last_name: "",
@@ -350,7 +360,7 @@ export default {
             }
         },
         updateUser(data) {
-            console.log(data);
+            /* console.log(data);
             this.resetFields();
             this.resetErrors();
             this.id = data.id;
@@ -364,7 +374,13 @@ export default {
             this.email = data.email;
             this.age = data.age;
             this.contact_num = data.contact_num;
-            this.selected_role = data.role;
+            this.selected_role = data.role; */
+
+			this.id = data.id;
+			this.selected_block = data.block_lot.block.id;
+            this.getBlockLot();
+            this.selected_block_lot = data.block_lot.id;
+
         },
         async confirmUpdateUser() {
             this.process = true;
@@ -500,9 +516,33 @@ export default {
         getBlockLot() {
             this.$store.dispatch("lots/getBlockLots", this.selected_block);
         },
+		populateData() {
+			//this.id = ;
+			//console.log(this.$store.state.userLogged);
+			this.first_name = this.$store.state.userLogged.first_name;
+            this.last_name = this.$store.state.userLogged.last_name;
+            this.gender = this.$store.state.userLogged.gender;
+            this.block_lot_id = null;
+            this.email = this.$store.state.userLogged.email;
+            this.password = null;
+            this.confirm_password = null;
+            this.verified = 1;
+            this.has_voted = 0;
+            this.age = this.$store.state.userLogged.age;
+            this.contact_num = this.$store.state.userLogged.contact_num;
+            this.selected_role = this.$store.state.userLogged.role;
+			//this.selected_block =  this.$store.state.blocks.blocks.id;
+			//console.log(this.$store.state.userLogged.block_lot_id);
+			//this.getBlockLot();
+            this.selected_block_lot =  this.$store.state.userLogged.block_lot_id;
+
+			//this.updateUser(this.$store.state.userLogged);
+			console.log(this.$store.state.userLogged);
+		}
     },
     created() {
         this.initFilters();
+		this.populateData();
     },
 };
 </script>
