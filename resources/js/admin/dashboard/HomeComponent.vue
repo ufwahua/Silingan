@@ -7,11 +7,14 @@
 
         <div class="layout-main-container">
             <div class="layout-main">
-                <router-view name="contents"></router-view>
+                <router-view
+                    name="contents"
+                    :key="$route.fullPath"
+                ></router-view>
             </div>
             <AppFooter />
         </div>
-        <!-- <AppConfig :layoutMode="layoutMode" @layout-change="onLayoutChange" @change-theme="changeTheme" /> -->
+        <ChatComponent :layoutMode="layoutMode" />
         <transition name="layout-mask">
             <div
                 class="layout-mask p-component-overlay"
@@ -25,14 +28,14 @@
 import AppTopBar from "../AppTopbar.vue";
 import AppMenu from "../AppMenu.vue";
 import AppFooter from "../AppFooter.vue";
-// import AppConfig from "../AppConfig.vue";
+import ChatComponent from "../../components/ChatComponent.vue";
 
 export default {
     name: "HomeComponent",
     components: {
         AppTopBar,
         AppMenu,
-        // AppConfig: AppConfig,
+        ChatComponent: ChatComponent,
         AppFooter,
     },
     data() {
@@ -47,15 +50,11 @@ export default {
                     label: "Admin",
                     items: [
                         {
-                            label: "Dashboard",
+                            label: "Timeline",
                             icon: "pi pi-fw pi-home",
                             to: "/admin/dashboard",
                         },
-                        {
-                            label: "Timeline",
-                            icon: "pi pi-fw pi-send",
-                            to: "/admin/timeline",
-                        },
+
                         {
                             label: "Marketplace",
                             icon: "pi pi-shopping-cart",

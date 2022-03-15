@@ -47,10 +47,10 @@ export default createStore({
                 url: "/api/user_logged",
             })
                 .then((res) => {
-                    console.log(res.data[0]);
                     commit("getUserLogged", res.data[0]);
                 })
                 .catch((err) => {
+                    commit("getUserLogged", null);
                     console.log(err.response);
                 });
         },
