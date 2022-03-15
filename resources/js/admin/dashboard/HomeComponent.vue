@@ -52,6 +52,11 @@ export default {
                             to: "/admin/dashboard",
                         },
                         {
+                            label: "Announcement",
+                            icon: "pi pi-fw pi-send",
+                            to: "/admin/timeline",
+                        },
+                        {
                             label: "Timeline",
                             icon: "pi pi-fw pi-send",
                             to: "/admin/timeline",
