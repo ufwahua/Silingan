@@ -15,6 +15,8 @@ import EmergencyContactDetail from "../admin/dashboard/EmergencyContactDetail.vu
 import Position from "../admin/dashboard/PositionComponent.vue";
 import Candidate from "../admin/dashboard/CandidateComponent.vue";
 import ElectionComponent from "../admin/dashboard/ElectionComponent.vue";
+import ViewAnnouncement from "../components/AnnouncementComponent.vue";
+import Marketplace from "../components/PostMarketplaceComponent.vue";
 
 //user
 import UserHome from "../user/dashboard/UserHomeComponent.vue";
@@ -252,6 +254,28 @@ const router = createRouter({
                     components: {
                         default: NotFound,
                         contents: ElectionComponent,
+                    },
+                },
+                {
+                    path: "view-announcement",
+                    meta: {
+                        role: "admin",
+                    },
+                    beforeEnter: checkRole,
+                    components: {
+                        default: NotFound,
+                        contents: ViewAnnouncement,
+                    },
+                },
+                {
+                    path: "marketplace",
+                    meta: {
+                        role: "admin",
+                    },
+                    beforeEnter: checkRole,
+                    components: {
+                        default: NotFound,
+                        contents: Marketplace,
                     },
                 },
             ],

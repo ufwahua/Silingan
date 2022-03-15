@@ -59,6 +59,11 @@ export default {
                             icon: "pi pi-shopping-cart",
                             to: "/admin/marketplace",
                         },
+                        {
+                            label: "Announcement",
+                            icon: "pi pi-info",
+                            to: "/admin/view-announcement",
+                        },
                     ],
                 },
                 {
