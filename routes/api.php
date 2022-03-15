@@ -16,7 +16,9 @@ use App\Http\Controllers\ElectionController;
 use App\Http\Controllers\PositionController;
 use App\Http\Controllers\CandidateController;
 use App\Http\Controllers\AnnouncementController;
+use App\Http\Controllers\CardController;
 use App\Http\Controllers\EmergencyContactDetailController;
+use App\Http\Controllers\LogController;
 
 /*
 |--------------------------------------------------------------------------
@@ -57,6 +59,8 @@ Route::get('/user_logged',[UserController::class, 'userLogged']);
     'emergency_contact_detail' => EmergencyContactDetailController::class,
     'candidate'             => CandidateController::class,
     'election'             => ElectionController::class,
+    'card'             => CardController::class,
+    'log'             => LogController::class,
 ]);
 
   

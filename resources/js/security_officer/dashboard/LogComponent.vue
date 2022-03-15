@@ -7,7 +7,7 @@
                 <TabPanel>
                     <template #header>
                         <i class="pi pi-user mr-2"></i>
-                        <span>People</span>
+                        <span>Visitor</span>
                     </template>
                     <div class="card">
                         <div class="grid mb-4">
@@ -30,10 +30,10 @@
                                     <template #end>
                                         <div class="mr-2">
                                             <Button
-                                                label="Create"
-                                                icon="pi pi-plus"
+                                                label="Log in"
+                                                icon="pi pi-user-plus"
                                                 class="p-button-success p-mr-2"
-                                                @click="createAnnouncement"
+                                                @click="LogVisitor"
                                             />
                                         </div>
                                     </template>
@@ -43,243 +43,43 @@
                         <div class="grid">
                             <div class="col-12">
                                 <DataTable
-                                    :value="peoples"
+                                    :value="visitors"
                                     :filters="filters"
                                     breakpoint="1230px"
                                 >
                                     <template #empty>
-                                        No announcement found
+                                        No Visitors found
                                     </template>
                                     <template #loading>
-                                        Loading Users
+                                        Loading Visitors
                                     </template>
                                     <Column header="ID" field="id"> </Column>
-                                    <Column
-                                        header="Firstname"
-                                        field="user.first_name"
-                                    >
+                                    <Column header="Name" field="name">
+                                    </Column>
+                                    <Column header="Card" field="card.number">
                                     </Column>
                                     <Column
-                                        header="Lastname"
-                                        field="user.last_name"
+                                        header="Visitor Log"
+                                        field="created_at"
                                     >
                                     </Column>
-                                    <Column header="Role" field="user.role">
-                                    </Column>
-                                    <Column header="Title" field="title">
-                                    </Column>
-                                    <Column header="Created" field="created_at">
-                                    </Column>
-                                    <Column header="Content" field="content">
-                                    </Column>
-
                                     <Column header="Actions" field="actions">
                                         <template #body="{ data }">
                                             <Button
                                                 icon="pi pi-pencil"
                                                 class="p-button-rounded p-button-primary mr-2"
-                                                @click="
-                                                    updateAnnouncement(data)
-                                                "
+                                                v-tooltip="'Edit Log'"
+                                                @click="updateLog(data)"
                                             />
                                             <Button
-                                                icon="pi pi-trash"
+                                                icon="pi pi-user-minus"
                                                 class="p-button-rounded p-button-danger"
-                                                @click="
-                                                    deleteAnnouncement(data)
-                                                "
+                                                v-tooltip="'Logout'"
+                                                @click="logout(data)"
                                             />
                                         </template>
                                     </Column>
                                 </DataTable>
-
-                                <Dialog
-                                    v-model:visible="deleteAnnouncementDialog"
-                                    :style="{ width: '450px' }"
-                                    header="Confirm"
-                                    :modal="true"
-                                >
-                                    <div class="confirmation-content">
-                                        <div class="grid">
-                                            <div
-                                                class="col-12 flex align-items-center justify-content-center"
-                                            >
-                                                <i
-                                                    class="pi pi-exclamation-triangle mr-3"
-                                                    style="font-size: 2rem"
-                                                />
-                                                <span
-                                                    >Are you sure you want to
-                                                    delete announcement
-                                                    <b>{{ title }}</b
-                                                    >?</span
-                                                >
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <template #footer>
-                                        <Button
-                                            label="Cancel"
-                                            icon="pi pi-times"
-                                            class="p-button-text"
-                                            @click="
-                                                deleteAnnouncementDialog = false
-                                            "
-                                        />
-                                        <Button
-                                            label="Delete"
-                                            icon="pi pi-check"
-                                            class="p-button-text p-button-danger"
-                                            @click="confirmDeleteAnnouncement"
-                                        />
-                                    </template>
-                                </Dialog>
-                                <Dialog
-                                    v-model:visible="updateAnnouncementDialog"
-                                    :style="{ width: '500px' }"
-                                    header="Update Announcement"
-                                    :modal="true"
-                                >
-                                    <div class="grid">
-                                        <div class="col-12">
-                                            <div class="field">
-                                                <label>Title</label>
-                                                <InputText
-                                                    v-model="title"
-                                                    :class="{
-                                                        'p-invalid':
-                                                            error_title,
-                                                    }"
-                                                    class="w-full"
-                                                />
-                                                <label
-                                                    style="color: red"
-                                                    v-if="error_title"
-                                                    >{{ error_title }}</label
-                                                >
-                                            </div>
-                                        </div>
-                                        <div class="col-12">
-                                            <div class="field">
-                                                <label>Content</label>
-                                                <Textarea
-                                                    v-model="content"
-                                                    :autoResize="true"
-                                                    :class="{
-                                                        'p-invalid':
-                                                            error_content,
-                                                    }"
-                                                    class="w-full"
-                                                />
-                                                <label
-                                                    style="color: red"
-                                                    v-if="error_content"
-                                                    >{{ error_content }}</label
-                                                >
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <template #footer>
-                                        <Button
-                                            label="Cancel"
-                                            icon="pi pi-times"
-                                            class="p-button-text"
-                                            @click="
-                                                updateAnnouncementDialog = false
-                                            "
-                                        />
-                                        <Button
-                                            label="Update"
-                                            icon="pi pi-check"
-                                            class="p-button-text p-button-warning"
-                                            @click="confirmUpdateUser"
-                                        />
-                                    </template>
-                                </Dialog>
-                                <Dialog
-                                    v-model:visible="createAnnouncementDialog"
-                                    :style="{ width: '500px' }"
-                                    header="Create Announcement"
-                                    :modal="true"
-                                >
-                                    <div class="grid">
-                                        <div class="col-12">
-                                            <div class="field">
-                                                <label>Title</label>
-                                                <InputText
-                                                    v-model="title"
-                                                    :class="{
-                                                        'p-invalid':
-                                                            error_title,
-                                                    }"
-                                                    class="w-full"
-                                                />
-                                                <label
-                                                    style="color: red"
-                                                    v-if="error_title"
-                                                    >{{ error_title }}</label
-                                                >
-                                            </div>
-                                        </div>
-                                        <div class="col-12">
-                                            <div class="field">
-                                                <label>Content</label>
-                                                <Textarea
-                                                    v-model="content"
-                                                    :autoResize="true"
-                                                    :class="{
-                                                        'p-invalid':
-                                                            error_content,
-                                                    }"
-                                                    class="w-full"
-                                                />
-                                                <label
-                                                    style="color: red"
-                                                    v-if="error_content"
-                                                    >{{ error_content }}</label
-                                                >
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <template #footer>
-                                        <Button
-                                            label="Cancel"
-                                            icon="pi pi-times"
-                                            class="p-button-text"
-                                            @click="
-                                                createAnnouncementDialog = false
-                                            "
-                                        />
-                                        <Button
-                                            label="Create"
-                                            icon="pi pi-check"
-                                            class="p-button-text p-button-success"
-                                            @click="onCreateAnnouncementClick"
-                                        />
-                                    </template>
-                                </Dialog>
-                                <Dialog
-                                    v-model:visible="loading"
-                                    :style="{ width: '450px' }"
-                                    :modal="true"
-                                    :closable="false"
-                                    :closeOnEscape="true"
-                                >
-                                    <div class="grid">
-                                        <div class="col-12 text-center">
-                                            <ProgressSpinner
-                                                class="block mb-4"
-                                                style="
-                                                    width: 100px;
-                                                    height: 100px;
-                                                "
-                                                strokeWidth="4"
-                                                fill="#EEEEEE"
-                                                animationDuration="1s"
-                                            />
-                                        </div>
-                                    </div>
-                                </Dialog>
                             </div>
                         </div>
                     </div>
@@ -310,10 +110,10 @@
                                     <template #end>
                                         <div class="mr-2">
                                             <Button
-                                                label="Create"
-                                                icon="pi pi-plus"
+                                                label="Log in"
+                                                icon="pi pi-user-plus"
                                                 class="p-button-success p-mr-2"
-                                                @click="createAnnouncement"
+                                                @click="LogVehicle"
                                             />
                                         </div>
                                     </template>
@@ -328,244 +128,274 @@
                                     breakpoint="1230px"
                                 >
                                     <template #empty>
-                                        No announcement found
+                                        No Vehicles found
                                     </template>
                                     <template #loading>
-                                        Loading Users
+                                        Loading Visitors
                                     </template>
                                     <Column header="ID" field="id"> </Column>
                                     <Column
-                                        header="Firstname"
-                                        field="user.first_name"
+                                        header="Plate Number"
+                                        field="plate_number"
                                     >
+                                    </Column>
+                                    <Column header="Card" field="card.number">
                                     </Column>
                                     <Column
-                                        header="Lastname"
-                                        field="user.last_name"
+                                        header="Vehicle Log"
+                                        field="created_at"
                                     >
                                     </Column>
-                                    <Column header="Role" field="user.role">
-                                    </Column>
-                                    <Column header="Title" field="title">
-                                    </Column>
-                                    <Column header="Created" field="created_at">
-                                    </Column>
-                                    <Column header="Content" field="content">
-                                    </Column>
-
                                     <Column header="Actions" field="actions">
                                         <template #body="{ data }">
                                             <Button
                                                 icon="pi pi-pencil"
                                                 class="p-button-rounded p-button-primary mr-2"
-                                                @click="
-                                                    updateAnnouncement(data)
-                                                "
+                                                v-tooltip="'Edit Log'"
+                                                @click="updateLog(data)"
                                             />
                                             <Button
-                                                icon="pi pi-trash"
+                                                icon="pi pi-user-minus"
                                                 class="p-button-rounded p-button-danger"
-                                                @click="
-                                                    deleteAnnouncement(data)
-                                                "
+                                                v-tooltip="'Logout'"
+                                                @click="logout(data)"
                                             />
                                         </template>
                                     </Column>
                                 </DataTable>
-
-                                <Dialog
-                                    v-model:visible="deleteAnnouncementDialog"
-                                    :style="{ width: '450px' }"
-                                    header="Confirm"
-                                    :modal="true"
-                                >
-                                    <div class="confirmation-content">
-                                        <div class="grid">
-                                            <div
-                                                class="col-12 flex align-items-center justify-content-center"
-                                            >
-                                                <i
-                                                    class="pi pi-exclamation-triangle mr-3"
-                                                    style="font-size: 2rem"
-                                                />
-                                                <span
-                                                    >Are you sure you want to
-                                                    delete announcement
-                                                    <b>{{ title }}</b
-                                                    >?</span
-                                                >
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <template #footer>
-                                        <Button
-                                            label="Cancel"
-                                            icon="pi pi-times"
-                                            class="p-button-text"
-                                            @click="
-                                                deleteAnnouncementDialog = false
-                                            "
-                                        />
-                                        <Button
-                                            label="Delete"
-                                            icon="pi pi-check"
-                                            class="p-button-text p-button-danger"
-                                            @click="confirmDeleteAnnouncement"
-                                        />
-                                    </template>
-                                </Dialog>
-                                <Dialog
-                                    v-model:visible="updateAnnouncementDialog"
-                                    :style="{ width: '500px' }"
-                                    header="Update Announcement"
-                                    :modal="true"
-                                >
-                                    <div class="grid">
-                                        <div class="col-12">
-                                            <div class="field">
-                                                <label>Title</label>
-                                                <InputText
-                                                    v-model="title"
-                                                    :class="{
-                                                        'p-invalid':
-                                                            error_title,
-                                                    }"
-                                                    class="w-full"
-                                                />
-                                                <label
-                                                    style="color: red"
-                                                    v-if="error_title"
-                                                    >{{ error_title }}</label
-                                                >
-                                            </div>
-                                        </div>
-                                        <div class="col-12">
-                                            <div class="field">
-                                                <label>Content</label>
-                                                <Textarea
-                                                    v-model="content"
-                                                    :autoResize="true"
-                                                    :class="{
-                                                        'p-invalid':
-                                                            error_content,
-                                                    }"
-                                                    class="w-full"
-                                                />
-                                                <label
-                                                    style="color: red"
-                                                    v-if="error_content"
-                                                    >{{ error_content }}</label
-                                                >
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <template #footer>
-                                        <Button
-                                            label="Cancel"
-                                            icon="pi pi-times"
-                                            class="p-button-text"
-                                            @click="
-                                                updateAnnouncementDialog = false
-                                            "
-                                        />
-                                        <Button
-                                            label="Update"
-                                            icon="pi pi-check"
-                                            class="p-button-text p-button-warning"
-                                            @click="confirmUpdateUser"
-                                        />
-                                    </template>
-                                </Dialog>
-                                <Dialog
-                                    v-model:visible="createAnnouncementDialog"
-                                    :style="{ width: '500px' }"
-                                    header="Create Announcement"
-                                    :modal="true"
-                                >
-                                    <div class="grid">
-                                        <div class="col-12">
-                                            <div class="field">
-                                                <label>Title</label>
-                                                <InputText
-                                                    v-model="title"
-                                                    :class="{
-                                                        'p-invalid':
-                                                            error_title,
-                                                    }"
-                                                    class="w-full"
-                                                />
-                                                <label
-                                                    style="color: red"
-                                                    v-if="error_title"
-                                                    >{{ error_title }}</label
-                                                >
-                                            </div>
-                                        </div>
-                                        <div class="col-12">
-                                            <div class="field">
-                                                <label>Content</label>
-                                                <Textarea
-                                                    v-model="content"
-                                                    :autoResize="true"
-                                                    :class="{
-                                                        'p-invalid':
-                                                            error_content,
-                                                    }"
-                                                    class="w-full"
-                                                />
-                                                <label
-                                                    style="color: red"
-                                                    v-if="error_content"
-                                                    >{{ error_content }}</label
-                                                >
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <template #footer>
-                                        <Button
-                                            label="Cancel"
-                                            icon="pi pi-times"
-                                            class="p-button-text"
-                                            @click="
-                                                createAnnouncementDialog = false
-                                            "
-                                        />
-                                        <Button
-                                            label="Create"
-                                            icon="pi pi-check"
-                                            class="p-button-text p-button-success"
-                                            @click="onCreateAnnouncementClick"
-                                        />
-                                    </template>
-                                </Dialog>
-                                <Dialog
-                                    v-model:visible="loading"
-                                    :style="{ width: '450px' }"
-                                    :modal="true"
-                                    :closable="false"
-                                    :closeOnEscape="true"
-                                >
-                                    <div class="grid">
-                                        <div class="col-12 text-center">
-                                            <ProgressSpinner
-                                                class="block mb-4"
-                                                style="
-                                                    width: 100px;
-                                                    height: 100px;
-                                                "
-                                                strokeWidth="4"
-                                                fill="#EEEEEE"
-                                                animationDuration="1s"
-                                            />
-                                        </div>
-                                    </div>
-                                </Dialog>
                             </div>
                         </div>
                     </div>
                 </TabPanel>
             </TabView>
         </div>
+        <Dialog
+            v-model:visible="logOutDialog"
+            :style="{ width: '450px' }"
+            header="Logout"
+            :modal="true"
+        >
+            <div class="confirmation-content">
+                <div class="grid">
+                    <div
+                        class="col-12 flex align-items-center justify-content-center"
+                    >
+                        <i
+                            class="pi pi-exclamation-triangle mr-3"
+                            style="font-size: 2rem"
+                        />
+                        <span
+                            >Logout
+                            <b>{{
+                                name === null
+                                    ? "Plate number: " + plate_number
+                                    : name
+                            }}</b
+                            >?</span
+                        >
+                    </div>
+                </div>
+            </div>
+            <template #footer>
+                <Button
+                    label="Cancel"
+                    class="p-button-text"
+                    @click="logOutDialog = false"
+                />
+                <Button
+                    label="Logout"
+                    class="p-button p-button-danger"
+                    @click="logOut"
+                />
+            </template>
+        </Dialog>
+        <Dialog
+            v-model:visible="logUpdate"
+            :style="{ width: '500px' }"
+            header="Update Log"
+            :modal="true"
+        >
+            <div class="grid">
+                <div class="col-12">
+                    <div v-if="log_type === 'visitor'" class="field">
+                        <label>Name</label>
+                        <InputText
+                            v-model="name"
+                            :class="{
+                                'p-invalid': error_name,
+                            }"
+                            class="w-full"
+                        />
+                        <label style="color: red" v-if="error_name">{{
+                            error_name
+                        }}</label>
+                    </div>
+                    <div v-else class="field">
+                        <label>Plate number</label>
+                        <InputText
+                            v-model="plate_number"
+                            :class="{
+                                'p-invalid': error_name,
+                            }"
+                            class="w-full"
+                        />
+                        <label style="color: red" v-if="error_name">{{
+                            error_name
+                        }}</label>
+                    </div>
+                </div>
+            </div>
+            <template #footer>
+                <Button
+                    label="Cancel"
+                    icon="pi pi-times"
+                    class="p-button-text"
+                    @click="logUpdate = false"
+                />
+                <Button
+                    label="Update"
+                    icon="pi pi-check"
+                    class="p-button-text p-button-warning"
+                    @click="confirmUpdateVisitor"
+                    :disabled="name || plate_number ? false : true"
+                />
+            </template>
+        </Dialog>
+        <Dialog
+            v-model:visible="logVisitorDialog"
+            :style="{ width: '500px' }"
+            header="Log In"
+            :modal="true"
+        >
+            <div class="grid">
+                <div class="col-12">
+                    <div class="field">
+                        <label>Name</label>
+                        <InputText
+                            v-model="name"
+                            :class="{
+                                'p-invalid': error_name,
+                            }"
+                            class="w-full"
+                        />
+                        <label style="color: red" v-if="error_name">{{
+                            error_name
+                        }}</label>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="field">
+                        <label>Card Number</label>
+                        <Dropdown
+                            v-model="selected_card"
+                            :options="cards"
+                            optionLabel="number"
+                            :class="{
+                                'p-invalid': error_card,
+                            }"
+                            optionValue="id"
+                            :filter="true"
+                            :showClear="true"
+                            class="w-full"
+                        />
+
+                        <label style="color: red" v-if="error_card">{{
+                            error_card
+                        }}</label>
+                    </div>
+                </div>
+            </div>
+            <template #footer>
+                <Button
+                    label="Cancel"
+                    class="p-button-text"
+                    @click="logVisitorDialog = false"
+                />
+                <Button
+                    label="Log in"
+                    class="p-button p-button-success"
+                    @click="logIn('visitor')"
+                    :disabled="!name"
+                />
+            </template>
+        </Dialog>
+        <Dialog
+            v-model:visible="logVehicleDialog"
+            :style="{ width: '500px' }"
+            header="Log In"
+            :modal="true"
+        >
+            <div class="grid">
+                <div class="col-12">
+                    <div class="field">
+                        <label>Plate Number</label>
+                        <InputText
+                            v-model="plate_number"
+                            :class="{
+                                'p-invalid': error_plate_number,
+                            }"
+                            class="w-full"
+                        />
+                        <label style="color: red" v-if="error_plate_number">{{
+                            error_plate_number
+                        }}</label>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="field">
+                        <label>Card Number</label>
+                        <Dropdown
+                            v-model="selected_card"
+                            :options="cards"
+                            optionLabel="number"
+                            :class="{
+                                'p-invalid': error_card,
+                            }"
+                            optionValue="id"
+                            :filter="true"
+                            :showClear="true"
+                            class="w-full"
+                        />
+
+                        <label style="color: red" v-if="error_card">{{
+                            error_card
+                        }}</label>
+                    </div>
+                </div>
+            </div>
+            <template #footer>
+                <Button
+                    label="Cancel"
+                    class="p-button-text"
+                    @click="logVehicleDialog = false"
+                />
+                <Button
+                    label="Log in"
+                    class="p-button p-button-success"
+                    @click="logIn('vehicle')"
+                    :disabled="!plate_number"
+                />
+            </template>
+        </Dialog>
+        <Dialog
+            v-model:visible="loading"
+            :style="{ width: '450px' }"
+            :modal="true"
+            :closable="false"
+            :closeOnEscape="true"
+        >
+            <div class="grid">
+                <div class="col-12 text-center">
+                    <ProgressSpinner
+                        class="block mb-4"
+                        style="width: 100px; height: 100px"
+                        strokeWidth="4"
+                        fill="#EEEEEE"
+                        animationDuration="1s"
+                    />
+                </div>
+            </div>
+        </Dialog>
     </div>
 </template>
 
@@ -581,28 +411,46 @@ export default {
         const store = useStore();
 
         return {
-            announcements: computed(
-                () => store.state.announcements.announcements
-            ),
+            cards: computed(() => store.state.cards.cards),
+            visitors: computed(() => {
+                // return store.state.logs.logs;
+                let temp = [];
+                store.state.logs.logs.forEach((elem) => {
+                    if (elem.plate_number === null && elem.name !== null) {
+                        temp.push(elem);
+                    }
+                });
+                return temp;
+            }),
+            vehicles: computed(() => {
+                let temp = [];
+                store.state.logs.logs.forEach((elem) => {
+                    if (elem.name === null && elem.plate_number !== null) {
+                        temp.push(elem);
+                    }
+                });
+                return temp;
+            }),
         };
     },
     data() {
         return {
             filters: {},
             // announcements: this.$store.state.announcements.announcements,
-
+            selected_card: null,
             name: null,
+            plate_number: null,
+            log_type: null,
             loading: false,
-            createAnnouncementDialog: false,
-            deleteAnnouncementDialog: false,
-            updateAnnouncementDialog: false,
+            logVisitorDialog: false,
+            logVehicleDialog: false,
+            logOutDialog: false,
+            logUpdate: false,
             id: null,
-            user_id: null,
-            title: null,
-            content: null,
 
-            error_title: null,
-            error_content: null,
+            error_name: null,
+            error_card: null,
+            error_plate_number: null,
         };
     },
     methods: {
@@ -620,30 +468,36 @@ export default {
             };
         },
 
-        deleteAnnouncement(data) {
+        logout(data) {
             this.id = data.id;
-            this.title = data.title;
-            this.deleteAnnouncementDialog = true;
+            this.name = data.name;
+            this.selected_card = data.card_id;
+            this.plate_number = data.plate_number;
+            this.logOutDialog = true;
         },
-        showDeleteAnnouncementToast() {
+        showLogoutToast() {
             this.$toast.add({
                 severity: "success",
                 summary: "Successful Request",
-                detail: "Deleted Announcement",
+                detail: "Successful Logout",
                 life: 3000,
             });
         },
-        async confirmDeleteAnnouncement() {
+        async logOut() {
             this.loading = true;
             await axios({
                 method: "delete",
-                url: "/api/announcement/" + this.id,
+                url: "/api/log/" + this.id,
+                data: {
+                    card_id: this.selected_card,
+                },
             })
                 .then(() => {
-                    this.deleteAnnouncementDialog = false;
+                    this.logOutDialog = false;
                     this.resetFields();
-                    this.$store.dispatch("announcements/getAll");
-                    this.showDeleteAnnouncementToast();
+                    this.$store.dispatch("logs/getAll");
+                    this.$store.dispatch("cards/getAll");
+                    this.showLogoutToast();
                     this.loading = false;
                 })
                 .catch((err) => {
@@ -653,102 +507,121 @@ export default {
                     this.loading = false;
                 });
         },
-        updateAnnouncement(data) {
-            this.resetFields();
+        updateLog(data) {
             this.resetErrors();
             this.id = data.id;
+            this.log_type = data.log_type;
             this.user_id = this.$store.state.userLogged.id;
-            this.title = data.title;
-            this.content = data.content;
-            this.updateAnnouncementDialog = true;
+            this.selected_card = data.card_id;
+            this.plate_number = data.plate_number;
+            this.name = data.name;
+            this.logUpdate = true;
         },
-        showUpdateAnnouncementToast() {
+        showUpdateVisitorToast() {
             this.$toast.add({
                 severity: "success",
                 summary: "Successful Request",
-                detail: "Updated Announcement",
+                detail: "Updated Log",
                 life: 3000,
             });
         },
-        async confirmUpdateUser() {
+        async confirmUpdateVisitor() {
             this.loading = true;
             await axios({
                 method: "put",
-                url: "/api/announcement/" + this.id,
+                url: "/api/log/" + this.id,
                 data: {
-                    user_id: this.user_id,
-                    title: this.title,
-                    content: this.content,
+                    user_id: this.$store.state.userLogged.id,
+                    card_id: this.selected_card,
+                    log_type: "visitor",
+                    name: this.name,
+                    plate_number: this.plate_number,
                 },
             })
                 .then(() => {
-                    this.updateAnnouncementDialog = false;
+                    this.logUpdate = false;
                     this.resetFields();
-                    this.$store.dispatch("announcements/getAll");
-                    this.showUpdateAnnouncementToast();
+                    this.$store.dispatch("logs/getAll");
+                    this.showUpdateVisitorToast();
                     this.loading = false;
                 })
                 .catch((err) => {
                     this.resetErrors();
-                    this.validate(err.response.data.errors);
+                    this.validate();
                     this.loading = false;
                 });
         },
-        showCreateAnnouncementToast() {
+        showLogToast() {
             this.$toast.add({
                 severity: "success",
                 summary: "Successful Request",
-                detail: "Created Announcement",
+                detail: "Successfully Log",
                 life: 3000,
             });
         },
-        //REGISTER USER
-        createAnnouncement() {
-            this.createAnnouncementDialog = true;
+        //Log Visitor
+        LogVisitor() {
+            this.logVisitorDialog = true;
             this.resetFields();
             this.resetErrors();
         },
-        async onCreateAnnouncementClick() {
+        //Log Vehicle
+        LogVehicle() {
+            this.logVehicleDialog = true;
+            this.resetFields();
+            this.resetErrors();
+        },
+        async logIn(type) {
             this.loading = true;
             await axios({
                 method: "post",
-                url: "/api/announcement",
+                url: "/api/log",
                 data: {
                     user_id: this.$store.state.userLogged.id,
-                    title: this.title,
-                    content: this.content,
+                    card_id: this.selected_card,
+                    log_type: type,
+                    name: this.name,
+                    plate_number: this.plate_number,
                 },
             })
                 .then(() => {
-                    this.createAnnouncementDialog = false;
-                    this.$store.dispatch("announcements/getAll");
-                    this.showCreateAnnouncementToast();
+                    this.logVisitorDialog = false;
+                    this.logVehicleDialog = false;
+                    this.$store.dispatch("logs/getAll");
+                    this.$store.dispatch("cards/getAll");
+                    this.showLogToast();
                     this.loading = false;
                 })
                 .catch((err) => {
+                    console.log(err.response);
                     this.resetErrors();
-                    this.validate(err.response.data.errors);
+                    this.validate();
                     this.loading = false;
                 });
         },
 
         resetFields() {
             this.id = null;
-            this.user_id = null;
-            this.title = null;
-            this.content = null;
+            this.name = null;
+            this.plate_number = null;
+            this.selected_card = null;
         },
         resetErrors() {
-            this.error_title = "";
-            this.error_content = "";
+            this.error_name = null;
+            this.error_card = null;
         },
-        validate(error) {
-            if (error.content) this.error_content = error.content[0];
-            if (error.title) this.error_title = error.title[0];
+        validate() {
+            if (this.selected_card === null) {
+                this.error_card = "This field is required";
+            }
         },
     },
     created() {
         this.initFilters();
+    },
+    mounted() {
+        this.$store.dispatch("logs/getAll");
+        this.$store.dispatch("cards/getAll");
     },
 };
 </script>

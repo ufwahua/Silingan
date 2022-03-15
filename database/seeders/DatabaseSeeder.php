@@ -29,9 +29,9 @@ class DatabaseSeeder extends Seeder
             ChatSeeder::class,
             PositionSeeder::class,
             EmergencyContactDetailSeeder::class,
-            // ElectionSeeder::class,
-            CandidateSeeder::class
-
+            CandidateSeeder::class,
+            CardSeeder::class,
+            
         ]);
     }
 }

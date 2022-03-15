@@ -21,7 +21,7 @@
                             />
                             <Button
                                 label="Start"
-                                class="ml-3 p-button-primary"
+                                class="ml-2 p-button-primary"
                                 @click="showElectionDialog"
                             />
                         </div>
@@ -83,11 +83,7 @@
                                         {{ candidate.user.last_name }}
                                     </h5>
                                 </template>
-                                <template #subtitle>
-                                    Block:
-                                    {{ candidate.user.block_lot.block_id }}
-                                    Lot: {{ candidate.user.block_lot.number }}
-                                </template>
+
                                 <template #footer>
                                     <div
                                         v-if="!checkElection"

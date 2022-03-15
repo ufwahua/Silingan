@@ -16,6 +16,10 @@ import timeNow from "./admin/timeNow";
 import news from "./user/news";
 import posts from "./user/posts";
 
+//security officer
+import cards from "./security_officer/cards";
+import logs from "./security_officer/logs";
+
 export default createStore({
     state: {
         users: null,
@@ -89,6 +93,8 @@ export default createStore({
         candidates,
         registeredUsersFname,
         timeNow,
+        cards,
+        logs,
     },
 
     plugins: [createPersistedState()],
