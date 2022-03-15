@@ -2,7 +2,6 @@ import Login from "../login/LoginComponent.vue";
 import Register from "../login/RegisterComponent.vue";
 import ForgotPassword from "../login/ForgotPasswordComponent.vue";
 //admin
-import IndexComponent from "../home/IndexComponent.vue";
 import HomeComponent from "../admin/dashboard/HomeComponent.vue";
 import DashboardComponent from "../admin/dashboard/DashboardComponent.vue";
 import Block_Lot from "../admin/dashboard/Block_LotComponent.vue";
@@ -20,8 +19,15 @@ import ElectionComponent from "../admin/dashboard/ElectionComponent.vue";
 //user
 import UserHome from "../user/dashboard/UserHomeComponent.vue";
 import UserDashboard from "../user/dashboard/UserDashboardComponent.vue";
-import AnnouncementComponent from "../components/AnnouncementComponent.vue";
+//import AnnouncementComponent from "../components/AnnouncementComponent.vue";
 
+//security officer
+import SecurityHome from "../security_officer/dashboard/SecurityHomeComponent.vue";
+import SecurityDashboard from "../security_officer/dashboard/SecurityDashboardComponent.vue";
+import LogComponent from "../security_officer/dashboard/LogComponent.vue";
+
+import IndexComponent from "../home/IndexComponent.vue";
+import AnnouncementComponent from "../components/AnnouncementComponent.vue";
 import NotFound from "../components/NotFoundComponent.vue";
 import { createRouter, createWebHistory } from "vue-router";
 import store from "../store/store";
@@ -36,12 +42,25 @@ function checkRole(to, from, next) {
     if (!isAuthenticated) {
         next({ name: "login" });
     } else {
-        if (userLogged.role === "admin" && to.meta.role === "resident") {
+        if (
+            userLogged.role === "admin" &&
+            (to.meta.role === "resident" || to.meta.role === "security_officer")
+        ) {
             next("/admin/dashboard");
         }
-        if (userLogged.role === "resident" && to.meta.role === "admin") {
+        if (
+            userLogged.role === "resident" &&
+            (to.meta.role === "admin" || to.meta.role === "security_officer")
+        ) {
             next("/resident/dashboard");
         }
+        if (
+            userLogged.role === "security_officer" &&
+            (to.meta.role === "admin" || to.meta.role === "resident")
+        ) {
+            next("/security/dashboard");
+        }
+
         next();
     }
 }
@@ -56,6 +75,8 @@ function checkLogged(to, from, next) {
         next("/admin/dashboard");
     } else if (isAuthenticated && userLogged.role === "resident") {
         next("/resident/dashboard");
+    } else if (isAuthenticated && userLogged.role === "security_officer") {
+        next("/security/dashboard");
     } else {
         next();
     }
@@ -278,6 +299,64 @@ const router = createRouter({
                     components: {
                         default: NotFound,
                         contents: AnnouncementComponent,
+                    },
+                },
+            ],
+        },
+        {
+            path: "/security",
+            component: SecurityHome,
+            meta: {
+                role: "security_officer",
+            },
+            beforeEnter: checkRole,
+            name: "securityhome",
+            children: [
+                {
+                    path: "/security/dashboard",
+                    meta: {
+                        role: "security_officer",
+                    },
+                    beforeEnter: checkRole,
+                    meta: {
+                        reload: true,
+                    },
+                    components: {
+                        default: NotFound,
+                        contents: SecurityDashboard,
+                    },
+                },
+                {
+                    path: "profile",
+                    meta: {
+                        role: "security_officer",
+                    },
+                    beforeEnter: checkRole,
+                    components: {
+                        default: NotFound,
+                        contents: AppProfile,
+                    },
+                },
+                {
+                    path: "announcement",
+                    meta: {
+                        role: "security_officer",
+                    },
+                    beforeEnter: checkRole,
+                    components: {
+                        default: NotFound,
+                        contents: AnnouncementComponent,
+                    },
+                },
+                {
+                    path: "log",
+                    meta: {
+                        role: "security_officer",
+                    },
+                    beforeEnter: checkRole,
+                    components: {
+                        default: NotFound,
+                        contents: LogComponent,
                     },
                 },
             ],

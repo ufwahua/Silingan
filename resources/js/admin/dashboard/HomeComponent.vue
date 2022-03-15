@@ -55,16 +55,6 @@ export default {
                             to: "/admin/dashboard",
                         },
                         {
-                            label: "Announcement",
-                            icon: "pi pi-fw pi-info",
-                            to: "/admin/timeline",
-                        },
-                        {
-                            label: "Timeline",
-                            icon: "pi pi-fw pi-send",
-                            to: "/admin/timeline",
-                        },
-                        {
                             label: "Marketplace",
                             icon: "pi pi-shopping-cart",
                             to: "/admin/marketplace",

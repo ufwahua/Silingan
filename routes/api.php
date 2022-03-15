@@ -57,8 +57,6 @@ Route::get('/user_logged',[UserController::class, 'userLogged']);
     'emergency_contact_detail' => EmergencyContactDetailController::class,
     'candidate'             => CandidateController::class,
     'election'             => ElectionController::class,
-
-
 ]);
 
   

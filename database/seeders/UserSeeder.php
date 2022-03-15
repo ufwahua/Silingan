@@ -37,6 +37,20 @@ class UserSeeder extends Seeder
             'email' => 'jh.diamos@gmail.com',
             'password'=> Hash::make("12345678"),
         ]);
+
+        User::create([
+            'first_name' => "Joshua Henry",
+            'last_name' => "Diamos",
+            'role' => 'security_officer',
+            'block_lot_id' => 1,
+            'gender' =>'male',
+            'age' => rand(1,100),     
+            'verified' => 1,
+            'has_voted' => 0,
+            'contact_num' => rand(11111111111,9999999999),
+            'email' => 'jh.security@gmail.com',
+            'password'=> Hash::make("12345678"),
+        ]);
         
         User::create([
             'first_name' => "Varbie",
