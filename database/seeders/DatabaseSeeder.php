@@ -3,7 +3,9 @@
 namespace Database\Seeders;
 
 use App\Models\ChatRoom;
+use App\Models\Election;
 use Illuminate\Database\Seeder;
+use Database\Seeders\CandidateSeeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -26,7 +28,10 @@ class DatabaseSeeder extends Seeder
             ChatRoomSeeder::class,
             ChatSeeder::class,
             PositionSeeder::class,
-            EmergencyContactDetailSeeder::class
+            EmergencyContactDetailSeeder::class,
+            // ElectionSeeder::class,
+            CandidateSeeder::class
+
         ]);
     }
 }

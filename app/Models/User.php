@@ -35,7 +35,7 @@ class User extends Authenticatable
     public function post(){
         return $this->hasMany(Post::class,'id','user_id');
     }
-    public function blockLot(){
+    public function lot(){
         return $this->hasOne(Lot::class,'id','block_lot_id');
     }
     /**

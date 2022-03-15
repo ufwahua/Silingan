@@ -62,28 +62,29 @@
 </template>
 
 <script>
-import store from "../store/store";
+import { computed } from "vue";
+import { useStore } from "vuex";
 export default {
+    setup() {
+        const store = useStore();
+        return {
+            userLogged: computed(() => store.state.userLogged),
+        };
+    },
     data() {
         return {
             profile_menu: [
                 {
                     label:
-                        store.state.userLogged.first_name +
+                        this.userLogged.first_name +
                         " " +
-                        store.state.userLogged.last_name,
+                        this.userLogged.last_name,
                     items: [
                         {
                             label: "Profile",
                             icon: "pi pi-pencil",
-                            command: () => {
-                                this.$toast.add({
-                                    severity: "success",
-                                    summary: "Updated",
-                                    detail: "Data Updated",
-                                    life: 3000,
-                                });
-                            },
+                            to: "/resident/profile",
+                            command: () => {},
                         },
                         {
                             label: "Logout",

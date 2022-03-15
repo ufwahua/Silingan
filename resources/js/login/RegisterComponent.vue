@@ -9,10 +9,14 @@
             >
                 <div class="col-12 mb-2 lg:col-12 lg:mb-3 text-center">
                     <router-link to="/" :key="$route.fullPath">
+                        <!-- <img
+                            class="Silingan-logo"
+                            alt="Silingan-Logo"
+                            src="http://127.0.0.1:8000/storage/images/silingan-icon.png" -->
                         <img
                             class="Silingan-logo"
                             alt="Silingan-Logo"
-                            src="http://127.0.0.1:8000/storage/images/silingan-icon.png"
+                            src="https://i.ibb.co/V3B8NBM/silingan-icon.png"
                     /></router-link>
                 </div>
 
@@ -28,33 +32,27 @@
                 <form @submit.prevent="onRegisterClick" autocomplete="on">
                     <div class="p-fluid formgrid grid">
                         <div class="field col-12 md:col-6">
-                            <label for="first_name">Firstname</label>
+                            <label>Firstname</label>
                             <InputText
                                 :class="{ 'p-invalid': error_first_name }"
                                 type="text"
                                 v-model="first_name"
                             />
-                            <label
-                                style="color: red"
-                                for="first_name"
-                                v-if="error_first_name"
-                                >{{ error_first_name }}</label
-                            >
+                            <label style="color: red" v-if="error_first_name">{{
+                                error_first_name
+                            }}</label>
                         </div>
 
                         <div class="field col-12 md:col-6">
-                            <label for="last_name">Lastname</label>
+                            <label>Lastname</label>
                             <InputText
                                 :class="{ 'p-invalid': error_last_name }"
                                 type="text"
                                 v-model="last_name"
                             />
-                            <label
-                                style="color: red"
-                                for="last_name"
-                                v-if="error_last_name"
-                                >{{ error_last_name }}</label
-                            >
+                            <label style="color: red" v-if="error_last_name">{{
+                                error_last_name
+                            }}</label>
                         </div>
 
                         <div class="field col-12 md:col-6">
@@ -65,13 +63,8 @@
                                     value="male"
                                     v-model="gender"
                                 />
-                                <label class="mb-0 ml-1" for="gender"
-                                    >Male</label
-                                >
-                                <label
-                                    style="color: red"
-                                    for="gender"
-                                    v-if="!gender"
+                                <label class="mb-0 ml-1">Male</label>
+                                <label style="color: red" v-if="!gender"
                                     >*</label
                                 >
                             </div>
@@ -84,13 +77,8 @@
                                     value="female"
                                     v-model="gender"
                                 />
-                                <label class="mb-0 ml-1" for="gender"
-                                    >Female</label
-                                >
-                                <label
-                                    style="color: red"
-                                    for="gender"
-                                    v-if="!gender"
+                                <label class="mb-0 ml-1">Female</label>
+                                <label style="color: red" v-if="!gender"
                                     >*</label
                                 >
                             </div>
@@ -104,10 +92,8 @@
                         </div>
 
                         <div class="field col-12 md:col-6">
-                            <label for="age">Age</label
-                            ><label style="color: red" for="age" v-if="!age"
-                                >*</label
-                            >
+                            <label>Age</label
+                            ><label style="color: red" v-if="!age">*</label>
                             <InputText
                                 id="age"
                                 type="number"
@@ -119,33 +105,27 @@
                                 oninput="validity.valid || (value = this.previousValue)"
                                 v-model="age"
                             />
-                            <label
-                                style="color: red"
-                                for="age"
-                                v-if="error_age"
-                                >{{ error_age }}</label
-                            >
+                            <label style="color: red" v-if="error_age">{{
+                                error_age
+                            }}</label>
                         </div>
 
                         <div class="field col-12 md:col-6">
-                            <label for="contact_num">Contact Number</label>
+                            <label>Contact Number</label>
                             <InputText
-                                id="contact_num"
                                 :class="{ 'p-invalid': error_contact_num }"
-                                type="number"
-                                oninput="validity.valid||(value='');"
+                                oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*?)\..*/g, '$1');"
                                 v-model="contact_num"
                             />
                             <label
                                 style="color: red"
-                                for="contact_num"
                                 v-if="error_contact_num"
                                 >{{ error_contact_num }}</label
                             >
                         </div>
 
                         <div class="field col-12 md:col-6">
-                            <label for="selected_block">Block</label>
+                            <label>Block</label>
 
                             <Dropdown
                                 v-model="selected_block"
@@ -158,14 +138,13 @@
                             />
                             <label
                                 style="color: red"
-                                for="selected_block"
                                 v-if="error_selected_block"
                                 >{{ error_selected_block }}</label
                             >
                         </div>
 
                         <div class="field col-12 md:col-6">
-                            <label for="selected_lot">Lot</label>
+                            <label>Lot</label>
 
                             <Dropdown
                                 v-model="block_lot_id"
@@ -177,7 +156,6 @@
                             />
                             <label
                                 style="color: red"
-                                for="selected_lot"
                                 v-if="error_selected_lot"
                                 >{{ error_selected_lot }}</label
                             >
@@ -196,39 +174,31 @@
                         </div>
 
                         <div class="field col-12 md:col-4">
-                            <label for="email">Email</label>
+                            <label>Email</label>
                             <InputText
                                 type="text"
                                 :class="{ 'p-invalid': error_email }"
                                 name="email"
                                 v-model="email"
                             />
-                            <label
-                                style="color: red"
-                                for="email"
-                                v-if="error_email"
-                                >{{ error_email }}</label
-                            >
+                            <label style="color: red" v-if="error_email">{{
+                                error_email
+                            }}</label>
                         </div>
                         <div class="field col-12 md:col-4">
-                            <label for="password">Password</label>
+                            <label>Password</label>
                             <Password
                                 :class="{ 'p-invalid': error_password }"
                                 v-model="password"
                                 autocomplete="off"
                                 toggleMask
                             ></Password>
-                            <label
-                                style="color: red"
-                                for="password"
-                                v-if="error_password"
-                                >{{ error_password }}</label
-                            >
+                            <label style="color: red" v-if="error_password">{{
+                                error_password
+                            }}</label>
                         </div>
                         <div class="field col-12 md:col-4">
-                            <label for="confirm_password"
-                                >Confirm Password</label
-                            >
+                            <label>Confirm Password</label>
                             <Password
                                 :class="{ 'p-invalid': error_confirm_password }"
                                 autocomplete="off"
@@ -237,7 +207,6 @@
                             ></Password>
                             <label
                                 style="color: red"
-                                for="confirm_password"
                                 v-if="error_confirm_password"
                                 >{{ error_confirm_password }}</label
                             >
@@ -275,7 +244,6 @@
                         fill="#EEEEEE"
                         animationDuration="1s"
                     />
-                    <span class="block">Processing Request...</span>
                 </div>
             </div>
         </Dialog>

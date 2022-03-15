@@ -10,7 +10,7 @@
             <div class="grid mb-4">
                 <div class="col-12">
                     <Toolbar>
-                        <template #left>
+                        <template #start>
                             <span class="p-input-icon-left inline-block">
                                 <i class="pi pi-search" />
                                 <InputText
@@ -20,7 +20,7 @@
                             </span>
                         </template>
 
-                        <template #right>
+                        <template #end>
                             <div class="mr-2">
                                 <Button
                                     label="Add"
@@ -69,18 +69,34 @@
                         </Column> -->
                         <Column header="Status" field="status">
                             <template #body="{ data }">
-                                <Badge v-if="data.verified == 1 " :class="badgecolor(data.verified)">{{
-                                    "Approved"
-                                }}</Badge>
-                                <Badge v-if="data.verified == 0 " :class="badgecolor(data.verified)">{{
-                                    "Pending"
-                                }}</Badge>
+                                <Badge
+                                    v-if="data.verified == 1"
+                                    :class="badgecolor(data.verified)"
+                                    >{{ "Approved" }}</Badge
+                                >
+                                <Badge
+                                    v-if="data.verified == 0"
+                                    :class="badgecolor(data.verified)"
+                                    >{{ "Pending" }}</Badge
+                                >
                             </template>
                         </Column>
                         <Column header="Verify" field="verify">
                             <template #body="{ data }">
-                                <Button v-if="data.verified == 0" label="Accept" icon="pi pi-check" class="p-button-sm"  @click="verify(data)"/>
-                                <Button v-if="data.verified == 1" label="Accept" icon="pi pi-check" class="p-button-sm" disabled="isDisabled"/>
+                                <Button
+                                    v-if="data.verified == 0"
+                                    label="Accept"
+                                    icon="pi pi-check"
+                                    class="p-button-sm"
+                                    @click="verify(data)"
+                                />
+                                <Button
+                                    v-if="data.verified == 1"
+                                    label="Accept"
+                                    icon="pi pi-check"
+                                    class="p-button-sm"
+                                    disabled="isDisabled"
+                                />
                             </template>
                         </Column>
                         <Column header="Actions" field="actions">
@@ -162,11 +178,8 @@
 
                             <div class="p-fluid formgrid grid">
                                 <div class="field col-12 md:col-6">
-                                    <label for="first_name">Firstname</label>
-                                    <label
-                                        style="color: red"
-                                        for="first_name"
-                                        v-if="!first_name"
+                                    <label>Firstname</label>
+                                    <label style="color: red" v-if="!first_name"
                                         >*</label
                                     >
                                     <InputText
@@ -176,18 +189,14 @@
                                     />
                                     <label
                                         style="color: red"
-                                        for="first_name"
                                         v-if="error_first_name"
                                         >{{ error_first_name }}</label
                                     >
                                 </div>
 
                                 <div class="field col-12 md:col-6">
-                                    <label for="last_name">Lastname</label>
-                                    <label
-                                        style="color: red"
-                                        for="last_name"
-                                        v-if="!last_name"
+                                    <label>Lastname</label>
+                                    <label style="color: red" v-if="!last_name"
                                         >*</label
                                     >
                                     <InputText
@@ -197,7 +206,6 @@
                                     />
                                     <label
                                         style="color: red"
-                                        for="lastname"
                                         v-if="error_last_name"
                                         >{{ error_last_name }}</label
                                     >
@@ -205,11 +213,8 @@
 
                                 <div class="field col-12 md:col-6">
                                     <div>
-                                        <label for="gender">Gender</label>
-                                        <label
-                                            style="color: red"
-                                            for="gender"
-                                            v-if="!gender"
+                                        <label>Gender</label>
+                                        <label style="color: red" v-if="!gender"
                                             >*</label
                                         >
                                     </div>
@@ -222,9 +227,7 @@
                                                 v-model="gender"
                                                 @keydown.enter="onRegisterClick"
                                             />
-                                            <label
-                                                class="mb-0 ml-1 mr-5"
-                                                for="gender"
+                                            <label class="mb-0 ml-1 mr-5"
                                                 >Male</label
                                             >
                                             <RadioButton
@@ -233,16 +236,13 @@
                                                 v-model="gender"
                                                 @keydown.enter="onRegisterClick"
                                             />
-                                            <label
-                                                class="mb-0 ml-1"
-                                                for="gender"
+                                            <label class="mb-0 ml-1"
                                                 >Female</label
                                             >
                                         </div>
                                         <div>
                                             <label
                                                 style="color: red"
-                                                for="first_name"
                                                 v-if="error_gender"
                                                 >{{ error_gender }}</label
                                             >
@@ -254,7 +254,6 @@
                                 >
                                     <label
                                         style="color: red"
-                                        for="first_name"
                                         v-if="error_gender"
                                         >{{ error_gender }}</label
                                     >
@@ -275,14 +274,13 @@
                                     />
                                     <label
                                         style="color: red"
-                                        for="first_name"
                                         v-if="error_role"
                                         >{{ error_role }}</label
                                     >
                                 </div>
 
                                 <div class="field col-12 md:col-12">
-                                    <label for="age">Age</label
+                                    <label>Age</label
                                     ><label style="color: red" v-if="!age"
                                         >*</label
                                     >
@@ -298,40 +296,35 @@
                                     />
                                     <label
                                         style="color: red"
-                                        for="age"
                                         v-if="error_age"
                                         >{{ error_age }}</label
                                     >
                                 </div>
 
                                 <div class="field col-12 md:col-12">
-                                    <label for="contact_num"
-                                        >Contact Number</label
+                                    <label>Contact Number</label
                                     ><label
                                         style="color: red"
-                                        for="contact_num"
                                         v-if="!contact_num"
                                         >*</label
                                     >
                                     <InputText
                                         id="contact_num"
                                         type="text"
-                                        onkeyup="if(this.value<0){this.value= this.value * -1}"
+                                        oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*?)\..*/g, '$1');"
                                         v-model="contact_num"
                                     />
                                     <label
                                         style="color: red"
-                                        for="contact_num"
                                         v-if="error_contact_num"
                                         >{{ error_contact_num }}</label
                                     >
                                 </div>
 
                                 <div class="field col-12 md:col-6">
-                                    <label for="selected_block">Block</label>
+                                    <label>Block</label>
                                     <label
                                         style="color: red"
-                                        for="selected_block"
                                         v-if="!selected_block"
                                         >*</label
                                     >
@@ -345,17 +338,15 @@
                                     />
                                     <label
                                         style="color: red"
-                                        for="selected_block"
                                         v-if="error_selected_block"
                                         >{{ error_selected_block }}</label
                                     >
                                 </div>
 
                                 <div class="field col-12 md:col-6">
-                                    <label for="selected_block_lot">Lot</label>
+                                    <label>Lot</label>
                                     <label
                                         style="color: red"
-                                        for="selected_block_lot"
                                         v-if="!selected_block_lot"
                                         >*</label
                                     >
@@ -368,17 +359,13 @@
                                     />
                                     <label
                                         style="color: red"
-                                        for="selected_block_lot"
                                         v-if="error_selected_lot"
                                         >{{ error_selected_lot }}</label
                                     >
                                 </div>
                                 <div class="field col-12 md:col-12">
-                                    <label for="email">Email</label
-                                    ><label
-                                        style="color: red"
-                                        for="email"
-                                        v-if="!email"
+                                    <label>Email</label
+                                    ><label style="color: red" v-if="!email"
                                         >*</label
                                     >
                                     <InputText
@@ -388,7 +375,6 @@
                                     />
                                     <label
                                         style="color: red"
-                                        for="email"
                                         v-if="error_email"
                                         >{{ error_email }}</label
                                     >
@@ -411,7 +397,7 @@
                         </template>
                     </Dialog>
 
-                     <Dialog
+                    <Dialog
                         v-model:visible="registerUserDialog"
                         :style="{ width: '500px' }"
                         header="Register User"
@@ -430,10 +416,9 @@
 
                             <div class="p-fluid formgrid grid">
                                 <div class="field col-12 md:col-6">
-                                    <label for="first_name">Firstname</label>
+                                    <label>Firstname</label>
                                     <label
                                         style="color: red"
-                                        for="first_name"
                                         v-if="!form.first_name"
                                         >*</label
                                     >
@@ -445,17 +430,15 @@
                                     />
                                     <label
                                         style="color: red"
-                                        for="first_name"
                                         v-if="error_first_name"
                                         >{{ error_first_name }}</label
                                     >
                                 </div>
 
                                 <div class="field col-12 md:col-6">
-                                    <label for="last_name">Lastname</label>
+                                    <label>Lastname</label>
                                     <label
                                         style="color: red"
-                                        for="last_name"
                                         v-if="!form.last_name"
                                         >*</label
                                     >
@@ -467,7 +450,6 @@
                                     />
                                     <label
                                         style="color: red"
-                                        for="last_name"
                                         v-if="error_last_name"
                                         >{{ error_last_name }}</label
                                     >
@@ -475,11 +457,8 @@
 
                                 <div class="field col-12 md:col-6">
                                     <div>
-                                        <label for="gender">Gender</label>
-                                        <label
-                                            style="color: red"
-                                            for="gender"
-                                            v-if="!gender"
+                                        <label>Gender</label>
+                                        <label style="color: red" v-if="!gender"
                                             >*</label
                                         >
                                     </div>
@@ -492,9 +471,7 @@
                                                 v-model="form.gender"
                                                 @keydown.enter="onRegisterClick"
                                             />
-                                            <label
-                                                class="mb-0 ml-1 mr-5"
-                                                for="gender"
+                                            <label class="mb-0 ml-1 mr-5"
                                                 >Male</label
                                             >
                                             <RadioButton
@@ -503,26 +480,24 @@
                                                 v-model="form.gender"
                                                 @keydown.enter="onRegisterClick"
                                             />
-                                            <label
-                                                class="mb-0 ml-1"
-                                                for="gender"
+                                            <label class="mb-0 ml-1"
                                                 >Female</label
                                             >
                                         </div>
                                         <div>
                                             <label
                                                 style="color: red"
-                                                for="form.gender"
                                                 v-if="error_gender"
                                                 >{{ error_gender }}</label
                                             >
                                         </div>
                                     </div>
                                 </div>
-                                <div class="formgroup-inline flex justify-content-around">
+                                <div
+                                    class="formgroup-inline flex justify-content-around"
+                                >
                                     <label
                                         style="color: red"
-                                        for="form.gender"
                                         v-if="error_gender"
                                         >{{ error_gender }}</label
                                     >
@@ -543,14 +518,13 @@
                                     />
                                     <label
                                         style="color: red"
-                                        for="form.role"
                                         v-if="error_role"
                                         >{{ error_role }}</label
                                     >
                                 </div>
 
                                 <div class="field col-12 md:col-12">
-                                    <label for="age">Age</label
+                                    <label>Age</label
                                     ><label style="color: red" v-if="!age"
                                         >*</label
                                     >
@@ -566,40 +540,35 @@
                                     />
                                     <label
                                         style="color: red"
-                                        for="form.age"
                                         v-if="error_age"
                                         >{{ error_age }}</label
                                     >
                                 </div>
                                 <div class="field col-12 md:col-12">
-                                    <label for="form.contact_num"
-                                        >Contact Number</label
+                                    <label>Contact Number</label
                                     ><label
                                         style="color: red"
-                                        for="form.contact_num"
                                         v-if="!form.contact_num"
                                         >*</label
                                     >
                                     <InputText
                                         id="contact_num"
                                         type="text"
-                                        onkeyup="if(this.value<0){this.value= this.value * -1}"
+                                        oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*?)\..*/g, '$1');"
                                         v-model="form.contact_num"
                                         @keydown.enter="onRegisterClick"
                                     />
                                     <label
                                         style="color: red"
-                                        for="form.contact_num"
                                         v-if="error_contact_num"
                                         >{{ error_contact_num }}</label
                                     >
                                 </div>
 
                                 <div class="field col-12 md:col-6">
-                                    <label for="selected_block">Block</label>
+                                    <label>Block</label>
                                     <label
                                         style="color: red"
-                                        for="selected_block"
                                         v-if="!selected_block"
                                         >*</label
                                     >
@@ -613,17 +582,15 @@
                                     />
                                     <label
                                         style="color: red"
-                                        for="selected_block"
                                         v-if="error_selected_block"
                                         >{{ error_selected_block }}</label
                                     >
                                 </div>
 
                                 <div class="field col-12 md:col-6">
-                                    <label for="selected_block_lot">Lot</label>
+                                    <label>Lot</label>
                                     <label
                                         style="color: red"
-                                        for="selected_block_lot"
                                         v-if="!selected_block_lot"
                                         >*</label
                                     >
@@ -636,7 +603,6 @@
                                     />
                                     <label
                                         style="color: red"
-                                        for="selected_block_lot"
                                         v-if="error_selected_lot"
                                         >{{ error_selected_lot }}</label
                                     >
@@ -654,10 +620,9 @@
                                 </div>
 
                                 <div class="field col-12 md:col-4">
-                                    <label for="form.email">Email</label
+                                    <label>Email</label
                                     ><label
                                         style="color: red"
-                                        for="form.form.email"
                                         v-if="!form.email"
                                         >*</label
                                     >
@@ -669,16 +634,14 @@
                                     />
                                     <label
                                         style="color: red"
-                                        for="form.email"
                                         v-if="error_email"
                                         >{{ error_email }}</label
                                     >
                                 </div>
                                 <div class="field col-12 md:col-4">
-                                    <label for="form.password">Password</label
+                                    <label>Password</label
                                     ><label
                                         style="color: red"
-                                        for="form.password"
                                         v-if="!form.password"
                                         >*</label
                                     >
@@ -690,18 +653,14 @@
                                     />
                                     <label
                                         style="color: red"
-                                        for="form.password"
                                         v-if="error_password"
                                         >{{ error_password }}</label
                                     >
                                 </div>
                                 <div class="field col-12 md:col-4">
-                                    <label for="confirm_password"
-                                        >Confirm Password</label
-                                    >
+                                    <label>Confirm Password</label>
                                     <label
                                         style="color: red"
-                                        for="confirm_password"
                                         v-if="!form.confirm_password"
                                         >*</label
                                     >
@@ -713,7 +672,6 @@
                                     />
                                     <label
                                         style="color: red"
-                                        for="confirm_password"
                                         v-if="error_confirm_password"
                                         >{{ error_confirm_password }}</label
                                     >
@@ -819,9 +777,7 @@ export default {
             role: null,
             selected_role: null,
             user: null,
-            role: [
-                { type: "resident", value: "resident" },
-            ],
+            role: [{ type: "resident", value: "resident" }],
             error_first_name: "",
             error_last_name: "",
             error_gender: "",
@@ -847,7 +803,7 @@ export default {
         initFilters() {
             this.filters = {
                 global: { value: null, matchMode: FilterMatchMode.CONTAINS },
-                'role': { value: 'resident', matchMode: FilterMatchMode.EQUALS },
+                role: { value: "resident", matchMode: FilterMatchMode.EQUALS },
             };
         },
         badgecolor(color) {
@@ -859,10 +815,9 @@ export default {
                 return "bg-yellow-500";
             } else if (color == 1) {
                 return "bg-green-500";
-            }else if (color == 0) {
+            } else if (color == 0) {
                 return "bg-gray-500";
-            }else 
-            {
+            } else {
                 return "bg-yellow-800";
             }
         },
@@ -1027,7 +982,7 @@ export default {
         },
         resetFields() {
             this.selected_block = null;
-            this.selected_block_lot= null;
+            this.selected_block_lot = null;
             this.form = {
                 first_name: "",
                 last_name: "",

@@ -22,7 +22,7 @@ class PositionFactory extends Factory
     public function definition()
     {
         return [
-           'name' => $this->faker->text(50),
+           'name' => $this->faker->unique()->randomElement(['President', 'Vice-President', 'Secretary','Treasurer','Auditor','PIO','PRO']),
 
         ];
     }

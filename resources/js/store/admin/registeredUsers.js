@@ -13,6 +13,7 @@ const registeredUsers = {
         getAll(state, payload) {
             state.registeredUsers = payload;
         },
+
         getResidents(state) {
             let temp = state.registeredUsers.filter(function (e) {
                 return e.role.toUpperCase() === "RESIDENT";
@@ -46,7 +47,7 @@ const registeredUsers = {
             })
                 .then((res) => {
                     commit("getAll", res.data);
-                    //console.log(res.data);
+                    console.log(res.data);
                 })
                 .catch((err) => {
                     console.log(err.response.data);

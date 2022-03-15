@@ -1,31 +1,30 @@
 <template>
     <div class="grid">
         <div
-            class="col-12 sm:col-12 md:col-10 md:col-offset-1 lg:col-6 lg:col-offset-1 xl:col-6 xl:col-offset-1"
+            class="col-12 sm:col-12 md:col-8 md:col-offset-2 lg:col-6 lg:col-offset-1 xl:col-6 xl:col-offset-1"
         >
             <div class="col justify-content-center pt-0">
-                <Fieldset class="mb-3" legend="Announcement">
-                    <p>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                        sed do eiusmod tempor incididunt ut labore et dolore
-                        magna aliqua. Ut enim ad minim veniam, quis nostrud
-                        exercitation ullamco laboris nisi ut aliquip ex ea
-                        commodo consequat. Duis aute irure dolor in
-                        reprehenderit in voluptate velit esse cillum dolore eu
-                        fugiat nulla pariatur. Excepteur sint occaecat cupidatat
-                        non proident, sunt in culpa qui officia deserunt mollit
-                        anim id est laborum.
-                    </p>
-                </Fieldset>
                 <div class="card p-3">
                     <div class="p-inputgroup mb-2">
-                        <Avatar
-                            image="http://127.0.0.1:8000/storage/images/default-prof-pic.png"
-                            class="mr-2"
-                            size="large"
-                            shape="circle"
-                            alt="Image"
-                        />
+                        <div v-if="userLogged.profile_pic">
+                            <Avatar
+                                :image="`http://127.0.0.1:8000${userLogged.profile_pic}`"
+                                class="mr-2"
+                                size="large"
+                                shape="circle"
+                                alt="Image"
+                            />
+                        </div>
+                        <div v-else>
+                            <Avatar
+                                image="http://127.0.0.1:8000/storage/images/default-prof-pic.png"
+                                class="mr-2"
+                                size="large"
+                                shape="circle"
+                                alt="Image"
+                            />
+                        </div>
+
                         <Textarea
                             @click="openAddLotModal"
                             :autoResize="true"
@@ -45,7 +44,7 @@
             </div>
         </div>
         <div
-            class="col-12 sm:col-12 md:col-10 md:col-offset-1 lg:col-4 lg:col-offset-1 xl:col-4 xl:col-offset-1"
+            class="col-12 sm:col-12 md:col-8 md:col-offset-2 lg:col-4 lg:col-offset-1 xl:col-4 xl:col-offset-1"
         >
             <Fieldset class="mb-3" legend="Local News">
                 <NewsComponent />
@@ -122,8 +121,8 @@
 <script>
 import { computed } from "vue";
 import { useStore } from "vuex";
-import NewsComponent from "./NewsComponent.vue";
-import PostComponent from "./PostComponent.vue";
+import NewsComponent from "../../components/NewsComponent.vue";
+import PostComponent from "../../components/PostComponent.vue";
 export default {
     name: "UserDashboardComponent",
     components: {
@@ -134,10 +133,12 @@ export default {
         const store = useStore();
         return {
             posts: computed(() => store.state.posts.posts),
+            userLogged: computed(() => store.state.userLogged),
         };
     },
     data() {
         return {
+            profile_pic: null,
             loading: null,
             user_id: null,
             groud_id: null,
@@ -234,6 +235,9 @@ export default {
                     this.loading = false;
                 });
         },
+    },
+    mounted() {
+        this.$store.dispatch("posts/getAll");
     },
 };
 </script>

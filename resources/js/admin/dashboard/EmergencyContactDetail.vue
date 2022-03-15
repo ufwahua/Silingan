@@ -10,7 +10,7 @@
             <div class="grid mb-4">
                 <div class="col-12">
                     <Toolbar>
-                        <template #left>
+                        <template #start>
                             <span class="p-input-icon-left inline-block">
                                 <i class="pi pi-search" />
                                 <InputText
@@ -20,7 +20,7 @@
                             </span>
                         </template>
 
-                        <template #right>
+                        <template #end>
                             <div class="mr-2">
                                 <Button
                                     label="Add"
@@ -137,11 +137,8 @@
 
                             <div class="p-fluid formgrid grid">
                                 <div class="field col-12 md:col-6">
-                                    <label for="name">Name</label>
-                                    <label
-                                        style="color: red"
-                                        for="name"
-                                        v-if="!form.name"
+                                    <label>Name</label>
+                                    <label style="color: red" v-if="!form.name"
                                         >*</label
                                     >
                                     <InputText
@@ -152,17 +149,15 @@
                                     />
                                     <label
                                         style="color: red"
-                                        for="name"
                                         v-if="error_name"
                                         >{{ error_name }}</label
                                     >
                                 </div>
 
                                 <div class="field col-12 md:col-6">
-                                    <label for="number">Contact Details</label>
+                                    <label>Contact Details</label>
                                     <label
                                         style="color: red"
-                                        for="number"
                                         v-if="!form.number"
                                         >*</label
                                     >
@@ -176,7 +171,6 @@
                                     />
                                     <label
                                         style="color: red"
-                                        for="number"
                                         v-if="error_number"
                                         >{{ error_number }}</label
                                     >
@@ -197,8 +191,8 @@
                                 @click="confirmUpdateContact"
                             />
                         </template>
-                    </Dialog>            
-                     <Dialog
+                    </Dialog>
+                    <Dialog
                         v-model:visible="registerUserDialog"
                         :style="{ width: '500px' }"
                         header="Register User"
@@ -217,11 +211,8 @@
 
                             <div class="p-fluid formgrid grid">
                                 <div class="field col-12 md:col-6">
-                                    <label for="name">Name</label>
-                                    <label
-                                        style="color: red"
-                                        for="name"
-                                        v-if="!form.name"
+                                    <label>Name</label>
+                                    <label style="color: red" v-if="!form.name"
                                         >*</label
                                     >
                                     <InputText
@@ -232,18 +223,14 @@
                                     />
                                     <label
                                         style="color: red"
-                                        for="name"
                                         v-if="error_name"
                                         >{{ error_name }}</label
                                     >
                                 </div>
 
                                 <div class="field col-12 md:col-6">
-                                    <label for="number">Contact Details</label>
-                                    <label
-                                        style="color: red"
-                                        for="number"
-                                        v-if="!number"
+                                    <label>Contact Details</label>
+                                    <label style="color: red" v-if="!number"
                                         >*</label
                                     >
                                     <Textarea
@@ -256,7 +243,6 @@
                                     />
                                     <label
                                         style="color: red"
-                                        for="number"
                                         v-if="error_number"
                                         >{{ error_number }}</label
                                     >
@@ -314,7 +300,9 @@ export default {
         const store = useStore();
         return {
             emergency_contact_details: computed(
-                () => store.state.emergency_contact_details.emergency_contact_details
+                () =>
+                    store.state.emergency_contact_details
+                        .emergency_contact_details
             ),
         };
     },
@@ -411,7 +399,7 @@ export default {
                     number: this.form.number,
                     user_id: this.$store.state.userLogged.id,
                 },
-                })
+            })
                 .then(() => {
                     this.$toast.add({
                         severity: "success",
@@ -479,8 +467,7 @@ export default {
         },
         validate(error) {
             if (error.response.data.errors.name)
-                this.error_name =
-                    error.response.data.errors.name[0];
+                this.error_name = error.response.data.errors.name[0];
             if (error.response.data.errors.number)
                 this.error_number = error.response.data.errors.number[0];
         },

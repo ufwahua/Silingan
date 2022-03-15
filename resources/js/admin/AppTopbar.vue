@@ -1,10 +1,7 @@
 <template>
     <div class="layout-topbar">
         <router-link to="/admin/dashboard" class="layout-topbar-logo">
-            <img
-                alt="Silingan-Logo"
-                src="../admin/silingan-icon.png"
-            />
+            <img alt="Silingan-Logo" src="../admin/silingan-icon.png" />
         </router-link>
         <button
             class="p-link layout-menu-button layout-topbar-button"
@@ -28,17 +25,27 @@
         </button>
         <ul class="layout-topbar-menu hidden lg:flex origin-top">
             <li>
-                <button class="p-link layout-topbar-button">
-                    <i class="pi pi-calendar"></i>
-                    <span>Events</span>
-                </button>
+                <Button
+                    type="button"
+                    label="Toggle"
+                    @click="toggleNotification"
+                    aria-haspopup="true"
+                    aria-controls="overlay_menu"
+                    class="p-link layout-topbar-button"
+                >
+                    <i class="pi pi-bell"></i>
+                    <span>Notification</span>
+                </Button>
+                <Menu
+                    id="overlay_menu"
+                    ref="menu2"
+                    :model="items"
+                    :popup="true"
+                    class="overflow-auto"
+                    style="max-height: 300px"
+                />
             </li>
-            <li>
-                <button class="p-link layout-topbar-button">
-                    <i class="pi pi-cog"></i>
-                    <span>Settings</span>
-                </button>
-            </li>
+
             <li>
                 <button
                     class="p-link layout-topbar-button"
@@ -62,29 +69,47 @@
 </template>
 
 <script>
-import store from "../store/store";
+import { computed } from "vue";
+import { useStore } from "vuex";
 export default {
+    setup() {
+        const store = useStore();
+        return {
+            userLogged: computed(() => store.state.userLogged),
+        };
+    },
     data() {
         return {
+            profile_pic: false,
+            items: [
+                {
+                    label: "Notification",
+                    items: [
+                        {
+                            label: "",
+                            icon: "",
+                            command: () => {},
+                        },
+                        {
+                            label: "",
+                            icon: "s",
+                            command: () => {},
+                        },
+                    ],
+                },
+            ],
             profile_menu: [
                 {
                     label:
-                        store.state.userLogged.first_name +
+                        this.userLogged.first_name +
                         " " +
-                        store.state.userLogged.last_name,
+                        this.userLogged.last_name,
                     items: [
                         {
                             label: "Profile",
                             icon: "pi pi-pencil",
                             to: "/admin/profile",
-                            command: () => {
-                                this.$toast.add({
-                                    severity: "success",
-                                    summary: "Updated",
-                                    detail: "Data Updated",
-                                    life: 3000,
-                                });
-                            },
+                            command: () => {},
                         },
                         {
                             label: "Logout",
@@ -112,6 +137,9 @@ export default {
     methods: {
         toggle(event) {
             this.$refs.menu.toggle(event);
+        },
+        toggleNotification(event) {
+            this.$refs.menu2.toggle(event);
         },
         onMenuToggle(event) {
             this.$emit("menu-toggle", event);

@@ -7,11 +7,14 @@
 
         <div class="layout-main-container">
             <div class="layout-main">
-                <router-view name="contents"></router-view>
+                <router-view
+                    name="contents"
+                    :key="$route.fullPath"
+                ></router-view>
             </div>
             <AppFooter />
         </div>
-        <!-- <AppConfig :layoutMode="layoutMode" @layout-change="onLayoutChange" @change-theme="changeTheme" /> -->
+        <ChatComponent :layoutMode="layoutMode" />
         <transition name="layout-mask">
             <div
                 class="layout-mask p-component-overlay"
@@ -25,14 +28,14 @@
 import AppTopBar from "../AppTopbar.vue";
 import AppMenu from "../AppMenu.vue";
 import AppFooter from "../AppFooter.vue";
-// import AppConfig from "../AppConfig.vue";
+import ChatComponent from "../../components/ChatComponent.vue";
 
 export default {
     name: "HomeComponent",
     components: {
         AppTopBar,
         AppMenu,
-        // AppConfig: AppConfig,
+        ChatComponent: ChatComponent,
         AppFooter,
     },
     data() {
@@ -44,13 +47,14 @@ export default {
             mobileMenuActive: false,
             menu: [
                 {
-                    label: "Home",
+                    label: "Admin",
                     items: [
                         {
-                            label: "Dashboard",
+                            label: "Timeline",
                             icon: "pi pi-fw pi-home",
                             to: "/admin/dashboard",
                         },
+<<<<<<< HEAD
                         {
                             label: "Announcement",
                             icon: "pi pi-fw pi-info",
@@ -61,6 +65,9 @@ export default {
                             icon: "pi pi-fw pi-send",
                             to: "/admin/timeline",
                         },
+=======
+
+>>>>>>> 5eea6e50e70e8599195c664415ab377a8a9b1827
                         {
                             label: "Marketplace",
                             icon: "pi pi-shopping-cart",
@@ -78,27 +85,27 @@ export default {
                                     label: "Users",
                                     icon: "pi pi-users",
                                     items: [
-                                    {
-                                        label: "Residents",
-                                        icon: "pi pi-user-edit",
-                                        to: "/admin/residents",
-                                    },
-                                    {
-                                        label: "Security Officers",
-                                        icon: "pi pi-user-edit",
-                                        to: "/admin/security-officers",
-                                    },
-                                    {
-                                        label: "Officers",
-                                        icon: "pi pi-user-edit",
-                                        to: "/admin/officers",
-                                    },
-                                    {
-                                        label: "All Users",
-                                        icon: "pi pi-user-edit",
-                                        to: "/admin/registered-users",
-                                    },
-                                ],
+                                        {
+                                            label: "Residents",
+                                            icon: "pi pi-user-edit",
+                                            to: "/admin/residents",
+                                        },
+                                        {
+                                            label: "Security Officers",
+                                            icon: "pi pi-user-edit",
+                                            to: "/admin/security-officers",
+                                        },
+                                        {
+                                            label: "Officers",
+                                            icon: "pi pi-user-edit",
+                                            to: "/admin/officers",
+                                        },
+                                        {
+                                            label: "All Users",
+                                            icon: "pi pi-user-edit",
+                                            to: "/admin/registered-users",
+                                        },
+                                    ],
                                 },
                                 {
                                     label: "Block and Lot",
@@ -106,9 +113,14 @@ export default {
                                     to: "/admin/block-lot",
                                 },
                                 {
-                                    label: "Position",
+                                    label: "Positions",
                                     icon: "pi pi-info-circle",
                                     to: "/admin/position",
+                                },
+                                {
+                                    label: "Candidates",
+                                    icon: "pi pi-info-circle",
+                                    to: "/admin/candidate",
                                 },
                                 {
                                     label: "Announcement",
@@ -121,6 +133,15 @@ export default {
                                     to: "/admin/emergency-contact-detail",
                                 },
                             ],
+                        },
+                    ],
+                },
+                {
+                    items: [
+                        {
+                            label: "Election",
+                            icon: "pi pi-fw pi-calendar",
+                            to: "/admin/election",
                         },
                     ],
                 },
@@ -236,13 +257,17 @@ export default {
         else this.removeClass(document.body, "body-overflow-hidden");
     },
 
-    created() {
+    mounted() {
+        this.$store.dispatch("news/getAll");
+
         this.$store.dispatch("blocks/getAll");
         this.$store.dispatch("lots/getAll");
         this.$store.dispatch("registeredUsers/getAll");
+        this.$store.dispatch("registeredUsersFname/getAll");
         this.$store.dispatch("announcements/getAll");
         this.$store.dispatch("positions/getAll");
         this.$store.dispatch("emergency_contact_details/getAll");
+        this.$store.dispatch("candidates/getAll");
     },
 };
 </script>

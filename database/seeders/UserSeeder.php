@@ -28,6 +28,7 @@ class UserSeeder extends Seeder
             'first_name' => "Joshua Henry",
             'last_name' => "Diamos",
             'role' => 'admin',
+            'block_lot_id' => 1,
             'gender' =>'male',
             'age' => rand(1,100),     
             'verified' => 1,
@@ -41,12 +42,27 @@ class UserSeeder extends Seeder
             'first_name' => "Varbie",
             'last_name' => "Sumido",
             'role' => 'resident',
+            'block_lot_id' => 2,
             'gender' =>'female',
             'age' => rand(1,100),     
             'verified' => 1,
             'has_voted' => 0,
             'contact_num' => rand(11111111111,9999999999),
             'email' => 'varbie.sumido@gmail.com',
+            'password'=> Hash::make("12345678"),
+        ]);
+
+        User::create([
+            'first_name' => "Reynard",
+            'last_name' => "Dahunan",
+            'role' => 'resident',
+            'gender' =>'male',
+            'block_lot_id' => 3,
+            'age' => rand(1,100),     
+            'verified' => 1,
+            'has_voted' => 0,
+            'contact_num' => rand(11111111111,9999999999),
+            'email' => 'reynard.dahunan@gmail.com',
             'password'=> Hash::make("12345678"),
         ]);
     }

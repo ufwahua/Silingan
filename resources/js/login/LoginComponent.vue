@@ -9,11 +9,17 @@
             >
                 <div class="col-12 mt-5 xl:mt-0 text-center">
                     <router-link to="/" :key="$route.fullPath">
-                        <img
+                        <!-- <img
                             class="Silingan-logo"
                             alt="Silingan-Logo"
                             src="http://127.0.0.1:8000/storage/images/silingan-icon.png"
-                    /></router-link>
+                    />-->
+                        <img
+                            class="Silingan-logo"
+                            alt="Silingan-Logo"
+                            src="https://i.ibb.co/V3B8NBM/silingan-icon.png"
+                        />
+                    </router-link>
                 </div>
                 <form
                     @submit.prevent="onLoginSubmit"
@@ -35,9 +41,7 @@
                         style="padding: 1rem"
                     />
 
-                    <label
-                        for="password1"
-                        class="block text-900 font-medium text-xl mb-2"
+                    <label class="block text-900 font-medium text-xl mb-2"
                         >Password</label
                     >
                     <Password
@@ -63,7 +67,7 @@
                                 :binary="true"
                                 class="mr-2"
                             ></Checkbox>
-                            <label for="rememberme1">Remember me</label>
+                            <label>Remember me</label>
                         </div>
 
                         <router-link to="forgotpassword" :key="$route.fullPath">
@@ -143,7 +147,7 @@ export default {
                 .post("/api/login", this.form)
                 .then((response) => {
                     this.error = "";
-                    this.$store.dispatch("getUserLogged", response.data);
+                    this.$store.commit("getUserLogged", response.data);
                     if (response.data.role === "resident") {
                         this.loading = false;
                         this.$router.push("/resident/dashboard");

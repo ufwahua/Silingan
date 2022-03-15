@@ -9,7 +9,7 @@
             <div class="grid mb-4">
                 <div class="col-12">
                     <Toolbar>
-                        <template #left>
+                        <template #start>
                             <span class="p-input-icon-left inline-block">
                                 <i class="pi pi-search" />
                                 <InputText
@@ -19,7 +19,7 @@
                             </span>
                         </template>
 
-                        <template #right>
+                        <template #end>
                             <div class="mr-2">
                                 <Button
                                     label="Add"
@@ -101,12 +101,9 @@
                                 v-model="form_block_number"
                                 placeholder="How many blocks you want to create"
                             />
-                            <label
-                                style="color: red"
-                                for="number"
-                                v-if="error"
-                                >{{ this.error }}</label
-                            >
+                            <label style="color: red" v-if="error">{{
+                                this.error
+                            }}</label>
                         </div>
                     </div>
                 </div>
@@ -138,7 +135,7 @@
                     <div class="grid mb-4">
                         <div class="col-12">
                             <Toolbar>
-                                <template #left>
+                                <template #start>
                                     <span
                                         class="p-input-icon-left inline-block"
                                     >
@@ -150,7 +147,7 @@
                                     </span>
                                 </template>
 
-                                <template #right>
+                                <template #end>
                                     <div class="mr-2">
                                         <Button
                                             label="Add"
@@ -230,12 +227,9 @@
                                         v-model="form_lot_number"
                                         placeholder="How many lots you want to create"
                                     />
-                                    <label
-                                        style="color: red"
-                                        for="number"
-                                        v-if="error"
-                                        >{{ this.error }}</label
-                                    >
+                                    <label style="color: red" v-if="error">{{
+                                        this.error
+                                    }}</label>
                                 </div>
                             </div>
                         </div>
@@ -360,12 +354,9 @@
                         <div class="p-fluid">
                             <h5>Block Number</h5>
                             <InputText v-model="number" />
-                            <label
-                                style="color: red"
-                                for="number"
-                                v-if="error"
-                                >{{ this.error }}</label
-                            >
+                            <label style="color: red" v-if="error">{{
+                                this.error
+                            }}</label>
                         </div>
                     </div>
                 </div>
@@ -423,6 +414,24 @@
                 </template>
             </Dialog>
             <Dialog
+                v-model:visible="loading"
+                :style="{ width: '450px' }"
+                :modal="true"
+                :closable="false"
+                :closeOnEscape="true"
+            >
+                <div class="grid">
+                    <div class="col-12 text-center">
+                        <ProgressSpinner
+                            class="block mb-4"
+                            style="width: 100px; height: 100px"
+                            strokeWidth="4"
+                            fill="#EEEEEE"
+                            animationDuration="1s"
+                        />
+                    </div>
+                </div> </Dialog
+            ><Dialog
                 v-model:visible="loading"
                 :style="{ width: '450px' }"
                 :modal="true"
