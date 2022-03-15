@@ -53,7 +53,7 @@ export default {
                         },
                         {
                             label: "Announcement",
-                            icon: "pi pi-fw pi-send",
+                            icon: "pi pi-fw pi-info",
                             to: "/admin/timeline",
                         },
                         {
