@@ -84,9 +84,9 @@
                                     </h5>
                                 </template>
                                 <template #subtitle>
-                                    Block:
+                                    <!-- Block:
                                     {{ candidate.user.block_lot.block_id }}
-                                    Lot: {{ candidate.user.block_lot.number }}
+                                    Lot: {{ candidate.user.block_lot.number }} -->
                                 </template>
                                 <template #footer>
                                     <div

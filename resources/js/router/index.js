@@ -325,6 +325,17 @@ const router = createRouter({
                         contents: AnnouncementComponent,
                     },
                 },
+                {
+                    path: "marketplace",
+                    meta: {
+                        role: "resident",
+                    },
+                    beforeEnter: checkRole,
+                    components: {
+                        default: NotFound,
+                        contents: Marketplace,
+                    },
+                },
             ],
         },
         {
@@ -381,6 +392,17 @@ const router = createRouter({
                     components: {
                         default: NotFound,
                         contents: LogComponent,
+                    },
+                },
+                {
+                    path: "marketplace",
+                    meta: {
+                        role: "security_officer",
+                    },
+                    beforeEnter: checkRole,
+                    components: {
+                        default: NotFound,
+                        contents: Marketplace,
                     },
                 },
             ],

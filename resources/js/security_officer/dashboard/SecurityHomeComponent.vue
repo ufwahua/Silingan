@@ -51,7 +51,7 @@ export default {
                         {
                             label: "Marketplace",
                             icon: "pi pi-fw pi-shopping-cart",
-                            to: "/security/dashboard",
+                            to: "/security/marketplace",
                         },
                         {
                             label: "Announcement",
