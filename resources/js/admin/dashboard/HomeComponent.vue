@@ -54,7 +54,6 @@ export default {
                             icon: "pi pi-fw pi-home",
                             to: "/admin/dashboard",
                         },
-<<<<<<< HEAD
                         {
                             label: "Announcement",
                             icon: "pi pi-fw pi-info",
@@ -65,9 +64,6 @@ export default {
                             icon: "pi pi-fw pi-send",
                             to: "/admin/timeline",
                         },
-=======
-
->>>>>>> 5eea6e50e70e8599195c664415ab377a8a9b1827
                         {
                             label: "Marketplace",
                             icon: "pi pi-shopping-cart",
