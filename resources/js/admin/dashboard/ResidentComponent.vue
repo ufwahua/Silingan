@@ -38,7 +38,7 @@
                     <DataTable
                         :value="registeredUsers"
                         :filters="filters"
-                        breakpoint="1230px"
+                        breakpoint="1350px"
                     >
                         <template #empty> No registered users found </template>
                         <template #loading> Loading Users </template>
@@ -84,18 +84,13 @@
                         <Column header="Verify" field="verify">
                             <template #body="{ data }">
                                 <Button
-                                    v-if="data.verified == 0"
-                                    label="Accept"
+                                    v-tooltip="'Accept'"
                                     icon="pi pi-check"
-                                    class="p-button-sm"
+                                    class="p-button-rounded"
+                                    :disabled="
+                                        data.verified == 1 ? true : false
+                                    "
                                     @click="verify(data)"
-                                />
-                                <Button
-                                    v-if="data.verified == 1"
-                                    label="Accept"
-                                    icon="pi pi-check"
-                                    class="p-button-sm"
-                                    disabled="isDisabled"
                                 />
                             </template>
                         </Column>

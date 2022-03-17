@@ -203,21 +203,89 @@
                 </div>
             </div>
         </div>
-        <div align="right" class="mb-4">
-            <div v-if="btnUpdate">
-                <Button
-                    label="Update"
-                    class="p-button p-button-primary"
-                    @click="confirmUpdateUser"
-                />
+        <div class="grid">
+            <div class="col-6">
+                <div class="p-fluid mb-2">
+                    <Button
+                        label="Update"
+                        class="p-button p-button-primary"
+                        @click="confirmUpdateUser"
+                        :disabled="!btnUpdate ? true : false"
+                    />
+                </div>
             </div>
-            <div v-else>
-                <Button
-                    label="Update"
-                    class="p-button p-button-primary"
-                    @click="confirmUpdateUser"
-                    disabled
-                />
+        </div>
+        <div class="col-12 title-form">
+            <h3>Change Password</h3>
+        </div>
+
+        <div class="grid">
+            <div class="col-6">
+                <div class="p-fluid mb-2">
+                    <h6>Enter Current Password</h6>
+                    <Password
+                        v-model="old_password"
+                        @keyup.enter="changePassword"
+                        :class="{ 'p-invalid': error_old_password }"
+                        toggleMask
+                    ></Password>
+
+                    <label
+                        style="color: red"
+                        for="contact_number"
+                        v-if="error_old_password"
+                        >{{ error_old_password }}</label
+                    >
+                </div>
+            </div>
+        </div>
+        <div class="grid">
+            <div class="col-6">
+                <div class="p-fluid mb-2">
+                    <h6>New Password</h6>
+                    <Password
+                        v-model="new_password"
+                        @keyup.enter="changePassword"
+                        :class="{ 'p-invalid': error_new_password }"
+                        toggleMask
+                    ></Password>
+
+                    <label
+                        style="color: red"
+                        for="contact_number"
+                        v-if="error_new_password"
+                        >{{ error_new_password }}</label
+                    >
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="p-fluid mb-2">
+                    <h6>Confirm Password</h6>
+                    <Password
+                        v-model="confirm_password"
+                        @keyup.enter="changePassword"
+                        :class="{ 'p-invalid': error_confirm_password }"
+                        toggleMask
+                    ></Password>
+
+                    <label
+                        style="color: red"
+                        for="contact_number"
+                        v-if="error_confirm_password"
+                        >{{ error_confirm_password }}</label
+                    >
+                </div>
+            </div>
+        </div>
+        <div class="grid">
+            <div class="col-6">
+                <div class="p-fluid mb-2">
+                    <Button
+                        label="Change Password"
+                        class="p-button p-button-primary"
+                        @click="changePassword"
+                    />
+                </div>
             </div>
         </div>
         <Dialog
@@ -288,20 +356,73 @@ export default {
             selected_block: null,
             selected_block_lot: null,
             btnUpdate: false,
-            error_first_name: "",
-            error_last_name: "",
-            error_gender: "",
-            error_selected_block: "",
-            error_selected_lot: "",
-            error_email: "",
-            error_password: "",
-            error_confirm_password: "",
-            error_age: "",
-            error_contact_num: "",
-            error_role: "",
+
+            old_password: null,
+            new_password: null,
+            confirm_password: null,
+            error_first_name: null,
+            error_last_name: null,
+            error_gender: null,
+            error_selected_block: null,
+            error_selected_lot: null,
+            error_email: null,
+            error_old_password: null,
+            error_new_password: null,
+            error_confirm_password: null,
+            error_age: null,
+            error_contact_num: null,
+            error_role: null,
         };
     },
     methods: {
+        showUpdatePasswordToast() {
+            this.$toast.add({
+                severity: "success",
+                summary: "Success",
+                detail: "Updated Password",
+                life: 3000,
+            });
+        },
+        async changePassword() {
+            this.resetErrors();
+            this.loading = true;
+            await axios({
+                method: "put",
+                url: "/api/change-password/" + this.id,
+                data: {
+                    old_password: this.old_password,
+                    new_password: this.new_password,
+                    confirm_password: this.confirm_password,
+                },
+            })
+                .then((res) => {
+                    setTimeout(() => {
+                        this.$store.dispatch("getUserLogged");
+                        this.loading = false;
+                        this.showUpdatePasswordToast();
+                    }, 500);
+                    this.resetErrors();
+                })
+                .catch((e) => {
+                    this.loading = false;
+                    this.resetErrors();
+                    if (e.response.data.old_password) {
+                        this.error_old_password = e.response.data.old_password;
+                    }
+                    if (e.response.data.errors.old_password) {
+                        this.error_old_password =
+                            e.response.data.errors.old_password[0];
+                    }
+                    if (e.response.data.errors.new_password) {
+                        this.error_new_password =
+                            e.response.data.errors.new_password[0];
+                    }
+                    if (e.response.data.errors.confirm_password) {
+                        this.error_confirm_password =
+                            e.response.data.errors.confirm_password[0];
+                    }
+                });
+        },
         async onUpload(event) {
             let formData = new FormData();
             formData.append("images[]", event.files[0]);
@@ -352,23 +473,25 @@ export default {
                 })
                 .catch((err) => {
                     this.resetErrors();
+                    this.resetErrors();
                     console.log(err.response);
                     this.validate(err);
                     this.loading = false;
                 });
         },
         resetErrors() {
-            this.error_first_name = "";
-            this.error_last_name = "";
-            this.error_gender = "";
-            this.error_selected_block = "";
-            this.error_selected_lot = "";
-            this.error_email = "";
-            this.error_password = "";
-            this.error_confirm_password = "";
-            this.error_age = "";
-            this.error_contact_num = "";
-            this.error_role = "";
+            this.error_first_name = null;
+            this.error_last_name = null;
+            this.error_gender = null;
+            this.error_selected_block = null;
+            this.error_selected_lot = null;
+            this.error_email = null;
+            this.error_old_password = null;
+            this.error_new_password = null;
+            this.error_confirm_password = null;
+            this.error_age = null;
+            this.error_contact_num = null;
+            this.error_role = null;
         },
         validate(error) {
             if (error.response.data.errors.first_name)

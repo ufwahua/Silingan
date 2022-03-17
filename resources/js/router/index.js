@@ -1,6 +1,7 @@
 import Login from "../login/LoginComponent.vue";
 import Register from "../login/RegisterComponent.vue";
 import ForgotPassword from "../login/ForgotPasswordComponent.vue";
+import ResetPasswordComponent from "../login/ResetPasswordComponent.vue";
 //admin
 import HomeComponent from "../admin/dashboard/HomeComponent.vue";
 import DashboardComponent from "../admin/dashboard/DashboardComponent.vue";
@@ -101,10 +102,16 @@ const router = createRouter({
             name: "login",
         },
         {
-            path: "/forgotpassword",
+            path: "/forgot-password",
             component: ForgotPassword,
             beforeEnter: checkLogged,
             name: "forgotpassword",
+        },
+        {
+            path: "/reset-password",
+            component: ResetPasswordComponent,
+            beforeEnter: checkLogged,
+            name: "resetpassword",
         },
         {
             path: "/register",

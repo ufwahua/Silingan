@@ -3,15 +3,19 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
 
+use Illuminate\Validation\Rule;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 use App\Http\Requests\LoginRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\RegisterRequest;
+use Illuminate\Support\Facades\Password;
+use Illuminate\Auth\Events\PasswordReset;
+use Illuminate\Validation\ValidationException;
 
 class UserController extends Controller
 {
@@ -25,7 +29,7 @@ class UserController extends Controller
     {
         $user = User::where('email', $request->email)->with('lot.block')->first();
 
-        if ( $user ||  Hash::check($request->password, $user->password)) {
+        if ( $user &&  Hash::check($request->password, $user->password)) {
             Auth::login($user,$request['remember']);
             $request->session()->regenerate();  
  
@@ -134,10 +138,97 @@ class UserController extends Controller
   
     }
   
+    public function changePassword(Request $request) : JsonResponse{
+        $request->validate([
+            'old_password' => ['required','password'],
+            'new_password' => ['required','min:8' ],
+            'confirm_password' => ['required','same:new_password' ],
+            
+        ]);
+        if (Hash::check($request['old_password'],Auth::user()->password)){
+            $user = User::find(Auth::user()->id);
+            $user->password = Hash::make($request['new_password']);
+            if($user->save()){
+               return response()->json($user);
+            }
+        }else{
+            $response = [
+                'old_password' => 'Current Password is incorrect',
+            ];
+            return response()->json($response,404);
+        }
+        
+    }
+    public function resetPassword(Request $request){
+        $request->validate([
+            'token' => 'required',
+            'email' => 'required|email',
+            'password' => 'required|min:8|confirmed',
+         ]);
+        $status = Password::reset(
+            $request->only( 'password' ,'email', 'password_confirmation', 'token'),
+            function ($user) use ($request) {
+                $user->forceFill([
+                    'password' => Hash::make($request->password),
+                    'remember_token' => Str::random(60),
+                ])->save();
+                event(new PasswordReset($user));
+            }
 
-    public function forgotPassword(User $user) : JsonResponse
+        );
+        if($status == Password::PASSWORD_RESET){
+            return response([
+                'message' => 'Password reset successfully'
+            ]);
+        }else{
+             return response([
+                'email' => 'Invalid Email'
+            ]);
+        }
+    }
+    public function forgotPassword(Request $request) 
     {
-        return response()->json(Auth::user());
+        $request->validate([
+            'email' => ['required','email'],
+        ]);
+
+        $status = Password::sendResetLink(
+                $request->only('email')
+        );
+        if($status == Password::RESET_LINK_SENT){
+            return response([
+                'status' => __($status) . "    note: check your email in spam folder",
+            ]);
+        }
+        throw ValidationException::withMessages([
+            'email' => [trans($status)],
+        ]);
+
+        // if(User::where('email',$request['email'])->doesntExist()){
+        //     return response([
+        //         'message' => 'User doesn\'t exists!'
+        //     ],404);
+        // }
+        //  $token = Str::random(10);
+        // try{
+        //     DB::table('password_resets')->insert([
+        //         'email' => $request['email'],
+        //         'token' => $token
+        //     ]);
+
+        //     //send email
+        //     
+
+          
+        // }catch(\Exception $exception){
+        //     return response([
+        //         'message' => $exception->getMessage()
+        //     ],400);
+        // }
+       
+        
+
+        // return response()->json(Auth::user());
     }
     public function userLogged(): JsonResponse{
         if($id= Auth::user()->id)

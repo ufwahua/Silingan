@@ -52,7 +52,6 @@
                         class="w-full mb-3"
                         inputClass="w-full"
                         inputStyle="padding:1rem"
-                        autocomplete="off"
                     ></Password>
                     <label style="color: red" v-if="error">{{
                         this.error
@@ -70,7 +69,10 @@
                             <label>Remember me</label>
                         </div>
 
-                        <router-link to="forgotpassword" :key="$route.fullPath">
+                        <router-link
+                            to="forgot-password"
+                            :key="$route.fullPath"
+                        >
                             <a
                                 class="font-medium no-underline ml-2 text-right cursor-pointer"
                                 style="color: var(--primary-color)"

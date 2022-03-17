@@ -31,6 +31,9 @@
                         placeholder="Email"
                         style="padding: 1rem"
                     />
+                    <label style="color: green" v-if="message">{{
+                        message
+                    }}</label>
                     <label style="color: red" v-if="error_email">{{
                         error_email
                     }}</label>
@@ -53,6 +56,25 @@
                 </div>
             </div>
         </div>
+        <Dialog
+            v-model:visible="loading"
+            :style="{ width: '450px' }"
+            :modal="true"
+            :closable="false"
+            :closeOnEscape="true"
+        >
+            <div class="grid">
+                <div class="col-12 text-center">
+                    <ProgressSpinner
+                        class="block mb-4"
+                        style="width: 100px; height: 100px"
+                        strokeWidth="4"
+                        fill="#EEEEEE"
+                        animationDuration="1s"
+                    />
+                </div>
+            </div>
+        </Dialog>
     </div>
 </template>
 
@@ -70,52 +92,33 @@ export default {
     },
     data() {
         return {
+            loading: false,
             email: null,
+            message: null,
             error_email: null,
         };
     },
     methods: {
         async sendPasswordLink() {
-            // axios
-            //     .post("/api/forgotpassword", this.email)
-            //     .then((response) => {
-            //         this.error = "";
-            //         this.$store.dispatch("getUser", response.data);
-            //         localStorage.user = response.data;
-            //         localStorage.role = response.data.role;
-            //         localStorage.full_name =
-            //             response.data.first_name +
-            //             " " +
-            //             response.data.last_name;
-            //         if (response.data.role == "resident") {
-            //             this.$router.push("/user/dashboard");
-            //         } else {
-            //             this.$router.push("/admin/dashboard");
-            //         }
-            //     })
-            axios
-                .post("/api/forgotpassword", this.email)
-                .then((response) => {
-                    this.error = "";
-                    this.$store.dispatch("getUser", response.data);
-                    localStorage.user = response.data;
-                    localStorage.role = response.data.role;
-                    localStorage.full_name =
-                        response.data.first_name +
-                        " " +
-                        response.data.last_name;
-                    if (response.data.role == "resident") {
-                        this.$router.push("/user/dashboard");
-                    } else {
-                        this.$router.push("/admin/dashboard");
-                    }
+            this.loading = true;
+            await axios({
+                method: "post",
+                url: "/api/forgot-password",
+                data: {
+                    email: this.email,
+                },
+            })
+                .then((res) => {
+                    this.message = res.data.status;
+                    this.loading = false;
                 })
                 .catch((err) => {
-                    this.error = "";
-                    console.log(err);
-                    if (err.response.data.errors) {
-                        this.error = "Invalid Credentials";
+                    this.error_email = "";
+                    console.log(err.response);
+                    if (err.response.data.errors.email) {
+                        this.error_email = err.response.data.errors.email[0];
                     }
+                    this.loading = false;
                 });
         },
     },
