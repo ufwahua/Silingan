@@ -204,7 +204,8 @@
             </div>
         </div>
         <div class="grid">
-            <div class="col-6">
+            <div class="col-4"></div>
+            <div class="col-4">
                 <div class="p-fluid mb-2">
                     <Button
                         label="Update"
@@ -278,7 +279,8 @@
             </div>
         </div>
         <div class="grid">
-            <div class="col-6">
+            <div class="col-4"></div>
+            <div class="col-4">
                 <div class="p-fluid mb-2">
                     <Button
                         label="Change Password"

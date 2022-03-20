@@ -269,6 +269,9 @@ export default {
             return ["layout-config", { "layout-config-active": this.active }];
         },
     },
+    mounted() {
+        console.log("residents", this.residents);
+    },
 };
 </script>
 <style scoped>
