@@ -43,7 +43,7 @@ function checkRole(to, from, next) {
         next({ name: "login" });
     } else {
         if (
-            userLogged.role === "admin" &&
+            (userLogged.role === "admin" || userLogged.role === "officer") &&
             (to.meta.role === "resident" || to.meta.role === "security_officer")
         ) {
             next("/admin/dashboard");
@@ -71,12 +71,15 @@ function checkLogged(to, from, next) {
     if (userLogged) isAuthenticated = true;
     else isAuthenticated = false;
 
-    if (isAuthenticated && userLogged.role === "admin") {
+    if (
+        isAuthenticated &&
+        (userLogged.role === "admin" || userLogged.role === "officer")
+    ) {
         next("/admin/dashboard");
     } else if (isAuthenticated && userLogged.role === "resident") {
         next("/resident/dashboard");
     } else if (isAuthenticated && userLogged.role === "security_officer") {
-        next("/security/dashboard");
+        next("/security_officer/dashboard");
     } else {
         next();
     }
@@ -310,7 +313,7 @@ const router = createRouter({
             ],
         },
         {
-            path: "/security",
+            path: "/security_officer",
             component: SecurityHome,
             meta: {
                 role: "security_officer",
@@ -319,7 +322,7 @@ const router = createRouter({
             name: "securityhome",
             children: [
                 {
-                    path: "/security/dashboard",
+                    path: "/security_officer/dashboard",
                     meta: {
                         role: "security_officer",
                     },

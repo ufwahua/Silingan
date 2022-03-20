@@ -25,10 +25,10 @@
 </template>
 
 <script>
-import AppTopBar from "../AppTopbar.vue";
-import AppMenu from "../AppMenu.vue";
-import AppFooter from "../AppFooter.vue";
+import AppTopBar from "../../components/AppTopbar.vue";
+import AppMenu from "../../components/AppMenu.vue";
 import ChatComponent from "../../components/ChatComponent.vue";
+import AppFooter from "../../components/AppFooter.vue";
 
 export default {
     name: "HomeComponent",

@@ -5,58 +5,71 @@
             class="layout-config-button"
             id="layout-config-button"
             @click="toggleChatContainer"
+            v-tooltip="'Chat'"
         >
             <i class="pi pi-user"></i>
         </a>
         <div class="grid">
             <div class="col flex align-content-center m-3">
                 <div class="col">
-                    <b class="flex align-items-center text-xl">Contacts</b>
+                    <b class="flex align-items-center text-xl">{{
+                        resident
+                            ? "Residents"
+                            : officer
+                            ? "Officers"
+                            : admin
+                            ? "Admins"
+                            : "Security Officers"
+                    }}</b>
                 </div>
                 <div>
-                    <Button icon="pi pi-search" />
+                    <Button icon="pi pi-replay" @click="toggle" />
+                    <Menu
+                        id="chat_menu"
+                        ref="menu_chat"
+                        :model="items"
+                        :popup="true"
+                        v-tooltip="'Chat'"
+                    />
                 </div>
             </div>
 
-            <div class="col-12">
-                <TabView ref="tabview1" :scrollable="true" lazy>
-                    <TabPanel header="Residents">
-                        <div v-for="resident in residents" :key="resident.id">
-                            <ChatSideBarComponent
-                                @click="openChatRoom(resident)"
-                                v-bind:user="resident"
-                            />
-                        </div>
-                    </TabPanel>
-                    <TabPanel header="Security Officers">
-                        <div
-                            v-for="security_officer in security_officers"
-                            :key="security_officer.id"
-                        >
-                            <ChatSideBarComponent
-                                @click="openChatRoom(security_officer)"
-                                v-bind:user="security_officer"
-                            />
-                        </div>
-                    </TabPanel>
-                    <TabPanel header="Officers">
-                        <div v-for="officer in officers" :key="officer.id">
-                            <ChatSideBarComponent
-                                @click="openChatRoom(resident)"
-                                v-bind:user="officer"
-                            />
-                        </div>
-                    </TabPanel>
-
-                    <TabPanel header="Admins">
-                        <div v-for="admin in admins" :key="admin.id">
-                            <ChatSideBarComponent
-                                @click="openChatRoom(admin)"
-                                v-bind:user="admin"
-                            />
-                        </div>
-                    </TabPanel>
-                </TabView>
+            <div class="col-12 layout-config-content">
+                <div v-if="resident">
+                    <div v-for="resident in residents" :key="resident.id">
+                        <ChatSideBarComponent
+                            @click="openChatRoom(resident)"
+                            v-bind:user="resident"
+                        />
+                    </div>
+                </div>
+                <div v-if="security_officer">
+                    <div
+                        v-for="security_officer in security_officers"
+                        :key="security_officer.id"
+                    >
+                        <ChatSideBarComponent
+                            @click="openChatRoom(security_officer)"
+                            v-bind:user="security_officer"
+                        />
+                    </div>
+                </div>
+                <div v-if="officer">
+                    <div v-for="officer in officers" :key="officer.id">
+                        <ChatSideBarComponent
+                            @click="openChatRoom(resident)"
+                            v-bind:user="officer"
+                        />
+                    </div>
+                </div>
+                <div v-if="admin">
+                    <div v-for="admin in admins" :key="admin.id">
+                        <ChatSideBarComponent
+                            @click="openChatRoom(admin)"
+                            v-bind:user="admin"
+                        />
+                    </div>
+                </div>
             </div>
         </div>
         <Dialog
@@ -159,6 +172,49 @@ export default {
             message: null,
             position: null,
             active: false,
+            //change chat
+            resident: true,
+            officer: false,
+            security_officer: false,
+            admin: false,
+            items: [
+                {
+                    label: "Resident",
+                    command: () => {
+                        this.resident = true;
+                        this.officer = false;
+                        this.security_officer = false;
+                        this.admin = false;
+                    },
+                },
+                {
+                    label: "Officer",
+                    command: () => {
+                        this.resident = false;
+                        this.officer = true;
+                        this.security_officer = false;
+                        this.admin = false;
+                    },
+                },
+                {
+                    label: "Security Officers",
+                    command: () => {
+                        this.resident = false;
+                        this.officer = false;
+                        this.security_officer = true;
+                        this.admin = false;
+                    },
+                },
+                {
+                    label: "Admin",
+                    command: () => {
+                        this.resident = false;
+                        this.officer = false;
+                        this.security_officer = false;
+                        this.admin = true;
+                    },
+                },
+            ],
         };
     },
     watch: {
@@ -180,6 +236,9 @@ export default {
         },
     },
     methods: {
+        toggle() {
+            this.$refs.menu_chat.toggle(event);
+        },
         async sendMessage() {
             await axios({
                 method: "post",
@@ -234,9 +293,6 @@ export default {
         toggleChatContainer(event) {
             this.active = !this.active;
             event.preventDefault();
-
-            if (this.active) this.bindOutsideClickListener();
-            else this.unbindOutsideClickListener();
         },
         bindOutsideClickListener() {
             if (!this.outsideClickListener) {
@@ -268,9 +324,6 @@ export default {
         containerClass() {
             return ["layout-config", { "layout-config-active": this.active }];
         },
-    },
-    mounted() {
-        console.log("residents", this.residents);
     },
 };
 </script>

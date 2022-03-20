@@ -155,7 +155,7 @@ export default {
                         this.$router.push("/resident/dashboard");
                     } else if (response.data.role === "security_officer") {
                         this.loading = false;
-                        this.$router.push("/security/dashboard");
+                        this.$router.push("/security_officer/dashboard");
                     } else {
                         this.loading = false;
                         this.$router.push("/admin/dashboard");
