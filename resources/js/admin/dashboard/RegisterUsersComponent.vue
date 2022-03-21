@@ -823,13 +823,13 @@ export default {
             this.first_name = data.first_name;
             this.last_name = data.last_name;
             this.gender = data.gender;
-            this.selected_block = data.block_lot.block.id;
-            this.getBlockLot();
-            this.selected_block_lot = data.block_lot.id;
             this.email = data.email;
             this.age = data.age;
             this.contact_num = data.contact_num;
             this.selected_role = data.role;
+            this.selected_block = data.block_lot.block.id;
+            this.getBlockLot();
+            this.selected_block_lot = data.block_lot.id;
         },
         async confirmUpdateUser() {
             this.process = true;
