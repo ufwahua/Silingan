@@ -47,9 +47,13 @@
                                 {{ data.id }}
                             </template>
                         </Column>
+
                         <Column header="Name" field="name">
                             <template #body="{ data }">
-                                {{ data.first_name }} {{ data.last_name }}
+                                {{
+                                    (data["name"] =
+                                        data.first_name + " " + data.last_name)
+                                }}
                             </template>
                         </Column>
                         <Column header="Email" field="email">

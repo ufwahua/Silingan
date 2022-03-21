@@ -13,6 +13,7 @@ use App\Http\Requests\LoginRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\RegisterRequest;
+use App\Models\BlockUser;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Validation\ValidationException;
@@ -83,13 +84,15 @@ class UserController extends Controller
     public function index(Request $request) : JsonResponse
     {
         return response()->json(
-            User::with('lot.block')->get()
+            User::with(['lot.block'])->get()
         );
     }
 
     public function index2(User $user) : JsonResponse
     {   
          $users =User::where('role','resident')->get();
+         
+         
          $req= [];
          foreach($users as $user){
              $request = [
@@ -102,17 +105,29 @@ class UserController extends Controller
             $req
         );
     }
+     public function notBlockedUsers(Request $request) : JsonResponse
+    {   
+        
+        $block_user_ids=DB::table('block_users')->where('user_id',$request->route('user'))->pluck('block_user_id')->toArray();
+        $block_users =User::whereNotIn('id',$block_user_ids)->get();
+
+        return response()->json(
+            $block_users
+        );
+    }
 
 
     /**
      * @param User $user
      * @return JsonResponse
      */
-    public function show(Request $request) : JsonResponse
+    public function show(User $user) : JsonResponse
     {
-       
-        return response()->json( User::with('lot.block')->where('id',$request->ignore($this->route('user')))->get());
+        //  $block_user_ids=DB::table('block_users')->where('user_id',$request->route('user'))->pluck('block_user_id')->toArray();
+        //  $user =User::whereNotIn('id',$block_user_ids)->get();
+        return response()->json( $user);
     }
+   
     /**
      * @param Request $request
      * @return JsonResponse

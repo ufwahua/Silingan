@@ -14,29 +14,8 @@ const registeredUsers = {
             state.registeredUsers = payload;
         },
 
-        getResidents(state) {
-            let temp = state.registeredUsers.filter(function (e) {
-                return e.role.toUpperCase() === "RESIDENT";
-            });
-            state.residents = temp;
-        },
-        getOfficers(state) {
-            let temp = state.registeredUsers.filter(function (e) {
-                return e.role.toUpperCase() === "OFFICER";
-            });
-            state.officers = temp;
-        },
-        getAdmins(state) {
-            let temp = state.registeredUsers.filter(function (e) {
-                return e.role.toUpperCase() === "ADMIN";
-            });
-            state.admins = temp;
-        },
-        getSecurityOfficers(state) {
-            let temp = state.registeredUsers.filter(function (e) {
-                return e.role.toUpperCase() === "SECURITY_OFFICER";
-            });
-            state.security_officers = temp;
+        getUsersNotBlocked(state, payload) {
+            state.registeredUsers = payload;
         },
     },
     actions: {
@@ -47,7 +26,20 @@ const registeredUsers = {
             })
                 .then((res) => {
                     commit("getAll", res.data);
-                    console.log(res.data);
+                    console.log("registeredUsers", res.data);
+                })
+                .catch((err) => {
+                    console.log(err.response.data);
+                });
+        },
+        async getUsersNotBlocked({ commit }, payload) {
+            await axios({
+                method: "get",
+                url: "/api/user/not_blocked/" + payload,
+            })
+                .then((res) => {
+                    commit("getUsersNotBlocked", res.data);
+                    console.log("registeredUsersNotBlocked", res.data);
                 })
                 .catch((err) => {
                     console.log(err.response.data);

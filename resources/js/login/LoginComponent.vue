@@ -164,7 +164,7 @@ export default {
                 .catch((err) => {
                     this.error = "";
 
-                    if (err.response.data.errors) {
+                    if (err) {
                         this.error = "Invalid Credentials";
                     }
                     this.loading = false;

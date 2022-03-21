@@ -49,7 +49,10 @@
                         </Column>
                         <Column header="Name" field="name">
                             <template #body="{ data }">
-                                {{ data.first_name }} {{ data.last_name }}
+                                {{
+                                    (data["name"] =
+                                        data.first_name + " " + data.last_name)
+                                }}
                             </template>
                         </Column>
                         <Column header="Email" field="email">
@@ -60,13 +63,6 @@
                         <Column header="Block" field="block_lot.block.number">
                         </Column>
                         <Column header="Lot" field="block_lot.number"> </Column>
-                        <!-- <Column header="Role" field="role">
-                            <template #body="{ data }">
-                                <Badge :class="badgecolor(data.role)">{{
-                                    data.role
-                                }}</Badge>
-                            </template>
-                        </Column> -->
                         <Column header="Status" field="status">
                             <template #body="{ data }">
                                 <Badge

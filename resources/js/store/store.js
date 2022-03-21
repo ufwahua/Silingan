@@ -1,7 +1,6 @@
 import { createStore } from "vuex";
 import createPersistedState from "vuex-persistedstate";
 import registeredUsers from "./admin/registeredUsers";
-import registeredUsersFname from "./admin/registeredUsersFname";
 
 //admin
 import blocks from "./admin/blocks";
@@ -25,6 +24,7 @@ export default createStore({
         users: null,
         userLogged: null,
         chat_room: null,
+        block_users: null,
         chats: null,
     },
 
@@ -32,6 +32,9 @@ export default createStore({
     mutations: {
         getUserLogged(state, payload) {
             state.userLogged = payload;
+        },
+        getBlockUsers(state, payload) {
+            state.block_users = payload;
         },
         getChatRoom(state, payload) {
             state.chat_room = payload;
@@ -55,6 +58,20 @@ export default createStore({
                 })
                 .catch((err) => {
                     commit("getUserLogged", null);
+                    console.log(err.response);
+                });
+        },
+        async getBlockUsers({ commit }, payload) {
+            await axios({
+                method: "get",
+                url: "/api/block_user/" + payload,
+            })
+                .then((res) => {
+                    console.log("block users", res.data);
+                    commit("getBlockUsers", res.data);
+                })
+                .catch((err) => {
+                    commit("getBlockUsers", null);
                     console.log(err.response);
                 });
         },
@@ -91,7 +108,6 @@ export default createStore({
         positions,
         emergency_contact_details,
         candidates,
-        registeredUsersFname,
         timeNow,
         cards,
         logs,

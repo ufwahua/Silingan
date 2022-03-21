@@ -185,10 +185,7 @@ export default {
         this.$store.dispatch("posts/getAll");
         this.$store.dispatch("cards/getAll");
         this.$store.dispatch("registeredUsers/getAll");
-        this.$store.commit("registeredUsers/getResidents");
-        this.$store.commit("registeredUsers/getOfficers");
-        this.$store.commit("registeredUsers/getAdmins");
-        this.$store.commit("registeredUsers/getSecurityOfficers");
+        this.$store.dispatch("getBlockUsers", this.$store.state.userLogged.id);
     },
 };
 </script>

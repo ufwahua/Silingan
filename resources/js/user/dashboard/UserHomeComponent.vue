@@ -51,7 +51,7 @@ export default {
                         {
                             label: "Marketplace",
                             icon: "pi pi-fw pi-shopping-cart",
-                            to: "/resident/dashboard",
+                            to: "/resident/marketplace",
                         },
                         {
                             label: "Announcement",
@@ -198,11 +198,12 @@ export default {
     created() {
         this.$store.dispatch("news/getAll");
         this.$store.dispatch("posts/getAll");
-        this.$store.dispatch("registeredUsers/getAll");
-        this.$store.dispatch("registeredUsers/getResidents");
-        this.$store.dispatch("registeredUsers/getOfficers");
-        this.$store.dispatch("registeredUsers/getAdmins");
-        this.$store.dispatch("registeredUsers/getSecurityOfficers");
+        this.$store.dispatch(
+            "registeredUsers/getUsersNotBlocked",
+            this.$store.state.userLogged.id
+        );
+
+        this.$store.dispatch("getBlockUsers", this.$store.state.userLogged.id);
     },
 };
 </script>

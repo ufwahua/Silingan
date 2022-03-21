@@ -248,16 +248,12 @@ export default {
         this.$store.dispatch("news/getAll");
         this.$store.dispatch("blocks/getAll");
         this.$store.dispatch("lots/getAll");
-        this.$store.dispatch("registeredUsers/getAll");
-        this.$store.commit("registeredUsers/getResidents");
-        this.$store.commit("registeredUsers/getOfficers");
-        this.$store.commit("registeredUsers/getAdmins");
-        this.$store.commit("registeredUsers/getSecurityOfficers");
-        this.$store.dispatch("registeredUsersFname/getAll");
         this.$store.dispatch("announcements/getAll");
         this.$store.dispatch("positions/getAll");
         this.$store.dispatch("emergency_contact_details/getAll");
         this.$store.dispatch("candidates/getAll");
+        this.$store.dispatch("registeredUsers/getAll");
+        this.$store.dispatch("getBlockUsers", this.$store.state.userLogged.id);
     },
 };
 </script>
