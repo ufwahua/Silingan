@@ -21,7 +21,7 @@
                             />
                             <Button
                                 label="Start"
-                                class="ml-3 p-button-primary"
+                                class="ml-2 p-button-primary"
                                 @click="showElectionDialog"
                             />
                         </div>

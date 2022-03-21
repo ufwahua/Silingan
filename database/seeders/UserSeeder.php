@@ -21,7 +21,7 @@ class UserSeeder extends Seeder
     public function run()
     {
         User::factory()
-            ->count(25)
+            ->count(50)
             ->create();
 
         User::create([
@@ -37,7 +37,19 @@ class UserSeeder extends Seeder
             'email' => 'jh.diamos@gmail.com',
             'password'=> Hash::make("12345678"),
         ]);
-
+        User::create([
+            'first_name' => "Joshua Henry",
+            'last_name' => "Diamos",
+            'role' => 'officer',
+            'block_lot_id' => 1,
+            'gender' =>'male',
+            'age' => rand(1,100),     
+            'verified' => 1,
+            'has_voted' => 0,
+            'contact_num' => rand(11111111111,9999999999),
+            'email' => 'jh.officer@gmail.com',
+            'password'=> Hash::make("12345678"),
+        ]);
         User::create([
             'first_name' => "Joshua Henry",
             'last_name' => "Diamos",

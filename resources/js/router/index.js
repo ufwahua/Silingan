@@ -1,6 +1,7 @@
 import Login from "../login/LoginComponent.vue";
 import Register from "../login/RegisterComponent.vue";
 import ForgotPassword from "../login/ForgotPasswordComponent.vue";
+import ResetPasswordComponent from "../login/ResetPasswordComponent.vue";
 //admin
 import HomeComponent from "../admin/dashboard/HomeComponent.vue";
 import DashboardComponent from "../admin/dashboard/DashboardComponent.vue";
@@ -45,7 +46,7 @@ function checkRole(to, from, next) {
         next({ name: "login" });
     } else {
         if (
-            userLogged.role === "admin" &&
+            (userLogged.role === "admin" || userLogged.role === "officer") &&
             (to.meta.role === "resident" || to.meta.role === "security_officer")
         ) {
             next("/admin/dashboard");
@@ -73,12 +74,15 @@ function checkLogged(to, from, next) {
     if (userLogged) isAuthenticated = true;
     else isAuthenticated = false;
 
-    if (isAuthenticated && userLogged.role === "admin") {
+    if (
+        isAuthenticated &&
+        (userLogged.role === "admin" || userLogged.role === "officer")
+    ) {
         next("/admin/dashboard");
     } else if (isAuthenticated && userLogged.role === "resident") {
         next("/resident/dashboard");
     } else if (isAuthenticated && userLogged.role === "security_officer") {
-        next("/security/dashboard");
+        next("/security_officer/dashboard");
     } else {
         next();
     }
@@ -104,10 +108,16 @@ const router = createRouter({
             name: "login",
         },
         {
-            path: "/forgotpassword",
+            path: "/forgot-password",
             component: ForgotPassword,
             beforeEnter: checkLogged,
             name: "forgotpassword",
+        },
+        {
+            path: "/reset-password",
+            component: ResetPasswordComponent,
+            beforeEnter: checkLogged,
+            name: "resetpassword",
         },
         {
             path: "/register",
@@ -339,7 +349,7 @@ const router = createRouter({
             ],
         },
         {
-            path: "/security",
+            path: "/security_officer",
             component: SecurityHome,
             meta: {
                 role: "security_officer",
@@ -348,7 +358,7 @@ const router = createRouter({
             name: "securityhome",
             children: [
                 {
-                    path: "/security/dashboard",
+                    path: "/security_officer/dashboard",
                     meta: {
                         role: "security_officer",
                     },

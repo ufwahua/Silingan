@@ -53,6 +53,18 @@ const registeredUsers = {
                     console.log(err.response.data);
                 });
         },
+        async getResidents({ commit }) {
+            await commit("getResidents");
+        },
+        async getOfficers({ commit }) {
+            await commit("getOfficers");
+        },
+        async getAdmins({ commit }) {
+            await commit("getAdmins");
+        },
+        async getSecurityOfficers({ commit }) {
+            await commit("getSecurityOfficers");
+        },
     },
     getters: {},
 };

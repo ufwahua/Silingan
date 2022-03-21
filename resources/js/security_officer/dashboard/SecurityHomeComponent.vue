@@ -25,10 +25,10 @@
 </template>
 
 <script>
-import AppTopBar from "../AppTopbar.vue";
-import AppMenu from "../AppMenu.vue";
+import AppTopBar from "../../components/AppTopbar.vue";
+import AppMenu from "../../components/AppMenu.vue";
 import ChatComponent from "../../components/ChatComponent.vue";
-import AppFooter from "../AppFooter.vue";
+import AppFooter from "../../components/AppFooter.vue";
 
 export default {
     name: "SecurityHomeComponent",
@@ -46,7 +46,7 @@ export default {
                         {
                             label: "Timeline",
                             icon: "pi pi-fw pi-home",
-                            to: "/security/dashboard",
+                            to: "/security_officer/dashboard",
                         },
                         {
                             label: "Marketplace",
@@ -56,12 +56,12 @@ export default {
                         {
                             label: "Announcement",
                             icon: "pi pi-fw pi-calendar",
-                            to: "/security/announcement",
+                            to: "/security_officer/announcement",
                         },
                         {
                             label: "Log",
                             icon: "pi pi-fw pi-calendar",
-                            to: "/security/log",
+                            to: "/security_officer/log",
                         },
                     ],
                 },
@@ -183,6 +183,7 @@ export default {
     created() {
         this.$store.dispatch("news/getAll");
         this.$store.dispatch("posts/getAll");
+        this.$store.dispatch("cards/getAll");
         this.$store.dispatch("registeredUsers/getAll");
         this.$store.commit("registeredUsers/getResidents");
         this.$store.commit("registeredUsers/getOfficers");

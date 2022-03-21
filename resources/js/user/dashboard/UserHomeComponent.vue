@@ -25,10 +25,10 @@
 </template>
 
 <script>
-import AppTopBar from "../AppTopbar.vue";
-import AppMenu from "../AppMenu.vue";
+import AppTopBar from "../../components/AppTopbar.vue";
+import AppMenu from "../../components/AppMenu.vue";
 import ChatComponent from "../../components/ChatComponent.vue";
-import AppFooter from "../AppFooter.vue";
+import AppFooter from "../../components/AppFooter.vue";
 
 export default {
     name: "HomeComponent",
@@ -199,10 +199,10 @@ export default {
         this.$store.dispatch("news/getAll");
         this.$store.dispatch("posts/getAll");
         this.$store.dispatch("registeredUsers/getAll");
-        this.$store.commit("registeredUsers/getResidents");
-        this.$store.commit("registeredUsers/getOfficers");
-        this.$store.commit("registeredUsers/getAdmins");
-        this.$store.commit("registeredUsers/getSecurityOfficers");
+        this.$store.dispatch("registeredUsers/getResidents");
+        this.$store.dispatch("registeredUsers/getOfficers");
+        this.$store.dispatch("registeredUsers/getAdmins");
+        this.$store.dispatch("registeredUsers/getSecurityOfficers");
     },
 };
 </script>

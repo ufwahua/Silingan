@@ -16,7 +16,9 @@ use App\Http\Controllers\ElectionController;
 use App\Http\Controllers\PositionController;
 use App\Http\Controllers\CandidateController;
 use App\Http\Controllers\AnnouncementController;
+use App\Http\Controllers\CardController;
 use App\Http\Controllers\EmergencyContactDetailController;
+use App\Http\Controllers\LogController;
 
 /*
 |--------------------------------------------------------------------------
@@ -33,6 +35,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
   
 });
 //PUBLIC
+Route::put('/change-password/{user}', [UserController::class, 'changePassword']);
+Route::post('/reset-password', [UserController::class, 'resetPassword']);
 Route::post('/forgot-password', [UserController::class, 'forgotPassword']);
 Route::post('/login', [UserController::class, 'login']);
 Route::get('/logout', [UserController::class, 'logout']);
@@ -57,6 +61,8 @@ Route::get('/user_logged',[UserController::class, 'userLogged']);
     'emergency_contact_detail' => EmergencyContactDetailController::class,
     'candidate'             => CandidateController::class,
     'election'             => ElectionController::class,
+    'card'             => CardController::class,
+    'log'             => LogController::class,
 ]);
 
   
