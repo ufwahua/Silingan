@@ -152,13 +152,13 @@ export default {
                     this.$store.commit("getUserLogged", response.data);
                     if (response.data.role === "resident") {
                         this.loading = false;
-                        this.$router.push("/resident/dashboard");
+                        this.$router.push("/resident/timeline");
                     } else if (response.data.role === "security_officer") {
                         this.loading = false;
-                        this.$router.push("/security_officer/dashboard");
+                        this.$router.push("/security_officer/timeline");
                     } else {
                         this.loading = false;
-                        this.$router.push("/admin/dashboard");
+                        this.$router.push("/admin/timeline");
                     }
                 })
                 .catch((err) => {

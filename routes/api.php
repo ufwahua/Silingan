@@ -41,7 +41,6 @@ Route::post('/reset-password', [UserController::class, 'resetPassword']);
 Route::post('/forgot-password', [UserController::class, 'forgotPassword']);
 Route::post('/login', [UserController::class, 'login']);
 Route::get('/logout', [UserController::class, 'logout']);
-Route::get('/user/index2', [UserController::class, 'index2']);
 Route::get('/user/not_blocked/{user}', [UserController::class, 'notBlockedUsers']);
 Route::delete('/candidate/election/{candidate}', [CandidateController::class, 'deleteAllCandidate']);
 //Check if User is Logged in

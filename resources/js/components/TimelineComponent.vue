@@ -121,10 +121,10 @@
 <script>
 import { computed } from "vue";
 import { useStore } from "vuex";
-import NewsComponent from "../../components/NewsComponent.vue";
-import PostComponent from "../../components/PostComponent.vue";
+import NewsComponent from "./NewsComponent.vue";
+import PostComponent from "./PostComponent.vue";
 export default {
-    name: "SecurityDashboardComponent",
+    name: "TimelineComponent",
     components: {
         NewsComponent,
         PostComponent,
@@ -145,29 +145,6 @@ export default {
             images: null,
             content: null,
             openPostModal: false,
-            data: [
-                {
-                    name: "Jayson Cadiz",
-                    date: "January 1, 2021",
-                    type: "Laptop",
-                    model: "Aspire-15",
-                    brand: "Acer",
-                },
-                {
-                    name: "Gio Alfanta",
-                    date: "January 2, 2021",
-                    type: "Desktop",
-                    model: "Aspire-15",
-                    brand: "Acer",
-                },
-                {
-                    name: "Godfrey Español",
-                    date: "January 3, 2021",
-                    type: "Mouse",
-                    model: "Abyssus",
-                    brand: "Razer",
-                },
-            ],
         };
     },
     methods: {

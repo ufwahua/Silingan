@@ -4,7 +4,6 @@ import ForgotPassword from "../login/ForgotPasswordComponent.vue";
 import ResetPasswordComponent from "../login/ResetPasswordComponent.vue";
 //admin
 import HomeComponent from "../admin/dashboard/HomeComponent.vue";
-import DashboardComponent from "../admin/dashboard/DashboardComponent.vue";
 import Block_Lot from "../admin/dashboard/Block_LotComponent.vue";
 import RegisteredUsersComponent from "../admin/dashboard/RegisterUsersComponent.vue";
 import Announcement from "../admin/dashboard/Announcement.vue";
@@ -18,13 +17,12 @@ import ElectionComponent from "../admin/dashboard/ElectionComponent.vue";
 
 //user
 import UserHome from "../user/dashboard/UserHomeComponent.vue";
-import UserDashboard from "../user/dashboard/UserDashboardComponent.vue";
 
 //security officer
 import SecurityHome from "../security_officer/dashboard/SecurityHomeComponent.vue";
-import SecurityDashboard from "../security_officer/dashboard/SecurityDashboardComponent.vue";
 import LogComponent from "../security_officer/dashboard/LogComponent.vue";
 
+import Timeline from "../components/TimelineComponent.vue";
 import IndexComponent from "../home/IndexComponent.vue";
 import AnnouncementComponent from "../components/AnnouncementComponent.vue";
 import NotFound from "../components/NotFoundComponent.vue";
@@ -47,19 +45,19 @@ function checkRole(to, from, next) {
             (userLogged.role === "admin" || userLogged.role === "officer") &&
             (to.meta.role === "resident" || to.meta.role === "security_officer")
         ) {
-            next("/admin/dashboard");
+            next("/admin/timeline");
         }
         if (
             userLogged.role === "resident" &&
             (to.meta.role === "admin" || to.meta.role === "security_officer")
         ) {
-            next("/resident/dashboard");
+            next("/resident/timeline");
         }
         if (
             userLogged.role === "security_officer" &&
             (to.meta.role === "admin" || to.meta.role === "resident")
         ) {
-            next("/security/dashboard");
+            next("/security/timeline");
         }
 
         next();
@@ -76,11 +74,11 @@ function checkLogged(to, from, next) {
         isAuthenticated &&
         (userLogged.role === "admin" || userLogged.role === "officer")
     ) {
-        next("/admin/dashboard");
+        next("/admin/timeline");
     } else if (isAuthenticated && userLogged.role === "resident") {
-        next("/resident/dashboard");
+        next("/resident/timeline");
     } else if (isAuthenticated && userLogged.role === "security_officer") {
-        next("/security_officer/dashboard");
+        next("/security_officer/timeline");
     } else {
         next();
     }
@@ -133,14 +131,14 @@ const router = createRouter({
             },
             children: [
                 {
-                    path: "/admin/dashboard",
+                    path: "/admin/timeline",
                     beforeEnter: checkRole,
                     meta: {
                         role: "admin",
                     },
                     components: {
                         default: NotFound,
-                        contents: DashboardComponent,
+                        contents: Timeline,
                     },
                 },
                 {
@@ -287,7 +285,7 @@ const router = createRouter({
             name: "userhome",
             children: [
                 {
-                    path: "/resident/dashboard",
+                    path: "/resident/timeline",
                     meta: {
                         role: "resident",
                     },
@@ -297,7 +295,7 @@ const router = createRouter({
                     },
                     components: {
                         default: NotFound,
-                        contents: UserDashboard,
+                        contents: Timeline,
                     },
                 },
                 {
@@ -345,7 +343,7 @@ const router = createRouter({
             name: "securityhome",
             children: [
                 {
-                    path: "/security_officer/dashboard",
+                    path: "/security_officer/timeline",
                     meta: {
                         role: "security_officer",
                     },
@@ -355,7 +353,7 @@ const router = createRouter({
                     },
                     components: {
                         default: NotFound,
-                        contents: SecurityDashboard,
+                        contents: Timeline,
                     },
                 },
                 {

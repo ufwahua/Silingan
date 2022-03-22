@@ -42,24 +42,6 @@ class UserController extends Controller
     
     public function store(RegisterRequest $request) : JsonResponse
     {
-        // $user = User::query()->create($request->validate([
-        //     'block_lot_id' => ['required',Rule::exists('lots', 'id')],
-             
-        //     'first_name' => ['required','string' , 'max:255'],
-        //     'last_name' => ['required','string' , 'max:255'],
-        //     'gender' => ['required'],
-        //     'block_lot_id' => ['sometimes'],
-        //     'age' => ['required','integer','numeric','gt:0', 'max:130'],
-        //     'contact_num' => ['required','string','min:11'],
-        //     'role' => ['required'],
-        //     'verified' => ['required'],
-        //     'has_voted' => ['required'],
-
-        //    'email' => ['required','string' ,'email', 'max:255',Rule::unique('users')->ignore($this->route('user'))],
-        //     'password' => ['required' , 'min:8'],
-        //     'confirm_password' => ['required','same:password' , 'min:8'],
-        //     'profile_pic'=> ['sometimes'],
-        // ]));
         $user = User::query()->create($request->validated());
 
         return response()->json($user);
@@ -88,23 +70,6 @@ class UserController extends Controller
         );
     }
 
-    public function index2(User $user) : JsonResponse
-    {   
-         $users =User::where('role','resident')->get();
-         
-         
-         $req= [];
-         foreach($users as $user){
-             $request = [
-                 'user'=> $user,
-                 'full_name' => $user->first_name ." ". $user->last_name,
-             ];
-             array_push($req,$request);
-         }
-            return response()->json(
-            $req
-        );
-    }
      public function notBlockedUsers(Request $request) : JsonResponse
     {   
         
@@ -219,31 +184,6 @@ class UserController extends Controller
             'email' => [trans($status)],
         ]);
 
-        // if(User::where('email',$request['email'])->doesntExist()){
-        //     return response([
-        //         'message' => 'User doesn\'t exists!'
-        //     ],404);
-        // }
-        //  $token = Str::random(10);
-        // try{
-        //     DB::table('password_resets')->insert([
-        //         'email' => $request['email'],
-        //         'token' => $token
-        //     ]);
-
-        //     //send email
-        //     
-
-          
-        // }catch(\Exception $exception){
-        //     return response([
-        //         'message' => $exception->getMessage()
-        //     ],400);
-        // }
-       
-        
-
-        // return response()->json(Auth::user());
     }
     public function userLogged(): JsonResponse{
         if($id= Auth::user()->id)
