@@ -15,7 +15,7 @@ class LotSeeder extends Seeder
     public function run()
     {
          Lot::factory()
-            ->count(100)
+            ->count(200)
             ->create();
     }
 }

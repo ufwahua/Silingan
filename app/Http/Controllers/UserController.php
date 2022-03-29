@@ -29,7 +29,6 @@ class UserController extends Controller
     public function login(LoginRequest $request) : JsonResponse
     {
         $user = User::where('email', $request->email)->with('lot.block')->first();
-
     if ( $user &&  Hash::check($request->password, $user->password) && $user['verified']) {
         Auth::login($user,$request['remember']);
         $request->session()->regenerate();  

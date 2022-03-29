@@ -39,28 +39,29 @@ class BlockController extends Controller
      */
     public function store(BlockRequest $request) : JsonResponse
     {
-        $block="";
-        try{
-            $block = DB::table('blocks')->latest('number')->first();
-        $number = $block->number;
-             for($j = 0;$j<$request['number'];$j++)
-            {
-                $block = Block::query()->create([
-                    'number' => ++$number]);
-            }
-        }
-        catch (\Throwable $th){
-            $number = 1;
-             for($j = 0;$j<$request['number'];$j++)
-            {
-                $block = Block::query()->create([
-                    'number' =>$number++]);
-            }
-        }
-
-       
+        // $block="";
+        // try{
+        //     $block = DB::table('blocks')->latest('number')->first();
+        // $number = $block->number;
+        //      for($j = 0;$j<$request['number'];$j++)
+        //     {
+        //         $block = Block::query()->create([
+        //             'number' => ++$number]);
+        //     }
+        // }
+        // catch (\Throwable $th){
+        //     $number = 1;
+        //      for($j = 0;$j<$request['number'];$j++)
+        //     {
+        //         $block = Block::query()->create([
+        //             'number' =>$number++]);
+        //     }
+        // }
+        $block = Block::query()->create($request->validated());
 
         return response()->json($block);
+    
+       
     }
 
     /**
@@ -85,7 +86,10 @@ class BlockController extends Controller
     public function destroy(Block $block) : JsonResponse
     {
         $block->delete();
-        Lot::query()->where('block_id',$block['id'])->delete();
+        if(Lot::find($block['id'])){
+            Lot::query()->where('block_id',$block['id'])->delete();
+        }
+        
         return response()->json(['ok']);
     }
 }

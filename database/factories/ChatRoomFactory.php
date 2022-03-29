@@ -23,9 +23,8 @@ class ChatRoomFactory extends Factory
     public function definition()
     {
         return [
-        //    'name' =>  $this->faker->unique()->numberBetween(1,User::all()->count())." ".$this->faker->unique()->numberBetween(1,User::all()->count()),
-        //    'name' =>  "27 ".$this->faker->unique()->numberBetween(1,User::all()->count()),
-           'name' =>  "27 ".$this->faker->unique()->numberBetween(26,27),
+
+           'name' =>  "27 ".$this->faker->unique()->randomElement(['26','27']),
         
         ];
     }
