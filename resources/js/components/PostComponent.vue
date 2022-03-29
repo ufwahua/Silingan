@@ -31,6 +31,9 @@
                                         {{ post.user.first_name }}
                                         {{ post.user.last_name }}</b
                                     >
+                                    <b class="p-0 m-0">
+                                        [{{ post.user.role }}]
+                                    </b>
                                 </div>
                                 <div class="col-12">
                                     <p>{{ post.updated_at }}</p>
@@ -38,7 +41,11 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-fix" style="width: 30px">
+                    <div
+                        v-if="post.group_id === 1"
+                        class="col-fix"
+                        style="width: 30px"
+                    >
                         <Button
                             class="p-button-text w-full h-full"
                             icon="pi pi-ellipsis-v"
@@ -381,6 +388,7 @@ export default {
                     group_id: this.post.group.id,
                     user_id: this.userLogged.id,
                     content: this.content,
+                    approved: 1,
                 },
             })
                 .then((res) => {

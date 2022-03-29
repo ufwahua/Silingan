@@ -163,9 +163,9 @@ export default {
                 })
                 .catch((err) => {
                     this.error = "";
-
-                    if (err) {
-                        this.error = "Invalid Credentials";
+                    console.log(err.response);
+                    if (err.response.data.error) {
+                        this.error = err.response.data.error;
                     }
                     this.loading = false;
                 });

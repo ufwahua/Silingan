@@ -14,6 +14,7 @@ class Post extends Model
         'user_id',
         'images',
         'content',
+        'approved',
     ];
     public function group(){
         return $this->hasOne(Group::class,'id','group_id');

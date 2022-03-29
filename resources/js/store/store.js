@@ -1,6 +1,5 @@
 import { createStore } from "vuex";
 import createPersistedState from "vuex-persistedstate";
-import registeredUsers from "./admin/registeredUsers";
 
 //admin
 import blocks from "./admin/blocks";
@@ -30,6 +29,13 @@ export default createStore({
 
     //synchronous
     mutations: {
+        getAllUsers(state, payload) {
+            state.users = payload;
+        },
+
+        getUsersNotBlocked(state, payload) {
+            state.users = payload;
+        },
         getUserLogged(state, payload) {
             state.userLogged = payload;
         },
@@ -48,6 +54,33 @@ export default createStore({
     },
 
     actions: {
+        async getAllUsers({ commit }) {
+            await axios({
+                method: "get",
+                url: "/api/user/",
+            })
+                .then((res) => {
+                    commit("getAllUsers", res.data);
+                    console.log("users", res.data);
+                })
+                .catch((err) => {
+                    console.log(err.response.data);
+                });
+        },
+
+        async getUsersNotBlocked({ commit }, payload) {
+            await axios({
+                method: "get",
+                url: "/api/user/not_blocked/" + payload,
+            })
+                .then((res) => {
+                    commit("getUsersNotBlocked", res.data);
+                    console.log("registeredUsersNotBlocked", res.data);
+                })
+                .catch((err) => {
+                    console.log(err.response.data);
+                });
+        },
         async getUserLogged({ commit }) {
             await axios({
                 method: "get",
@@ -58,7 +91,6 @@ export default createStore({
                 })
                 .catch((err) => {
                     commit("getUserLogged", null);
-                    console.log(err.response);
                 });
         },
         async getBlockUsers({ commit }, payload) {
@@ -99,7 +131,6 @@ export default createStore({
     },
     getters: {},
     modules: {
-        registeredUsers,
         blocks,
         lots,
         news,

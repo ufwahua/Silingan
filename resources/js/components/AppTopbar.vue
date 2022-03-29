@@ -1,6 +1,6 @@
 <template>
     <div class="layout-topbar">
-        <router-link to="/admin/dashboard" class="layout-topbar-logo">
+        <router-link to="/admin/timeline" class="layout-topbar-logo">
             <img
                 alt="Silingan-Logo"
                 src="http://localhost:8000/storage/images/silingan-icon.png"

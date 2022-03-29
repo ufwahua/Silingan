@@ -16,7 +16,7 @@
                             >
                             <Dropdown
                                 v-model="selectedUser"
-                                :options="registeredUsers"
+                                :options="users"
                                 optionLabel="full_name"
                                 optionValue="id"
                                 :filter="true"
@@ -177,9 +177,7 @@ export default {
         const store = useStore();
         return {
             posts: computed(() => store.state.posts.posts),
-            registeredUsers: computed(
-                () => store.state.registeredUsers.registeredUsers
-            ),
+            users: computed(() => store.state.users),
             block_users: computed(() => store.state.block_users),
 
             userLogged: computed(() => store.state.userLogged),
@@ -212,7 +210,7 @@ export default {
             })
                 .then((res) => {
                     this.$store.dispatch(
-                        "registeredUsers/getUsersNotBlocked",
+                        "getUsersNotBlocked",
                         this.$store.state.userLogged.id
                     );
 
@@ -265,7 +263,7 @@ export default {
             })
                 .then((res) => {
                     this.$store.dispatch(
-                        "registeredUsers/getUsersNotBlocked",
+                        "getUsersNotBlocked",
                         this.$store.state.userLogged.id
                     );
 

@@ -199,6 +199,7 @@ export default {
                     user_id: this.$store.state.userLogged.id,
                     images: JSON.stringify(this.images),
                     content: this.content,
+                    approved: 1,
                 },
             })
                 .then((res) => {

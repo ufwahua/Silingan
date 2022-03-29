@@ -30,13 +30,18 @@ class UserController extends Controller
     {
         $user = User::where('email', $request->email)->with('lot.block')->first();
 
-        if ( $user &&  Hash::check($request->password, $user->password)) {
-            Auth::login($user,$request['remember']);
-            $request->session()->regenerate();  
+    if ( $user &&  Hash::check($request->password, $user->password) && $user['verified']) {
+        Auth::login($user,$request['remember']);
+        $request->session()->regenerate();  
  
-            return response()->json($user);
-        }
+        return response()->json($user);
+    }
+    else if(!$user['verified']){
+        return response()->json(["error"=>"Not verified, please contact admin or the officers"],401);
+    }else{
         return response()->json(["error"=>"Invalid Credentials, please try again"],401);
+    }
+        
                
     }
     

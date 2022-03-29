@@ -99,7 +99,7 @@ import { computed } from "vue";
 import { useStore } from "vuex";
 import NewsComponent from "./NewsComponent.vue";
 export default {
-    name: "UserDashboardComponent",
+    name: "AnnouncementComponent",
     components: {
         NewsComponent,
     },

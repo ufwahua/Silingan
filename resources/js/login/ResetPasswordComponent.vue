@@ -143,7 +143,7 @@ export default {
                 .then((res) => {
                     console.log("reset password successfully");
                     this.loading = false;
-                    this.$router.push("/security/dashboard");
+                    this.$router.push("/login");
                 })
                 .catch((err) => {
                     this.resetErrors();
