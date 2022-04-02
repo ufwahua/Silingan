@@ -29,6 +29,7 @@ class PostRequest extends FormRequest
             'user_id' => ['required',Rule::exists('users', 'id')],
             'images' => ['sometimes'],
             'content' => ['sometimes'],  
+            'approved' => ['required'],  
         ];
     }
 }

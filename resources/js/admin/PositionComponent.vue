@@ -217,7 +217,7 @@ export default {
 
         return {
             positions: computed(() => store.state.positions.positions),
-            users: computed(() => store.state.registeredUsers.registeredUsers),
+            users: computed(() => store.state.users),
         };
     },
     data() {

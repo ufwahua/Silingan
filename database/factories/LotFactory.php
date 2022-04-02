@@ -25,7 +25,7 @@ class LotFactory extends Factory
     {
         return [
             'block_id' => Block::all()->random()->id,
-            'number' =>  rand(1,100),
+            'number' =>  $this->faker->unique(true)->numberBetween(1, 50),
         ];
     }
 }

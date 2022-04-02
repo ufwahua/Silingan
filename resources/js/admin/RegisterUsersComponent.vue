@@ -3,7 +3,7 @@
         <Toast />
         <div class="grid">
             <div class="col-12">
-                <h1>Security Officers</h1>
+                <h1>Registered Users</h1>
             </div>
         </div>
         <div class="card">
@@ -36,7 +36,7 @@
             <div class="grid">
                 <div class="col-12">
                     <DataTable
-                        :value="registeredUsers"
+                        :value="users"
                         :filters="filters"
                         breakpoint="1230px"
                     >
@@ -47,9 +47,13 @@
                                 {{ data.id }}
                             </template>
                         </Column>
+
                         <Column header="Name" field="name">
                             <template #body="{ data }">
-                                {{ data.first_name }} {{ data.last_name }}
+                                {{
+                                    (data["name"] =
+                                        data.first_name + " " + data.last_name)
+                                }}
                             </template>
                         </Column>
                         <Column header="Email" field="email">
@@ -364,328 +368,6 @@
                             />
                         </template>
                     </Dialog>
-                    <!-- <Dialog
-                        v-model:visible="registerUserDialog"
-                        :style="{ width: '500px' }"
-                        header="Register User"
-                        :modal="true"
-                    >
-                        <div class="grid">
-                            <div class="col-12 title-form">
-                                <Badge
-                                    :value="1"
-                                    severity="info"
-                                    class="mr-2 mb-2"
-                                    size="large"
-                                ></Badge>
-                                <label><h6>Basic Information</h6></label>
-                            </div>
-
-                            <div class="p-fluid formgrid grid">
-                                <div class="field col-12 md:col-6">
-                                    <label >Firstname</label>
-                                    <label
-                                        style="color: red"
-                                        
-                                        v-if="!first_name"
-                                        >*</label
-                                    >
-                                    <InputText
-                                        id="firstname"
-                                        type="text"
-                                        v-model="first_name"
-                                        @keydown.enter="onRegisterClick"
-                                    />
-                                    <label
-                                        style="color: red"
-                                        
-                                        v-if="error_first_name"
-                                        >{{ error_first_name }}</label
-                                    >
-                                </div>
-
-                                <div class="field col-12 md:col-6">
-                                    <label >Lastname</label>
-                                    <label
-                                        style="color: red"
-                                        
-                                        v-if="!last_name"
-                                        >*</label
-                                    >
-                                    <InputText
-                                        id="last_name"
-                                        type="text"
-                                        v-model="last_name"
-                                        @keydown.enter="onRegisterClick"
-                                    />
-                                    <label
-                                        style="color: red"
-                                        
-                                        v-if="error_last_name"
-                                        >{{ error_last_name }}</label
-                                    >
-                                </div>
-
-                                <div class="field col-12 md:col-12">
-                                    <label >Age</label
-                                    ><label
-                                        style="color: red"
-                                        
-                                        v-if="!age"
-                                        >*</label
-                                    >
-                                    <InputText
-                                        id="age"
-                                        type="number"
-                                        min="0"
-                                        step="1"
-                                        onfocus="this.previousValue = this.value"
-                                        onkeydown="this.previousValue = this.value"
-                                        oninput="validity.valid || (value = this.previousValue)"
-                                        v-model="age"
-                                        @keydown.enter="onRegisterClick"
-                                    />
-                                    <label
-                                        style="color: red"
-                                        
-                                        v-if="error_age"
-                                        >{{ error_age }}</label
-                                    >
-                                </div>
-                                <div class="field col-12 md:col-12">
-                                    <div>
-                                        <label >Gender</label>
-                                        <label
-                                            style="color: red"
-                                            
-                                            v-if="!gender"
-                                            >*</label
-                                        >
-                                    </div>
-
-                                    <div class="field col-12 md:col-6">
-                                        <label>Role</label>
-                                        <label
-                                            style="color: red"
-                                            v-if="!selected_role"
-                                            >*</label
-                                        >
-                                        <Dropdown
-                                            v-model="selected_role"
-                                            :options="role"
-                                            optionLabel="type"
-                                            optionValue="value"
-                                            placeholder="Select Role"
-                                        />
-                                        <label
-                                            style="color: red"
-                                            
-                                            v-if="error_role"
-                                            >{{ error_role }}</label
-                                        >
-                                    </div>
-
-                                    <div>
-                                        <div class="field-radiobutton mb-0">
-                                            <RadioButton
-                                                name="gender"
-                                                value="male"
-                                                v-model="gender"
-                                                @keydown.enter="onRegisterClick"
-                                            />
-                                            <label
-                                                class="mb-0 ml-1 mr-5"
-                                                
-                                                >Male</label
-                                            >
-                                            <RadioButton
-                                                name="gender"
-                                                value="female"
-                                                v-model="gender"
-                                                @keydown.enter="onRegisterClick"
-                                            />
-                                            <label
-                                                class="mb-0 ml-1"
-                                                
-                                                >Female</label
-                                            >
-                                        </div>
-                                        <div>
-                                            <label
-                                                style="color: red"
-                                                
-                                                v-if="error_gender"
-                                                >{{ error_gender }}</label
-                                            >
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="field col-12 md:col-12">
-                                    <label 
-                                        >Contact Number</label
-                                    ><label
-                                        style="color: red"
-                                        
-                                        v-if="!contact_num"
-                                        >*</label
-                                    >
-                                    <InputText
-                                        id="contact_num"
-                                        type="text"
-                                        onkeyup="if(this.value<0){this.value= this.value * -1}"
-                                        v-model="contact_num"
-                                        @keydown.enter="onRegisterClick"
-                                    />
-                                    <label
-                                        style="color: red"
-                                        
-                                        v-if="error_contact_num"
-                                        >{{ error_contact_num }}</label
-                                    >
-                                </div>
-
-                                <div class="field col-12 md:col-6">
-                                    <label >Block</label>
-                                    <label
-                                        style="color: red"
-                                        
-                                        v-if="!selected_block"
-                                        >*</label
-                                    >
-                                    <Dropdown
-                                        v-model="selected_block"
-                                        :options="blocks"
-                                        optionLabel="number"
-                                        optionValue="id"
-                                        placeholder="Select Block"
-                                        @change="getBlockLot"
-                                    />
-                                    <label
-                                        style="color: red"
-                                        
-                                        v-if="error_selected_block"
-                                        >{{ error_selected_block }}</label
-                                    >
-                                </div>
-
-                                <div class="field col-12 md:col-6">
-                                    <label >Lot</label>
-                                    <label
-                                        style="color: red"
-                                        
-                                        v-if="!selected_block_lot"
-                                        >*</label
-                                    >
-                                    <Dropdown
-                                        v-model="selected_block_lot"
-                                        :options="filteredLots"
-                                        optionLabel="number"
-                                        optionValue="id"
-                                        placeholder="Select Lot"
-                                    />
-                                    <label
-                                        style="color: red"
-                                        
-                                        v-if="error_selected_lot"
-                                        >{{ error_selected_lot }}</label
-                                    >
-                                </div>
-
-                                <br />
-
-                                <div class="col-12 title-form">
-                                    <Badge
-                                        :value="2"
-                                        severity="info"
-                                        class="mr-2 mb-2"
-                                        size="large"
-                                    ></Badge>
-                                    <label><h6>Security Information</h6></label>
-                                </div>
-
-                                <div class="field col-12 md:col-4">
-                                    <label >Email</label
-                                    ><label
-                                        style="color: red"
-                                        
-                                        v-if="!email"
-                                        >*</label
-                                    >
-                                    <InputText
-                                        type="text"
-                                        name="email"
-                                        v-model="email"
-                                        @keydown.enter="onRegisterClick"
-                                    />
-                                    <label
-                                        style="color: red"
-                                        
-                                        v-if="error_email"
-                                        >{{ error_email }}</label
-                                    >
-                                </div>
-                                <div class="field col-12 md:col-4">
-                                    <label >Password</label
-                                    ><label
-                                        style="color: red"
-                                        
-                                        v-if="!password"
-                                        >*</label
-                                    >
-                                    <InputText
-                                        type="password"
-                                        name="password"
-                                        v-model="password"
-                                        @keydown.enter="onRegisterClick"
-                                    />
-                                    <label
-                                        style="color: red"
-                                        
-                                        v-if="error_password"
-                                        >{{ error_password }}</label
-                                    >
-                                </div>
-                                <div class="field col-12 md:col-4">
-                                    <label 
-                                        >Confirm Password</label
-                                    >
-                                    <label
-                                        style="color: red"
-                                        
-                                        v-if="!confirm_password"
-                                        >*</label
-                                    >
-                                    <InputText
-                                        type="password"
-                                        name="confirmpassword"
-                                        v-model="confirm_password"
-                                        @keydown.enter="onRegisterClick"
-                                    />
-                                    <label
-                                        style="color: red"
-                                        
-                                        v-if="error_confirm_password"
-                                        >{{ error_confirm_password }}</label
-                                    >
-                                </div>
-                            </div>
-                        </div>
-                        <template #footer>
-                            <Button
-                                label="Cancel"
-                                icon="pi pi-times"
-                                class="p-button-text"
-                                @click="registerUserDialog = false"
-                            />
-                            <Button
-                                label="Register"
-                                icon="pi pi-check"
-                                class="p-button-text p-button-success"
-                                @click="onRegisterClick"
-                            />
-                        </template>
-                    </Dialog> -->
-
                     <Dialog
                         v-model:visible="registerUserDialog"
                         :style="{ width: '500px' }"
@@ -1020,9 +702,7 @@ export default {
             blocks: computed(() => store.state.blocks.blocks),
             filteredLots: computed(() => store.state.lots.filteredLots),
             lots: computed(() => store.state.lots.lots),
-            registeredUsers: computed(
-                () => store.state.registeredUsers.registeredUsers
-            ),
+            users: computed(() => store.state.users),
         };
     },
     data() {
@@ -1066,7 +746,12 @@ export default {
             role: null,
             selected_role: null,
             user: null,
-            role: [{ type: "security_officer", value: "security_officer" }],
+            role: [
+                { type: "officer", value: "officer" },
+                { type: "resident", value: "resident" },
+                { type: "security_officer", value: "security_officer" },
+                { type: "admin", value: "admin" },
+            ],
             error_first_name: "",
             error_last_name: "",
             error_gender: "",
@@ -1092,10 +777,6 @@ export default {
         initFilters() {
             this.filters = {
                 global: { value: null, matchMode: FilterMatchMode.CONTAINS },
-                role: {
-                    value: "security_officer",
-                    matchMode: FilterMatchMode.EQUALS,
-                },
             };
         },
         badgecolor(color) {
@@ -1122,7 +803,7 @@ export default {
                     method: "delete",
                     url: "/api/user/" + this.id,
                 });
-                this.$store.dispatch("registeredUsers/getAll");
+                this.$store.dispatch("getAllUsers");
                 this.process = false;
                 this.$toast.add({
                     severity: "success",
@@ -1177,7 +858,7 @@ export default {
                         detail: "Updated User",
                         life: 3000,
                     });
-                    this.$store.dispatch("registeredUsers/getAll");
+                    this.$store.dispatch("getAllUsers");
                     this.resetFields();
                     this.updateUserDialog = false;
                     this.process = false;
@@ -1218,7 +899,7 @@ export default {
                 .then(() => {
                     this.registerUserDialog = false;
                     this.resetFields();
-                    this.$store.dispatch("registeredUsers/getAll");
+                    this.$store.dispatch("getAllUsers");
                     this.$toast.add({
                         severity: "success",
                         summary: "Successful Request",

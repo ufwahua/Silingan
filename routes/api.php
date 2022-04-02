@@ -16,6 +16,7 @@ use App\Http\Controllers\ElectionController;
 use App\Http\Controllers\PositionController;
 use App\Http\Controllers\CandidateController;
 use App\Http\Controllers\AnnouncementController;
+use App\Http\Controllers\BlockUserController;
 use App\Http\Controllers\CardController;
 use App\Http\Controllers\EmergencyContactDetailController;
 use App\Http\Controllers\LogController;
@@ -34,16 +35,16 @@ use App\Http\Controllers\LogController;
 Route::middleware(['auth:sanctum'])->group(function () {
   
 });
+//Check if User is Logged in
+Route::get('/user_logged',[UserController::class, 'userLogged']);
 //PUBLIC
 Route::put('/change-password/{user}', [UserController::class, 'changePassword']);
 Route::post('/reset-password', [UserController::class, 'resetPassword']);
 Route::post('/forgot-password', [UserController::class, 'forgotPassword']);
 Route::post('/login', [UserController::class, 'login']);
 Route::get('/logout', [UserController::class, 'logout']);
-Route::get('/user/index2', [UserController::class, 'index2']);
+Route::get('/user/not_blocked/{user}', [UserController::class, 'notBlockedUsers']);
 Route::delete('/candidate/election/{candidate}', [CandidateController::class, 'deleteAllCandidate']);
-//Check if User is Logged in
-Route::get('/user_logged',[UserController::class, 'userLogged']);
 
 
  Route::apiResources([
@@ -63,6 +64,7 @@ Route::get('/user_logged',[UserController::class, 'userLogged']);
     'election'             => ElectionController::class,
     'card'             => CardController::class,
     'log'             => LogController::class,
+    'block_user'             => BlockUserController::class,
 ]);
 
   

@@ -43,9 +43,16 @@
                         <template #empty> No announcement found </template>
                         <template #loading> Loading Users </template>
                         <Column header="ID" field="id"> </Column>
-                        <Column header="Firstname" field="user.first_name">
-                        </Column>
-                        <Column header="Lastname" field="user.last_name">
+
+                        <Column header="Name" field="name">
+                            <template #body="{ data }">
+                                {{
+                                    (data["name"] =
+                                        data.user.first_name +
+                                        " " +
+                                        data.user.last_name)
+                                }}
+                            </template>
                         </Column>
                         <Column header="Role" field="user.role"> </Column>
                         <Column header="Title" field="title"> </Column>

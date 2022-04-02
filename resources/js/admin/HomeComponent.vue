@@ -25,10 +25,10 @@
 </template>
 
 <script>
-import AppTopBar from "../../components/AppTopbar.vue";
-import AppMenu from "../../components/AppMenu.vue";
-import ChatComponent from "../../components/ChatComponent.vue";
-import AppFooter from "../../components/AppFooter.vue";
+import AppTopBar from "../components/AppTopbar.vue";
+import AppMenu from "../components/AppMenu.vue";
+import ChatComponent from "../components/ChatComponent.vue";
+import AppFooter from "../components/AppFooter.vue";
 
 export default {
     name: "HomeComponent",
@@ -52,7 +52,7 @@ export default {
                         {
                             label: "Timeline",
                             icon: "pi pi-fw pi-home",
-                            to: "/admin/dashboard",
+                            to: "/admin/timeline",
                         },
                         {
                             label: "Marketplace",
@@ -108,27 +108,22 @@ export default {
                                     icon: "pi pi-info-circle",
                                     to: "/admin/position",
                                 },
-                                {
-                                    label: "Candidates",
-                                    icon: "pi pi-info-circle",
-                                    to: "/admin/candidate",
-                                },
-                                {
-                                    label: "Announcement",
-                                    icon: "pi pi-info-circle",
-                                    to: "/admin/announcement",
-                                },
-                                {
-                                    label: "Emergency Details",
-                                    icon: "pi pi-info-circle",
-                                    to: "/admin/emergency-contact-detail",
-                                },
                             ],
                         },
                     ],
                 },
                 {
                     items: [
+                        {
+                            label: "Announcement",
+                            icon: "pi pi-info-circle",
+                            to: "/admin/announcement",
+                        },
+                        {
+                            label: "Emergency Details",
+                            icon: "pi pi-info-circle",
+                            to: "/admin/emergency-contact-detail",
+                        },
                         {
                             label: "Election",
                             icon: "pi pi-fw pi-calendar",
@@ -251,21 +246,17 @@ export default {
     mounted() {
         this.$store.dispatch("news/getAll");
         this.$store.dispatch("blocks/getAll");
-        this.$store.dispatch("lots/getAll");
-        this.$store.dispatch("registeredUsers/getAll");
-        this.$store.commit("registeredUsers/getResidents");
-        this.$store.commit("registeredUsers/getOfficers");
-        this.$store.commit("registeredUsers/getAdmins");
-        this.$store.commit("registeredUsers/getSecurityOfficers");
-        this.$store.dispatch("registeredUsersFname/getAll");
+
         this.$store.dispatch("announcements/getAll");
         this.$store.dispatch("positions/getAll");
         this.$store.dispatch("emergency_contact_details/getAll");
         this.$store.dispatch("candidates/getAll");
+        this.$store.dispatch("getAllUsers");
+        this.$store.dispatch("getBlockUsers", this.$store.state.userLogged.id);
     },
 };
 </script>
 
 <style lang="scss">
-@import "../App.scss";
+@import "./assets/styles/App.scss";
 </style>

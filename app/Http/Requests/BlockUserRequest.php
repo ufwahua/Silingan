@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class BlockUserRequest extends FormRequest
@@ -24,7 +25,8 @@ class BlockUserRequest extends FormRequest
     public function rules()
     {
         return [
-            'user_id' => ['required']
+            'user_id' => ['required',Rule::exists('users', 'id')],
+            'block_user_id' => ['required',Rule::exists('users', 'id')],
         ];
     }
 }

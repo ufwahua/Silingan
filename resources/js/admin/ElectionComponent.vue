@@ -148,9 +148,9 @@
                                 <label style="color: red">*</label>
                                 <Dropdown
                                     v-model="user_id"
-                                    :options="registeredUsersFname"
+                                    :options="users"
                                     optionLabel="full_name"
-                                    optionValue="user.id"
+                                    optionValue="id"
                                     placeholder="Select Candidates"
                                     :class="{
                                         'p-invalid': error_user_id,
@@ -159,6 +159,14 @@
                                     :filter="true"
                                     :showClear="true"
                                 >
+                                    <template #option="slotProps">
+                                        {{
+                                            (slotProps.option["full_name"] =
+                                                slotProps.option.first_name +
+                                                " " +
+                                                slotProps.option.last_name)
+                                        }}
+                                    </template>
                                 </Dropdown>
                                 <label
                                     style="color: red"
@@ -215,11 +223,12 @@
                             <div class="field col-12 md:col-12">
                                 <label>Candidate name</label>
                                 <label style="color: red">*</label>
+
                                 <Dropdown
                                     v-model="user_id"
-                                    :options="registeredUsersFname"
+                                    :options="users"
                                     optionLabel="full_name"
-                                    optionValue="user.id"
+                                    optionValue="id"
                                     placeholder="Select Candidates"
                                     :class="{
                                         'p-invalid': error_user_id,
@@ -228,6 +237,14 @@
                                     :filter="true"
                                     :showClear="true"
                                 >
+                                    <template #option="slotProps">
+                                        {{
+                                            (slotProps.option["full_name"] =
+                                                slotProps.option.first_name +
+                                                " " +
+                                                slotProps.option.last_name)
+                                        }}
+                                    </template>
                                 </Dropdown>
                                 <label
                                     style="color: red"
@@ -351,12 +368,12 @@ export default {
         return {
             positions: computed(() => store.state.positions.positions),
             candidates: computed(() => store.state.candidates.candidates),
-            registeredUsers: computed(
-                () => store.state.registeredUsers.registeredUsers
-            ),
-            registeredUsersFname: computed(
-                () => store.state.registeredUsersFname.registeredUsersFname
-            ),
+            users: computed(() => {
+                var temp = store.state.users.filter((elem) => {
+                    return elem.role === "resident";
+                });
+                return temp;
+            }),
         };
     },
     data() {

@@ -3,6 +3,7 @@ import Register from "../login/RegisterComponent.vue";
 import ForgotPassword from "../login/ForgotPasswordComponent.vue";
 import ResetPasswordComponent from "../login/ResetPasswordComponent.vue";
 //admin
+<<<<<<< HEAD
 import HomeComponent from "../admin/dashboard/HomeComponent.vue";
 import DashboardComponent from "../admin/dashboard/DashboardComponent.vue";
 import Block_Lot from "../admin/dashboard/Block_LotComponent.vue";
@@ -23,15 +24,35 @@ import Marketplace from "../components/PostMarketplaceComponent.vue";
 import UserHome from "../user/dashboard/UserHomeComponent.vue";
 import UserDashboard from "../user/dashboard/UserDashboardComponent.vue";
 //import AnnouncementComponent from "../components/AnnouncementComponent.vue";
+=======
+import HomeComponent from "../admin/HomeComponent.vue";
+import Block_Lot from "../admin/Block_LotComponent.vue";
+import RegisteredUsersComponent from "../admin/RegisterUsersComponent.vue";
+import Announcement from "../admin/Announcement.vue";
+import ResidentComponent from "../admin/ResidentComponent.vue";
+import OfficerComponent from "../admin/OfficerComponent.vue";
+import SecurityOfficerComponent from "../admin/SecurityOfficerComponent.vue";
+import EmergencyContactDetail from "../admin/EmergencyContactDetail.vue";
+import Position from "../admin/PositionComponent.vue";
+import Candidate from "../admin/CandidateComponent.vue";
+import ElectionComponent from "../admin/ElectionComponent.vue";
+
+//user
+import UserHome from "../user/UserHomeComponent.vue";
+>>>>>>> 4db789ac93e6d00324b76355b86341ebd84bb5b0
 
 //security officer
-import SecurityHome from "../security_officer/dashboard/SecurityHomeComponent.vue";
-import SecurityDashboard from "../security_officer/dashboard/SecurityDashboardComponent.vue";
-import LogComponent from "../security_officer/dashboard/LogComponent.vue";
+import SecurityHome from "../security_officer/SecurityHomeComponent.vue";
+import LogComponent from "../security_officer/LogComponent.vue";
 
+import TimelineComponent from "../components/TimelineComponent.vue";
+import MarketplaceComponent from "../components/MarketplaceComponent.vue";
 import IndexComponent from "../home/IndexComponent.vue";
 import AnnouncementComponent from "../components/AnnouncementComponent.vue";
+import EmergencyContactComponent from "../components/EmergencyContactComponent.vue";
 import NotFound from "../components/NotFoundComponent.vue";
+import AppProfile from "../components/AppProfile.vue";
+import BlockUser from "../components/BlockUserComponent.vue";
 import { createRouter, createWebHistory } from "vue-router";
 import store from "../store/store";
 
@@ -49,19 +70,19 @@ function checkRole(to, from, next) {
             (userLogged.role === "admin" || userLogged.role === "officer") &&
             (to.meta.role === "resident" || to.meta.role === "security_officer")
         ) {
-            next("/admin/dashboard");
+            next("/admin/timeline");
         }
         if (
             userLogged.role === "resident" &&
             (to.meta.role === "admin" || to.meta.role === "security_officer")
         ) {
-            next("/resident/dashboard");
+            next("/resident/timeline");
         }
         if (
             userLogged.role === "security_officer" &&
             (to.meta.role === "admin" || to.meta.role === "resident")
         ) {
-            next("/security/dashboard");
+            next("/security/timeline");
         }
 
         next();
@@ -78,11 +99,11 @@ function checkLogged(to, from, next) {
         isAuthenticated &&
         (userLogged.role === "admin" || userLogged.role === "officer")
     ) {
-        next("/admin/dashboard");
+        next("/admin/timeline");
     } else if (isAuthenticated && userLogged.role === "resident") {
-        next("/resident/dashboard");
+        next("/resident/timeline");
     } else if (isAuthenticated && userLogged.role === "security_officer") {
-        next("/security_officer/dashboard");
+        next("/security_officer/timeline");
     } else {
         next();
     }
@@ -135,14 +156,25 @@ const router = createRouter({
             },
             children: [
                 {
-                    path: "/admin/dashboard",
+                    path: "/admin/timeline",
                     beforeEnter: checkRole,
                     meta: {
                         role: "admin",
                     },
                     components: {
                         default: NotFound,
-                        contents: DashboardComponent,
+                        contents: TimelineComponent,
+                    },
+                },
+                {
+                    path: "marketplace",
+                    beforeEnter: checkRole,
+                    meta: {
+                        role: "admin",
+                    },
+                    components: {
+                        default: NotFound,
+                        contents: MarketplaceComponent,
                     },
                 },
                 {
@@ -245,6 +277,17 @@ const router = createRouter({
                     },
                 },
                 {
+                    path: "block_user",
+                    meta: {
+                        role: "admin",
+                    },
+                    beforeEnter: checkRole,
+                    components: {
+                        default: NotFound,
+                        contents: BlockUser,
+                    },
+                },
+                {
                     path: "emergency-contact-detail",
                     meta: {
                         role: "admin",
@@ -300,7 +343,7 @@ const router = createRouter({
             name: "userhome",
             children: [
                 {
-                    path: "/resident/dashboard",
+                    path: "/resident/timeline",
                     meta: {
                         role: "resident",
                     },
@@ -310,7 +353,18 @@ const router = createRouter({
                     },
                     components: {
                         default: NotFound,
-                        contents: UserDashboard,
+                        contents: TimelineComponent,
+                    },
+                },
+                {
+                    path: "marketplace",
+                    beforeEnter: checkRole,
+                    meta: {
+                        role: "resident",
+                    },
+                    components: {
+                        default: NotFound,
+                        contents: MarketplaceComponent,
                     },
                 },
                 {
@@ -325,6 +379,18 @@ const router = createRouter({
                     },
                 },
                 {
+                    path: "block_user",
+                    meta: {
+                        role: "resident",
+                    },
+                    beforeEnter: checkRole,
+                    components: {
+                        default: NotFound,
+                        contents: BlockUser,
+                    },
+                },
+
+                {
                     path: "announcement",
                     meta: {
                         role: "resident",
@@ -336,14 +402,22 @@ const router = createRouter({
                     },
                 },
                 {
+<<<<<<< HEAD
                     path: "marketplace",
+=======
+                    path: "emergency",
+>>>>>>> 4db789ac93e6d00324b76355b86341ebd84bb5b0
                     meta: {
                         role: "resident",
                     },
                     beforeEnter: checkRole,
                     components: {
                         default: NotFound,
+<<<<<<< HEAD
                         contents: Marketplace,
+=======
+                        contents: EmergencyContactComponent,
+>>>>>>> 4db789ac93e6d00324b76355b86341ebd84bb5b0
                     },
                 },
             ],
@@ -358,7 +432,7 @@ const router = createRouter({
             name: "securityhome",
             children: [
                 {
-                    path: "/security_officer/dashboard",
+                    path: "/security_officer/timeline",
                     meta: {
                         role: "security_officer",
                     },
@@ -368,7 +442,18 @@ const router = createRouter({
                     },
                     components: {
                         default: NotFound,
-                        contents: SecurityDashboard,
+                        contents: TimelineComponent,
+                    },
+                },
+                {
+                    path: "marketplace",
+                    beforeEnter: checkRole,
+                    meta: {
+                        role: "securit_officer",
+                    },
+                    components: {
+                        default: NotFound,
+                        contents: MarketplaceComponent,
                     },
                 },
                 {
@@ -383,6 +468,28 @@ const router = createRouter({
                     },
                 },
                 {
+                    path: "log",
+                    meta: {
+                        role: "security_officer",
+                    },
+                    beforeEnter: checkRole,
+                    components: {
+                        default: NotFound,
+                        contents: LogComponent,
+                    },
+                },
+                {
+                    path: "block_user",
+                    meta: {
+                        role: "security_officer",
+                    },
+                    beforeEnter: checkRole,
+                    components: {
+                        default: NotFound,
+                        contents: BlockUser,
+                    },
+                },
+                {
                     path: "announcement",
                     meta: {
                         role: "security_officer",
@@ -394,14 +501,14 @@ const router = createRouter({
                     },
                 },
                 {
-                    path: "log",
+                    path: "emergency",
                     meta: {
                         role: "security_officer",
                     },
                     beforeEnter: checkRole,
                     components: {
                         default: NotFound,
-                        contents: LogComponent,
+                        contents: EmergencyContactComponent,
                     },
                 },
                 {

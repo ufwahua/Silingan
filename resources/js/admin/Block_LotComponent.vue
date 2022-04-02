@@ -53,6 +53,7 @@
                                     v-tooltip="'Add lots'"
                                     @click="openLotModal(data.number)"
                                 />
+
                                 <Button
                                     icon="pi pi-pencil"
                                     class="p-button-rounded p-button-primary mr-1"
@@ -92,14 +93,10 @@
                             <InputText
                                 id="number"
                                 type="number"
-                                min="0"
-                                step="1"
-                                onfocus="this.previousValue = this.value"
-                                onkeydown="this.previousValue = this.value"
-                                oninput="validity.valid || (value = this.previousValue)"
+                                :class="{ 'p-invalid': error }"
+                                oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*?)\..*/g, '$1');"
                                 class="inputfield w-full"
                                 v-model="form_block_number"
-                                placeholder="How many blocks you want to create"
                             />
                             <label style="color: red" v-if="error">{{
                                 this.error
@@ -127,10 +124,12 @@
             <Dialog
                 v-model:visible="lotModal"
                 :style="{ width: '800px' }"
-                :header="number"
                 :modal="true"
                 :closeOnEscape="true"
             >
+                <template #header>
+                    <h3>Block {{ number }}</h3>
+                </template>
                 <div class="card">
                     <div class="grid mb-4">
                         <div class="col-12">
@@ -163,7 +162,7 @@
 
                     <div class="grid">
                         <div class="col-12">
-                            <DataTable :value="lots" :filters="filters">
+                            <DataTable :value="filteredLots" :filters="filters">
                                 <template #empty> No Lots found </template>
                                 <template #loading> Loading </template>
 
@@ -218,14 +217,10 @@
                                     <InputText
                                         id="number"
                                         type="number"
-                                        min="0"
-                                        step="1"
-                                        onfocus="this.previousValue = this.value"
-                                        onkeydown="this.previousValue = this.value"
-                                        oninput="validity.valid || (value = this.previousValue)"
+                                        :class="{ 'p-invalid': error }"
+                                        oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*?)\..*/g, '$1');"
                                         class="inputfield w-full"
                                         v-model="form_lot_number"
-                                        placeholder="How many lots you want to create"
                                     />
                                     <label style="color: red" v-if="error">{{
                                         this.error
@@ -260,7 +255,11 @@
                             <div class="col-12">
                                 <div class="p-fluid">
                                     <h5>Lot Number</h5>
-                                    <InputText v-model="form_lot_number" />
+                                    <InputText
+                                        :class="{ 'p-invalid': error }"
+                                        oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*?)\..*/g, '$1');"
+                                        v-model="form_lot_number"
+                                    />
                                     <label style="color: red" v-if="error">{{
                                         this.error
                                     }}</label>
@@ -353,7 +352,11 @@
                     <div class="col-12">
                         <div class="p-fluid">
                             <h5>Block Number</h5>
-                            <InputText v-model="number" />
+                            <InputText
+                                :class="{ 'p-invalid': error }"
+                                oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*?)\..*/g, '$1');"
+                                v-model="number"
+                            />
                             <label style="color: red" v-if="error">{{
                                 this.error
                             }}</label>
@@ -476,7 +479,8 @@ export default {
 
         return {
             blocks: computed(() => store.state.blocks.blocks),
-            lots: computed(() => store.state.lots.lots),
+            // lots: computed(() => store.state.lots.lots),
+            filteredLots: computed(() => store.state.lots.filteredLots),
         };
     },
     components: {
@@ -530,20 +534,6 @@ export default {
             this.error = null;
         },
 
-        //GET BLOCK
-        async getBlock() {
-            await axios({
-                method: "get",
-                url: "/api/block/",
-            })
-                .then((res) => {
-                    this.block = res.data;
-                })
-                .catch((error) => {
-                    console.log(error);
-                });
-        },
-
         // Open Block Modal
         openAddBlockModal() {
             this.addBlockModal = true;
@@ -575,7 +565,7 @@ export default {
             })
                 .then((res) => {
                     this.addBlockModal = false;
-                    this.getBlock();
+                    this.$store.dispatch("blocks/getAll");
                     this.showAddBlockToast();
                     this.loading = false;
                 })
@@ -615,7 +605,7 @@ export default {
             })
                 .then((res) => {
                     this.updateBlockModal = false;
-                    this.getBlock();
+                    this.$store.dispatch("blocks/getAll");
                     this.showUpdateBlockToast();
                     this.loading = false;
                 })
@@ -650,7 +640,7 @@ export default {
             })
                 .then((res) => {
                     this.deleteModal = false;
-                    this.getBlock();
+                    this.$store.dispatch("blocks/getAll");
                     this.showDeleteBlockToast();
                     this.loading = false;
                 })
@@ -660,27 +650,12 @@ export default {
                 });
         },
 
-        //LOT
-        async getLot() {
-            await axios({
-                method: "get",
-                url: "/api/lot/" + this.block_id,
-            })
-                .then((res) => {
-                    this.lot = res.data;
-                })
-                .catch((error) => {
-                    this.lot = null;
-                    console.log(error);
-                });
-        },
-
         // Open Lot Modal
         openLotModal(number) {
             this.block_id = number;
-            this.number = "Block " + number;
+            this.number = number;
             this.lotModal = true;
-            this.getLot();
+            this.$store.dispatch("lots/getBlockLots", this.block_id);
         },
         closeLotModal() {
             this.lotModal = false;
@@ -716,14 +691,16 @@ export default {
                 },
             })
                 .then((res) => {
+                    console.log("post lot", res.data);
                     this.addLotModal = false;
-                    this.getLot();
+                    this.$store.dispatch("lots/getBlockLots", this.block_id);
                     this.showAddLotToast();
                     this.loading = false;
                 })
                 .catch((error) => {
-                    if (error.response.data.errors.lot)
-                        this.error = error.response.data.errors.number[0];
+                    console.log(error.response);
+                    if (error.response.data.error)
+                        this.error = error.response.data.error;
                     this.lot = [];
                     this.loading = false;
                 });
@@ -764,7 +741,7 @@ export default {
             })
                 .then((res) => {
                     this.updateLotModal = false;
-                    this.getLot();
+                    this.$store.dispatch("lots/getBlockLots", this.block_id);
                     this.showUpdateLotToast();
                     this.loading = false;
                 })
@@ -798,7 +775,7 @@ export default {
             })
                 .then((res) => {
                     this.deleteLotModal = false;
-                    this.getLot();
+                    this.$store.dispatch("lots/getBlockLots", this.block_id);
                     this.showDeleteToast();
                     this.loading = false;
                 })

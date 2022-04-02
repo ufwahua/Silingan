@@ -36,8 +36,9 @@
 
             <div class="col-12 layout-config-content">
                 <div v-if="resident">
-                    <div v-for="resident in residents" :key="resident.id">
+                    <div v-for="resident in users" :key="resident.id">
                         <ChatSideBarComponent
+                            v-if="resident.role === 'resident'"
                             @click="openChatRoom(resident)"
                             v-bind:user="resident"
                         />
@@ -45,26 +46,29 @@
                 </div>
                 <div v-if="security_officer">
                     <div
-                        v-for="security_officer in security_officers"
+                        v-for="security_officer in users"
                         :key="security_officer.id"
                     >
                         <ChatSideBarComponent
+                            v-if="security_officer.role === 'security_officer'"
                             @click="openChatRoom(security_officer)"
                             v-bind:user="security_officer"
                         />
                     </div>
                 </div>
                 <div v-if="officer">
-                    <div v-for="officer in officers" :key="officer.id">
+                    <div v-for="officer in users" :key="officer.id">
                         <ChatSideBarComponent
+                            v-if="officer.role === 'officer'"
                             @click="openChatRoom(resident)"
                             v-bind:user="officer"
                         />
                     </div>
                 </div>
                 <div v-if="admin">
-                    <div v-for="admin in admins" :key="admin.id">
+                    <div v-for="admin in users" :key="admin.id">
                         <ChatSideBarComponent
+                            v-if="admin.role === 'admin'"
                             @click="openChatRoom(admin)"
                             v-bind:user="admin"
                         />
@@ -137,12 +141,7 @@ export default {
     setup() {
         const store = useStore();
         return {
-            residents: computed(() => store.state.registeredUsers.residents),
-            officers: computed(() => store.state.registeredUsers.officers),
-            admins: computed(() => store.state.registeredUsers.admins),
-            security_officers: computed(
-                () => store.state.registeredUsers.security_officers
-            ),
+            users: computed(() => store.state.users),
             chats: computed(() => store.state.chats),
         };
     },
@@ -240,23 +239,25 @@ export default {
             this.$refs.menu_chat.toggle(event);
         },
         async sendMessage() {
-            await axios({
-                method: "post",
-                url: "/api/chat/",
-                data: {
-                    user_id: this.user.id,
-                    message: this.message,
-                },
-            })
-                .then((res) => {
-                    this.message = null;
-                    console.log(res.data[0].chats);
-                    this.$store.commit("getChats", res.data[0].chats);
+            if (this.message) {
+                await axios({
+                    method: "post",
+                    url: "/api/chat/",
+                    data: {
+                        user_id: this.user.id,
+                        message: this.message,
+                    },
                 })
-                .catch((error) => {
-                    this.$store.commit("getChats", null);
-                    console.log(error.response);
-                });
+                    .then((res) => {
+                        this.message = null;
+                        console.log(res.data[0].chats);
+                        this.$store.commit("getChats", res.data[0].chats);
+                    })
+                    .catch((error) => {
+                        this.$store.commit("getChats", null);
+                        console.log(error.response);
+                    });
+            }
         },
         connect() {
             if (this.chat_room_id) {
@@ -293,6 +294,9 @@ export default {
         toggleChatContainer(event) {
             this.active = !this.active;
             event.preventDefault();
+
+            if (this.active) this.bindOutsideClickListener();
+            else this.unbindOutsideClickListener();
         },
         bindOutsideClickListener() {
             if (!this.outsideClickListener) {

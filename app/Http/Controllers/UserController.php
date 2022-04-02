@@ -13,6 +13,7 @@ use App\Http\Requests\LoginRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\RegisterRequest;
+use App\Models\BlockUser;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Validation\ValidationException;
@@ -28,37 +29,23 @@ class UserController extends Controller
     public function login(LoginRequest $request) : JsonResponse
     {
         $user = User::where('email', $request->email)->with('lot.block')->first();
-
-        if ( $user &&  Hash::check($request->password, $user->password)) {
-            Auth::login($user,$request['remember']);
-            $request->session()->regenerate();  
+    if ( $user &&  Hash::check($request->password, $user->password) && $user['verified']) {
+        Auth::login($user,$request['remember']);
+        $request->session()->regenerate();  
  
-            return response()->json($user);
-        }
+        return response()->json($user);
+    }
+    else if(!$user['verified']){
+        return response()->json(["error"=>"Not verified, please contact admin or the officers"],401);
+    }else{
         return response()->json(["error"=>"Invalid Credentials, please try again"],401);
+    }
+        
                
     }
     
     public function store(RegisterRequest $request) : JsonResponse
     {
-        // $user = User::query()->create($request->validate([
-        //     'block_lot_id' => ['required',Rule::exists('lots', 'id')],
-             
-        //     'first_name' => ['required','string' , 'max:255'],
-        //     'last_name' => ['required','string' , 'max:255'],
-        //     'gender' => ['required'],
-        //     'block_lot_id' => ['sometimes'],
-        //     'age' => ['required','integer','numeric','gt:0', 'max:130'],
-        //     'contact_num' => ['required','string','min:11'],
-        //     'role' => ['required'],
-        //     'verified' => ['required'],
-        //     'has_voted' => ['required'],
-
-        //    'email' => ['required','string' ,'email', 'max:255',Rule::unique('users')->ignore($this->route('user'))],
-        //     'password' => ['required' , 'min:8'],
-        //     'confirm_password' => ['required','same:password' , 'min:8'],
-        //     'profile_pic'=> ['sometimes'],
-        // ]));
         $user = User::query()->create($request->validated());
 
         return response()->json($user);
@@ -83,23 +70,18 @@ class UserController extends Controller
     public function index(Request $request) : JsonResponse
     {
         return response()->json(
-            User::with('lot.block')->get()
+            User::with(['lot.block'])->get()
         );
     }
 
-    public function index2(User $user) : JsonResponse
+     public function notBlockedUsers(Request $request) : JsonResponse
     {   
-         $users =User::where('role','resident')->get();
-         $req= [];
-         foreach($users as $user){
-             $request = [
-                 'user'=> $user,
-                 'full_name' => $user->first_name ." ". $user->last_name,
-             ];
-             array_push($req,$request);
-         }
-            return response()->json(
-            $req
+        
+        $block_user_ids=DB::table('block_users')->where('user_id',$request->route('user'))->pluck('block_user_id')->toArray();
+        $block_users =User::whereNotIn('id',$block_user_ids)->get();
+
+        return response()->json(
+            $block_users
         );
     }
 
@@ -108,11 +90,13 @@ class UserController extends Controller
      * @param User $user
      * @return JsonResponse
      */
-    public function show(Request $request) : JsonResponse
+    public function show(User $user) : JsonResponse
     {
-       
-        return response()->json( User::with('lot.block')->where('id',$request->ignore($this->route('user')))->get());
+        //  $block_user_ids=DB::table('block_users')->where('user_id',$request->route('user'))->pluck('block_user_id')->toArray();
+        //  $user =User::whereNotIn('id',$block_user_ids)->get();
+        return response()->json( $user);
     }
+   
     /**
      * @param Request $request
      * @return JsonResponse
@@ -204,31 +188,6 @@ class UserController extends Controller
             'email' => [trans($status)],
         ]);
 
-        // if(User::where('email',$request['email'])->doesntExist()){
-        //     return response([
-        //         'message' => 'User doesn\'t exists!'
-        //     ],404);
-        // }
-        //  $token = Str::random(10);
-        // try{
-        //     DB::table('password_resets')->insert([
-        //         'email' => $request['email'],
-        //         'token' => $token
-        //     ]);
-
-        //     //send email
-        //     
-
-          
-        // }catch(\Exception $exception){
-        //     return response([
-        //         'message' => $exception->getMessage()
-        //     ],400);
-        // }
-       
-        
-
-        // return response()->json(Auth::user());
     }
     public function userLogged(): JsonResponse{
         if($id= Auth::user()->id)

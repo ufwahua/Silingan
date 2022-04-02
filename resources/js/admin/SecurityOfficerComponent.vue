@@ -3,7 +3,7 @@
         <Toast />
         <div class="grid">
             <div class="col-12">
-                <h1>Officers</h1>
+                <h1>Security Officers</h1>
             </div>
         </div>
         <div class="card">
@@ -36,7 +36,7 @@
             <div class="grid">
                 <div class="col-12">
                     <DataTable
-                        :value="registeredUsers"
+                        :value="users"
                         :filters="filters"
                         breakpoint="1230px"
                     >
@@ -49,7 +49,10 @@
                         </Column>
                         <Column header="Name" field="name">
                             <template #body="{ data }">
-                                {{ data.first_name }} {{ data.last_name }}
+                                {{
+                                    (data["name"] =
+                                        data.first_name + " " + data.last_name)
+                                }}
                             </template>
                         </Column>
                         <Column header="Email" field="email">
@@ -1020,9 +1023,7 @@ export default {
             blocks: computed(() => store.state.blocks.blocks),
             filteredLots: computed(() => store.state.lots.filteredLots),
             lots: computed(() => store.state.lots.lots),
-            registeredUsers: computed(
-                () => store.state.registeredUsers.registeredUsers
-            ),
+            users: computed(() => store.state.users),
         };
     },
     data() {
@@ -1066,7 +1067,7 @@ export default {
             role: null,
             selected_role: null,
             user: null,
-            role: [{ type: "officer", value: "officer" }],
+            role: [{ type: "security_officer", value: "security_officer" }],
             error_first_name: "",
             error_last_name: "",
             error_gender: "",
@@ -1092,7 +1093,10 @@ export default {
         initFilters() {
             this.filters = {
                 global: { value: null, matchMode: FilterMatchMode.CONTAINS },
-                role: { value: "officer", matchMode: FilterMatchMode.EQUALS },
+                role: {
+                    value: "security_officer",
+                    matchMode: FilterMatchMode.EQUALS,
+                },
             };
         },
         badgecolor(color) {
@@ -1119,7 +1123,7 @@ export default {
                     method: "delete",
                     url: "/api/user/" + this.id,
                 });
-                this.$store.dispatch("registeredUsers/getAll");
+                this.$store.dispatch("getAllUsers");
                 this.process = false;
                 this.$toast.add({
                     severity: "success",
@@ -1174,7 +1178,7 @@ export default {
                         detail: "Updated User",
                         life: 3000,
                     });
-                    this.$store.dispatch("registeredUsers/getAll");
+                    this.$store.dispatch("getAllUsers");
                     this.resetFields();
                     this.updateUserDialog = false;
                     this.process = false;
@@ -1215,7 +1219,7 @@ export default {
                 .then(() => {
                     this.registerUserDialog = false;
                     this.resetFields();
-                    this.$store.dispatch("registeredUsers/getAll");
+                    this.$store.dispatch("getAllUsers");
                     this.$toast.add({
                         severity: "success",
                         summary: "Successful Request",

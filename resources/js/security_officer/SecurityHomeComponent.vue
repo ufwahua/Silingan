@@ -25,13 +25,13 @@
 </template>
 
 <script>
-import AppTopBar from "../../components/AppTopbar.vue";
-import AppMenu from "../../components/AppMenu.vue";
-import ChatComponent from "../../components/ChatComponent.vue";
-import AppFooter from "../../components/AppFooter.vue";
+import AppTopBar from "../components/AppTopbar.vue";
+import AppMenu from "../components/AppMenu.vue";
+import ChatComponent from "../components/ChatComponent.vue";
+import AppFooter from "../components/AppFooter.vue";
 
 export default {
-    name: "HomeComponent",
+    name: "SecurityHomeComponent",
     data() {
         return {
             layoutMode: "static",
@@ -41,42 +41,36 @@ export default {
             mobileMenuActive: false,
             menu: [
                 {
-                    label: "Resident",
+                    label: "Security Officer",
                     items: [
                         {
                             label: "Timeline",
                             icon: "pi pi-fw pi-home",
-                            to: "/resident/dashboard",
+                            to: "/security_officer/timeline",
                         },
                         {
                             label: "Marketplace",
                             icon: "pi pi-fw pi-shopping-cart",
-                            to: "/resident/marketplace",
+<<<<<<< HEAD:resources/js/security_officer/dashboard/SecurityHomeComponent.vue
+                            to: "/security/marketplace",
+=======
+                            to: "/security_officer/marketplace",
+                        },
+                        {
+                            label: "Log",
+                            icon: "pi pi-fw pi-calendar",
+                            to: "/security_officer/log",
+>>>>>>> 4db789ac93e6d00324b76355b86341ebd84bb5b0:resources/js/security_officer/SecurityHomeComponent.vue
                         },
                         {
                             label: "Announcement",
                             icon: "pi pi-fw pi-calendar",
-                            to: "/resident/announcement",
+                            to: "/security_officer/announcement",
                         },
-                    ],
-                },
-
-                {
-                    label: "GROUPS",
-                    items: [
                         {
-                            label: "General",
-                            icon: "pi pi-fw pi-users",
-                            items: [
-                                {
-                                    label: "Group 1",
-                                    to: "/resident/test",
-                                },
-                                {
-                                    label: "Group 2",
-                                    to: "/resident/test2",
-                                },
-                            ],
+                            label: "Emergency Contact",
+                            icon: "pi pi-fw pi-calendar",
+                            to: "/security_officer/emergency",
                         },
                     ],
                 },
@@ -198,11 +192,12 @@ export default {
     created() {
         this.$store.dispatch("news/getAll");
         this.$store.dispatch("posts/getAll");
-        this.$store.dispatch("registeredUsers/getAll");
-        this.$store.dispatch("registeredUsers/getResidents");
-        this.$store.dispatch("registeredUsers/getOfficers");
-        this.$store.dispatch("registeredUsers/getAdmins");
-        this.$store.dispatch("registeredUsers/getSecurityOfficers");
+        this.$store.dispatch("cards/getAll");
+        this.$store.dispatch("getAllUsers");
+        this.$store.dispatch("getBlockUsers", this.$store.state.userLogged.id);
+        this.$store.dispatch("logs/getAll");
+        this.$store.dispatch("cards/getAll");
+        this.$store.dispatch("emergency_contact_details/getAll");
     },
 };
 </script>

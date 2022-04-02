@@ -25,13 +25,13 @@
 </template>
 
 <script>
-import AppTopBar from "../../components/AppTopbar.vue";
-import AppMenu from "../../components/AppMenu.vue";
-import ChatComponent from "../../components/ChatComponent.vue";
-import AppFooter from "../../components/AppFooter.vue";
+import AppTopBar from "../components/AppTopbar.vue";
+import AppMenu from "../components/AppMenu.vue";
+import ChatComponent from "../components/ChatComponent.vue";
+import AppFooter from "../components/AppFooter.vue";
 
 export default {
-    name: "SecurityHomeComponent",
+    name: "HomeComponent",
     data() {
         return {
             layoutMode: "static",
@@ -41,27 +41,27 @@ export default {
             mobileMenuActive: false,
             menu: [
                 {
-                    label: "Security Officer",
+                    label: "Resident",
                     items: [
                         {
                             label: "Timeline",
                             icon: "pi pi-fw pi-home",
-                            to: "/security_officer/dashboard",
+                            to: "/resident/timeline",
                         },
                         {
                             label: "Marketplace",
                             icon: "pi pi-fw pi-shopping-cart",
-                            to: "/security/marketplace",
+                            to: "/resident/marketplace",
                         },
                         {
                             label: "Announcement",
                             icon: "pi pi-fw pi-calendar",
-                            to: "/security_officer/announcement",
+                            to: "/resident/announcement",
                         },
                         {
-                            label: "Log",
+                            label: "Emergency Contact",
                             icon: "pi pi-fw pi-calendar",
-                            to: "/security_officer/log",
+                            to: "/resident/emergency",
                         },
                     ],
                 },
@@ -183,12 +183,12 @@ export default {
     created() {
         this.$store.dispatch("news/getAll");
         this.$store.dispatch("posts/getAll");
-        this.$store.dispatch("cards/getAll");
-        this.$store.dispatch("registeredUsers/getAll");
-        this.$store.commit("registeredUsers/getResidents");
-        this.$store.commit("registeredUsers/getOfficers");
-        this.$store.commit("registeredUsers/getAdmins");
-        this.$store.commit("registeredUsers/getSecurityOfficers");
+        this.$store.dispatch(
+            "getUsersNotBlocked",
+            this.$store.state.userLogged.id
+        );
+
+        this.$store.dispatch("getBlockUsers", this.$store.state.userLogged.id);
     },
 };
 </script>

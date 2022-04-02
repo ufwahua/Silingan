@@ -31,7 +31,7 @@ class DatabaseSeeder extends Seeder
             EmergencyContactDetailSeeder::class,
             CandidateSeeder::class,
             CardSeeder::class,
-            
+            BlockUserSeeder::class,
         ]);
     }
 }

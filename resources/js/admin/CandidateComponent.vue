@@ -43,10 +43,14 @@
                         <template #empty> No candidates found </template>
                         <Column header="Position name" field="position.name">
                         </Column>
-                        <Column header="Candidate name">
+                        <Column header="Candidate name" field="name">
                             <template #body="{ data }">
-                                {{ data.user.first_name }}
-                                {{ data.user.last_name }}
+                                {{
+                                    (data["name"] =
+                                        data.user.first_name +
+                                        " " +
+                                        data.user.last_name)
+                                }}
                             </template>
                         </Column>
 
@@ -142,14 +146,33 @@
                                             v-if="!user_id"
                                             >*</label
                                         >
+
                                         <Dropdown
                                             v-model="user_id"
-                                            :options="registeredUsersFname"
+                                            :options="users"
                                             optionLabel="full_name"
-                                            optionValue="user.id"
+                                            optionValue="id"
                                             placeholder="Select Candidates"
+                                            :class="{
+                                                'p-invalid': error_user_id,
+                                            }"
                                             class="w-full"
-                                        />
+                                            :filter="true"
+                                            :showClear="true"
+                                        >
+                                            <template #option="slotProps">
+                                                {{
+                                                    (slotProps.option[
+                                                        "full_name"
+                                                    ] =
+                                                        slotProps.option
+                                                            .first_name +
+                                                        " " +
+                                                        slotProps.option
+                                                            .last_name)
+                                                }}
+                                            </template>
+                                        </Dropdown>
                                     </div>
                                 </div>
                             </div>
@@ -200,12 +223,30 @@
                                         <label style="color: red">*</label>
                                         <Dropdown
                                             v-model="user_id"
-                                            :options="registeredUsersFname"
+                                            :options="users"
                                             optionLabel="full_name"
-                                            optionValue="user.id"
+                                            optionValue="id"
                                             placeholder="Select Candidates"
+                                            :class="{
+                                                'p-invalid': error_user_id,
+                                            }"
                                             class="w-full"
-                                        />
+                                            :filter="true"
+                                            :showClear="true"
+                                        >
+                                            <template #option="slotProps">
+                                                {{
+                                                    (slotProps.option[
+                                                        "full_name"
+                                                    ] =
+                                                        slotProps.option
+                                                            .first_name +
+                                                        " " +
+                                                        slotProps.option
+                                                            .last_name)
+                                                }}
+                                            </template>
+                                        </Dropdown>
                                         <label
                                             style="color: red"
                                             v-if="error_user_id"
@@ -270,12 +311,12 @@ export default {
         return {
             positions: computed(() => store.state.positions.positions),
             candidates: computed(() => store.state.candidates.candidates),
-            registeredUsers: computed(
-                () => store.state.registeredUsers.registeredUsers
-            ),
-            registeredUsersFname: computed(
-                () => store.state.registeredUsersFname.registeredUsers
-            ),
+            users: computed(() => {
+                var temp = store.state.users.filter((elem) => {
+                    return elem.role === "resident";
+                });
+                return temp;
+            }),
         };
     },
     data() {

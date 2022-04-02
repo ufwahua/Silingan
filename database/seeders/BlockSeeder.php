@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Lot;
 use App\Models\Block;
 use Illuminate\Database\Seeder;
 
@@ -15,7 +16,7 @@ class BlockSeeder extends Seeder
     public function run()
     {
          Block::factory()
-            ->count(10)
+            ->count(25)
             ->create();
     }
 }

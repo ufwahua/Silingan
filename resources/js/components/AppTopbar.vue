@@ -1,6 +1,6 @@
 <template>
     <div class="layout-topbar">
-        <router-link to="/admin/dashboard" class="layout-topbar-logo">
+        <router-link to="/admin/timeline" class="layout-topbar-logo">
             <img
                 alt="Silingan-Logo"
                 src="http://localhost:8000/storage/images/silingan-icon.png"
@@ -101,7 +101,29 @@ export default {
                     ],
                 },
             ],
-            profile_menu: [
+            profile_menu: null,
+        };
+    },
+    methods: {
+        toggle(event) {
+            this.$refs.menu.toggle(event);
+        },
+        toggleNotification(event) {
+            this.$refs.menu2.toggle(event);
+        },
+        onMenuToggle(event) {
+            this.$emit("menu-toggle", event);
+        },
+        onTopbarMenuToggle(event) {
+            this.$emit("topbar-menu-toggle", event);
+        },
+    },
+    created() {
+        if (
+            this.$store.state.userLogged.role === "admin" ||
+            this.$store.state.userLogged.role === "officer"
+        ) {
+            this.profile_menu = [
                 {
                     label:
                         this.userLogged.first_name +
@@ -141,22 +163,65 @@ export default {
                         },
                     ],
                 },
-            ],
-        };
-    },
-    methods: {
-        toggle(event) {
-            this.$refs.menu.toggle(event);
-        },
-        toggleNotification(event) {
-            this.$refs.menu2.toggle(event);
-        },
-        onMenuToggle(event) {
-            this.$emit("menu-toggle", event);
-        },
-        onTopbarMenuToggle(event) {
-            this.$emit("topbar-menu-toggle", event);
-        },
+            ];
+        } else {
+            this.profile_menu = [
+                {
+                    label:
+                        this.userLogged.first_name +
+                        " " +
+                        this.userLogged.last_name,
+                    items: [
+                        {
+                            label: "Profile",
+                            icon: "pi pi-pencil",
+                            command: () => {
+                                if (this.userLogged.role === "officer") {
+                                    this.$router.push("/admin/profile");
+                                } else {
+                                    this.$router.push(
+                                        `/${this.userLogged.role}` + "/profile"
+                                    );
+                                }
+                            },
+                        },
+                        {
+                            label: "Block User",
+                            icon: "pi pi-user-edit",
+                            command: () => {
+                                if (this.userLogged.role === "officer") {
+                                    this.$router.push("/admin/block_user");
+                                } else {
+                                    this.$router.push(
+                                        `/${this.userLogged.role}` +
+                                            "/block_user"
+                                    );
+                                }
+                            },
+                        },
+
+                        {
+                            label: "Logout",
+                            icon: "pi pi-sign-out",
+                            command: async () => {
+                                await axios({
+                                    method: "get",
+                                    url: "/api/logout",
+                                })
+                                    .then((response) => {
+                                        console.log(response);
+                                        this.$router.push("/login");
+                                        this.$store.dispatch("logout", null);
+                                    })
+                                    .catch((error) => {
+                                        console.log(error.response);
+                                    });
+                            },
+                        },
+                    ],
+                },
+            ];
+        }
     },
 };
 </script>

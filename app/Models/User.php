@@ -39,6 +39,7 @@ class User extends Authenticatable
     public function lot(){
         return $this->hasOne(Lot::class,'id','block_lot_id');
     }
+    
     /**
      * The attributes that should be hidden for serialization.
      *
