@@ -114,12 +114,9 @@
                         <Column header="Verify" field="verified">
                             <template #body="{ data }">
                                 <div v-if="data.verified == 0">
-                                    <Button
-                                        v-tooltip="'Verify'"
-                                        icon="pi pi-check"
-                                        class="p-button-rounded"
-                                        @click="verifyUser(data)"
-                                    />
+                                    <Badge :class="badgecolor(data.verified)">
+                                        not verified
+                                    </Badge>
                                 </div>
                                 <div v-else>
                                     <Badge :class="badgecolor(data.verified)">
@@ -131,27 +128,19 @@
                         <Column header="Actions" field="actions">
                             <template #body="{ data }">
                                 <Button
-                                    icon="pi pi-pencil"
-                                    class="p-button-rounded p-button-primary mr-2"
-                                    @click="updateUser(data)"
-                                    v-tooltip="'Edit Resident'"
+                                    type="button"
+                                    icon="pi pi-ellipsis-h"
+                                    class="p-button-rounded p-button-info"
+                                    @click="toggle(data)"
+                                    aria-haspopup="true"
+                                    aria-controls="overlay_menu"
                                 />
-                                <div v-if="data.status == 'active'">
-                                    <Button
-                                        icon="pi pi-lock"
-                                        class="p-button-rounded p-button-danger"
-                                        @click="changeStatus(data)"
-                                        v-tooltip="'Deactivate Resident'"
-                                    />
-                                </div>
-                                <div v-else>
-                                    <Button
-                                        icon="pi pi-unlock"
-                                        class="p-button-rounded p-button-success"
-                                        @click="changeStatus(data)"
-                                        v-tooltip="'Activate Resident'"
-                                    />
-                                </div>
+                                <Menu
+                                    id="overlay_menu"
+                                    ref="menu"
+                                    :model="menus"
+                                    :popup="true"
+                                />
                             </template>
                         </Column>
                     </DataTable>
@@ -733,6 +722,9 @@ export default {
     },
     data() {
         return {
+            //menu
+
+            menus: null,
             isInvalid: false,
             filters: {},
             id: null,
@@ -793,6 +785,99 @@ export default {
         };
     },
     methods: {
+        toggle(data) {
+            if (data.status == "active" && data.verified == 1) {
+                this.menus = [
+                    {
+                        label: "Update Resident",
+                        icon: "pi pi-pencil",
+                        command: () => {
+                            this.updateUser(data);
+                        },
+                    },
+                    {
+                        label: "Deactivate Resident",
+                        icon: "pi pi-lock",
+                        command: () => {
+                            this.changeStatus(data);
+                        },
+                    },
+                ];
+            } else if (data.status == "active" && data.verified == 0) {
+                this.menus = [
+                    {
+                        label: "Update Resident",
+                        icon: "pi pi-pencil",
+                        command: () => {
+                            this.updateUser(data);
+                        },
+                    },
+                    {
+                        label: "Verify Resident",
+                        icon: "pi pi-check",
+                        command: () => {
+                            this.verifyUser(data);
+                        },
+                    },
+                    {
+                        label: "Activate Resident",
+                        icon: "pi pi-unlock",
+                        command: () => {
+                            this.changeStatus(data);
+                        },
+                    },
+                ];
+            } else if (data.status == "inactive" && data.verified == 1) {
+                this.menus = [
+                    {
+                        label: "Update Resident",
+                        icon: "pi pi-pencil",
+                        command: () => {
+                            this.updateUser(data);
+                        },
+                    },
+
+                    {
+                        label: "Activate Resident",
+                        icon: "pi pi-unlock",
+                        command: () => {
+                            this.changeStatus(data);
+                        },
+                    },
+                ];
+            } else {
+                this.menus = [
+                    {
+                        label: "Update Resident",
+                        icon: "pi pi-pencil",
+                        command: () => {
+                            this.updateUser(data);
+                        },
+                    },
+                    {
+                        label: "Verify Resident",
+                        icon: "pi pi-check",
+                        command: () => {
+                            this.verifyUser(data);
+                        },
+                    },
+                    {
+                        label: "Activate Resident",
+                        icon: "pi pi-unlock",
+                        command: () => {
+                            this.changeStatus(data);
+                        },
+                    },
+                ];
+            }
+            this.$refs.menu.toggle(event);
+            this.populateFields(data);
+        },
+        populateFields(data) {
+            this.id = data.id;
+            this.name = data.name;
+            this.position = data.position;
+        },
         clearFilter() {
             this.filters["lot.block.number"].value = null;
             this.filters["lot.number"].value = null;
@@ -833,6 +918,8 @@ export default {
             if (color == "active") {
                 return "bg-green-500";
             } else if (color == 1) {
+                return "bg-orange-500";
+            } else if (color == 0) {
                 return "bg-gray-500";
             } else {
                 return "bg-pink-500";
@@ -936,7 +1023,7 @@ export default {
                     gender: data.gender,
                     block_lot_id: data.lot.id,
                     email: data.email,
-                    verified: data.verified,
+                    verified: 1,
                     status: data.status,
                     has_voted: data.has_voted,
                     age: data.age,
@@ -1023,7 +1110,7 @@ export default {
                     email: this.form.email,
                     password: this.form.password,
                     confirm_password: this.form.confirm_password,
-                    verify: 0,
+                    verified: 1,
                     has_voted: 0,
                     age: this.form.age,
                     contact_num: this.form.contact_num,
@@ -1118,6 +1205,7 @@ export default {
             );
         },
     },
+
     created() {
         this.initFilters();
     },

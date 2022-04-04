@@ -57,7 +57,7 @@ class UserSeeder extends Seeder
             'last_name' => "Diamos",
             'role' => 'security_officer',
             'status' => 'active',
-            'block_lot_id' => 1,
+            'block_lot_id' => null,
             'gender' =>'male',
             'age' => rand(1,100),     
             'verified' => 1,

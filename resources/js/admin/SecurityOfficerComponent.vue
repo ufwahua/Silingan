@@ -7,41 +7,34 @@
             </div>
         </div>
         <div class="card">
-            <div class="grid mb-4">
-                <div class="col-12">
-                    <Toolbar>
-                        <template #start>
-                            <span class="p-input-icon-left inline-block">
-                                <i class="pi pi-search" />
-                                <InputText
-                                    v-model="filters['global'].value"
-                                    placeholder="Keyword Search"
-                                />
-                            </span>
-                        </template>
-
-                        <template #end>
-                            <div class="mr-2">
-                                <Button
-                                    label="Add"
-                                    icon="pi pi-plus"
-                                    class="p-button-success p-mr-2"
-                                    @click="registerUser"
-                                />
-                            </div>
-                        </template>
-                    </Toolbar>
-                </div>
-            </div>
             <div class="grid">
                 <div class="col-12">
                     <DataTable
                         :value="users"
                         :filters="filters"
-                        breakpoint="1230px"
+                        breakpoint="1350px"
                         :paginator="true"
                         :rows="10"
                     >
+                        <template #header>
+                            <div class="flex flex-wrap justify-content-between">
+                                <span class="p-input-icon-left inline-block">
+                                    <i class="pi pi-search" />
+                                    <InputText
+                                        v-model="filters['global'].value"
+                                        placeholder="Keyword Search"
+                                        class="my-2"
+                                    />
+                                </span>
+
+                                <Button
+                                    label="Add"
+                                    icon="pi pi-plus"
+                                    class="p-button-success my-2"
+                                    @click="registerUser"
+                                />
+                            </div>
+                        </template>
                         <template #empty> No registered users found </template>
                         <template #loading> Loading Users </template>
                         <Column header="Id" field="id">
@@ -62,32 +55,28 @@
                                 {{ data.email }}
                             </template>
                         </Column>
-
-                        <Column header="Role" field="role">
+                        <Column header="Status" field="status">
                             <template #body="{ data }">
-                                <Badge :class="badgecolor(data.role)">{{
-                                    data.role
+                                <Badge :class="badgecolor(data.status)">{{
+                                    data.status
                                 }}</Badge>
                             </template>
                         </Column>
                         <Column header="Actions" field="actions">
                             <template #body="{ data }">
                                 <Button
-                                    icon="pi pi-pencil"
-                                    class="p-button-rounded p-button-primary mr-2"
-                                    @click="updateUser(data)"
-                                    v-tooltip="'Edit Security Officer'"
+                                    type="button"
+                                    icon="pi pi-ellipsis-h"
+                                    class="p-button-rounded p-button-info"
+                                    @click="toggle(data)"
+                                    aria-haspopup="true"
+                                    aria-controls="overlay_menu"
                                 />
-                                <Button
-                                    icon="pi pi-trash"
-                                    class="p-button-rounded p-button-danger"
-                                    @click="
-                                        deleteUser(
-                                            data.first_name,
-                                            data.last_name,
-                                            data.id
-                                        )
-                                    "
+                                <Menu
+                                    id="overlay_menu"
+                                    ref="menu"
+                                    :model="menus"
+                                    :popup="true"
                                 />
                             </template>
                         </Column>
@@ -134,7 +123,7 @@
                     <Dialog
                         v-model:visible="updateUserDialog"
                         :style="{ width: '500px' }"
-                        header="Update User"
+                        header="Update Security Officer"
                         :modal="true"
                     >
                         <div class="grid">
@@ -159,7 +148,7 @@
                                         :class="{
                                             'p-invalid': error_first_name,
                                         }"
-                                        @keydown.enter="confirmUpdateUser"
+                                        @keydown.enter="onRegisterClick"
                                     />
                                     <label
                                         style="color: red"
@@ -178,7 +167,7 @@
                                         :class="{
                                             'p-invalid': error_last_name,
                                         }"
-                                        @keydown.enter="confirmUpdateUser"
+                                        @keydown.enter="onRegisterClick"
                                     />
                                     <label
                                         style="color: red"
@@ -201,9 +190,7 @@
                                                 :class="{
                                                     'p-invalid': error_gender,
                                                 }"
-                                                @keydown.enter="
-                                                    confirmUpdateUser
-                                                "
+                                                @keydown.enter="onRegisterClick"
                                             />
                                             <label class="mb-0 ml-1 mr-5"
                                                 >Male</label
@@ -215,9 +202,7 @@
                                                     'p-invalid': error_gender,
                                                 }"
                                                 v-model="form.gender"
-                                                @keydown.enter="
-                                                    confirmUpdateUser
-                                                "
+                                                @keydown.enter="onRegisterClick"
                                             />
                                             <label class="mb-0 ml-1"
                                                 >Female</label
@@ -292,8 +277,6 @@
                                         >{{ error_contact_num }}</label
                                     >
                                 </div>
-
-                                <br />
                             </div>
                         </div>
                         <template #footer>
@@ -315,7 +298,7 @@
                     <Dialog
                         v-model:visible="registerUserDialog"
                         :style="{ width: '500px' }"
-                        header="Register User"
+                        header="Register Security Officer"
                         :modal="true"
                     >
                         <div class="grid">
@@ -469,8 +452,6 @@
                                         >{{ error_contact_num }}</label
                                     >
                                 </div>
-
-                                <br />
 
                                 <div class="col-12 title-form">
                                     <Badge
@@ -586,12 +567,14 @@ export default {
     setup() {
         const store = useStore();
         return {
-            lots: computed(() => store.state.lots.lots),
             users: computed(() => store.state.users),
         };
     },
     data() {
         return {
+            //menu
+
+            menus: null,
             isInvalid: false,
             filters: {},
             id: null,
@@ -604,45 +587,134 @@ export default {
                 first_name: "",
                 last_name: "",
                 gender: "",
-                selected_block_lot: "",
+
                 email: "",
                 password: "",
                 confirm_password: "",
                 age: "",
                 contact_num: "",
                 selected_role: "",
+                verified: "",
+                has_voted: "",
+                status: "",
             },
 
-            lot: null,
-
-            first_name: null,
-            last_name: null,
-            gender: null,
-
-            email: null,
-            password: null,
-            confirm_password: null,
-            verified: 1,
-            has_voted: 0,
-            age: null,
-            contact_num: null,
-            role: null,
-            selected_role: null,
             user: null,
             role: [{ type: "security_officer", value: "security_officer" }],
             error_first_name: "",
             error_last_name: "",
             error_gender: "",
-
+            error_selected_block: "",
+            error_selected_lot: "",
             error_email: "",
             error_password: "",
             error_confirm_password: "",
             error_age: "",
             error_contact_num: "",
             error_role: "",
+
+            status: [{ status: "active" }, { status: "inactive" }],
+            verification: [
+                { status: "verified", value: true },
+                { status: "not verified", value: false },
+            ],
         };
     },
     methods: {
+        toggle(data) {
+            if (data.status == "active" && data.verified == 1) {
+                this.menus = [
+                    {
+                        label: "Update Security Officer",
+                        icon: "pi pi-pencil",
+                        command: () => {
+                            this.updateUser(data);
+                        },
+                    },
+                    {
+                        label: "Deactivate Security Officer",
+                        icon: "pi pi-lock",
+                        command: () => {
+                            this.changeStatus(data);
+                        },
+                    },
+                ];
+            } else if (data.status == "active" && data.verified == 0) {
+                this.menus = [
+                    {
+                        label: "Update Security Officer",
+                        icon: "pi pi-pencil",
+                        command: () => {
+                            this.updateUser(data);
+                        },
+                    },
+                    {
+                        label: "Verify Security Officer",
+                        icon: "pi pi-check",
+                        command: () => {
+                            this.verifyUser(data);
+                        },
+                    },
+                    {
+                        label: "Activate Security Officer",
+                        icon: "pi pi-unlock",
+                        command: () => {
+                            this.changeStatus(data);
+                        },
+                    },
+                ];
+            } else if (data.status == "inactive" && data.verified == 1) {
+                this.menus = [
+                    {
+                        label: "Update Security Officer",
+                        icon: "pi pi-pencil",
+                        command: () => {
+                            this.updateUser(data);
+                        },
+                    },
+
+                    {
+                        label: "Activate Security Officer",
+                        icon: "pi pi-unlock",
+                        command: () => {
+                            this.changeStatus(data);
+                        },
+                    },
+                ];
+            } else {
+                this.menus = [
+                    {
+                        label: "Update Security Officer",
+                        icon: "pi pi-pencil",
+                        command: () => {
+                            this.updateUser(data);
+                        },
+                    },
+                    {
+                        label: "Verify Security Officer",
+                        icon: "pi pi-check",
+                        command: () => {
+                            this.verifyUser(data);
+                        },
+                    },
+                    {
+                        label: "Activate Security Officer",
+                        icon: "pi pi-unlock",
+                        command: () => {
+                            this.changeStatus(data);
+                        },
+                    },
+                ];
+            }
+            this.$refs.menu.toggle(event);
+            this.populateFields(data);
+        },
+        populateFields(data) {
+            this.id = data.id;
+            this.name = data.name;
+            this.position = data.position;
+        },
+
         showSuccess() {
             this.$toast.add({
                 severity: "success",
@@ -661,14 +733,14 @@ export default {
             };
         },
         badgecolor(color) {
-            if (color == "admin") {
-                return "bg-gray-500";
-            } else if (color == "resident") {
+            if (color == "active") {
+                return "bg-green-500";
+            } else if (color == 1) {
                 return "bg-orange-500";
-            } else if (color == "security_officer") {
-                return "bg-yellow-500";
+            } else if (color == 0) {
+                return "bg-gray-500";
             } else {
-                return "bg-yellow-800";
+                return "bg-pink-500";
             }
         },
         deleteUser(first_name, last_name, id) {
@@ -689,7 +761,7 @@ export default {
                 this.$toast.add({
                     severity: "success",
                     summary: "Successful Request",
-                    detail: "Deleted User",
+                    detail: "Deleted Security Officer",
                     life: 3000,
                 });
             } catch (err) {
@@ -706,11 +778,14 @@ export default {
             this.form.first_name = data.first_name;
             this.form.last_name = data.last_name;
             this.form.gender = data.gender;
-            this.form.selected_block_lot = data.lot.id;
+
             this.form.email = data.email;
             this.form.age = data.age;
             this.form.contact_num = data.contact_num;
             this.form.selected_role = data.role;
+            this.form.verified = data.verified;
+            this.form.has_voted = data.has_voted;
+            this.form.status = data.status;
         },
         async confirmUpdateUser() {
             this.process = true;
@@ -718,28 +793,110 @@ export default {
                 method: "put",
                 url: "/api/user/" + this.id,
                 data: {
-                    block_lot_id: null,
                     first_name: this.form.first_name,
                     last_name: this.form.last_name,
                     gender: this.form.gender,
+                    block_lot_id: null,
+                    email: this.form.email,
+                    password: this.form.password,
+                    confirm_password: this.form.confirm_password,
+                    verified: this.form.verified,
+                    has_voted: this.form.has_voted,
                     age: this.form.age,
-                    verified: 1,
-                    has_voted: 0,
                     contact_num: this.form.contact_num,
                     role: this.form.selected_role,
-                    status: "active",
+                    status: this.form.status,
                 },
             })
                 .then(() => {
                     this.$toast.add({
                         severity: "success",
                         summary: "Successful Request",
-                        detail: "Updated User",
+                        detail: "Updated Security Officer",
                         life: 3000,
                     });
                     this.$store.dispatch("getAllUsers");
                     this.resetFields();
                     this.updateUserDialog = false;
+                    this.process = false;
+                })
+                .catch((err) => {
+                    console.log(err.response);
+                    this.resetErrors();
+                    this.validate(err);
+                    this.process = false;
+                });
+        },
+        async verifyUser(data) {
+            this.process = true;
+            console.log("verify", data);
+            await axios({
+                method: "put",
+                url: "/api/user/" + data.id,
+                data: {
+                    first_name: data.first_name,
+                    last_name: data.last_name,
+                    gender: data.gender,
+                    block_lot_id: null,
+                    email: data.email,
+                    verified: 1,
+                    status: data.status,
+                    has_voted: data.has_voted,
+                    age: data.age,
+                    contact_num: data.contact_num,
+                    role: data.role,
+                },
+            })
+                .then(() => {
+                    this.$toast.add({
+                        severity: "success",
+                        summary: "Successful",
+                        detail: "Security Officer Verified",
+                        life: 3000,
+                    });
+                    this.$store.dispatch("getAllUsers");
+                    this.resetFields();
+                    this.process = false;
+                })
+                .catch((err) => {
+                    console.log(err.response);
+                    this.resetErrors();
+                    this.validate(err);
+                    this.process = false;
+                });
+        },
+        async changeStatus(data) {
+            this.process = true;
+            console.log("verify", data);
+            await axios({
+                method: "put",
+                url: "/api/user/" + data.id,
+                data: {
+                    first_name: data.first_name,
+                    last_name: data.last_name,
+                    gender: data.gender,
+                    block_lot_id: null,
+                    email: data.email,
+                    verified: data.verified,
+                    status: data.status == "active" ? "inactive" : "active",
+                    has_voted: data.has_voted,
+                    age: data.age,
+                    contact_num: data.contact_num,
+                    role: data.role,
+                },
+            })
+                .then(() => {
+                    this.$toast.add({
+                        severity: "success",
+                        summary: "Successful",
+                        detail:
+                            data.status != "active"
+                                ? "Security Officer Activated"
+                                : "Security Officer Deactivated",
+                        life: 3000,
+                    });
+                    this.$store.dispatch("getAllUsers");
+                    this.resetFields();
                     this.process = false;
                 })
                 .catch((err) => {
@@ -784,7 +941,7 @@ export default {
                     this.$toast.add({
                         severity: "success",
                         summary: "Successful Request",
-                        detail: "Registered User",
+                        detail: "Registered Security Officer",
                         life: 3000,
                     });
                     this.process = false;
@@ -801,6 +958,7 @@ export default {
                 first_name: "",
                 last_name: "",
                 gender: "",
+
                 email: "",
                 password: "",
                 confirm_password: "",
@@ -846,6 +1004,7 @@ export default {
                 this.error_role = error.response.data.errors.role[0];
         },
     },
+
     created() {
         this.initFilters();
     },
