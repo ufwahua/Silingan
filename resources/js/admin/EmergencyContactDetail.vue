@@ -39,6 +39,8 @@
                         :value="emergency_contact_details"
                         :filters="filters"
                         breakpoint="1230px"
+                        :paginator="true"
+                        :rows="10"
                     >
                         <template #empty> No registered users found </template>
                         <template #loading> Loading Users </template>

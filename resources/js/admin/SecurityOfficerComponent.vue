@@ -39,6 +39,8 @@
                         :value="users"
                         :filters="filters"
                         breakpoint="1230px"
+                        :paginator="true"
+                        :rows="10"
                     >
                         <template #empty> No registered users found </template>
                         <template #loading> Loading Users </template>
@@ -60,9 +62,7 @@
                                 {{ data.email }}
                             </template>
                         </Column>
-                        <Column header="Block" field="block_lot.block.number">
-                        </Column>
-                        <Column header="Lot" field="block_lot.number"> </Column>
+
                         <Column header="Role" field="role">
                             <template #body="{ data }">
                                 <Badge :class="badgecolor(data.role)">{{
