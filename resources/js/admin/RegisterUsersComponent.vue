@@ -7,32 +7,6 @@
             </div>
         </div>
         <div class="card">
-            <div class="grid mb-4">
-                <div class="col-12">
-                    <Toolbar>
-                        <template #start>
-                            <span class="p-input-icon-left inline-block">
-                                <i class="pi pi-search" />
-                                <InputText
-                                    v-model="filters['global'].value"
-                                    placeholder="Keyword Search"
-                                />
-                            </span>
-                        </template>
-
-                        <template #end>
-                            <div class="mr-2">
-                                <Button
-                                    label="Add"
-                                    icon="pi pi-plus"
-                                    class="p-button-success p-mr-2"
-                                    @click="registerUser"
-                                />
-                            </div>
-                        </template>
-                    </Toolbar>
-                </div>
-            </div>
             <div class="grid">
                 <div class="col-12">
                     <DataTable
@@ -42,6 +16,51 @@
                         :paginator="true"
                         :rows="10"
                     >
+                        <template #header>
+                            <div class="flex flex-wrap justify-content-between">
+                                <span class="p-input-icon-left inline-block">
+                                    <i class="pi pi-search" />
+                                    <InputText
+                                        v-model="filters['global'].value"
+                                        placeholder="Keyword Search"
+                                        class="my-2"
+                                    />
+                                </span>
+                                <Dropdown
+                                    v-model="filters['lot.block.number'].value"
+                                    :showClear="true"
+                                    :options="blocks"
+                                    optionLabel="number"
+                                    optionValue="number"
+                                    placeholder="Filter by block"
+                                    class="my-2"
+                                    style="width: 155px"
+                                    @change="getFilterBlockLot"
+                                ></Dropdown>
+                                <Dropdown
+                                    v-model="filters['lot.number'].value"
+                                    :showClear="true"
+                                    :options="filteredLots"
+                                    optionLabel="number"
+                                    optionValue="number"
+                                    placeholder="Filter by lot"
+                                    style="width: 155px"
+                                    class="my-2"
+                                ></Dropdown>
+                                <Button
+                                    label="Clear"
+                                    icon="pi pi-filter-slash"
+                                    class="my-2 p-button-outlined p-button-secondary"
+                                    @click="clearFilter"
+                                />
+                                <Button
+                                    label="Add"
+                                    icon="pi pi-plus"
+                                    class="p-button-success my-2"
+                                    @click="registerUser"
+                                />
+                            </div>
+                        </template>
                         <template #empty> No registered users found </template>
                         <template #loading> Loading Users </template>
                         <Column header="Id" field="id">
@@ -306,7 +325,7 @@
                                         v-model="selected_block"
                                         :options="blocks"
                                         optionLabel="number"
-                                        optionValue="id"
+                                        optionValue="number"
                                         placeholder="Select Block"
                                         @change="getBlockLot"
                                     />
@@ -549,7 +568,7 @@
                                         v-model="selected_block"
                                         :options="blocks"
                                         optionLabel="number"
-                                        optionValue="id"
+                                        optionValue="number"
                                         placeholder="Select Block"
                                         @change="getBlockLot"
                                     />
@@ -768,6 +787,10 @@ export default {
         };
     },
     methods: {
+        clearFilter() {
+            this.filters["lot.block.number"].value = null;
+            this.filters["lot.number"].value = null;
+        },
         showSuccess() {
             this.$toast.add({
                 severity: "success",
@@ -779,6 +802,14 @@ export default {
         initFilters() {
             this.filters = {
                 global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+                "lot.block.number": {
+                    value: null,
+                    matchMode: FilterMatchMode.EQUALS,
+                },
+                "lot.number": {
+                    value: null,
+                    matchMode: FilterMatchMode.EQUALS,
+                },
             };
         },
         badgecolor(color) {
@@ -978,6 +1009,12 @@ export default {
 
         getBlockLot() {
             this.$store.dispatch("lots/getBlockLots", this.selected_block);
+        },
+        getFilterBlockLot() {
+            this.$store.dispatch(
+                "lots/getBlockLots",
+                this.filters["lot.block.number"].value
+            );
         },
     },
     created() {

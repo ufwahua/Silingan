@@ -7,32 +7,6 @@
             </div>
         </div>
         <div class="card">
-            <div class="grid mb-4">
-                <div class="col-12">
-                    <Toolbar>
-                        <template #start>
-                            <span class="p-input-icon-left inline-block">
-                                <i class="pi pi-search" />
-                                <InputText
-                                    v-model="filters['global'].value"
-                                    placeholder="Keyword Search"
-                                />
-                            </span>
-                        </template>
-
-                        <template #end>
-                            <div class="mr-2">
-                                <Button
-                                    label="Add"
-                                    icon="pi pi-plus"
-                                    class="p-button-success p-mr-2"
-                                    @click="registerUser"
-                                />
-                            </div>
-                        </template>
-                    </Toolbar>
-                </div>
-            </div>
             <div class="grid">
                 <div class="col-12">
                     <DataTable
@@ -42,6 +16,51 @@
                         :paginator="true"
                         :rows="10"
                     >
+                        <template #header>
+                            <div class="flex flex-wrap justify-content-between">
+                                <span class="p-input-icon-left inline-block">
+                                    <i class="pi pi-search" />
+                                    <InputText
+                                        v-model="filters['global'].value"
+                                        placeholder="Keyword Search"
+                                        class="my-2"
+                                    />
+                                </span>
+                                <Dropdown
+                                    v-model="filters['lot.block.number'].value"
+                                    :showClear="true"
+                                    :options="blocks"
+                                    optionLabel="number"
+                                    optionValue="number"
+                                    placeholder="Filter by block"
+                                    class="my-2"
+                                    style="width: 155px"
+                                    @change="getFilterBlockLot"
+                                ></Dropdown>
+                                <Dropdown
+                                    v-model="filters['lot.number'].value"
+                                    :showClear="true"
+                                    :options="filteredLots"
+                                    optionLabel="number"
+                                    optionValue="number"
+                                    placeholder="Filter by lot"
+                                    style="width: 155px"
+                                    class="my-2"
+                                ></Dropdown>
+                                <Button
+                                    label="Clear"
+                                    icon="pi pi-filter-slash"
+                                    class="my-2 p-button-outlined p-button-secondary"
+                                    @click="clearFilter"
+                                />
+                                <Button
+                                    label="Add"
+                                    icon="pi pi-plus"
+                                    class="p-button-success my-2"
+                                    @click="registerUser"
+                                />
+                            </div>
+                        </template>
                         <template #empty> No registered users found </template>
                         <template #loading> Loading Users </template>
                         <Column header="Id" field="id">
@@ -305,7 +324,7 @@
                                         v-model="selected_block"
                                         :options="blocks"
                                         optionLabel="number"
-                                        optionValue="id"
+                                        optionValue="number"
                                         placeholder="Select Block"
                                         @change="getBlockLot"
                                     />
@@ -369,327 +388,6 @@
                             />
                         </template>
                     </Dialog>
-                    <!-- <Dialog
-                        v-model:visible="registerUserDialog"
-                        :style="{ width: '500px' }"
-                        header="Register User"
-                        :modal="true"
-                    >
-                        <div class="grid">
-                            <div class="col-12 title-form">
-                                <Badge
-                                    :value="1"
-                                    severity="info"
-                                    class="mr-2 mb-2"
-                                    size="large"
-                                ></Badge>
-                                <label><h6>Basic Information</h6></label>
-                            </div>
-
-                            <div class="p-fluid formgrid grid">
-                                <div class="field col-12 md:col-6">
-                                    <label >Firstname</label>
-                                    <label
-                                        style="color: red"
-                                        
-                                        v-if="!first_name"
-                                        >*</label
-                                    >
-                                    <InputText
-                                        id="firstname"
-                                        type="text"
-                                        v-model="first_name"
-                                        @keydown.enter="onRegisterClick"
-                                    />
-                                    <label
-                                        style="color: red"
-                                        
-                                        v-if="error_first_name"
-                                        >{{ error_first_name }}</label
-                                    >
-                                </div>
-
-                                <div class="field col-12 md:col-6">
-                                    <label >Lastname</label>
-                                    <label
-                                        style="color: red"
-                                        
-                                        v-if="!last_name"
-                                        >*</label
-                                    >
-                                    <InputText
-                                        id="last_name"
-                                        type="text"
-                                        v-model="last_name"
-                                        @keydown.enter="onRegisterClick"
-                                    />
-                                    <label
-                                        style="color: red"
-                                        
-                                        v-if="error_last_name"
-                                        >{{ error_last_name }}</label
-                                    >
-                                </div>
-
-                                <div class="field col-12 md:col-12">
-                                    <label >Age</label
-                                    ><label
-                                        style="color: red"
-                                        
-                                        v-if="!age"
-                                        >*</label
-                                    >
-                                    <InputText
-                                        id="age"
-                                        type="number"
-                                        min="0"
-                                        step="1"
-                                        onfocus="this.previousValue = this.value"
-                                        onkeydown="this.previousValue = this.value"
-                                        oninput="validity.valid || (value = this.previousValue)"
-                                        v-model="age"
-                                        @keydown.enter="onRegisterClick"
-                                    />
-                                    <label
-                                        style="color: red"
-                                        
-                                        v-if="error_age"
-                                        >{{ error_age }}</label
-                                    >
-                                </div>
-                                <div class="field col-12 md:col-12">
-                                    <div>
-                                        <label >Gender</label>
-                                        <label
-                                            style="color: red"
-                                            
-                                            v-if="!gender"
-                                            >*</label
-                                        >
-                                    </div>
-
-                                    <div class="field col-12 md:col-6">
-                                        <label>Role</label>
-                                        <label
-                                            style="color: red"
-                                            v-if="!selected_role"
-                                            >*</label
-                                        >
-                                        <Dropdown
-                                            v-model="selected_role"
-                                            :options="role"
-                                            optionLabel="type"
-                                            optionValue="value"
-                                            placeholder="Select Role"
-                                        />
-                                        <label
-                                            style="color: red"
-                                            
-                                            v-if="error_role"
-                                            >{{ error_role }}</label
-                                        >
-                                    </div>
-
-                                    <div>
-                                        <div class="field-radiobutton mb-0">
-                                            <RadioButton
-                                                name="gender"
-                                                value="male"
-                                                v-model="gender"
-                                                @keydown.enter="onRegisterClick"
-                                            />
-                                            <label
-                                                class="mb-0 ml-1 mr-5"
-                                                
-                                                >Male</label
-                                            >
-                                            <RadioButton
-                                                name="gender"
-                                                value="female"
-                                                v-model="gender"
-                                                @keydown.enter="onRegisterClick"
-                                            />
-                                            <label
-                                                class="mb-0 ml-1"
-                                                
-                                                >Female</label
-                                            >
-                                        </div>
-                                        <div>
-                                            <label
-                                                style="color: red"
-                                                
-                                                v-if="error_gender"
-                                                >{{ error_gender }}</label
-                                            >
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="field col-12 md:col-12">
-                                    <label 
-                                        >Contact Number</label
-                                    ><label
-                                        style="color: red"
-                                        
-                                        v-if="!contact_num"
-                                        >*</label
-                                    >
-                                    <InputText
-                                        id="contact_num"
-                                        type="text"
-                                        onkeyup="if(this.value<0){this.value= this.value * -1}"
-                                        v-model="contact_num"
-                                        @keydown.enter="onRegisterClick"
-                                    />
-                                    <label
-                                        style="color: red"
-                                        
-                                        v-if="error_contact_num"
-                                        >{{ error_contact_num }}</label
-                                    >
-                                </div>
-
-                                <div class="field col-12 md:col-6">
-                                    <label >Block</label>
-                                    <label
-                                        style="color: red"
-                                        
-                                        v-if="!selected_block"
-                                        >*</label
-                                    >
-                                    <Dropdown
-                                        v-model="selected_block"
-                                        :options="blocks"
-                                        optionLabel="number"
-                                        optionValue="id"
-                                        placeholder="Select Block"
-                                        @change="getBlockLot"
-                                    />
-                                    <label
-                                        style="color: red"
-                                        
-                                        v-if="error_selected_block"
-                                        >{{ error_selected_block }}</label
-                                    >
-                                </div>
-
-                                <div class="field col-12 md:col-6">
-                                    <label >Lot</label>
-                                    <label
-                                        style="color: red"
-                                        
-                                        v-if="!selected_block_lot"
-                                        >*</label
-                                    >
-                                    <Dropdown
-                                        v-model="selected_block_lot"
-                                        :options="filteredLots"
-                                        optionLabel="number"
-                                        optionValue="id"
-                                        placeholder="Select Lot"
-                                    />
-                                    <label
-                                        style="color: red"
-                                        
-                                        v-if="error_selected_lot"
-                                        >{{ error_selected_lot }}</label
-                                    >
-                                </div>
-
-                                <br />
-
-                                <div class="col-12 title-form">
-                                    <Badge
-                                        :value="2"
-                                        severity="info"
-                                        class="mr-2 mb-2"
-                                        size="large"
-                                    ></Badge>
-                                    <label><h6>Security Information</h6></label>
-                                </div>
-
-                                <div class="field col-12 md:col-4">
-                                    <label >Email</label
-                                    ><label
-                                        style="color: red"
-                                        
-                                        v-if="!email"
-                                        >*</label
-                                    >
-                                    <InputText
-                                        type="text"
-                                        name="email"
-                                        v-model="email"
-                                        @keydown.enter="onRegisterClick"
-                                    />
-                                    <label
-                                        style="color: red"
-                                        
-                                        v-if="error_email"
-                                        >{{ error_email }}</label
-                                    >
-                                </div>
-                                <div class="field col-12 md:col-4">
-                                    <label >Password</label
-                                    ><label
-                                        style="color: red"
-                                        
-                                        v-if="!password"
-                                        >*</label
-                                    >
-                                    <InputText
-                                        type="password"
-                                        name="password"
-                                        v-model="password"
-                                        @keydown.enter="onRegisterClick"
-                                    />
-                                    <label
-                                        style="color: red"
-                                        
-                                        v-if="error_password"
-                                        >{{ error_password }}</label
-                                    >
-                                </div>
-                                <div class="field col-12 md:col-4">
-                                    <label 
-                                        >Confirm Password</label
-                                    >
-                                    <label
-                                        style="color: red"
-                                        
-                                        v-if="!confirm_password"
-                                        >*</label
-                                    >
-                                    <InputText
-                                        type="password"
-                                        name="confirmpassword"
-                                        v-model="confirm_password"
-                                        @keydown.enter="onRegisterClick"
-                                    />
-                                    <label
-                                        style="color: red"
-                                        
-                                        v-if="error_confirm_password"
-                                        >{{ error_confirm_password }}</label
-                                    >
-                                </div>
-                            </div>
-                        </div>
-                        <template #footer>
-                            <Button
-                                label="Cancel"
-                                icon="pi pi-times"
-                                class="p-button-text"
-                                @click="registerUserDialog = false"
-                            />
-                            <Button
-                                label="Register"
-                                icon="pi pi-check"
-                                class="p-button-text p-button-success"
-                                @click="onRegisterClick"
-                            />
-                        </template>
-                    </Dialog> -->
 
                     <Dialog
                         v-model:visible="registerUserDialog"
@@ -870,7 +568,7 @@
                                         v-model="selected_block"
                                         :options="blocks"
                                         optionLabel="number"
-                                        optionValue="id"
+                                        optionValue="number"
                                         placeholder="Select Block"
                                         @change="getBlockLot"
                                     />
@@ -1084,6 +782,10 @@ export default {
         };
     },
     methods: {
+        clearFilter() {
+            this.filters["lot.block.number"].value = null;
+            this.filters["lot.number"].value = null;
+        },
         showSuccess() {
             this.$toast.add({
                 severity: "success",
@@ -1096,6 +798,14 @@ export default {
             this.filters = {
                 global: { value: null, matchMode: FilterMatchMode.CONTAINS },
                 role: { value: "officer", matchMode: FilterMatchMode.EQUALS },
+                "lot.block.number": {
+                    value: null,
+                    matchMode: FilterMatchMode.EQUALS,
+                },
+                "lot.number": {
+                    value: null,
+                    matchMode: FilterMatchMode.EQUALS,
+                },
             };
         },
         badgecolor(color) {
@@ -1295,6 +1005,12 @@ export default {
 
         getBlockLot() {
             this.$store.dispatch("lots/getBlockLots", this.selected_block);
+        },
+        getFilterBlockLot() {
+            this.$store.dispatch(
+                "lots/getBlockLots",
+                this.filters["lot.block.number"].value
+            );
         },
     },
     created() {

@@ -132,7 +132,7 @@
                                 :class="{ 'p-invalid': error_selected_block }"
                                 :options="blocks"
                                 optionLabel="number"
-                                optionValue="id"
+                                optionValue="number"
                                 placeholder="Select Block"
                                 @change="getBlockLot"
                             />

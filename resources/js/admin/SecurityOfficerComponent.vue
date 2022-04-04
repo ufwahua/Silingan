@@ -303,7 +303,7 @@
                                         v-model="selected_block"
                                         :options="blocks"
                                         optionLabel="number"
-                                        optionValue="id"
+                                        optionValue="number"
                                         placeholder="Select Block"
                                         @change="getBlockLot"
                                     />
@@ -559,7 +559,7 @@
                                         v-model="selected_block"
                                         :options="blocks"
                                         optionLabel="number"
-                                        optionValue="id"
+                                        optionValue="number"
                                         placeholder="Select Block"
                                         @change="getBlockLot"
                                     />
@@ -868,7 +868,7 @@
                                         v-model="selected_block"
                                         :options="blocks"
                                         optionLabel="number"
-                                        optionValue="id"
+                                        optionValue="number"
                                         placeholder="Select Block"
                                         @change="getBlockLot"
                                     />

@@ -113,6 +113,7 @@ class UserController extends Controller
         'age' => ['required','integer','numeric','gt:0', 'max:130'],
         'contact_num' => ['required','string','min:11'],
         'role' => ['required'],
+        'status' => ['required'],
         'verified' => ['required'],
         'has_voted' => ['required'],
         'email' => ['required','string' ,'email', 'max:255',Rule::unique('users')->ignore($request->route('user'))],

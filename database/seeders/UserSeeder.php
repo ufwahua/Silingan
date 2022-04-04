@@ -21,13 +21,14 @@ class UserSeeder extends Seeder
     public function run()
     {
         User::factory()
-            ->count(50)
+            ->count(100)
             ->create();
 
         User::create([
             'first_name' => "Joshua Henry",
             'last_name' => "Diamos",
             'role' => 'admin',
+            'status' => 'active',
             'block_lot_id' => 1,
             'gender' =>'male',
             'age' => rand(1,100),     
@@ -41,6 +42,7 @@ class UserSeeder extends Seeder
             'first_name' => "Joshua Henry",
             'last_name' => "Diamos",
             'role' => 'officer',
+            'status' => 'active',
             'block_lot_id' => 1,
             'gender' =>'male',
             'age' => rand(1,100),     
@@ -54,6 +56,7 @@ class UserSeeder extends Seeder
             'first_name' => "Joshua Henry",
             'last_name' => "Diamos",
             'role' => 'security_officer',
+            'status' => 'active',
             'block_lot_id' => 1,
             'gender' =>'male',
             'age' => rand(1,100),     
@@ -68,6 +71,7 @@ class UserSeeder extends Seeder
             'first_name' => "Varbie",
             'last_name' => "Sumido",
             'role' => 'resident',
+            'status' => 'active',
             'block_lot_id' => 2,
             'gender' =>'female',
             'age' => rand(1,100),     
@@ -82,6 +86,7 @@ class UserSeeder extends Seeder
             'first_name' => "Reynard",
             'last_name' => "Dahunan",
             'role' => 'resident',
+            'status' => 'active',
             'gender' =>'male',
             'block_lot_id' => 3,
             'age' => rand(1,100),     
@@ -96,6 +101,7 @@ class UserSeeder extends Seeder
             'first_name' => "tes",
             'last_name' => "test",
             'role' => 'resident',
+            'status' => 'active',
             'gender' =>'male',
             'block_lot_id' => 3,
             'age' => rand(1,100),     

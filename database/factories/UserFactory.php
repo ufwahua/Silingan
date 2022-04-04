@@ -29,6 +29,7 @@ class UserFactory extends Factory
             'first_name' => $first_name,
             'last_name' => $last_name,
             'role' => $this->faker->randomElement(['admin', 'officer', 'resident','security_officer']),
+            'status' => $this->faker->randomElement(['active', 'inactive']),
             'gender' => $this->faker->randomElement(['male','female']),
             'block_lot_id' =>  Lot::all()->random()->id,
             'age' => rand(1,100),     

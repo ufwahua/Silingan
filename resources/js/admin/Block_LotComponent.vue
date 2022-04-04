@@ -484,7 +484,6 @@ export default {
 
         return {
             blocks: computed(() => store.state.blocks.blocks),
-            // lots: computed(() => store.state.lots.lots),
             filteredLots: computed(() => store.state.lots.filteredLots),
         };
     },

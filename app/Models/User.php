@@ -19,18 +19,23 @@ class User extends Authenticatable
      * @var string[]
      */
     protected $fillable = [
+        'block_lot_id',
+        'email',
+        'password',
         'first_name',
         'last_name',
         'gender',
-        'block_lot_id',
         'age',
         'contact_num',
-        'role',
-        'verified',
-        'has_voted',
-        'email',
-        'password',
         'profile_pic',
+        'has_voted',
+        'verified',
+        'status',
+        'role',
+       
+        
+        
+        
     ];
     //relationships
     public function post(){
