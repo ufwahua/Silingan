@@ -32,10 +32,6 @@ class User extends Authenticatable
         'verified',
         'status',
         'role',
-       
-        
-        
-        
     ];
     //relationships
     public function post(){

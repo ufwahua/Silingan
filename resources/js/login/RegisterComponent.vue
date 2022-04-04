@@ -9,10 +9,6 @@
             >
                 <div class="col-12 mb-2 lg:col-12 lg:mb-3 text-center">
                     <router-link to="/" :key="$route.fullPath">
-                        <!-- <img
-                            class="Silingan-logo"
-                            alt="Silingan-Logo"
-                            src="http://127.0.0.1:8000/storage/images/silingan-icon.png" -->
                         <img
                             class="Silingan-logo"
                             alt="Silingan-Logo"
@@ -64,9 +60,6 @@
                                     v-model="gender"
                                 />
                                 <label class="mb-0 ml-1">Male</label>
-                                <label style="color: red" v-if="!gender"
-                                    >*</label
-                                >
                             </div>
                         </div>
                         <div class="field col-12 md:col-6">
@@ -78,9 +71,6 @@
                                     v-model="gender"
                                 />
                                 <label class="mb-0 ml-1">Female</label>
-                                <label style="color: red" v-if="!gender"
-                                    >*</label
-                                >
                             </div>
                         </div>
                         <div
@@ -92,8 +82,7 @@
                         </div>
 
                         <div class="field col-12 md:col-6">
-                            <label>Age</label
-                            ><label style="color: red" v-if="!age">*</label>
+                            <label>Age</label>
                             <InputText
                                 id="age"
                                 type="number"

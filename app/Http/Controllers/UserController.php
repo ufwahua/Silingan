@@ -44,9 +44,45 @@ class UserController extends Controller
                
     }
     
-    public function store(RegisterRequest $request) : JsonResponse
+    public function store(Request $request) : JsonResponse
     {
-        $user = User::query()->create($request->validated());
+        if($request['role'] == 'security_officer'){
+            $user = User::query()->create($request->validate([
+                'email'                 => ['required','string' ,'email', 'max:255',Rule::unique('users')->ignore($request->route('user'))],
+                'password'              => ['required' , 'min:8'],
+                'confirm_password'     => ['required','same:password' , 'min:8'],
+                'first_name'            => ['required','string' , 'max:255'],
+                'last_name'             => ['required','string' , 'max:255'],
+                'gender'                => ['required'],
+                'age'                   => ['required','integer','numeric','gt:0', 'max:130'],
+                'contact_num'           => ['required','string','min:11'],
+                'profile_pic'           => ['sometimes'],
+                'has_voted'             => ['required'],
+                'verified'              => ['required'],
+                'status'                => ['required'],
+                'role'                  => ['required'],
+            ]));
+        }
+        else{
+            $user = User::query()->create($request->validate([
+                'block_lot_id'          => ['required',Rule::exists('lots', 'id')],
+                'email'                 => ['required','string' ,'email', 'max:255',Rule::unique('users')->ignore($request->route('user'))],
+                'password'              => ['required' , 'min:8'],
+                'confirm_password'     => ['required','same:password' , 'min:8'],
+                'first_name'            => ['required','string' , 'max:255'],
+                'last_name'             => ['required','string' , 'max:255'],
+                'gender'                => ['required'],
+                'age'                   => ['required','integer','numeric','gt:0', 'max:130'],
+                'contact_num'           => ['required','string','min:11'],
+                'profile_pic'           => ['sometimes'],
+                'has_voted'             => ['required'],
+                'verified'              => ['required'],
+                'status'                => ['required'],
+                'role'                  => ['required'],
+           
+            ]));
+        }
+      
 
         return response()->json($user);
        
@@ -70,7 +106,7 @@ class UserController extends Controller
     public function index(Request $request) : JsonResponse
     {
         return response()->json(
-            User::with(['lot.block'])->get()
+            User::with(['lot.block'])->orderBy('role','asc')->orderBy('id','asc')->get()
         );
     }
 
@@ -103,22 +139,40 @@ class UserController extends Controller
      */
     public function update(Request $request): JsonResponse
     {
-  
-        User::query()->where('id',$request->route('user'))->update($request->validate([
-        'block_lot_id' => ['required',Rule::exists('lots', 'id')],
-        'first_name' => ['required','string' , 'max:255'],
-        'last_name' => ['required','string' , 'max:255'],
-        'gender' => ['required'],
-        'block_lot_id' => ['sometimes'],
-        'age' => ['required','integer','numeric','gt:0', 'max:130'],
-        'contact_num' => ['required','string','min:11'],
-        'role' => ['required'],
-        'status' => ['required'],
-        'verified' => ['required'],
-        'has_voted' => ['required'],
-        'email' => ['required','string' ,'email', 'max:255',Rule::unique('users')->ignore($request->route('user'))],
-        'profile_pic'=> ['sometimes'],
-    ]));
+        if($request['role'] == 'security_officer'){
+           User::query()->where('id',$request->route('user'))->update($request->validate([
+               'block_lot_id' => ['sometimes'],
+                'first_name' => ['required','string' , 'max:255'],
+                'last_name' => ['required','string' , 'max:255'],
+                'gender' => ['required'],
+                
+                'age' => ['required','integer','numeric','gt:0', 'max:130'],
+                'contact_num' => ['required','string','min:11'],
+                'role' => ['required'],
+                'status' => ['required'],
+                'verified' => ['required'],
+                'has_voted' => ['required'],
+                
+                'profile_pic'=> ['sometimes'],
+            ]));
+        }
+        else{
+            User::query()->where('id',$request->route('user'))->update($request->validate([
+                'block_lot_id' => ['required',Rule::exists('lots', 'id')],
+                'first_name' => ['required','string' , 'max:255'],
+                'last_name' => ['required','string' , 'max:255'],
+                'gender' => ['required'],
+                'age' => ['required','integer','numeric','gt:0', 'max:130'],
+                'contact_num' => ['required','string','min:11'],
+                'role' => ['required'],
+                'status' => ['required'],
+                'verified' => ['required'],
+                'has_voted' => ['required'],
+                'email' => ['required','string' ,'email', 'max:255',Rule::unique('users')->ignore($request->route('user'))],
+                'profile_pic'=> ['sometimes'],
+            ]));
+        }
+        
         return response()->json(User::where('id',$request->route('user'))->with(['lot.block'])->get());
   
     }

@@ -140,9 +140,7 @@
                             <div class="p-fluid formgrid grid">
                                 <div class="field col-12 md:col-6">
                                     <label>Name</label>
-                                    <label style="color: red" v-if="!form.name"
-                                        >*</label
-                                    >
+
                                     <InputText
                                         id="name"
                                         type="text"
@@ -158,11 +156,7 @@
 
                                 <div class="field col-12 md:col-6">
                                     <label>Contact Details</label>
-                                    <label
-                                        style="color: red"
-                                        v-if="!form.number"
-                                        >*</label
-                                    >
+
                                     <Textarea
                                         v-model="form.number"
                                         :autoResize="true"
@@ -214,9 +208,7 @@
                             <div class="p-fluid formgrid grid">
                                 <div class="field col-12 md:col-6">
                                     <label>Name</label>
-                                    <label style="color: red" v-if="!form.name"
-                                        >*</label
-                                    >
+
                                     <InputText
                                         id="firstname"
                                         type="text"
@@ -232,9 +224,7 @@
 
                                 <div class="field col-12 md:col-6">
                                     <label>Contact Details</label>
-                                    <label style="color: red" v-if="!number"
-                                        >*</label
-                                    >
+
                                     <Textarea
                                         v-model="form.number"
                                         :autoResize="true"

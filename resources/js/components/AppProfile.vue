@@ -41,7 +41,7 @@
             <div class="p-fluid formgrid grid">
                 <div class="field col-12 md:col-6">
                     <label>Firstname</label>
-                    <label style="color: red" v-if="!first_name">*</label>
+
                     <InputText
                         id="firstname"
                         :class="{
@@ -57,7 +57,7 @@
 
                 <div class="field col-12 md:col-6">
                     <label>Lastname</label>
-                    <label style="color: red" v-if="!last_name">*</label>
+
                     <InputText
                         :class="{
                             'p-invalid': error_last_name,
@@ -74,7 +74,6 @@
                 <div class="field col-12 md:col-6">
                     <div>
                         <label>Gender</label>
-                        <label style="color: red" v-if="!gender">*</label>
                     </div>
 
                     <div>
@@ -113,8 +112,7 @@
                     }}</label>
                 </div>
                 <div class="field col-12 md:col-12">
-                    <label>Age</label
-                    ><label style="color: red" v-if="!age">*</label>
+                    <label>Age</label>
                     <InputText
                         id="age"
                         :class="{
@@ -134,8 +132,7 @@
                 </div>
 
                 <div class="field col-12 md:col-12">
-                    <label>Contact Number</label
-                    ><label style="color: red" v-if="!contact_num">*</label>
+                    <label>Contact Number</label>
                     <InputText
                         :class="{
                             'p-invalid': error_contact_num,
@@ -150,7 +147,7 @@
 
                 <div class="field col-12 md:col-6">
                     <label>Block</label>
-                    <label style="color: red" v-if="!selected_block">*</label>
+
                     <Dropdown
                         v-model="selected_block"
                         :class="{
@@ -169,9 +166,7 @@
 
                 <div class="field col-12 md:col-6">
                     <label>Lot</label>
-                    <label style="color: red" v-if="!selected_block_lot"
-                        >*</label
-                    >
+
                     <Dropdown
                         v-model="selected_block_lot"
                         :class="{
@@ -187,8 +182,7 @@
                     }}</label>
                 </div>
                 <div class="field col-12 md:col-12">
-                    <label>Email</label
-                    ><label style="color: red" v-if="!email">*</label>
+                    <label>Email</label>
                     <InputText
                         type="text"
                         :class="{

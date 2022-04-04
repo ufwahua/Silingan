@@ -172,9 +172,7 @@
                             <div class="p-fluid formgrid grid">
                                 <div class="field col-12 md:col-6">
                                     <label>Firstname</label>
-                                    <label style="color: red" v-if="!first_name"
-                                        >*</label
-                                    >
+
                                     <InputText
                                         id="firstname"
                                         type="text"
@@ -189,9 +187,7 @@
 
                                 <div class="field col-12 md:col-6">
                                     <label>Lastname</label>
-                                    <label style="color: red" v-if="!last_name"
-                                        >*</label
-                                    >
+
                                     <InputText
                                         id="last_name"
                                         type="text"
@@ -207,9 +203,6 @@
                                 <div class="field col-12 md:col-6">
                                     <div>
                                         <label>Gender</label>
-                                        <label style="color: red" v-if="!gender"
-                                            >*</label
-                                        >
                                     </div>
 
                                     <div>
@@ -242,22 +235,10 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div
-                                    class="formgroup-inline flex justify-content-around"
-                                >
-                                    <label
-                                        style="color: red"
-                                        v-if="error_gender"
-                                        >{{ error_gender }}</label
-                                    >
-                                </div>
+
                                 <div class="field col-12 md:col-6">
                                     <label>Role</label>
-                                    <label
-                                        style="color: red"
-                                        v-if="!selected_role"
-                                        >*</label
-                                    >
+
                                     <Dropdown
                                         v-model="selected_role"
                                         :options="role"
@@ -273,10 +254,7 @@
                                 </div>
 
                                 <div class="field col-12 md:col-12">
-                                    <label>Age</label
-                                    ><label style="color: red" v-if="!age"
-                                        >*</label
-                                    >
+                                    <label>Age</label>
                                     <InputText
                                         id="age"
                                         type="number"
@@ -295,12 +273,7 @@
                                 </div>
 
                                 <div class="field col-12 md:col-12">
-                                    <label>Contact Number</label
-                                    ><label
-                                        style="color: red"
-                                        v-if="!contact_num"
-                                        >*</label
-                                    >
+                                    <label>Contact Number</label>
                                     <InputText
                                         id="contact_num"
                                         type="text"
@@ -316,11 +289,7 @@
 
                                 <div class="field col-12 md:col-6">
                                     <label>Block</label>
-                                    <label
-                                        style="color: red"
-                                        v-if="!selected_block"
-                                        >*</label
-                                    >
+
                                     <Dropdown
                                         v-model="selected_block"
                                         :options="blocks"
@@ -338,11 +307,7 @@
 
                                 <div class="field col-12 md:col-6">
                                     <label>Lot</label>
-                                    <label
-                                        style="color: red"
-                                        v-if="!selected_block_lot"
-                                        >*</label
-                                    >
+
                                     <Dropdown
                                         v-model="selected_block_lot"
                                         :options="filteredLots"
@@ -357,10 +322,7 @@
                                     >
                                 </div>
                                 <div class="field col-12 md:col-12">
-                                    <label>Email</label
-                                    ><label style="color: red" v-if="!email"
-                                        >*</label
-                                    >
+                                    <label>Email</label>
                                     <InputText
                                         type="text"
                                         name="email"
@@ -409,11 +371,7 @@
                             <div class="p-fluid formgrid grid">
                                 <div class="field col-12 md:col-6">
                                     <label>Firstname</label>
-                                    <label
-                                        style="color: red"
-                                        v-if="!form.first_name"
-                                        >*</label
-                                    >
+
                                     <InputText
                                         id="firstname"
                                         type="text"
@@ -429,11 +387,7 @@
 
                                 <div class="field col-12 md:col-6">
                                     <label>Lastname</label>
-                                    <label
-                                        style="color: red"
-                                        v-if="!form.last_name"
-                                        >*</label
-                                    >
+
                                     <InputText
                                         id="last_name"
                                         type="text"
@@ -450,9 +404,6 @@
                                 <div class="field col-12 md:col-6">
                                     <div>
                                         <label>Gender</label>
-                                        <label style="color: red" v-if="!gender"
-                                            >*</label
-                                        >
                                     </div>
 
                                     <div>
@@ -485,22 +436,10 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div
-                                    class="formgroup-inline flex justify-content-around"
-                                >
-                                    <label
-                                        style="color: red"
-                                        v-if="error_gender"
-                                        >{{ error_gender }}</label
-                                    >
-                                </div>
+
                                 <div class="field col-12 md:col-6">
                                     <label>Role</label>
-                                    <label
-                                        style="color: red"
-                                        v-if="!selected_role"
-                                        >*</label
-                                    >
+
                                     <Dropdown
                                         v-model="form.selected_role"
                                         :options="role"
@@ -516,10 +455,7 @@
                                 </div>
 
                                 <div class="field col-12 md:col-12">
-                                    <label>Age</label
-                                    ><label style="color: red" v-if="!age"
-                                        >*</label
-                                    >
+                                    <label>Age</label>
                                     <InputText
                                         id="age"
                                         type="number"
@@ -537,12 +473,7 @@
                                     >
                                 </div>
                                 <div class="field col-12 md:col-12">
-                                    <label>Contact Number</label
-                                    ><label
-                                        style="color: red"
-                                        v-if="!form.contact_num"
-                                        >*</label
-                                    >
+                                    <label>Contact Number</label>
                                     <InputText
                                         id="contact_num"
                                         type="text"
@@ -559,11 +490,7 @@
 
                                 <div class="field col-12 md:col-6">
                                     <label>Block</label>
-                                    <label
-                                        style="color: red"
-                                        v-if="!selected_block"
-                                        >*</label
-                                    >
+
                                     <Dropdown
                                         v-model="selected_block"
                                         :options="blocks"
@@ -581,11 +508,7 @@
 
                                 <div class="field col-12 md:col-6">
                                     <label>Lot</label>
-                                    <label
-                                        style="color: red"
-                                        v-if="!selected_block_lot"
-                                        >*</label
-                                    >
+
                                     <Dropdown
                                         v-model="selected_block_lot"
                                         :options="filteredLots"
@@ -612,12 +535,7 @@
                                 </div>
 
                                 <div class="field col-12 md:col-4">
-                                    <label>Email</label
-                                    ><label
-                                        style="color: red"
-                                        v-if="!form.email"
-                                        >*</label
-                                    >
+                                    <label>Email</label>
                                     <InputText
                                         type="text"
                                         name="email"
@@ -631,12 +549,7 @@
                                     >
                                 </div>
                                 <div class="field col-12 md:col-4">
-                                    <label>Password</label
-                                    ><label
-                                        style="color: red"
-                                        v-if="!form.password"
-                                        >*</label
-                                    >
+                                    <label>Password</label>
                                     <InputText
                                         type="password"
                                         name="password"
@@ -651,11 +564,7 @@
                                 </div>
                                 <div class="field col-12 md:col-4">
                                     <label>Confirm Password</label>
-                                    <label
-                                        style="color: red"
-                                        v-if="!form.confirm_password"
-                                        >*</label
-                                    >
+
                                     <InputText
                                         type="password"
                                         name="confirmpassword"
