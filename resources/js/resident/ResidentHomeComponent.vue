@@ -1,7 +1,15 @@
 <template>
     <div :class="containerClass" @click="onWrapperClick">
-        <AppTopBar @menu-toggle="onMenuToggle" />
-        <div class="layout-sidebar" @click="onSidebarClick">
+        <AppTopBar
+            v-if="userLogged.status != 'inactive'"
+            @menu-toggle="onMenuToggle"
+        />
+        <AppTopBar v-else @menu-toggle="onMenuToggle" />
+        <div
+            v-if="userLogged.status != 'inactive'"
+            class="layout-sidebar"
+            @click="onSidebarClick"
+        >
             <AppMenu :model="menu" @menuitem-click="onMenuItemClick" />
         </div>
 
@@ -14,7 +22,10 @@
             </div>
             <AppFooter />
         </div>
-        <ChatComponent :layoutMode="layoutMode" />
+        <ChatComponent
+            v-if="userLogged.status != 'inactive'"
+            :layoutMode="layoutMode"
+        />
         <transition name="layout-mask">
             <div
                 class="layout-mask p-component-overlay"
@@ -29,9 +40,16 @@ import AppTopBar from "../components/AppTopbar.vue";
 import AppMenu from "../components/AppMenu.vue";
 import ChatComponent from "../components/ChatComponent.vue";
 import AppFooter from "../components/AppFooter.vue";
-
+import { computed } from "vue";
+import { useStore } from "vuex";
 export default {
-    name: "HomeComponent",
+    name: "ResidentHomeComponent",
+    setup() {
+        const store = useStore();
+        return {
+            userLogged: computed(() => store.state.userLogged),
+        };
+    },
     data() {
         return {
             layoutMode: "static",

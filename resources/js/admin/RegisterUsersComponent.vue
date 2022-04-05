@@ -57,7 +57,7 @@
                                     style="width: 200px"
                                     class="my-2"
                                 ></Dropdown>
-                                
+
                                 <Button
                                     label="Clear"
                                     icon="pi pi-filter-slash"
@@ -268,8 +268,8 @@
                                             'p-invalid': error_role,
                                         }"
                                         :options="role"
-                                        optionLabel="type"
-                                        optionValue="value"
+                                        optionLabel="role"
+                                        optionValue="role"
                                         placeholder="Select Role"
                                     />
                                     <label
@@ -495,8 +495,8 @@
                                             'p-invalid': error_role,
                                         }"
                                         :options="role"
-                                        optionLabel="type"
-                                        optionValue="value"
+                                        optionLabel="role"
+                                        optionValue="role"
                                         placeholder="Select Role"
                                     />
                                     <label
@@ -755,19 +755,13 @@ export default {
             email: null,
             password: null,
             confirm_password: null,
-            verify: 1,
+            verified: 1,
             has_voted: 0,
             age: null,
             contact_num: null,
-            role: null,
             selected_role: null,
             user: null,
-            role: [
-                { type: "admin", value: "admin" },
-                { type: "resident", value: "resident" },
-                { type: "officer", value: "officer" },
-                { type: "security_officer", value: "security_officer" },
-            ],
+
             error_first_name: "",
             error_last_name: "",
             error_gender: "",
@@ -780,8 +774,12 @@ export default {
             error_contact_num: "",
             error_role: "",
 
-            role: [{ role: "admin" }, { role: "resident" }, { role: "security_officer" }, { role: "officer" }],
-           
+            role: [
+                { role: "admin" },
+                { role: "resident" },
+                { role: "security_officer" },
+                { role: "officer" },
+            ],
         };
     },
     methods: {
@@ -797,7 +795,6 @@ export default {
             }
         },
         toggle(data) {
-           
             this.menus = [
                 {
                     label: "Update User",
@@ -806,7 +803,6 @@ export default {
                         this.updateUser(data);
                     },
                 },
-                
             ];
 
             this.$refs.menu.toggle(event);
@@ -821,7 +817,6 @@ export default {
             this.filters["lot.block.number"].value = null;
             this.filters["lot.number"].value = null;
             this.filters["role"].value = null;
-           
         },
         showSuccess() {
             this.$toast.add({
@@ -847,7 +842,6 @@ export default {
                     value: null,
                     matchMode: FilterMatchMode.EQUALS,
                 },
-                
             };
         },
 
@@ -889,7 +883,7 @@ export default {
             if (data.role != "security_officer") {
                 this.form.selected_block = data.lot.block.number;
                 this.getBlockLot();
-                this.form.selected_block_lot = data.lot.id;
+                this.form.selected_block_lot = data.block_lot_id;
             }
 
             this.form.email = data.email;
@@ -950,7 +944,7 @@ export default {
                     first_name: data.first_name,
                     last_name: data.last_name,
                     gender: data.gender,
-                    block_lot_id: data.lot.id,
+                    block_lot_id: data.block_lot_id,
                     email: data.email,
                     verified: 1,
                     status: data.status,
@@ -988,7 +982,7 @@ export default {
                     first_name: data.first_name,
                     last_name: data.last_name,
                     gender: data.gender,
-                    block_lot_id: data.lot.id,
+                    block_lot_id: data.block_lot_id,
                     email: data.email,
                     verified: data.verified,
                     status: data.status == "active" ? "inactive" : "active",
@@ -1028,7 +1022,7 @@ export default {
         },
         async onRegisterClick() {
             this.process = true;
-           await axios({
+            await axios({
                 method: "post",
                 url: "/api/user",
                 data: {

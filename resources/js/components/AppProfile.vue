@@ -454,7 +454,7 @@ export default {
                     contact_num: this.contact_num,
                     role: this.selected_role,
                     profile_pic: this.profile_pic,
-                    status:'active',
+                    status: "active",
                 },
             })
                 .then((res) => {
@@ -521,7 +521,7 @@ export default {
         },
 
         getBlockLot() {
-            this.$store.dispatch("lots/getBlockLots", this.selected_block);   
+            this.$store.dispatch("lots/getBlockLots", this.selected_block);
         },
         populateData() {
             this.id = this.$store.state.userLogged.id;

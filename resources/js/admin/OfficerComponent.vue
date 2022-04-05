@@ -751,7 +751,7 @@ export default {
             email: null,
             password: null,
             confirm_password: null,
-            verify: 1,
+            verified: 1,
             has_voted: 0,
             age: null,
             contact_num: null,
@@ -955,7 +955,7 @@ export default {
             this.form.gender = data.gender;
             this.form.selected_block = data.lot.block.number;
             this.getBlockLot();
-            this.form.selected_block_lot = data.lot.id;
+            this.form.selected_block_lot = data.block_lot_id;
             this.form.email = data.email;
             this.form.age = data.age;
             this.form.contact_num = data.contact_num;
@@ -1014,7 +1014,7 @@ export default {
                     first_name: data.first_name,
                     last_name: data.last_name,
                     gender: data.gender,
-                    block_lot_id: data.lot.id,
+                    block_lot_id: data.block_lot_id,
                     email: data.email,
                     verified: 1,
                     status: data.status,
@@ -1052,7 +1052,7 @@ export default {
                     first_name: data.first_name,
                     last_name: data.last_name,
                     gender: data.gender,
-                    block_lot_id: data.lot.id,
+                    block_lot_id: data.block_lot_id,
                     email: data.email,
                     verified: data.verified,
                     status: data.status == "active" ? "inactive" : "active",
@@ -1103,7 +1103,7 @@ export default {
                     email: this.form.email,
                     password: this.form.password,
                     confirm_password: this.form.confirm_password,
-                    verify: 0,
+                    verified: 1,
                     has_voted: 0,
                     age: this.form.age,
                     contact_num: this.form.contact_num,

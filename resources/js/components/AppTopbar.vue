@@ -7,6 +7,7 @@
             />
         </router-link>
         <button
+            v-if="userLogged.status != 'inactive'"
             class="p-link layout-menu-button layout-topbar-button"
             @click="onMenuToggle"
         >
@@ -14,6 +15,7 @@
         </button>
 
         <button
+            v-if="userLogged.status != 'inactive'"
             class="p-link layout-topbar-menu-button layout-topbar-button"
             v-styleclass="{
                 selector: '@next',
@@ -27,7 +29,7 @@
             <i class="pi pi-ellipsis-v"></i>
         </button>
         <ul class="layout-topbar-menu hidden lg:flex origin-top">
-            <li>
+            <li v-if="userLogged.status != 'inactive'">
                 <Button
                     type="button"
                     label="Toggle"
@@ -118,8 +120,37 @@ export default {
             this.$emit("topbar-menu-toggle", event);
         },
     },
-    created() {
-        if (
+    mounted() {
+        if (this.$store.state.userLogged.status != "active") {
+            this.profile_menu = [
+                {
+                    label:
+                        this.$store.state.userLogged.first_name +
+                        " " +
+                        this.$store.state.userLogged.last_name,
+                    items: [
+                        {
+                            label: "Logout",
+                            icon: "pi pi-sign-out",
+                            command: async () => {
+                                await axios({
+                                    method: "get",
+                                    url: "/api/logout",
+                                })
+                                    .then((response) => {
+                                        console.log(response);
+                                        this.$router.push("/login");
+                                        this.$store.dispatch("logout", null);
+                                    })
+                                    .catch((error) => {
+                                        console.log(error.response);
+                                    });
+                            },
+                        },
+                    ],
+                },
+            ];
+        } else if (
             this.$store.state.userLogged.role === "admin" ||
             this.$store.state.userLogged.role === "officer"
         ) {
@@ -141,6 +172,15 @@ export default {
                                         `/${this.userLogged.role}` + "/profile"
                                     );
                                 }
+                            },
+                        },
+                        {
+                            label: "Setting",
+                            icon: "pi pi-cog",
+                            command: () => {
+                                this.$router.push(
+                                    `/${this.userLogged.role}` + "/setting"
+                                );
                             },
                         },
                         {
@@ -185,18 +225,14 @@ export default {
                                 }
                             },
                         },
+
                         {
-                            label: "Block User",
-                            icon: "pi pi-user-edit",
+                            label: "Setting",
+                            icon: "pi pi-cog",
                             command: () => {
-                                if (this.userLogged.role === "officer") {
-                                    this.$router.push("/admin/block_user");
-                                } else {
-                                    this.$router.push(
-                                        `/${this.userLogged.role}` +
-                                            "/block_user"
-                                    );
-                                }
+                                this.$router.push(
+                                    `/${this.userLogged.role}` + "/setting"
+                                );
                             },
                         },
 

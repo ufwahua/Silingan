@@ -26,7 +26,7 @@ class CreateUsersTable extends Migration
             $table->text('profile_pic')->nullable();
             $table->boolean('has_voted');
             $table->boolean('verified');
-            $table->enum('status', ['active', 'inactive'])->nullable();
+            $table->enum('status', ['active', 'inactive']);
             $table->enum('role', ['admin', 'officer', 'resident', 'security_officer']);
 
 

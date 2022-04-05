@@ -150,7 +150,11 @@ export default {
                 .then((response) => {
                     this.error = "";
                     this.$store.commit("getUserLogged", response.data);
-                    if (response.data.role === "resident") {
+                    if (response.data.status == "inactive") {
+                        this.$router.push(
+                            "/" + response.data.role + "/activate-account"
+                        );
+                    } else if (response.data.role === "resident") {
                         this.loading = false;
                         this.$router.push("/resident/timeline");
                     } else if (response.data.role === "security_officer") {

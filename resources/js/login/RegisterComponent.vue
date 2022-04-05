@@ -297,12 +297,12 @@ export default {
                     email: this.email,
                     password: this.password,
                     confirm_password: this.confirm_password,
-                    verified: 1,
+                    verified: 0,
                     has_voted: 0,
                     age: this.age,
                     contact_num: this.contact_num,
                     role: "resident",
-                    status:"active",
+                    status: "active",
                 },
             })
                 .then(() => {
@@ -324,8 +324,8 @@ export default {
             this.email = null;
             this.password = null;
             this.confirm_password = null;
-            this.verified = true;
-            this.has_voted = false;
+            this.verified = 0;
+            this.has_voted = 0;
             this.age = null;
             this.contact_num = null;
             this.role = "resident";

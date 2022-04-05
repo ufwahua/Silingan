@@ -18,7 +18,7 @@ class DatabaseSeeder extends Seeder
     {
          $this->call([
             BlockSeeder::class,
-            LotSeeder::class,
+            // LotSeeder::class,
             UserSeeder::class,
             GroupSeeder::class,
             PostSeeder::class,
