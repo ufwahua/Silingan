@@ -48,25 +48,16 @@
                                     class="my-2"
                                 ></Dropdown>
                                 <Dropdown
-                                    v-model="filters['status'].value"
+                                    v-model="filters['role'].value"
                                     :showClear="true"
-                                    :options="status"
-                                    optionLabel="status"
-                                    optionValue="status"
-                                    placeholder="Filter by Status"
+                                    :options="role"
+                                    optionLabel="role"
+                                    optionValue="role"
+                                    placeholder="Filter by Role"
                                     style="width: 200px"
                                     class="my-2"
                                 ></Dropdown>
-                                <Dropdown
-                                    v-model="filters['verified'].value"
-                                    :showClear="true"
-                                    :options="verification"
-                                    optionLabel="status"
-                                    optionValue="value"
-                                    placeholder="Filter by Verification"
-                                    style="width: 215px"
-                                    class="my-2"
-                                ></Dropdown>
+                                
                                 <Button
                                     label="Clear"
                                     icon="pi pi-filter-slash"
@@ -789,11 +780,8 @@ export default {
             error_contact_num: "",
             error_role: "",
 
-            status: [{ status: "active" }, { status: "inactive" }],
-            verification: [
-                { status: "verified", value: true },
-                { status: "not verified", value: false },
-            ],
+            role: [{ role: "admin" }, { role: "resident" }, { role: "security_officer" }, { role: "officer" }],
+           
         };
     },
     methods: {
@@ -809,90 +797,18 @@ export default {
             }
         },
         toggle(data) {
-            if (data.status == "active" && data.verified == 1) {
-                this.menus = [
-                    {
-                        label: "Update User",
-                        icon: "pi pi-pencil",
-                        command: () => {
-                            this.updateUser(data);
-                        },
+           
+            this.menus = [
+                {
+                    label: "Update User",
+                    icon: "pi pi-pencil",
+                    command: () => {
+                        this.updateUser(data);
                     },
-                    {
-                        label: "Deactivate User",
-                        icon: "pi pi-lock",
-                        command: () => {
-                            this.changeStatus(data);
-                        },
-                    },
-                ];
-            } else if (data.status == "active" && data.verified == 0) {
-                this.menus = [
-                    {
-                        label: "Update User",
-                        icon: "pi pi-pencil",
-                        command: () => {
-                            this.updateUser(data);
-                        },
-                    },
-                    {
-                        label: "Verify User",
-                        icon: "pi pi-check",
-                        command: () => {
-                            this.verifyUser(data);
-                        },
-                    },
-                    {
-                        label: "Activate User",
-                        icon: "pi pi-unlock",
-                        command: () => {
-                            this.changeStatus(data);
-                        },
-                    },
-                ];
-            } else if (data.status == "inactive" && data.verified == 1) {
-                this.menus = [
-                    {
-                        label: "Update User",
-                        icon: "pi pi-pencil",
-                        command: () => {
-                            this.updateUser(data);
-                        },
-                    },
+                },
+                
+            ];
 
-                    {
-                        label: "Activate User",
-                        icon: "pi pi-unlock",
-                        command: () => {
-                            this.changeStatus(data);
-                        },
-                    },
-                ];
-            } else {
-                this.menus = [
-                    {
-                        label: "Update User",
-                        icon: "pi pi-pencil",
-                        command: () => {
-                            this.updateUser(data);
-                        },
-                    },
-                    {
-                        label: "Verify User",
-                        icon: "pi pi-check",
-                        command: () => {
-                            this.verifyUser(data);
-                        },
-                    },
-                    {
-                        label: "Activate User",
-                        icon: "pi pi-unlock",
-                        command: () => {
-                            this.changeStatus(data);
-                        },
-                    },
-                ];
-            }
             this.$refs.menu.toggle(event);
             this.populateFields(data);
         },
@@ -904,8 +820,8 @@ export default {
         clearFilter() {
             this.filters["lot.block.number"].value = null;
             this.filters["lot.number"].value = null;
-            this.filters["status"].value = null;
-            this.filters["verified"].value = null;
+            this.filters["role"].value = null;
+           
         },
         showSuccess() {
             this.$toast.add({
@@ -927,14 +843,11 @@ export default {
                     value: null,
                     matchMode: FilterMatchMode.EQUALS,
                 },
-                status: {
+                role: {
                     value: null,
                     matchMode: FilterMatchMode.EQUALS,
                 },
-                verified: {
-                    value: null,
-                    matchMode: FilterMatchMode.EQUALS,
-                },
+                
             };
         },
 
@@ -1115,7 +1028,7 @@ export default {
         },
         async onRegisterClick() {
             this.process = true;
-            await axios({
+           await axios({
                 method: "post",
                 url: "/api/user",
                 data: {
@@ -1126,7 +1039,7 @@ export default {
                     email: this.form.email,
                     password: this.form.password,
                     confirm_password: this.form.confirm_password,
-                    verify: 0,
+                    verified: 1,
                     has_voted: 0,
                     age: this.form.age,
                     contact_num: this.form.contact_num,

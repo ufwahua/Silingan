@@ -293,7 +293,7 @@ export default {
                     first_name: this.first_name,
                     last_name: this.last_name,
                     gender: this.gender,
-                    block_lot_id: this.selected_block_lot,
+                    block_lot_id: this.block_lot_id,
                     email: this.email,
                     password: this.password,
                     confirm_password: this.confirm_password,
@@ -302,6 +302,7 @@ export default {
                     age: this.age,
                     contact_num: this.contact_num,
                     role: "resident",
+                    status:"active",
                 },
             })
                 .then(() => {

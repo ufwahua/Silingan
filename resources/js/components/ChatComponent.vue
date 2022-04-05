@@ -250,7 +250,7 @@ export default {
                 })
                     .then((res) => {
                         this.message = null;
-                        console.log(res.data[0].chats);
+                        console.log('post chat',res.data[0].chats);
                         this.$store.commit("getChats", res.data[0].chats);
                     })
                     .catch((error) => {
@@ -283,6 +283,7 @@ export default {
             })
                 .then((res) => {
                     this.chat_room_id = res.data[0].id;
+                    console.log('chats',res.data);
                     this.$store.commit("getChats", res.data[0].chats);
                 })
                 .catch((error) => {
