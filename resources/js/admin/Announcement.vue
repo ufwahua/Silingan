@@ -44,9 +44,8 @@
                     >
                         <template #empty> No announcement found </template>
                         <template #loading> Loading Users </template>
-                        <Column header="ID" field="id"> </Column>
 
-                        <Column header="Name" field="name">
+                        <Column header="Announced By" field="name">
                             <template #body="{ data }">
                                 {{
                                     (data["name"] =
@@ -64,14 +63,18 @@
                         <Column header="Actions" field="actions">
                             <template #body="{ data }">
                                 <Button
-                                    icon="pi pi-pencil"
-                                    class="p-button-rounded p-button-primary mr-2"
-                                    @click="updateAnnouncement(data)"
+                                    type="button"
+                                    icon="pi pi-ellipsis-h"
+                                    class="p-button-rounded p-button-info"
+                                    @click="toggle(data)"
+                                    aria-haspopup="true"
+                                    aria-controls="overlay_menu"
                                 />
-                                <Button
-                                    icon="pi pi-trash"
-                                    class="p-button-rounded p-button-danger"
-                                    @click="deleteAnnouncement(data)"
+                                <Menu
+                                    id="overlay_menu"
+                                    ref="menu"
+                                    :model="menus"
+                                    :popup="true"
                                 />
                             </template>
                         </Column>
@@ -290,9 +293,39 @@ export default {
 
             error_title: null,
             error_content: null,
+
+            //action menu overlay
+            menus: [
+                {
+                    label: "Edit",
+                    icon: "pi pi-pencil",
+                    command: () => {
+                        this.updateAnnouncement();
+                    },
+                },
+                {
+                    label: "Delete",
+                    icon: "pi pi-trash",
+                    command: () => {
+                        this.deleteAnnouncement();
+                    },
+                },
+            ],
         };
     },
     methods: {
+        toggle(data) {
+            this.$refs.menu.toggle(event);
+            this.populateFields(data);
+        },
+        populateFields(data) {
+            this.resetFields();
+            this.resetErrors();
+            this.id = data.id;
+            this.user_id = this.$store.state.userLogged.id;
+            this.title = data.title;
+            this.content = data.content;
+        },
         showSuccess() {
             this.$toast.add({
                 severity: "success",
@@ -307,9 +340,7 @@ export default {
             };
         },
 
-        deleteAnnouncement(data) {
-            this.id = data.id;
-            this.title = data.title;
+        deleteAnnouncement() {
             this.deleteAnnouncementDialog = true;
         },
         showDeleteAnnouncementToast() {
@@ -340,13 +371,7 @@ export default {
                     this.loading = false;
                 });
         },
-        updateAnnouncement(data) {
-            this.resetFields();
-            this.resetErrors();
-            this.id = data.id;
-            this.user_id = this.$store.state.userLogged.id;
-            this.title = data.title;
-            this.content = data.content;
+        updateAnnouncement() {
             this.updateAnnouncementDialog = true;
         },
         showUpdateAnnouncementToast() {

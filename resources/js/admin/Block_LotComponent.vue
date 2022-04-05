@@ -53,30 +53,18 @@
                         <Column header="Actions" field="actions">
                             <template #body="{ data }">
                                 <Button
-                                    icon="pi pi-plus"
-                                    class="p-button-rounded p-button-success mr-1"
-                                    v-tooltip="'Add lots'"
-                                    @click="openLotModal(data.number)"
+                                    type="button"
+                                    icon="pi pi-ellipsis-h"
+                                    class="p-button-rounded p-button-info"
+                                    @click="toggle(data)"
+                                    aria-haspopup="true"
+                                    aria-controls="overlay_menu"
                                 />
-
-                                <Button
-                                    icon="pi pi-pencil"
-                                    class="p-button-rounded p-button-primary mr-1"
-                                    v-tooltip="'Edit'"
-                                    @click="
-                                        openEditBlockModal(data.number, data.id)
-                                    "
-                                />
-                                <Button
-                                    icon="pi pi-trash"
-                                    class="p-button-rounded p-button-danger"
-                                    v-tooltip="'Delete'"
-                                    @click="
-                                        openDeleteBlockModal(
-                                            data.number,
-                                            data.id
-                                        )
-                                    "
+                                <Menu
+                                    id="overlay_menu"
+                                    ref="menu"
+                                    :model="menus"
+                                    :popup="true"
                                 />
                             </template>
                         </Column>
@@ -180,27 +168,18 @@
                                 <Column header="Actions" field="actions">
                                     <template #body="{ data }">
                                         <Button
-                                            icon="pi pi-pencil"
-                                            class="p-button-rounded p-button-primary mr-1"
-                                            v-tooltip="'Edit'"
-                                            @click="
-                                                openEditLotModal(
-                                                    data.id,
-                                                    data.block_id,
-                                                    data.number
-                                                )
-                                            "
+                                            type="button"
+                                            icon="pi pi-ellipsis-h"
+                                            class="p-button-rounded p-button-info"
+                                            @click="toggleLot(data)"
+                                            aria-haspopup="true"
+                                            aria-controls="lot_overlay"
                                         />
-                                        <Button
-                                            icon="pi pi-trash"
-                                            class="p-button-rounded p-button-danger"
-                                            v-tooltip="'Delete'"
-                                            @click="
-                                                openDeleteLotModal(
-                                                    data.id,
-                                                    data.number
-                                                )
-                                            "
+                                        <Menu
+                                            id="lot_overlay"
+                                            ref="menu_lot"
+                                            :model="lot_menu"
+                                            :popup="true"
                                         />
                                     </template>
                                 </Column>
@@ -303,7 +282,7 @@
                                     />
                                     <span
                                         >Are you sure you want to delete
-                                        <b>Lot {{ number }}</b
+                                        <b>Lot {{ form_lot_number }}</b
                                         >?</span
                                     >
                                 </div>
@@ -524,9 +503,68 @@ export default {
             addLotModal: false,
             updateLotModal: false,
             deleteLotModal: false,
+
+            //action menu overlay
+            menus: [
+                {
+                    label: "Add Lots",
+                    icon: "pi pi-plus",
+                    command: () => {
+                        this.openLotModal();
+                    },
+                },
+                {
+                    label: "Edit",
+                    icon: "pi pi-pencil",
+                    command: () => {
+                        this.openEditBlockModal();
+                    },
+                },
+                {
+                    label: "Delete",
+                    icon: "pi pi-trash",
+                    command: () => {
+                        this.openDeleteBlockModal();
+                    },
+                },
+            ],
+            lot_menu: [
+                {
+                    label: "Edit",
+                    icon: "pi pi-pencil",
+                    command: () => {
+                        this.openEditLotModal();
+                    },
+                },
+                {
+                    label: "Delete",
+                    icon: "pi pi-trash",
+                    command: () => {
+                        this.openDeleteLotModal();
+                    },
+                },
+            ],
         };
     },
     methods: {
+        toggleLot(data) {
+            this.$refs.menu_lot.toggle(event);
+            this.populateLotFields(data);
+        },
+        toggle(data) {
+            this.$refs.menu.toggle(event);
+            this.populateFields(data);
+        },
+        populateLotFields(data) {
+            this.resetFields();
+            this.lot_id = data.id;
+            this.block_id = data.block_id;
+            this.form_lot_number = data.number;
+        },
+        populateFields(data) {
+            this.number = data.number;
+            this.block_id = data.id;
+        },
         initFilters() {
             this.filters = {
                 global: { value: null, matchMode: FilterMatchMode.CONTAINS },
@@ -580,9 +618,7 @@ export default {
                 });
         },
         // Edit Block Modal
-        openEditBlockModal(number, block_id) {
-            this.block_id = block_id;
-            this.number = number;
+        openEditBlockModal() {
             this.updateBlockModal = true;
         },
         closeUpdateBlockModal() {
@@ -620,9 +656,7 @@ export default {
                 });
         },
         // Delete Block Modal
-        openDeleteBlockModal(number, block_id) {
-            this.block_id = block_id;
-            this.number = number;
+        openDeleteBlockModal() {
             this.deleteModal = true;
         },
 
@@ -655,9 +689,7 @@ export default {
         },
 
         // Open Lot Modal
-        openLotModal(number) {
-            this.block_id = number;
-            this.number = number;
+        openLotModal() {
             this.lotModal = true;
             this.$store.dispatch("lots/getBlockLots", this.block_id);
         },
@@ -711,11 +743,7 @@ export default {
         },
 
         //Open  Edit Lot Modal
-        openEditLotModal(lot_id, block_id, number) {
-            this.resetFields();
-            this.lot_id = lot_id;
-            this.block_id = block_id;
-            this.form_lot_number = number;
+        openEditLotModal() {
             this.updateLotModal = true;
             console.log(this.lot_id, this.block_id, this.form_lot_number);
         },
@@ -755,9 +783,7 @@ export default {
                 });
         },
         // Delete Lot Modal
-        openDeleteLotModal(lot_id, number) {
-            this.lot_id = lot_id;
-            this.number = number;
+        openDeleteLotModal() {
             this.deleteLotModal = true;
         },
 

@@ -102,7 +102,6 @@ export default {
     methods: {
         async activateAccount(data) {
             this.process = true;
-
             await axios({
                 method: "put",
                 url: "/api/user/" + data.id,

@@ -77,11 +77,7 @@
                         </template>
                         <template #empty> No registered users found </template>
                         <template #loading> Loading Users </template>
-                        <Column header="Id" field="id">
-                            <template #body="{ data }">
-                                {{ data.id }}
-                            </template>
-                        </Column>
+
                         <Column header="Name" field="name">
                             <template #body="{ data }">
                                 {{
