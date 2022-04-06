@@ -705,7 +705,7 @@ export default {
             },
 
             user: null,
-            role: [{ type: "security_officer", value: "security_officer" }],
+            role: [{ type: "security officer", value: "security officer" }],
             error_first_name: "",
             error_last_name: "",
             error_gender: "",
@@ -832,7 +832,7 @@ export default {
             this.filters = {
                 global: { value: null, matchMode: FilterMatchMode.CONTAINS },
                 role: {
-                    value: "security_officer",
+                    value: "security officer",
                     matchMode: FilterMatchMode.EQUALS,
                 },
             };
@@ -1069,7 +1069,7 @@ export default {
                 confirm_password: "",
                 age: "",
                 contact_num: "",
-                selected_role: "security_officer",
+                selected_role: "security officer",
             };
         },
         resetErrors() {

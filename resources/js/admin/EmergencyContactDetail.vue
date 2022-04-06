@@ -334,7 +334,7 @@ export default {
                 return "bg-gray-500";
             } else if (color == "resident") {
                 return "bg-orange-500";
-            } else if (color == "security_officer") {
+            } else if (color == "security officer") {
                 return "bg-yellow-500";
             } else {
                 return "bg-yellow-800";

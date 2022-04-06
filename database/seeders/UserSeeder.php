@@ -42,7 +42,7 @@ class UserSeeder extends Seeder
         User::create([
             'first_name' => "Joshua Henry",
             'last_name' => "Diamos",
-            'role' => 'security_officer',
+            'role' => 'security officer',
             'status' => 'active',
             'block_lot_id' => null,
             'gender' =>'male',

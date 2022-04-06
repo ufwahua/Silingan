@@ -157,7 +157,7 @@ export default {
                     } else if (response.data.role === "resident") {
                         this.loading = false;
                         this.$router.push("/resident/timeline");
-                    } else if (response.data.role === "security_officer") {
+                    } else if (response.data.role === "security officer") {
                         this.loading = false;
                         this.$router.push("/security_officer/timeline");
                     } else {

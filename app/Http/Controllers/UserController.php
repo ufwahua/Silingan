@@ -46,7 +46,7 @@ class UserController extends Controller
     
     public function store(Request $request) : JsonResponse
     {
-        if($request['role'] == 'security_officer'){
+        if($request['role'] == 'security officer'){
             $user = User::query()->create($request->validate([
                 'email'                 => ['required','string' ,'email', 'max:255',Rule::unique('users')->ignore($request->route('user'))],
                 'password'              => ['required' , 'min:8'],
@@ -141,7 +141,7 @@ class UserController extends Controller
      */
     public function update(Request $request): JsonResponse
     {
-        if($request['role'] == 'security_officer'){
+        if($request['role'] == 'security officer'){
            User::query()->where('id',$request->route('user'))->update($request->validate([
                'block_lot_id' => ['sometimes'],
                 'first_name' => ['required','string' , 'max:255'],

@@ -448,7 +448,7 @@
 
                                 <div
                                     v-if="
-                                        form.selected_role != 'security_officer'
+                                        form.selected_role != 'security officer'
                                     "
                                     class="field col-12 md:col-6"
                                 >
@@ -474,7 +474,7 @@
 
                                 <div
                                     v-if="
-                                        form.selected_role != 'security_officer'
+                                        form.selected_role != 'security officer'
                                     "
                                     class="field col-12 md:col-6"
                                 >
@@ -675,7 +675,7 @@
 
                                 <div
                                     v-if="
-                                        form.selected_role != 'security_officer'
+                                        form.selected_role != 'security officer'
                                     "
                                     class="field col-12 md:col-6"
                                 >
@@ -701,7 +701,7 @@
 
                                 <div
                                     v-if="
-                                        form.selected_role != 'security_officer'
+                                        form.selected_role != 'security officer'
                                     "
                                     class="field col-12 md:col-6"
                                 >
@@ -973,7 +973,7 @@ export default {
             role: [
                 { role: "admin" },
                 { role: "resident" },
-                { role: "security_officer" },
+                { role: "security officer" },
                 { role: "officer" },
             ],
         };
@@ -990,7 +990,7 @@ export default {
                 return "bg-yellow-900";
             } else if (color == "officer") {
                 return "bg-purple-500";
-            } else if (color == "security_officer") {
+            } else if (color == "security officer") {
                 return "bg-indigo-500";
             } else if (color == "resident") {
                 return "bg-blue-500";
@@ -1084,7 +1084,7 @@ export default {
             this.form.first_name = data.first_name;
             this.form.last_name = data.last_name;
             this.form.gender = data.gender;
-            if (data.role != "security_officer") {
+            if (data.role != "security officer") {
                 this.form.selected_block = data.lot.block.number;
                 this.getBlockLot();
                 this.form.selected_block_lot = data.block_lot_id;

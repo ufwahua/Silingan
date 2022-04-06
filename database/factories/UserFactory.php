@@ -25,16 +25,16 @@ class UserFactory extends Factory
     {
         $first_name = $this->faker->firstName();
         $last_name = $this->faker->lastName();
-        $role = $this->faker->randomElement(['admin', 'resident','security_officer']);
+        $role = $this->faker->randomElement(['admin', 'resident','security officer']);
         return [
             'first_name' => $first_name,
             'last_name' => $last_name,
             'role' => $role,
             'status' => $this->faker->randomElement(['active', 'inactive']),
             'gender' => $this->faker->randomElement(['male','female']),
-            'block_lot_id' =>  $role != 'security_officer' ? Lot::all()->random()->id : null,
+            'block_lot_id' =>  $role != 'security officer' ? Lot::all()->random()->id : null,
             'age' => rand(1,100),     
-            'verified' => $role != 'security_officer' ? rand(0,1) : 1,
+            'verified' => $role != 'security officer' ? rand(0,1) : 1,
             'has_voted' => 0,
             'contact_num' => rand(639111111111,639999999999),
             'email' => strtolower($first_name).".".strtolower($last_name).$this->faker->randomElement(['@gmail.com','@yahoo.com','@hotmail.com','@outlook.com']),

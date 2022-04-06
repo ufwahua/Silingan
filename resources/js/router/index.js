@@ -57,7 +57,7 @@ function checkRole(to, from, next) {
             next("/resident/timeline");
         }
         if (
-            userLogged.role === "security_officer" &&
+            userLogged.role === "security officer" &&
             (to.meta.role === "admin" || to.meta.role === "resident")
         ) {
             next("/security/timeline");
@@ -79,7 +79,7 @@ function checkLogged(to, from, next) {
         next("/admin/timeline");
     } else if (isAuthenticated && userLogged.role === "resident") {
         next("/resident/timeline");
-    } else if (isAuthenticated && userLogged.role === "security_officer") {
+    } else if (isAuthenticated && userLogged.role === "security officer") {
         next("/security_officer/timeline");
     } else {
         next();

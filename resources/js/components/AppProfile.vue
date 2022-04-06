@@ -345,7 +345,7 @@ export default {
             role: [
                 { type: "officer", value: "officer" },
                 { type: "resident", value: "resident" },
-                { type: "security_officer", value: "security_officer" },
+                { type: "security officer", value: "security officer" },
                 { type: "admin", value: "admin" },
             ],
 
