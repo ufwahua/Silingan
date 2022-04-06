@@ -28,7 +28,7 @@ class UserController extends Controller
      */
     public function login(LoginRequest $request) : JsonResponse
     {
-        $user = User::where('email', $request->email)->with('lot.block')->first();
+        $user = User::where('email', $request->email)->with(['lot.block','position'])->first();
     if ( $user &&  Hash::check($request->password, $user->password) && $user['verified']) {
         Auth::login($user,$request['remember']);
         $request->session()->regenerate();  
@@ -61,6 +61,7 @@ class UserController extends Controller
                 'verified'              => ['required'],
                 'status'                => ['required'],
                 'role'                  => ['required'],
+                'position_id'           => ['sometimes'],
             ]));
         }
         else{
@@ -79,6 +80,7 @@ class UserController extends Controller
                 'verified'              => ['required'],
                 'status'                => ['required'],
                 'role'                  => ['required'],
+                'position_id'           => ['sometimes'],
            
             ]));
         }
@@ -106,7 +108,7 @@ class UserController extends Controller
     public function index(Request $request) : JsonResponse
     {
         return response()->json(
-            User::with(['lot.block'])->orderBy('role','asc')->orderBy('id','asc')->get()
+            User::with(['lot.block','position'])->orderBy('role','asc')->orderBy('id','asc')->get()
         );
     }
 
@@ -149,6 +151,7 @@ class UserController extends Controller
                 'age' => ['required','integer','numeric','gt:0', 'max:130'],
                 'contact_num' => ['required','string','min:11'],
                 'role' => ['required'],
+                'position_id'           => ['sometimes'],
                 'status' => ['required'],
                 'verified' => ['required'],
                 'has_voted' => ['required'],
@@ -165,6 +168,7 @@ class UserController extends Controller
                 'age' => ['required','integer','numeric','gt:0', 'max:130'],
                 'contact_num' => ['required','string','min:11'],
                 'role' => ['required'],
+                'position_id' => ['sometimes'],
                 'status' => ['required'],
                 'verified' => ['required'],
                 'has_voted' => ['required'],
@@ -173,7 +177,7 @@ class UserController extends Controller
             ]));
         }
         
-        return response()->json(User::where('id',$request->route('user'))->with(['lot.block'])->get());
+        return response()->json(User::where('id',$request->route('user'))->with(['lot.block','position'])->get());
   
     }
   
@@ -246,7 +250,7 @@ class UserController extends Controller
     }
     public function userLogged(): JsonResponse{
         if($id= Auth::user()->id)
-             return response()->json( User::where('id',$id)->with('lot.block')->get());
+             return response()->json( User::where('id',$id)->with(['lot.block','position'])->get());
         
         else
             return null;

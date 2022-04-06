@@ -3,7 +3,98 @@
         <Toast />
         <div class="grid">
             <div class="col-12">
-                <h1>Registered Users</h1>
+                <h1 class="text-center">User Masterlist</h1>
+            </div>
+        </div>
+        <div class="grid mb-2 flex justify-content-center">
+            <div class="col-12 lg:col-6 xl:col-3">
+                <div class="card mb-0 bg-green-100">
+                    <div class="flex justify-content-between mb-3">
+                        <div>
+                            <span
+                                class="block font-medium text-4xl font-bold mb-3"
+                                >{{ active }}</span
+                            >
+                            <div class="text-900">Active</div>
+                        </div>
+                        <div
+                            class="flex align-items-center justify-content-center"
+                            style="width: 2.5rem; height: 2.5rem"
+                        ></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 lg:col-6 xl:col-3">
+                <div class="card mb-0 bg-pink-100">
+                    <div class="flex justify-content-between mb-3">
+                        <div>
+                            <span
+                                class="block font-medium text-4xl font-bold mb-3"
+                                >{{ inactive }}</span
+                            >
+                            <div class="text-900">Inactive</div>
+                        </div>
+
+                        <div
+                            class="flex align-items-center justify-content-center"
+                            style="width: 2.5rem; height: 2.5rem"
+                        ></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 lg:col-6 xl:col-3">
+                <div class="card mb-0 bg-orange-100">
+                    <div class="flex justify-content-between mb-3">
+                        <div>
+                            <span
+                                class="block font-medium text-4xl font-bold mb-3"
+                                >{{ verified }}</span
+                            >
+                            <div class="text-900">Verified</div>
+                        </div>
+
+                        <div
+                            class="flex align-items-center justify-content-center"
+                            style="width: 2.5rem; height: 2.5rem"
+                        ></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 lg:col-6 xl:col-3">
+                <div class="card mb-0 bg-gray-400">
+                    <div class="flex justify-content-between mb-3">
+                        <div>
+                            <span
+                                class="block font-medium text-4xl font-bold mb-3"
+                                >{{ not_verified }}</span
+                            >
+                            <div class="text-900">Not Verified</div>
+                        </div>
+
+                        <div
+                            class="flex align-items-center justify-content-center"
+                            style="width: 2.5rem; height: 2.5rem"
+                        ></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 lg:col-6 xl:col-3">
+                <div class="card mb-0 bg-blue-100">
+                    <div class="flex justify-content-between mb-3">
+                        <div>
+                            <span
+                                class="block font-medium text-4xl font-bold mb-3"
+                                >{{ total }}</span
+                            >
+                            <div class="text-900">Total</div>
+                        </div>
+                        <div
+                            class="flex align-items-center justify-content-center"
+                            style="width: 2.5rem; height: 2.5rem"
+                        ></div>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="card">
@@ -67,18 +158,30 @@
                                 <Button
                                     label="Add"
                                     icon="pi pi-plus"
-                                    class="p-button-success my-2"
+                                    class="p-button-primary my-2"
                                     @click="registerUser"
                                 />
                             </div>
                         </template>
                         <template #empty> No registered users found </template>
                         <template #loading> Loading Users </template>
-                        <Column header="Id" field="id">
+                        <Column header="Profile Pic">
                             <template #body="{ data }">
-                                {{ data.id }}
-                            </template>
-                        </Column>
+                                <div v-if="data.profile_pic">
+                                    <Avatar
+                                        :image="`http://127.0.0.1:8000${data.profile_pic}`"
+                                        style="width: 100px; height: 100px"
+                                        shape="circle"
+                                    />
+                                </div>
+                                <div v-else>
+                                    <Avatar
+                                        image="http://127.0.0.1:8000/storage/images/default-prof-pic.png"
+                                        style="width: 100px; height: 100px"
+                                        shape="circle"
+                                    />
+                                </div> </template
+                        ></Column>
                         <Column header="Name" field="name">
                             <template #body="{ data }">
                                 {{
@@ -102,7 +205,31 @@
                                 }}</Badge>
                             </template>
                         </Column>
-
+                        <Column header="Status" field="status">
+                            <template #body="{ data }">
+                                <Badge :class="badgecolor(data.status)">{{
+                                    data.status
+                                }}</Badge>
+                            </template>
+                        </Column>
+                        <Column
+                            header="Verify"
+                            field="verified"
+                            style="min-width: 8rem"
+                        >
+                            <template #body="{ data }">
+                                <div v-if="data.verified == 0">
+                                    <Badge :class="badgecolor(data.verified)">
+                                        not verified
+                                    </Badge>
+                                </div>
+                                <div v-else>
+                                    <Badge :class="badgecolor(data.verified)">
+                                        verified
+                                    </Badge>
+                                </div>
+                            </template>
+                        </Column>
                         <Column header="Actions" field="actions">
                             <template #body="{ data }">
                                 <Button
@@ -716,6 +843,75 @@ export default {
             filteredLots: computed(() => store.state.lots.filteredLots),
             lots: computed(() => store.state.lots.lots),
             users: computed(() => store.state.users),
+            active: computed(() => {
+                let temp = [];
+                let active = [];
+                store.state.users.forEach((elem) => {
+                    if (elem.role.toUpperCase() == "RESIDENT") {
+                        temp.push(elem);
+                    }
+                });
+                temp.forEach((elem) => {
+                    if (elem.status == "active") {
+                        active.push(elem);
+                    }
+                });
+                return active.length;
+            }),
+            inactive: computed(() => {
+                let temp = [];
+                let inactive = [];
+                store.state.users.forEach((elem) => {
+                    if (elem.role.toUpperCase() == "RESIDENT") {
+                        temp.push(elem);
+                    }
+                });
+                temp.forEach((elem) => {
+                    if (elem.status == "inactive") {
+                        inactive.push(elem);
+                    }
+                });
+                return inactive.length;
+            }),
+            verified: computed(() => {
+                let temp = [];
+                let verified = [];
+                store.state.users.forEach((elem) => {
+                    if (elem.role.toUpperCase() == "RESIDENT") {
+                        temp.push(elem);
+                    }
+                });
+                temp.forEach((elem) => {
+                    if (elem.verified == 1) {
+                        verified.push(elem);
+                    }
+                });
+                return verified.length;
+            }),
+            not_verified: computed(() => {
+                let temp = [];
+                let not_verified = [];
+                store.state.users.forEach((elem) => {
+                    if (elem.role.toUpperCase() == "RESIDENT") {
+                        temp.push(elem);
+                    }
+                });
+                temp.forEach((elem) => {
+                    if (elem.verified == 0) {
+                        not_verified.push(elem);
+                    }
+                });
+                return not_verified.length;
+            }),
+            total: computed(() => {
+                let temp = [];
+                store.state.users.forEach((elem) => {
+                    if (elem.role.toUpperCase() == "RESIDENT") {
+                        temp.push(elem);
+                    }
+                });
+                return temp.length;
+            }),
         };
     },
     data() {
@@ -784,14 +980,22 @@ export default {
     },
     methods: {
         badgecolor(color) {
-            if (color == "admin") {
-                return "bg-gray-500";
-            } else if (color == "resident") {
+            if (color == "active") {
+                return "bg-green-500";
+            } else if (color == 1) {
                 return "bg-orange-500";
+            } else if (color == 0) {
+                return "bg-gray-500";
+            } else if (color == "admin") {
+                return "bg-yellow-900";
+            } else if (color == "officer") {
+                return "bg-purple-500";
             } else if (color == "security_officer") {
-                return "bg-yellow-500";
+                return "bg-indigo-500";
+            } else if (color == "resident") {
+                return "bg-blue-500";
             } else {
-                return "bg-yellow-800";
+                return "bg-pink-500";
             }
         },
         toggle(data) {

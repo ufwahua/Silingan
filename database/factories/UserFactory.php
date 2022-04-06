@@ -25,7 +25,7 @@ class UserFactory extends Factory
     {
         $first_name = $this->faker->firstName();
         $last_name = $this->faker->lastName();
-        $role = $this->faker->randomElement(['admin', 'officer', 'resident','security_officer']);
+        $role = $this->faker->randomElement(['admin', 'resident','security_officer']);
         return [
             'first_name' => $first_name,
             'last_name' => $last_name,

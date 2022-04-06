@@ -28,6 +28,7 @@ class CreateUsersTable extends Migration
             $table->boolean('verified');
             $table->enum('status', ['active', 'inactive']);
             $table->enum('role', ['admin', 'officer', 'resident', 'security_officer']);
+            $table->foreignId('position_id')->nullable();
 
 
 

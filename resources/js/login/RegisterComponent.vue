@@ -266,7 +266,7 @@ export default {
             age: null,
             contact_num: null,
             role: "resident",
-
+            relationship: null,
             selected_block: null,
 
             error_first_name: null,

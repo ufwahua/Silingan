@@ -32,6 +32,7 @@ class User extends Authenticatable
         'verified',
         'status',
         'role',
+        'position_id',
     ];
     //relationships
     public function post(){
@@ -40,6 +41,10 @@ class User extends Authenticatable
     public function lot(){
         return $this->hasOne(Lot::class,'id','block_lot_id');
     }
+    public function position(){
+        return $this->hasOne(Position::class,'id','position_id');
+    }
+
     
     /**
      * The attributes that should be hidden for serialization.

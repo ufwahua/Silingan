@@ -23,9 +23,9 @@
                         <template #end>
                             <div class="mr-2">
                                 <Button
-                                    label="Create"
+                                    label="Add"
                                     icon="pi pi-plus"
-                                    class="p-button-success p-mr-2"
+                                    class="p-button-primary p-mr-2"
                                     @click="createAnnouncement"
                                 />
                             </div>

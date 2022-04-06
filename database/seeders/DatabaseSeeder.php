@@ -18,7 +18,7 @@ class DatabaseSeeder extends Seeder
     {
          $this->call([
             BlockSeeder::class,
-            // LotSeeder::class,
+            PositionSeeder::class,
             UserSeeder::class,
             GroupSeeder::class,
             PostSeeder::class,
@@ -27,7 +27,6 @@ class DatabaseSeeder extends Seeder
             AnnouncementSeeder::class,
             ChatRoomSeeder::class,
             ChatSeeder::class,
-            PositionSeeder::class,
             EmergencyContactDetailSeeder::class,
             CandidateSeeder::class,
             CardSeeder::class,

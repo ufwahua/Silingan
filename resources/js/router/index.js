@@ -68,7 +68,6 @@ function checkRole(to, from, next) {
 }
 function checkLogged(to, from, next) {
     let isAuthenticated = false;
-    store.dispatch("getUserLogged");
     let userLogged = store.state.userLogged;
     if (userLogged) isAuthenticated = true;
     else isAuthenticated = false;
@@ -346,7 +345,7 @@ const router = createRouter({
                     },
                 },
                 {
-                    path: "setting",
+                    path: "/setting",
                     meta: {
                         role: "resident",
                     },
@@ -449,7 +448,7 @@ const router = createRouter({
                     },
                 },
                 {
-                    path: "setting",
+                    path: "/setting",
                     meta: {
                         role: "security_officer",
                     },

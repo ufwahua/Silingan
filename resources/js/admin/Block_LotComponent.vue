@@ -2,7 +2,45 @@
     <div>
         <div class="grid">
             <div class="col-12">
-                <h1>Block</h1>
+                <h1 class="text-center">Blocks</h1>
+            </div>
+        </div>
+        <div class="grid mb-2 flex justify-content-center">
+            <div class="col-12 lg:col-6 xl:col-3">
+                <div class="card mb-0 bg-yellow-400">
+                    <div class="flex justify-content-between mb-3">
+                        <div>
+                            <span
+                                class="block font-medium text-4xl font-bold mb-3"
+                                >{{ blocks.length }}</span
+                            >
+                            <div class="text-900">Blocks</div>
+                        </div>
+
+                        <div
+                            class="flex align-items-center justify-content-center"
+                            style="width: 2.5rem; height: 2.5rem"
+                        ></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 lg:col-6 xl:col-3">
+                <div class="card mb-0 bg-purple-100">
+                    <div class="flex justify-content-between mb-3">
+                        <div>
+                            <span
+                                class="block font-medium text-4xl font-bold mb-3"
+                                >{{ lots.length }}</span
+                            >
+                            <div class="text-900">Lots</div>
+                        </div>
+
+                        <div
+                            class="flex align-items-center justify-content-center"
+                            style="width: 2.5rem; height: 2.5rem"
+                        ></div>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="card">
@@ -24,7 +62,7 @@
                                 <Button
                                     label="Add"
                                     icon="pi pi-plus"
-                                    class="p-button-success p-mr-2"
+                                    class="p-button-primary p-mr-2"
                                     v-tooltip="'Add Blocks'"
                                     @click="openAddBlockModal"
                                 />
@@ -123,6 +161,26 @@
                 <template #header>
                     <h3>Block {{ number }}</h3>
                 </template>
+                <div class="grid mb-2 flex justify-content-center">
+                    <div class="col-12 lg:col-6 xl:col-3">
+                        <div class="card mb-0 bg-purple-100">
+                            <div class="flex justify-content-between mb-3">
+                                <div>
+                                    <span
+                                        class="block font-medium text-4xl font-bold mb-3"
+                                        >{{ filteredLots.length }}</span
+                                    >
+                                    <div class="text-900">Lots</div>
+                                </div>
+
+                                <div
+                                    class="flex align-items-center justify-content-center"
+                                    style="width: 2.5rem; height: 2.5rem"
+                                ></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <div class="card">
                     <div class="grid mb-4">
                         <div class="col-12">
@@ -464,6 +522,7 @@ export default {
         return {
             blocks: computed(() => store.state.blocks.blocks),
             filteredLots: computed(() => store.state.lots.filteredLots),
+            lots: computed(() => store.state.lots.lots),
         };
     },
     components: {
@@ -729,6 +788,7 @@ export default {
                 .then((res) => {
                     console.log("post lot", res.data);
                     this.addLotModal = false;
+                    this.$store.dispatch("lots/getAll");
                     this.$store.dispatch("lots/getBlockLots", this.block_id);
                     this.showAddLotToast();
                     this.loading = false;
