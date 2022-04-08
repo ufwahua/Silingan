@@ -25,7 +25,7 @@
                                 <Button
                                     label="Add"
                                     icon="pi pi-plus"
-                                    class="p-button-success p-mr-2"
+                                    class="p-button-primary p-mr-2"
                                     @click="registerUser"
                                 />
                             </div>
