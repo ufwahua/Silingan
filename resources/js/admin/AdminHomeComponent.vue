@@ -113,7 +113,7 @@ export default {
                                     ],
                                 },
                                 {
-                                    label: "Block and Lot",
+                                    label: "Block and Lots",
                                     icon: "pi pi-info-circle",
                                     to: "/admin/block-lot",
                                 },
@@ -121,6 +121,11 @@ export default {
                                     label: "Positions",
                                     icon: "pi pi-info-circle",
                                     to: "/admin/position",
+                                },
+                                {
+                                    label: "Cards",
+                                    icon: "pi pi-info-circle",
+                                    to: "/admin/card",
                                 },
                             ],
                         },
@@ -266,6 +271,7 @@ export default {
         this.$store.dispatch("emergency_contact_details/getAll");
         this.$store.dispatch("candidates/getAll");
         this.$store.dispatch("getAllUsers");
+        this.$store.dispatch("cards/getAllCards");
         this.$store.dispatch("getBlockUsers", this.$store.state.userLogged.id);
     },
 };
