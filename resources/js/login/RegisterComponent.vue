@@ -136,7 +136,7 @@
                             <label>Lot</label>
 
                             <Dropdown
-                                v-model="block_lot_id"
+                                v-model="selected_lot"
                                 :class="{ 'p-invalid': error_selected_lot }"
                                 :options="filteredLots"
                                 optionLabel="number"
@@ -257,7 +257,7 @@ export default {
             first_name: null,
             last_name: null,
             gender: null,
-            block_lot_id: null,
+            selected_lot: null,
             email: null,
             password: null,
             confirm_password: null,
@@ -293,7 +293,7 @@ export default {
                     first_name: this.first_name,
                     last_name: this.last_name,
                     gender: this.gender,
-                    block_lot_id: this.block_lot_id,
+                    block_lot_id: this.selected_lot,
                     email: this.email,
                     password: this.password,
                     confirm_password: this.confirm_password,
@@ -320,7 +320,7 @@ export default {
             this.first_name = null;
             this.last_name = null;
             this.gender = null;
-            this.block_lot_id = null;
+            this.selected_lot = null;
             this.email = null;
             this.password = null;
             this.confirm_password = null;
@@ -350,12 +350,13 @@ export default {
                 this.error_last_name = error.response.data.errors.last_name[0];
             if (error.response.data.errors.gender)
                 this.error_gender = error.response.data.errors.gender[0];
-            if (error.response.data.errors.selected_block)
-                this.error_selected_block =
-                    error.response.data.errors.selected_block[0];
-            if (error.response.data.errors.selected_lot)
-                this.error_selected_lot =
-                    error.response.data.errors.selected_lot[0];
+            if (error.response.data.errors.block_lot_id){
+                 this.error_selected_block =
+                    "Complete block and lot field";
+                    this.error_selected_lot =
+                    "Complete block and lot field";
+            }   
+               
             if (error.response.data.errors.email)
                 this.error_email = error.response.data.errors.email[0];
             if (error.response.data.errors.password)
@@ -371,6 +372,7 @@ export default {
         },
 
         getBlockLot() {
+            this.selected_lot = null;
             this.$store.dispatch("lots/getBlockLots", this.selected_block);
         },
     },

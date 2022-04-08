@@ -514,8 +514,10 @@ export default {
                     error.response.data.errors.contact_num[0];
             if (error.response.data.errors.role)
                 this.error_role = error.response.data.errors.role[0];
-            if (error.response.data.errors.block_lot_id)
-            this.error_selected_lot = "This lot field is required";
+            if (error.response.data.errors.block_lot_id){
+                this.error_selected_lot = "This lot field is required";
+            }
+            
         },
 
         getBlockLot() {
