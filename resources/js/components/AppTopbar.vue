@@ -167,6 +167,12 @@ export default {
                             command: () => {
                                 if (this.userLogged.role === "officer") {
                                     this.$router.push("/admin/profile");
+                                } else if (
+                                    this.userLogged.role === "security officer"
+                                ) {
+                                    this.$router.push(
+                                        "/security_officer/profile"
+                                    );
                                 } else {
                                     this.$router.push(
                                         `/${this.userLogged.role}` + "/profile"
@@ -218,6 +224,12 @@ export default {
                             command: () => {
                                 if (this.userLogged.role === "officer") {
                                     this.$router.push("/admin/profile");
+                                } else if (
+                                    this.userLogged.role === "security officer"
+                                ) {
+                                    this.$router.push(
+                                        "/security_officer/profile"
+                                    );
                                 } else {
                                     this.$router.push(
                                         `/${this.userLogged.role}` + "/profile"

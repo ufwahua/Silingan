@@ -38,7 +38,10 @@
                 <label><h3>Profile Settings</h3></label>
             </div>
 
-            <div class="p-fluid formgrid grid">
+            <div
+                v-if="selected_role == 'resident' || selected_role == 'officer'"
+                class="p-fluid formgrid grid"
+            >
                 <div class="field col-12 md:col-6">
                     <label>Firstname</label>
 
@@ -111,7 +114,7 @@
                         error_gender
                     }}</label>
                 </div>
-                <div class="field col-12 md:col-12">
+                <div class="field col-12 md:col-6">
                     <label>Age</label>
                     <InputText
                         id="age"
@@ -131,7 +134,7 @@
                     }}</label>
                 </div>
 
-                <div class="field col-12 md:col-12">
+                <div class="field col-12 md:col-6">
                     <label>Contact Number</label>
                     <InputText
                         :class="{
@@ -144,7 +147,23 @@
                         error_contact_num
                     }}</label>
                 </div>
+                <div class="field col-12 md:col-6">
+                    <label>Tag as</label>
 
+                    <Dropdown
+                        v-model="selected_tag"
+                        :class="{
+                            'p-invalid': error_selected_tag,
+                        }"
+                        :options="tag"
+                        optionLabel="tag"
+                        optionValue="tag"
+                        placeholder="Select Tag"
+                    />
+                    <label style="color: red" v-if="error_selected_tag">{{
+                        error_selected_tag
+                    }}</label>
+                </div>
                 <div class="field col-12 md:col-6">
                     <label>Block</label>
 
@@ -197,6 +216,129 @@
                     }}</label>
                 </div>
             </div>
+            <div v-else class="p-fluid formgrid grid">
+                <div class="field col-12 md:col-6">
+                    <label>Firstname</label>
+
+                    <InputText
+                        id="firstname"
+                        :class="{
+                            'p-invalid': error_first_name,
+                        }"
+                        type="text"
+                        v-model="first_name"
+                    />
+                    <label style="color: red" v-if="error_first_name">{{
+                        error_first_name
+                    }}</label>
+                </div>
+
+                <div class="field col-12 md:col-6">
+                    <label>Lastname</label>
+
+                    <InputText
+                        :class="{
+                            'p-invalid': error_last_name,
+                        }"
+                        id="last_name"
+                        type="text"
+                        v-model="last_name"
+                    />
+                    <label style="color: red" v-if="error_last_name">{{
+                        error_last_name
+                    }}</label>
+                </div>
+
+                <div class="field col-12 md:col-6">
+                    <div>
+                        <label>Gender</label>
+                    </div>
+
+                    <div>
+                        <div class="field-radiobutton mb-0">
+                            <RadioButton
+                                name="gender"
+                                :class="{
+                                    'p-invalid': error_gender,
+                                }"
+                                value="male"
+                                v-model="gender"
+                                block_number
+                            />
+                            <label class="mb-0 ml-1 mr-5">Male</label>
+                            <RadioButton
+                                name="gender"
+                                :class="{
+                                    'p-invalid': error_gender,
+                                }"
+                                value="female"
+                                v-model="gender"
+                                block_number
+                            />
+                            <label class="mb-0 ml-1">Female</label>
+                        </div>
+                        <div>
+                            <label style="color: red" v-if="error_gender">{{
+                                error_gender
+                            }}</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="formgroup-inline flex justify-content-around">
+                    <label style="color: red" v-if="error_gender">{{
+                        error_gender
+                    }}</label>
+                </div>
+                <div class="field col-12 md:col-6">
+                    <label>Age</label>
+                    <InputText
+                        id="age"
+                        :class="{
+                            'p-invalid': error_age,
+                        }"
+                        type="number"
+                        min="0"
+                        step="1"
+                        onfocus="this.previousValue = this.value"
+                        onkeydown="this.previousValue = this.value"
+                        oninput="validity.valid || (value = this.previousValue)"
+                        v-model="age"
+                    />
+                    <label style="color: red" v-if="error_age">{{
+                        error_age
+                    }}</label>
+                </div>
+
+                <div class="field col-12 md:col-12">
+                    <label>Contact Number</label>
+                    <InputText
+                        :class="{
+                            'p-invalid': error_contact_num,
+                        }"
+                        oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*?)\..*/g, '$1');"
+                        v-model="contact_num"
+                    />
+                    <label style="color: red" v-if="error_contact_num">{{
+                        error_contact_num
+                    }}</label>
+                </div>
+
+                <div class="field col-12 md:col-12">
+                    <label>Email</label>
+                    <InputText
+                        type="text"
+                        :class="{
+                            'p-invalid': error_email,
+                        }"
+                        name="email"
+                        v-model="email"
+                        disabled
+                    />
+                    <label style="color: red" v-if="error_email">{{
+                        error_email
+                    }}</label>
+                </div>
+            </div>
         </div>
         <div class="grid">
             <div class="col-4"></div>
@@ -206,7 +348,6 @@
                         label="Update"
                         class="p-button p-button-primary"
                         @click="confirmUpdateUser"
-                        
                     />
                 </div>
             </div>
@@ -338,16 +479,23 @@ export default {
             email: null,
             password: null,
             confirm_password: null,
-            verified: 1,
-            has_voted: 0,
+            status: null,
+            verified: null,
+            has_voted: null,
             age: null,
             contact_num: null,
             selected_role: null,
+            selected_tag: null,
             role: [
                 { type: "officer", value: "officer" },
                 { type: "resident", value: "resident" },
                 { type: "security officer", value: "security officer" },
                 { type: "admin", value: "admin" },
+            ],
+            tag: [
+                { tag: "owner" },
+                { tag: "renter" },
+                { tag: "family member" },
             ],
 
             selected_block: null,
@@ -369,6 +517,7 @@ export default {
             error_age: null,
             error_contact_num: null,
             error_role: null,
+            error_selected_tag: null,
         };
     },
     methods: {
@@ -441,43 +590,83 @@ export default {
         async confirmUpdateUser() {
             this.loading = true;
             this.resetErrors();
-            await axios({
-            method: "put",
-            url: "/api/user/" + this.id,
-            data: {
-                first_name: this.first_name,
-                last_name: this.last_name,
-                gender: this.gender,
-                block_lot_id: this.selected_block_lot,
-                email: this.email,
-                verified: 1,
-                has_voted: 0,
-                age: this.age,
-                contact_num: this.contact_num,
-                role: this.selected_role,
-                profile_pic: this.profile_pic,
-                status: "active",
-            },
-            })
-            .then((res) => {
-                console.log(res.data);
-                this.$toast.add({
-                    severity: "success",
-                    summary: "Successful Request",
-                    detail: "Updated User",
-                    life: 3000,
-                });
-                this.$store.dispatch("getUserLogged");
-                this.loading = false;
-            })
-            .catch((err) => {
-                console.log(err.response);
-                this.resetErrors();
-                this.validate(err);
-                this.loading = false;
-            });
-           
-           
+            if (
+                this.$store.state.userLogged.role != "admin" &&
+                this.$store.state.userLogged.role != "security officer"
+            ) {
+                await axios({
+                    method: "put",
+                    url: "/api/user/" + this.id,
+                    data: {
+                        first_name: this.first_name,
+                        last_name: this.last_name,
+                        gender: this.gender,
+                        block_lot_id: this.selected_block_lot,
+                        email: this.email,
+                        verified: this.verified,
+                        has_voted: this.has_voted,
+                        age: this.age,
+                        contact_num: this.contact_num,
+                        role: this.selected_role,
+                        profile_pic: this.profile_pic,
+                        status: this.status,
+                        tag_as: this.selected_tag,
+                    },
+                })
+                    .then((res) => {
+                        console.log(res.data);
+                        this.$toast.add({
+                            severity: "success",
+                            summary: "Successful Request",
+                            detail: "Updated User",
+                            life: 3000,
+                        });
+                        this.$store.dispatch("getUserLogged");
+                        this.loading = false;
+                    })
+                    .catch((err) => {
+                        console.log(err.response);
+                        this.resetErrors();
+                        this.validate(err);
+                        this.loading = false;
+                    });
+            } else {
+                await axios({
+                    method: "put",
+                    url: "/api/user/" + this.id,
+                    data: {
+                        first_name: this.first_name,
+                        last_name: this.last_name,
+                        gender: this.gender,
+                        block_lot_id: null,
+                        email: this.email,
+                        verified: this.verified,
+                        has_voted: this.has_voted,
+                        age: this.age,
+                        contact_num: this.contact_num,
+                        role: this.selected_role,
+                        profile_pic: this.profile_pic,
+                        status: this.status,
+                    },
+                })
+                    .then((res) => {
+                        console.log(res.data);
+                        this.$toast.add({
+                            severity: "success",
+                            summary: "Successful Request",
+                            detail: "Updated User",
+                            life: 3000,
+                        });
+                        this.$store.dispatch("getUserLogged");
+                        this.loading = false;
+                    })
+                    .catch((err) => {
+                        console.log(err.response);
+                        this.resetErrors();
+                        this.validate(err);
+                        this.loading = false;
+                    });
+            }
         },
         resetErrors() {
             this.error_first_name = null;
@@ -491,6 +680,7 @@ export default {
             this.error_age = null;
             this.error_contact_num = null;
             this.error_role = null;
+            this.error_selected_tag = null;
         },
         validate(error) {
             if (error.response.data.errors.first_name)
@@ -514,10 +704,12 @@ export default {
                     error.response.data.errors.contact_num[0];
             if (error.response.data.errors.role)
                 this.error_role = error.response.data.errors.role[0];
-            if (error.response.data.errors.block_lot_id){
+            if (error.response.data.errors.block_lot_id) {
                 this.error_selected_lot = "This lot field is required";
             }
-            
+            if (!this.selected_tag) {
+                this.error_selected_tag = "This tag field is required";
+            }
         },
 
         getBlockLot() {
@@ -533,20 +725,28 @@ export default {
             this.email = this.$store.state.userLogged.email;
             this.password = null;
             this.confirm_password = null;
-            this.verified = 1;
-            this.has_voted = 0;
+            this.status = this.$store.state.userLogged.status;
+            this.verified = this.$store.state.userLogged.verified;
+            this.has_voted = this.$store.state.userLogged.has_voted;
             this.age = this.$store.state.userLogged.age;
             this.contact_num = this.$store.state.userLogged.contact_num;
             this.selected_role = this.$store.state.userLogged.role;
-            this.selected_block = this.$store.state.userLogged.lot.block_id;
-            this.getBlockLot();
-            this.selected_block_lot = this.$store.state.userLogged.lot.id;
+            if (
+                this.selected_role != "security officer" &&
+                this.selected_role != "admin"
+            ) {
+                this.selected_block = this.$store.state.userLogged.lot.block_id;
+                this.getBlockLot();
+                this.selected_block_lot = this.$store.state.userLogged.lot.id;
+                this.selected_tag = this.$store.state.userLogged.tag_as;
+            }
             this.profile_pic = this.$store.state.userLogged.profile_pic;
         },
     },
-   
+
     mounted() {
         this.populateData();
+        console.log("userLogged", this.$store.state.userLogged);
     },
 };
 </script>

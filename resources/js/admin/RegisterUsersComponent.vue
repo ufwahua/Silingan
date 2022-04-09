@@ -110,7 +110,12 @@
                         <template #header>
                             <div class="flex flex-wrap justify-content-between">
                                 <span class="p-input-icon-left inline-block">
-                                    <i class="pi pi-search" />
+                                    <i
+                                        clasfilter
+                                        tag_as
+                                        done
+                                        s="pi pi-search"
+                                    />
                                     <InputText
                                         v-model="filters['global'].value"
                                         placeholder="Keyword Search"
@@ -2045,7 +2050,7 @@ export default {
                 { role: "admin" },
                 { role: "resident" },
                 { role: "officer" },
-                { role: "security_officer" },
+                { role: "security officer" },
             ],
             error_first_name: "",
             error_last_name: "",
