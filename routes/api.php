@@ -33,11 +33,11 @@ use App\Http\Controllers\LogController;
 */
 //NEEDS AUTHENTICATION
 Route::middleware(['auth:sanctum'])->group(function () {
-  
 });
 //Check if User is Logged in
-Route::get('/user_logged',[UserController::class, 'userLogged']);
+Route::get('/user_logged', [UserController::class, 'userLogged']);
 //PUBLIC
+Route::get('/getAllCards', [CardController::class, 'getAllCards']);
 Route::put('/change-password/{user}', [UserController::class, 'changePassword']);
 Route::post('/reset-password', [UserController::class, 'resetPassword']);
 Route::post('/forgot-password', [UserController::class, 'forgotPassword']);
@@ -47,7 +47,8 @@ Route::get('/user/not_blocked/{user}', [UserController::class, 'notBlockedUsers'
 Route::delete('/candidate/election/{candidate}', [CandidateController::class, 'deleteAllCandidate']);
 
 
- Route::apiResources([
+
+Route::apiResources([
     'block'             => BlockController::class,
     'lot'             => LotController::class,
     'user'             => UserController::class,
@@ -66,7 +67,3 @@ Route::delete('/candidate/election/{candidate}', [CandidateController::class, 'd
     'log'             => LogController::class,
     'block_user'             => BlockUserController::class,
 ]);
-
-  
-
-

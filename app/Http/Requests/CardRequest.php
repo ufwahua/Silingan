@@ -14,7 +14,7 @@ class CardRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -25,9 +25,9 @@ class CardRequest extends FormRequest
     public function rules()
     {
         return [
-            'number' => ['required','integer','gt:0',Rule::unique('cards')->ignore($this->route('card'))],
+            'number' => ['required', 'integer', 'gt:0', Rule::unique('cards')->ignore($this->route('card'))],
             'availability' => ['required'],
-            
+
         ];
     }
 }

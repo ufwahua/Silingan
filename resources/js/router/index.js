@@ -14,6 +14,7 @@ import EmergencyContactDetail from "../admin/EmergencyContactDetail.vue";
 import Position from "../admin/PositionComponent.vue";
 import Candidate from "../admin/CandidateComponent.vue";
 import ElectionComponent from "../admin/ElectionComponent.vue";
+import CardComponent from "../admin/CardComponent.vue";
 
 //resident
 import ResidentHomeComponent from "../resident/ResidentHomeComponent.vue";
@@ -295,6 +296,17 @@ const router = createRouter({
                     components: {
                         default: NotFound,
                         contents: ElectionComponent,
+                    },
+                },
+                {
+                    path: "card",
+                    meta: {
+                        role: "admin",
+                    },
+                    beforeEnter: checkRole,
+                    components: {
+                        default: NotFound,
+                        contents: CardComponent,
                     },
                 },
             ],

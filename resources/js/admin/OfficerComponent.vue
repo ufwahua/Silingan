@@ -141,7 +141,7 @@
                                 <Button
                                     label="Add"
                                     icon="pi pi-plus"
-                                    class="p-button-success my-2"
+                                    class="p-button-primary my-2"
                                     @click="registerUser"
                                 />
                             </div>

@@ -25,7 +25,7 @@
                                 <Button
                                     label="Add Candidate"
                                     icon="pi pi-plus"
-                                    class="p-button-success p-mr-2"
+                                    class="p-button-primary p-mr-2"
                                     @click="createCandidate"
                                 />
                             </div>

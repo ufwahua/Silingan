@@ -3,98 +3,7 @@
         <Toast />
         <div class="grid">
             <div class="col-12">
-                <h1 class="text-center">User Masterlist</h1>
-            </div>
-        </div>
-        <div class="grid mb-2 flex justify-content-center">
-            <div class="col-12 lg:col-6 xl:col-3">
-                <div class="card mb-0 bg-green-100">
-                    <div class="flex justify-content-between mb-3">
-                        <div>
-                            <span
-                                class="block font-medium text-4xl font-bold mb-3"
-                                >{{ active }}</span
-                            >
-                            <div class="text-900">Active</div>
-                        </div>
-                        <div
-                            class="flex align-items-center justify-content-center"
-                            style="width: 2.5rem; height: 2.5rem"
-                        ></div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-12 lg:col-6 xl:col-3">
-                <div class="card mb-0 bg-pink-100">
-                    <div class="flex justify-content-between mb-3">
-                        <div>
-                            <span
-                                class="block font-medium text-4xl font-bold mb-3"
-                                >{{ inactive }}</span
-                            >
-                            <div class="text-900">Inactive</div>
-                        </div>
-
-                        <div
-                            class="flex align-items-center justify-content-center"
-                            style="width: 2.5rem; height: 2.5rem"
-                        ></div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-12 lg:col-6 xl:col-3">
-                <div class="card mb-0 bg-orange-100">
-                    <div class="flex justify-content-between mb-3">
-                        <div>
-                            <span
-                                class="block font-medium text-4xl font-bold mb-3"
-                                >{{ verified }}</span
-                            >
-                            <div class="text-900">Verified</div>
-                        </div>
-
-                        <div
-                            class="flex align-items-center justify-content-center"
-                            style="width: 2.5rem; height: 2.5rem"
-                        ></div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-12 lg:col-6 xl:col-3">
-                <div class="card mb-0 bg-gray-400">
-                    <div class="flex justify-content-between mb-3">
-                        <div>
-                            <span
-                                class="block font-medium text-4xl font-bold mb-3"
-                                >{{ not_verified }}</span
-                            >
-                            <div class="text-900">Not Verified</div>
-                        </div>
-
-                        <div
-                            class="flex align-items-center justify-content-center"
-                            style="width: 2.5rem; height: 2.5rem"
-                        ></div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-12 lg:col-6 xl:col-3">
-                <div class="card mb-0 bg-blue-100">
-                    <div class="flex justify-content-between mb-3">
-                        <div>
-                            <span
-                                class="block font-medium text-4xl font-bold mb-3"
-                                >{{ total }}</span
-                            >
-                            <div class="text-900">Total</div>
-                        </div>
-                        <div
-                            class="flex align-items-center justify-content-center"
-                            style="width: 2.5rem; height: 2.5rem"
-                        ></div>
-                    </div>
-                </div>
+                <h1>Registered Users</h1>
             </div>
         </div>
         <div class="card">
@@ -148,6 +57,7 @@
                                     style="width: 200px"
                                     class="my-2"
                                 ></Dropdown>
+<<<<<<< HEAD
                                 <Dropdown
                                     v-model="filters['status'].value"
                                     :showClear="true"
@@ -168,6 +78,9 @@
                                     style="width: 215px"
                                     class="my-2"
                                 ></Dropdown>
+=======
+                                
+>>>>>>> a8ee47987571651c89aa09033f41163dc78c6e5f
                                 <Button
                                     label="Clear"
                                     icon="pi pi-filter-slash"
@@ -184,23 +97,11 @@
                         </template>
                         <template #empty> No registered users found </template>
                         <template #loading> Loading Users </template>
-                        <Column header="Profile Pic">
+                        <Column header="Id" field="id">
                             <template #body="{ data }">
-                                <div v-if="data.profile_pic">
-                                    <Avatar
-                                        :image="`http://127.0.0.1:8000${data.profile_pic}`"
-                                        style="width: 100px; height: 100px"
-                                        shape="circle"
-                                    />
-                                </div>
-                                <div v-else>
-                                    <Avatar
-                                        image="http://127.0.0.1:8000/storage/images/default-prof-pic.png"
-                                        style="width: 100px; height: 100px"
-                                        shape="circle"
-                                    />
-                                </div> </template
-                        ></Column>
+                                {{ data.id }}
+                            </template>
+                        </Column>
                         <Column header="Name" field="name">
                             <template #body="{ data }">
                                 {{
@@ -224,31 +125,7 @@
                                 }}</Badge>
                             </template>
                         </Column>
-                        <Column header="Status" field="status">
-                            <template #body="{ data }">
-                                <Badge :class="badgecolor(data.status)">{{
-                                    data.status
-                                }}</Badge>
-                            </template>
-                        </Column>
-                        <Column
-                            header="Verify"
-                            field="verified"
-                            style="min-width: 8rem"
-                        >
-                            <template #body="{ data }">
-                                <div v-if="data.verified == 0">
-                                    <Badge :class="badgecolor(data.verified)">
-                                        not verified
-                                    </Badge>
-                                </div>
-                                <div v-else>
-                                    <Badge :class="badgecolor(data.verified)">
-                                        verified
-                                    </Badge>
-                                </div>
-                            </template>
-                        </Column>
+
                         <Column header="Actions" field="actions">
                             <template #body="{ data }">
                                 <Button
@@ -467,7 +344,7 @@
 
                                 <div
                                     v-if="
-                                        form.selected_role != 'security officer'
+                                        form.selected_role != 'security_officer'
                                     "
                                     class="field col-12 md:col-6"
                                 >
@@ -493,7 +370,7 @@
 
                                 <div
                                     v-if="
-                                        form.selected_role != 'security officer'
+                                        form.selected_role != 'security_officer'
                                     "
                                     class="field col-12 md:col-6"
                                 >
@@ -694,7 +571,7 @@
 
                                 <div
                                     v-if="
-                                        form.selected_role != 'security officer'
+                                        form.selected_role != 'security_officer'
                                     "
                                     class="field col-12 md:col-6"
                                 >
@@ -720,7 +597,7 @@
 
                                 <div
                                     v-if="
-                                        form.selected_role != 'security officer'
+                                        form.selected_role != 'security_officer'
                                     "
                                     class="field col-12 md:col-6"
                                 >
@@ -1136,75 +1013,6 @@ export default {
             filteredLots: computed(() => store.state.lots.filteredLots),
             lots: computed(() => store.state.lots.lots),
             users: computed(() => store.state.users),
-            active: computed(() => {
-                let temp = [];
-                let active = [];
-                store.state.users.forEach((elem) => {
-                    if (elem.role.toUpperCase() == "RESIDENT") {
-                        temp.push(elem);
-                    }
-                });
-                temp.forEach((elem) => {
-                    if (elem.status == "active") {
-                        active.push(elem);
-                    }
-                });
-                return active.length;
-            }),
-            inactive: computed(() => {
-                let temp = [];
-                let inactive = [];
-                store.state.users.forEach((elem) => {
-                    if (elem.role.toUpperCase() == "RESIDENT") {
-                        temp.push(elem);
-                    }
-                });
-                temp.forEach((elem) => {
-                    if (elem.status == "inactive") {
-                        inactive.push(elem);
-                    }
-                });
-                return inactive.length;
-            }),
-            verified: computed(() => {
-                let temp = [];
-                let verified = [];
-                store.state.users.forEach((elem) => {
-                    if (elem.role.toUpperCase() == "RESIDENT") {
-                        temp.push(elem);
-                    }
-                });
-                temp.forEach((elem) => {
-                    if (elem.verified == 1) {
-                        verified.push(elem);
-                    }
-                });
-                return verified.length;
-            }),
-            not_verified: computed(() => {
-                let temp = [];
-                let not_verified = [];
-                store.state.users.forEach((elem) => {
-                    if (elem.role.toUpperCase() == "RESIDENT") {
-                        temp.push(elem);
-                    }
-                });
-                temp.forEach((elem) => {
-                    if (elem.verified == 0) {
-                        not_verified.push(elem);
-                    }
-                });
-                return not_verified.length;
-            }),
-            total: computed(() => {
-                let temp = [];
-                store.state.users.forEach((elem) => {
-                    if (elem.role.toUpperCase() == "RESIDENT") {
-                        temp.push(elem);
-                    }
-                });
-                return temp.length;
-            }),
         };
     },
     data() {
@@ -1246,13 +1054,18 @@ export default {
             email: null,
             password: null,
             confirm_password: null,
-            verified: 1,
+            verify: 1,
             has_voted: 0,
             age: null,
             contact_num: null,
             selected_role: null,
             user: null,
-
+            role: [
+                { role: "admin" },
+                { role: "resident" },
+                { role: "officer" },
+                { role: "security_officer" },
+            ],
             error_first_name: "",
             error_last_name: "",
             error_gender: "",
@@ -1265,6 +1078,7 @@ export default {
             error_contact_num: "",
             error_role: "",
 
+<<<<<<< HEAD
             role: [
                 { role: "admin" },
                 { role: "resident" },
@@ -1281,6 +1095,10 @@ export default {
                 { status: "verified", value: true },
                 { status: "not verified", value: false },
             ],
+=======
+            role: [{ role: "admin" }, { role: "resident" }, { role: "security_officer" }, { role: "officer" }],
+           
+>>>>>>> a8ee47987571651c89aa09033f41163dc78c6e5f
         };
     },
     methods: {
@@ -1288,25 +1106,32 @@ export default {
             this.viewUserDialog = true;
         },
         badgecolor(color) {
-            if (color == "active") {
-                return "bg-green-500";
-            } else if (color == 1) {
-                return "bg-orange-500";
-            } else if (color == 0) {
+            if (color == "admin") {
                 return "bg-gray-500";
-            } else if (color == "admin") {
-                return "bg-yellow-900";
-            } else if (color == "officer") {
-                return "bg-purple-500";
-            } else if (color == "security officer") {
-                return "bg-indigo-500";
             } else if (color == "resident") {
-                return "bg-blue-500";
+                return "bg-orange-500";
+            } else if (color == "security_officer") {
+                return "bg-yellow-500";
             } else {
-                return "bg-pink-500";
+                return "bg-yellow-800";
             }
         },
         toggle(data) {
+<<<<<<< HEAD
+=======
+           
+            this.menus = [
+                {
+                    label: "Update User",
+                    icon: "pi pi-pencil",
+                    command: () => {
+                        this.updateUser(data);
+                    },
+                },
+                
+            ];
+
+>>>>>>> a8ee47987571651c89aa09033f41163dc78c6e5f
             this.$refs.menu.toggle(event);
             this.populateFields(data);
             if (data.status == "active" && data.verified == 1) {
@@ -1451,8 +1276,12 @@ export default {
             this.filters["lot.block.number"].value = null;
             this.filters["lot.number"].value = null;
             this.filters["role"].value = null;
+<<<<<<< HEAD
             this.filters["status"].value = null;
             this.filters["verified"].value = null;
+=======
+           
+>>>>>>> a8ee47987571651c89aa09033f41163dc78c6e5f
         },
         showSuccess() {
             this.$toast.add({
@@ -1478,6 +1307,7 @@ export default {
                     value: null,
                     matchMode: FilterMatchMode.EQUALS,
                 },
+<<<<<<< HEAD
                 status: {
                     value: null,
                     matchMode: FilterMatchMode.EQUALS,
@@ -1486,6 +1316,9 @@ export default {
                     value: null,
                     matchMode: FilterMatchMode.EQUALS,
                 },
+=======
+                
+>>>>>>> a8ee47987571651c89aa09033f41163dc78c6e5f
             };
         },
 
@@ -1517,6 +1350,25 @@ export default {
         },
         updateUser() {
             this.updateUserDialog = true;
+<<<<<<< HEAD
+=======
+            this.form.first_name = data.first_name;
+            this.form.last_name = data.last_name;
+            this.form.gender = data.gender;
+            if (data.role != "security_officer") {
+                this.form.selected_block = data.lot.block.number;
+                this.getBlockLot();
+                this.form.selected_block_lot = data.lot.id;
+            }
+
+            this.form.email = data.email;
+            this.form.age = data.age;
+            this.form.contact_num = data.contact_num;
+            this.form.selected_role = data.role;
+            this.form.verified = data.verified;
+            this.form.has_voted = data.has_voted;
+            this.form.status = data.status;
+>>>>>>> a8ee47987571651c89aa09033f41163dc78c6e5f
         },
         async confirmUpdateUser() {
             this.process = true;
@@ -1528,15 +1380,15 @@ export default {
                     last_name: this.form.last_name,
                     gender: this.form.gender,
                     block_lot_id: this.form.selected_block_lot,
-                    email: this.form.email,
-                    password: this.form.password,
-                    confirm_password: this.form.confirm_password,
+                    
                     verified: this.form.verified,
                     has_voted: this.form.has_voted,
                     age: this.form.age,
                     contact_num: this.form.contact_num,
                     role: this.form.selected_role,
                     status: this.form.status,
+
+                    
                 },
             })
                 .then(() => {
@@ -1568,7 +1420,7 @@ export default {
                     first_name: data.first_name,
                     last_name: data.last_name,
                     gender: data.gender,
-                    block_lot_id: data.block_lot_id,
+                    block_lot_id: data.lot.id,
                     email: data.email,
                     verified: 1,
                     status: data.status,
@@ -1606,7 +1458,7 @@ export default {
                     first_name: data.first_name,
                     last_name: data.last_name,
                     gender: data.gender,
-                    block_lot_id: data.block_lot_id,
+                    block_lot_id: data.lot.id,
                     email: data.email,
                     verified: data.verified,
                     status: data.status == "active" ? "inactive" : "active",

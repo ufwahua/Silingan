@@ -170,6 +170,8 @@ export default {
                     console.log(err.response);
                     if (err.response.data.error) {
                         this.error = err.response.data.error;
+                    }else{
+                        this.error = "Please enter password";
                     }
                     this.loading = false;
                 });

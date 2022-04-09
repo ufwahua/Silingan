@@ -14,7 +14,7 @@ class CardFactory extends Factory
     public function definition()
     {
         return [
-            'number' => $this->faker->unique()->numberBetween(1,101),
+            'number' => $this->faker->unique()->numberBetween(1, 99),
             'availability' => 1,
         ];
     }
