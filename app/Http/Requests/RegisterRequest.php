@@ -40,6 +40,7 @@ class RegisterRequest extends FormRequest
             'status'                => ['required'],
             'role'                  => ['required'],
             'position_id'           => ['sometimes'],
+            'tag_as'                => ['sometimes'],
            
         ];
 

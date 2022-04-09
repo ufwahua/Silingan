@@ -12,8 +12,6 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Requests\LoginRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use App\Http\Requests\RegisterRequest;
-use App\Models\BlockUser;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Validation\ValidationException;
@@ -62,6 +60,7 @@ class UserController extends Controller
                 'status'                => ['required'],
                 'role'                  => ['required'],
                 'position_id'           => ['sometimes'],
+                'tag_as'                => ['sometimes'],
             ]));
         }
         else{
@@ -81,7 +80,7 @@ class UserController extends Controller
                 'status'                => ['required'],
                 'role'                  => ['required'],
                 'position_id'           => ['sometimes'],
-           
+                'tag_as'                => ['sometimes'],
             ]));
         }
       
@@ -155,7 +154,7 @@ class UserController extends Controller
                 'status' => ['required'],
                 'verified' => ['required'],
                 'has_voted' => ['required'],
-                
+                'tag_as'                => ['sometimes'],
                 'profile_pic'=> ['sometimes'],
             ]));
         }
@@ -174,6 +173,7 @@ class UserController extends Controller
                 'has_voted' => ['required'],
                 'email' => ['required','string' ,'email', 'max:255',Rule::unique('users')->ignore($request->route('user'))],
                 'profile_pic'=> ['sometimes'],
+                'tag_as'                => ['sometimes'],
             ]));
         }
         

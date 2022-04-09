@@ -148,7 +148,26 @@
                                     style="width: 200px"
                                     class="my-2"
                                 ></Dropdown>
-
+                                <Dropdown
+                                    v-model="filters['status'].value"
+                                    :showClear="true"
+                                    :options="status"
+                                    optionLabel="status"
+                                    optionValue="status"
+                                    placeholder="Filter by Status"
+                                    style="width: 200px"
+                                    class="my-2"
+                                ></Dropdown>
+                                <Dropdown
+                                    v-model="filters['verified'].value"
+                                    :showClear="true"
+                                    :options="verification"
+                                    optionLabel="status"
+                                    optionValue="value"
+                                    placeholder="Filter by Verification"
+                                    style="width: 215px"
+                                    class="my-2"
+                                ></Dropdown>
                                 <Button
                                     label="Clear"
                                     icon="pi pi-filter-slash"
@@ -805,6 +824,280 @@
                         </template>
                     </Dialog>
                     <Dialog
+                        v-model:visible="viewUserDialog"
+                        :style="{ width: '500px' }"
+                        header="View User"
+                        :modal="true"
+                    >
+                        <div class="grid">
+                            <div class="col-12 title-form">
+                                <Badge
+                                    :value="1"
+                                    severity="info"
+                                    class="mr-2 mb-2"
+                                    size="large"
+                                ></Badge>
+                                <label><h6>Basic Information</h6></label>
+                            </div>
+
+                            <div class="p-fluid formgrid grid">
+                                <div class="field col-12 md:col-6">
+                                    <label>Firstname</label>
+
+                                    <InputText
+                                        id="firstname"
+                                        type="text"
+                                        v-model="form.first_name"
+                                        :class="{
+                                            'p-invalid': error_first_name,
+                                        }"
+                                        @keydown.enter="onRegisterClick"
+                                        disabled
+                                    />
+                                    <label
+                                        style="color: red"
+                                        v-if="error_first_name"
+                                        >{{ error_first_name }}</label
+                                    >
+                                </div>
+
+                                <div class="field col-12 md:col-6">
+                                    <label>Lastname</label>
+
+                                    <InputText
+                                        id="last_name"
+                                        type="text"
+                                        v-model="form.last_name"
+                                        :class="{
+                                            'p-invalid': error_last_name,
+                                        }"
+                                        @keydown.enter="onRegisterClick"
+                                        disabled
+                                    />
+                                    <label
+                                        style="color: red"
+                                        v-if="error_last_name"
+                                        >{{ error_last_name }}</label
+                                    >
+                                </div>
+
+                                <div class="field col-12 md:col-6">
+                                    <div>
+                                        <label>Gender</label>
+                                    </div>
+
+                                    <div>
+                                        <div class="field-radiobutton mb-0">
+                                            <RadioButton
+                                                name="gender"
+                                                value="male"
+                                                v-model="form.gender"
+                                                :class="{
+                                                    'p-invalid': error_gender,
+                                                }"
+                                                @keydown.enter="onRegisterClick"
+                                                disabled
+                                            />
+                                            <label class="mb-0 ml-1 mr-5"
+                                                >Male</label
+                                            >
+                                            <RadioButton
+                                                name="gender"
+                                                value="female"
+                                                :class="{
+                                                    'p-invalid': error_gender,
+                                                }"
+                                                v-model="form.gender"
+                                                @keydown.enter="onRegisterClick"
+                                                disabled
+                                            />
+                                            <label class="mb-0 ml-1"
+                                                >Female</label
+                                            >
+                                        </div>
+                                        <div>
+                                            <label
+                                                style="color: red"
+                                                v-if="error_gender"
+                                                >{{ error_gender }}</label
+                                            >
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="field col-12 md:col-6">
+                                    <label>Age</label>
+                                    <InputText
+                                        id="age"
+                                        type="number"
+                                        min="0"
+                                        step="1"
+                                        onfocus="this.previousValue = this.value"
+                                        onkeydown="this.previousValue = this.value"
+                                        oninput="validity.valid || (value = this.previousValue)"
+                                        v-model="form.age"
+                                        :class="{
+                                            'p-invalid': error_age,
+                                        }"
+                                        disabled
+                                    />
+                                    <label
+                                        style="color: red"
+                                        v-if="error_age"
+                                        >{{ error_age }}</label
+                                    >
+                                </div>
+
+                                <div class="field col-12 md:col-6">
+                                    <label>Block</label>
+
+                                    <Dropdown
+                                        v-model="form.selected_block"
+                                        :options="blocks"
+                                        optionLabel="number"
+                                        optionValue="number"
+                                        placeholder="Select Block"
+                                        @change="getBlockLot"
+                                        :class="{
+                                            'p-invalid': error_selected_block,
+                                        }"
+                                        disabled
+                                    />
+                                    <label
+                                        style="color: red"
+                                        v-if="error_selected_block"
+                                        >{{ error_selected_block }}</label
+                                    >
+                                </div>
+
+                                <div class="field col-12 md:col-6">
+                                    <label>Lot</label>
+
+                                    <Dropdown
+                                        v-model="form.selected_block_lot"
+                                        :options="filteredLots"
+                                        optionLabel="number"
+                                        optionValue="id"
+                                        placeholder="Select Lot"
+                                        :class="{
+                                            'p-invalid': error_selected_lot,
+                                        }"
+                                        disabled
+                                    />
+                                    <label
+                                        style="color: red"
+                                        v-if="error_selected_lot"
+                                        >{{ error_selected_lot }}</label
+                                    >
+                                </div>
+
+                                <div class="field col-12 md:col-6">
+                                    <label>Role</label>
+
+                                    <Dropdown
+                                        v-model="form.selected_role"
+                                        :class="{
+                                            'p-invalid': error_role,
+                                        }"
+                                        :options="role"
+                                        optionLabel="role"
+                                        optionValue="role"
+                                        placeholder="Select Role"
+                                        disabled
+                                    />
+                                    <label
+                                        style="color: red"
+                                        v-if="error_role"
+                                        >{{ error_role }}</label
+                                    >
+                                </div>
+                                <div class="field col-12 md:col-6">
+                                    <label>Tag as</label>
+
+                                    <Dropdown
+                                        v-model="form.selected_tag"
+                                        :class="{
+                                            'p-invalid': error_selected_tag,
+                                        }"
+                                        :options="tag"
+                                        optionLabel="tag"
+                                        optionValue="tag"
+                                        placeholder="Select Tag"
+                                        disabled
+                                    />
+                                    <label
+                                        style="color: red"
+                                        v-if="error_selected_tag"
+                                        >{{ error_selected_tag }}</label
+                                    >
+                                </div>
+                                <div class="field col-12 md:col-12">
+                                    <label>Contact Number</label>
+                                    <InputText
+                                        id="contact_num"
+                                        type="text"
+                                        oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*?)\..*/g, '$1');"
+                                        v-model="form.contact_num"
+                                        @keydown.enter="onRegisterClick"
+                                        :class="{
+                                            'p-invalid': error_contact_num,
+                                        }"
+                                        disabled
+                                    />
+                                    <label
+                                        style="color: red"
+                                        v-if="error_contact_num"
+                                        >{{ error_contact_num }}</label
+                                    >
+                                </div>
+
+                                <div class="field col-12 md:col-6">
+                                    <label>Block</label>
+
+                                    <Dropdown
+                                        v-model="form.selected_block"
+                                        :options="blocks"
+                                        optionLabel="number"
+                                        optionValue="number"
+                                        placeholder="Select Block"
+                                        @change="getBlockLot"
+                                        :class="{
+                                            'p-invalid': error_selected_block,
+                                        }"
+                                        disabled
+                                    />
+                                    <label
+                                        style="color: red"
+                                        v-if="error_selected_block"
+                                        >{{ error_selected_block }}</label
+                                    >
+                                </div>
+
+                                <div class="field col-12 md:col-6">
+                                    <label>Lot</label>
+
+                                    <Dropdown
+                                        v-model="form.selected_block_lot"
+                                        :options="filteredLots"
+                                        optionLabel="number"
+                                        optionValue="id"
+                                        placeholder="Select Lot"
+                                        :class="{
+                                            'p-invalid': error_selected_lot,
+                                        }"
+                                        disabled
+                                    />
+                                    <label
+                                        style="color: red"
+                                        v-if="error_selected_lot"
+                                        >{{ error_selected_lot }}</label
+                                    >
+                                </div>
+                                <br />
+                            </div>
+                        </div>
+                    </Dialog>
+                    <Dialog
                         v-model:visible="process"
                         :style="{ width: '450px' }"
                         :modal="true"
@@ -927,6 +1220,7 @@ export default {
             registerUserDialog: false,
             deleteUserDialog: false,
             updateUserDialog: false,
+            viewUserDialog: false,
             form: {
                 first_name: "",
                 last_name: "",
@@ -942,6 +1236,7 @@ export default {
                 verified: "",
                 has_voted: "",
                 status: "",
+                selected_tag: "",
             },
 
             first_name: null,
@@ -976,9 +1271,22 @@ export default {
                 { role: "security officer" },
                 { role: "officer" },
             ],
+            status: [{ status: "active" }, { status: "inactive" }],
+            tag: [
+                { tag: "owner" },
+                { tag: "renter" },
+                { tag: "family member" },
+            ],
+            verification: [
+                { status: "verified", value: true },
+                { status: "not verified", value: false },
+            ],
         };
     },
     methods: {
+        viewUser() {
+            this.viewUserDialog = true;
+        },
         badgecolor(color) {
             if (color == "active") {
                 return "bg-green-500";
@@ -999,28 +1307,152 @@ export default {
             }
         },
         toggle(data) {
-            this.menus = [
-                {
-                    label: "Update User",
-                    icon: "pi pi-pencil",
-                    command: () => {
-                        this.updateUser(data);
-                    },
-                },
-            ];
-
             this.$refs.menu.toggle(event);
             this.populateFields(data);
+            if (data.status == "active" && data.verified == 1) {
+                this.menus = [
+                    {
+                        label: `View ${data.role}`,
+                        icon: "pi pi-user",
+                        command: () => {
+                            this.viewUser();
+                        },
+                    },
+                    {
+                        label: `Update ${data.role}`,
+                        icon: "pi pi-pencil",
+                        command: () => {
+                            this.updateUser();
+                        },
+                    },
+                    {
+                        label: `Deactivate ${data.role}`,
+                        icon: "pi pi-lock",
+                        command: () => {
+                            this.changeStatus();
+                        },
+                    },
+                ];
+            } else if (data.status == "active" && data.verified == 0) {
+                this.menus = [
+                    {
+                        label: `View ${data.role}`,
+                        icon: "pi pi-user",
+                        command: () => {
+                            this.viewUser();
+                        },
+                    },
+                    {
+                        label: `Verify ${data.role}`,
+                        icon: "pi pi-check",
+                        command: () => {
+                            this.viewVerifytDialog = true;
+                        },
+                    },
+                    {
+                        label: `Update ${data.role}`,
+                        icon: "pi pi-pencil",
+                        command: () => {
+                            this.updateUser();
+                        },
+                    },
+
+                    {
+                        label: `Deactivate ${data.role}`,
+                        icon: "pi pi-unlock",
+                        command: () => {
+                            this.changeStatus();
+                        },
+                    },
+                ];
+            } else if (data.status == "inactive" && data.verified == 1) {
+                this.menus = [
+                    {
+                        label: `View ${data.role}`,
+                        icon: "pi pi-user",
+                        command: () => {
+                            this.viewUser();
+                        },
+                    },
+                    {
+                        label: `Update ${data.role}`,
+                        icon: "pi pi-pencil",
+                        command: () => {
+                            this.updateUser();
+                        },
+                    },
+
+                    {
+                        label: `Activate ${data.role}`,
+                        icon: "pi pi-unlock",
+                        command: () => {
+                            this.changeStatus();
+                        },
+                    },
+                ];
+            } else {
+                this.menus = [
+                    {
+                        label: `View ${data.role}`,
+                        icon: "pi pi-user",
+                        command: () => {
+                            this.viewUser();
+                        },
+                    },
+                    {
+                        label: `Verify ${data.role}`,
+                        icon: "pi pi-check",
+                        command: () => {
+                            this.viewVerifytDialog = true;
+                        },
+                    },
+                    {
+                        label: `Update ${data.role}`,
+                        icon: "pi pi-pencil",
+                        command: () => {
+                            this.updateUser();
+                        },
+                    },
+
+                    {
+                        label: `Activate ${data.role}`,
+                        icon: "pi pi-unlock",
+                        command: () => {
+                            this.changeStatus();
+                        },
+                    },
+                ];
+            }
         },
         populateFields(data) {
+            this.resetFields();
+            this.resetErrors();
             this.id = data.id;
             this.name = data.name;
             this.position = data.position;
+            this.form.first_name = data.first_name;
+            this.form.last_name = data.last_name;
+            this.form.gender = data.gender;
+            if (data.role != "security officer") {
+                this.form.selected_block = data.lot.block.number;
+                this.getBlockLot();
+                this.form.selected_block_lot = data.block_lot_id;
+            }
+            this.form.email = data.email;
+            this.form.age = data.age;
+            this.form.contact_num = data.contact_num;
+            this.form.selected_role = data.role;
+            this.form.verified = data.verified;
+            this.form.has_voted = data.has_voted;
+            this.form.status = data.status;
+            this.form.selected_tag = data.tag_as;
         },
         clearFilter() {
             this.filters["lot.block.number"].value = null;
             this.filters["lot.number"].value = null;
             this.filters["role"].value = null;
+            this.filters["status"].value = null;
+            this.filters["verified"].value = null;
         },
         showSuccess() {
             this.$toast.add({
@@ -1043,6 +1475,14 @@ export default {
                     matchMode: FilterMatchMode.EQUALS,
                 },
                 role: {
+                    value: null,
+                    matchMode: FilterMatchMode.EQUALS,
+                },
+                status: {
+                    value: null,
+                    matchMode: FilterMatchMode.EQUALS,
+                },
+                verified: {
                     value: null,
                     matchMode: FilterMatchMode.EQUALS,
                 },
@@ -1075,28 +1515,8 @@ export default {
                 console.log(err.response);
             }
         },
-        updateUser(data) {
-            console.log("update", data);
-            this.resetFields();
-            this.resetErrors();
-            this.id = data.id;
+        updateUser() {
             this.updateUserDialog = true;
-            this.form.first_name = data.first_name;
-            this.form.last_name = data.last_name;
-            this.form.gender = data.gender;
-            if (data.role != "security officer") {
-                this.form.selected_block = data.lot.block.number;
-                this.getBlockLot();
-                this.form.selected_block_lot = data.block_lot_id;
-            }
-
-            this.form.email = data.email;
-            this.form.age = data.age;
-            this.form.contact_num = data.contact_num;
-            this.form.selected_role = data.role;
-            this.form.verified = data.verified;
-            this.form.has_voted = data.has_voted;
-            this.form.status = data.status;
         },
         async confirmUpdateUser() {
             this.process = true;
