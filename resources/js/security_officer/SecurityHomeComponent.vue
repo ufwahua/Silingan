@@ -51,16 +51,13 @@ export default {
                         {
                             label: "Marketplace",
                             icon: "pi pi-fw pi-shopping-cart",
-<<<<<<< HEAD:resources/js/security_officer/dashboard/SecurityHomeComponent.vue
                             to: "/security/marketplace",
-=======
                             to: "/security_officer/marketplace",
                         },
                         {
                             label: "Log",
                             icon: "pi pi-fw pi-calendar",
                             to: "/security_officer/log",
->>>>>>> 4db789ac93e6d00324b76355b86341ebd84bb5b0:resources/js/security_officer/SecurityHomeComponent.vue
                         },
                         {
                             label: "Announcement",
