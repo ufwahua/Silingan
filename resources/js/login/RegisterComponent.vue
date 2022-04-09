@@ -9,10 +9,6 @@
             >
                 <div class="col-12 mb-2 lg:col-12 lg:mb-3 text-center">
                     <router-link to="/" :key="$route.fullPath">
-                        <!-- <img
-                            class="Silingan-logo"
-                            alt="Silingan-Logo"
-                            src="http://127.0.0.1:8000/storage/images/silingan-icon.png" -->
                         <img
                             class="Silingan-logo"
                             alt="Silingan-Logo"
@@ -64,9 +60,6 @@
                                     v-model="gender"
                                 />
                                 <label class="mb-0 ml-1">Male</label>
-                                <label style="color: red" v-if="!gender"
-                                    >*</label
-                                >
                             </div>
                         </div>
                         <div class="field col-12 md:col-6">
@@ -78,9 +71,6 @@
                                     v-model="gender"
                                 />
                                 <label class="mb-0 ml-1">Female</label>
-                                <label style="color: red" v-if="!gender"
-                                    >*</label
-                                >
                             </div>
                         </div>
                         <div
@@ -92,8 +82,7 @@
                         </div>
 
                         <div class="field col-12 md:col-6">
-                            <label>Age</label
-                            ><label style="color: red" v-if="!age">*</label>
+                            <label>Age</label>
                             <InputText
                                 id="age"
                                 type="number"
@@ -132,7 +121,7 @@
                                 :class="{ 'p-invalid': error_selected_block }"
                                 :options="blocks"
                                 optionLabel="number"
-                                optionValue="id"
+                                optionValue="number"
                                 placeholder="Select Block"
                                 @change="getBlockLot"
                             />
@@ -147,7 +136,7 @@
                             <label>Lot</label>
 
                             <Dropdown
-                                v-model="block_lot_id"
+                                v-model="selected_lot"
                                 :class="{ 'p-invalid': error_selected_lot }"
                                 :options="filteredLots"
                                 optionLabel="number"
@@ -268,7 +257,7 @@ export default {
             first_name: null,
             last_name: null,
             gender: null,
-            block_lot_id: null,
+            selected_lot: null,
             email: null,
             password: null,
             confirm_password: null,
@@ -277,7 +266,7 @@ export default {
             age: null,
             contact_num: null,
             role: "resident",
-
+            relationship: null,
             selected_block: null,
 
             error_first_name: null,
@@ -304,15 +293,16 @@ export default {
                     first_name: this.first_name,
                     last_name: this.last_name,
                     gender: this.gender,
-                    block_lot_id: this.selected_block_lot,
+                    block_lot_id: this.selected_lot,
                     email: this.email,
                     password: this.password,
                     confirm_password: this.confirm_password,
-                    verified: 1,
+                    verified: 0,
                     has_voted: 0,
                     age: this.age,
                     contact_num: this.contact_num,
                     role: "resident",
+                    status: "active",
                 },
             })
                 .then(() => {
@@ -330,12 +320,12 @@ export default {
             this.first_name = null;
             this.last_name = null;
             this.gender = null;
-            this.block_lot_id = null;
+            this.selected_lot = null;
             this.email = null;
             this.password = null;
             this.confirm_password = null;
-            this.verified = true;
-            this.has_voted = false;
+            this.verified = 0;
+            this.has_voted = 0;
             this.age = null;
             this.contact_num = null;
             this.role = "resident";
@@ -360,12 +350,13 @@ export default {
                 this.error_last_name = error.response.data.errors.last_name[0];
             if (error.response.data.errors.gender)
                 this.error_gender = error.response.data.errors.gender[0];
-            if (error.response.data.errors.selected_block)
-                this.error_selected_block =
-                    error.response.data.errors.selected_block[0];
-            if (error.response.data.errors.selected_lot)
-                this.error_selected_lot =
-                    error.response.data.errors.selected_lot[0];
+            if (error.response.data.errors.block_lot_id){
+                 this.error_selected_block =
+                    "Complete block and lot field";
+                    this.error_selected_lot =
+                    "Complete block and lot field";
+            }   
+               
             if (error.response.data.errors.email)
                 this.error_email = error.response.data.errors.email[0];
             if (error.response.data.errors.password)
@@ -381,6 +372,7 @@ export default {
         },
 
         getBlockLot() {
+            this.selected_lot = null;
             this.$store.dispatch("lots/getBlockLots", this.selected_block);
         },
     },

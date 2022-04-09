@@ -1,7 +1,15 @@
 <template>
     <div :class="containerClass" @click="onWrapperClick">
-        <AppTopBar @menu-toggle="onMenuToggle" />
-        <div class="layout-sidebar" @click="onSidebarClick">
+        <AppTopBar
+            v-if="userLogged.status != 'inactive'"
+            @menu-toggle="onMenuToggle"
+        />
+        <AppTopBar v-else @menu-toggle="onMenuToggle" />
+        <div
+            v-if="userLogged.status != 'inactive'"
+            class="layout-sidebar"
+            @click="onSidebarClick"
+        >
             <AppMenu :model="menu" @menuitem-click="onMenuItemClick" />
         </div>
 
@@ -14,7 +22,10 @@
             </div>
             <AppFooter />
         </div>
-        <ChatComponent :layoutMode="layoutMode" />
+        <ChatComponent
+            v-if="userLogged.status != 'inactive'"
+            :layoutMode="layoutMode"
+        />
         <transition name="layout-mask">
             <div
                 class="layout-mask p-component-overlay"
@@ -29,9 +40,22 @@ import AppTopBar from "../components/AppTopbar.vue";
 import AppMenu from "../components/AppMenu.vue";
 import ChatComponent from "../components/ChatComponent.vue";
 import AppFooter from "../components/AppFooter.vue";
-
+import { computed } from "vue";
+import { useStore } from "vuex";
 export default {
-    name: "HomeComponent",
+    name: "AdminHomeComponent",
+    components: {
+        AppTopBar,
+        AppMenu,
+        ChatComponent: ChatComponent,
+        AppFooter,
+    },
+    setup() {
+        const store = useStore();
+        return {
+            userLogged: computed(() => store.state.userLogged),
+        };
+    },
     data() {
         return {
             layoutMode: "static",
@@ -41,27 +65,92 @@ export default {
             mobileMenuActive: false,
             menu: [
                 {
-                    label: "Resident",
+                    label: "Admin",
                     items: [
                         {
                             label: "Timeline",
                             icon: "pi pi-fw pi-home",
-                            to: "/resident/timeline",
+                            to: "/admin/timeline",
                         },
                         {
                             label: "Marketplace",
-                            icon: "pi pi-fw pi-shopping-cart",
-                            to: "/resident/marketplace",
+                            icon: "pi pi-shopping-cart",
+                            to: "/admin/marketplace",
                         },
                         {
                             label: "Announcement",
-                            icon: "pi pi-fw pi-calendar",
-                            to: "/resident/announcement",
+                            icon: "pi pi-info",
+                            to: "/admin/view-announcement",
+                        },
+                    ],
+                },
+                {
+                    items: [
+                        {
+                            label: "Maintain",
+                            icon: "pi pi-fw pi-sitemap",
+                            items: [
+                                {
+                                    label: "Users",
+                                    icon: "pi pi-users",
+                                    items: [
+                                        {
+                                            label: "Residents",
+                                            icon: "pi pi-user-edit",
+                                            to: "/admin/residents",
+                                        },
+                                        {
+                                            label: "Security Officers",
+                                            icon: "pi pi-user-edit",
+                                            to: "/admin/security-officers",
+                                        },
+                                        {
+                                            label: "Officers",
+                                            icon: "pi pi-user-edit",
+                                            to: "/admin/officers",
+                                        },
+                                        {
+                                            label: "All Users",
+                                            icon: "pi pi-user-edit",
+                                            to: "/admin/registered-users",
+                                        },
+                                    ],
+                                },
+                                {
+                                    label: "Block and Lots",
+                                    icon: "pi pi-info-circle",
+                                    to: "/admin/block-lot",
+                                },
+                                {
+                                    label: "Positions",
+                                    icon: "pi pi-info-circle",
+                                    to: "/admin/position",
+                                },
+                                {
+                                    label: "Cards",
+                                    icon: "pi pi-info-circle",
+                                    to: "/admin/card",
+                                },
+                            ],
+                        },
+                    ],
+                },
+                {
+                    items: [
+                        {
+                            label: "Announcement",
+                            icon: "pi pi-info-circle",
+                            to: "/admin/announcement",
                         },
                         {
-                            label: "Emergency Contact",
+                            label: "Emergency Details",
+                            icon: "pi pi-info-circle",
+                            to: "/admin/emergency-contact-detail",
+                        },
+                        {
+                            label: "Election",
                             icon: "pi pi-fw pi-calendar",
-                            to: "/resident/emergency",
+                            to: "/admin/election",
                         },
                     ],
                 },
@@ -112,7 +201,9 @@ export default {
                 this.mobileMenuActive = false;
             }
         },
-
+        onLayoutChange(layoutMode) {
+            this.layoutMode = layoutMode;
+        },
         onLayoutColorChange(layoutColorMode) {
             this.layoutColorMode = layoutColorMode;
         },
@@ -174,25 +265,22 @@ export default {
             this.addClass(document.body, "body-overflow-hidden");
         else this.removeClass(document.body, "body-overflow-hidden");
     },
-    components: {
-        AppTopBar: AppTopBar,
-        AppMenu: AppMenu,
-        ChatComponent: ChatComponent,
-        AppFooter: AppFooter,
-    },
-    created() {
-        this.$store.dispatch("news/getAll");
-        this.$store.dispatch("posts/getAll");
-        this.$store.dispatch(
-            "getUsersNotBlocked",
-            this.$store.state.userLogged.id
-        );
 
+    mounted() {
+        this.$store.dispatch("news/getAll");
+        this.$store.dispatch("blocks/getAll");
+        this.$store.dispatch("lots/getAll");
+        this.$store.dispatch("announcements/getAll");
+        this.$store.dispatch("positions/getAll");
+        this.$store.dispatch("emergency_contact_details/getAll");
+        this.$store.dispatch("candidates/getAll");
+        this.$store.dispatch("getAllUsers");
+        this.$store.dispatch("cards/getAllCards");
         this.$store.dispatch("getBlockUsers", this.$store.state.userLogged.id);
     },
 };
 </script>
 
-<style>
-/* @import "./App.scss"; */
+<style lang="scss">
+@import "./assets/styles/App.scss";
 </style>

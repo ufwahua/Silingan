@@ -3,7 +3,7 @@ import Register from "../login/RegisterComponent.vue";
 import ForgotPassword from "../login/ForgotPasswordComponent.vue";
 import ResetPasswordComponent from "../login/ResetPasswordComponent.vue";
 //admin
-import HomeComponent from "../admin/HomeComponent.vue";
+import AdminHomeComponent from "../admin/AdminHomeComponent.vue";
 import Block_Lot from "../admin/Block_LotComponent.vue";
 import RegisteredUsersComponent from "../admin/RegisterUsersComponent.vue";
 import Announcement from "../admin/Announcement.vue";
@@ -14,9 +14,10 @@ import EmergencyContactDetail from "../admin/EmergencyContactDetail.vue";
 import Position from "../admin/PositionComponent.vue";
 import Candidate from "../admin/CandidateComponent.vue";
 import ElectionComponent from "../admin/ElectionComponent.vue";
+import CardComponent from "../admin/CardComponent.vue";
 
-//user
-import UserHome from "../user/UserHomeComponent.vue";
+//resident
+import ResidentHomeComponent from "../resident/ResidentHomeComponent.vue";
 
 //security officer
 import SecurityHome from "../security_officer/SecurityHomeComponent.vue";
@@ -29,7 +30,8 @@ import AnnouncementComponent from "../components/AnnouncementComponent.vue";
 import EmergencyContactComponent from "../components/EmergencyContactComponent.vue";
 import NotFound from "../components/NotFoundComponent.vue";
 import AppProfile from "../components/AppProfile.vue";
-import BlockUser from "../components/BlockUserComponent.vue";
+import SettingComponent from "../components/SettingComponent.vue";
+import ActivateAccountComponent from "../components/ActivateAccountComponent.vue";
 import { createRouter, createWebHistory } from "vue-router";
 import store from "../store/store";
 
@@ -56,7 +58,7 @@ function checkRole(to, from, next) {
             next("/resident/timeline");
         }
         if (
-            userLogged.role === "security_officer" &&
+            userLogged.role === "security officer" &&
             (to.meta.role === "admin" || to.meta.role === "resident")
         ) {
             next("/security/timeline");
@@ -67,7 +69,6 @@ function checkRole(to, from, next) {
 }
 function checkLogged(to, from, next) {
     let isAuthenticated = false;
-    store.dispatch("getUserLogged");
     let userLogged = store.state.userLogged;
     if (userLogged) isAuthenticated = true;
     else isAuthenticated = false;
@@ -79,7 +80,7 @@ function checkLogged(to, from, next) {
         next("/admin/timeline");
     } else if (isAuthenticated && userLogged.role === "resident") {
         next("/resident/timeline");
-    } else if (isAuthenticated && userLogged.role === "security_officer") {
+    } else if (isAuthenticated && userLogged.role === "security officer") {
         next("/security_officer/timeline");
     } else {
         next();
@@ -125,7 +126,7 @@ const router = createRouter({
         },
         {
             path: "/admin",
-            component: HomeComponent,
+            component: AdminHomeComponent,
             beforeEnter: checkRole,
             name: "adminHome",
             meta: {
@@ -254,14 +255,14 @@ const router = createRouter({
                     },
                 },
                 {
-                    path: "block_user",
+                    path: "setting",
                     meta: {
                         role: "admin",
                     },
                     beforeEnter: checkRole,
                     components: {
                         default: NotFound,
-                        contents: BlockUser,
+                        contents: SettingComponent,
                     },
                 },
                 {
@@ -276,6 +277,17 @@ const router = createRouter({
                     },
                 },
                 {
+                    path: "activate-account",
+                    meta: {
+                        role: "admin",
+                    },
+
+                    components: {
+                        default: NotFound,
+                        contents: ActivateAccountComponent,
+                    },
+                },
+                {
                     path: "election",
                     meta: {
                         role: "admin",
@@ -286,11 +298,22 @@ const router = createRouter({
                         contents: ElectionComponent,
                     },
                 },
+                {
+                    path: "card",
+                    meta: {
+                        role: "admin",
+                    },
+                    beforeEnter: checkRole,
+                    components: {
+                        default: NotFound,
+                        contents: CardComponent,
+                    },
+                },
             ],
         },
         {
             path: "/resident",
-            component: UserHome,
+            component: ResidentHomeComponent,
             meta: {
                 role: "resident",
             },
@@ -334,14 +357,14 @@ const router = createRouter({
                     },
                 },
                 {
-                    path: "block_user",
+                    path: "/setting",
                     meta: {
                         role: "resident",
                     },
                     beforeEnter: checkRole,
                     components: {
                         default: NotFound,
-                        contents: BlockUser,
+                        contents: SettingComponent,
                     },
                 },
 
@@ -365,6 +388,17 @@ const router = createRouter({
                     components: {
                         default: NotFound,
                         contents: EmergencyContactComponent,
+                    },
+                },
+                {
+                    path: "activate-account",
+                    meta: {
+                        role: "resident",
+                    },
+
+                    components: {
+                        default: NotFound,
+                        contents: ActivateAccountComponent,
                     },
                 },
             ],
@@ -426,14 +460,14 @@ const router = createRouter({
                     },
                 },
                 {
-                    path: "block_user",
+                    path: "/setting",
                     meta: {
                         role: "security_officer",
                     },
                     beforeEnter: checkRole,
                     components: {
                         default: NotFound,
-                        contents: BlockUser,
+                        contents: SettingComponent,
                     },
                 },
                 {
@@ -456,6 +490,17 @@ const router = createRouter({
                     components: {
                         default: NotFound,
                         contents: EmergencyContactComponent,
+                    },
+                },
+                {
+                    path: "activate-account",
+                    meta: {
+                        role: "security_officer",
+                    },
+
+                    components: {
+                        default: NotFound,
+                        contents: ActivateAccountComponent,
                     },
                 },
             ],

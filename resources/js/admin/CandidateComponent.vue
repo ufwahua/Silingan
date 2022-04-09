@@ -25,7 +25,7 @@
                                 <Button
                                     label="Add Candidate"
                                     icon="pi pi-plus"
-                                    class="p-button-success p-mr-2"
+                                    class="p-button-primary p-mr-2"
                                     @click="createCandidate"
                                 />
                             </div>
@@ -125,11 +125,6 @@
                                 <div class="field">
                                     <div class="field col-12 md:col-12">
                                         <label>Position name</label>
-                                        <label
-                                            style="color: red"
-                                            v-if="!position_id"
-                                            >*</label
-                                        >
                                         <Dropdown
                                             v-model="position_id"
                                             :options="positions"
@@ -141,11 +136,6 @@
                                     </div>
                                     <div class="field col-12 md:col-12">
                                         <label>Candidate name</label>
-                                        <label
-                                            style="color: red"
-                                            v-if="!user_id"
-                                            >*</label
-                                        >
 
                                         <Dropdown
                                             v-model="user_id"
@@ -203,7 +193,7 @@
                                 <div class="field">
                                     <div class="field col-12 md:col-12">
                                         <label>Position name</label>
-                                        <label style="color: red">*</label>
+
                                         <Dropdown
                                             v-model="position_id"
                                             :options="positions"
@@ -220,7 +210,7 @@
                                     >
                                     <div class="field col-12 md:col-12">
                                         <label>Candidate name</label>
-                                        <label style="color: red">*</label>
+
                                         <Dropdown
                                             v-model="user_id"
                                             :options="users"

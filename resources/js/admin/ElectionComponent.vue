@@ -125,7 +125,7 @@
                         <div class="field">
                             <div class="field col-12 md:col-12">
                                 <label>Position name</label>
-                                <label style="color: red">*</label>
+
                                 <Dropdown
                                     v-model="position_id"
                                     :options="positions"
@@ -145,7 +145,7 @@
                             >
                             <div class="field col-12 md:col-12">
                                 <label>Candidate name</label>
-                                <label style="color: red">*</label>
+
                                 <Dropdown
                                     v-model="user_id"
                                     :options="users"
@@ -202,7 +202,7 @@
                         <div class="field">
                             <div class="field col-12 md:col-12">
                                 <label>Position name</label>
-                                <label style="color: red">*</label>
+
                                 <Dropdown
                                     v-model="position_id"
                                     :options="positions"
@@ -222,7 +222,6 @@
                             >
                             <div class="field col-12 md:col-12">
                                 <label>Candidate name</label>
-                                <label style="color: red">*</label>
 
                                 <Dropdown
                                     v-model="user_id"

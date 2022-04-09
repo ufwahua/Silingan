@@ -40,7 +40,7 @@
                             ></Button>
                         </div>
                     </div>
-                    <div v-if="block_users" class="card flex flex-column">
+                    <div v-if="block_users[0]" class="card flex flex-column">
                         <div
                             v-for="block_user in block_users"
                             :key="block_user.id"
@@ -61,6 +61,25 @@
                     </div>
                     <div v-else class="card flex justify-content-center">
                         <p>You haven't added anyone to your block list.</p>
+                    </div>
+                </Fieldset>
+            </div>
+            <div
+                v-if="this.userLogged.status == 'active'"
+                class="col justify-content-center pt-0"
+            >
+                <Fieldset class="mb-3" legend="Deactivate Account">
+                    <p class="p-4 text-center">
+                        Temporarily Deactivate your account
+                    </p>
+                    <div>
+                        <div class="flex justify-content-center mb-4">
+                            <Button
+                                label="Deactivate"
+                                class="p-button-outlined p-button-danger"
+                                @click="openDeactivateDialog"
+                            ></Button>
+                        </div>
                     </div>
                 </Fieldset>
             </div>
@@ -160,6 +179,36 @@
                 />
             </template>
         </Dialog>
+        <Dialog
+            v-model:visible="deactivateDialog"
+            :style="{ width: '450px' }"
+            :header="`Deactivate Account`"
+            :modal="true"
+        >
+            <div class="confirmation-content">
+                <div class="grid">
+                    <div
+                        class="col-12 flex align-items-center justify-content-center"
+                    >
+                        <span
+                            >Are you sure you want to deactivate your account?
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <template #footer>
+                <Button
+                    label="Cancel"
+                    class="p-button-text"
+                    @click="deactivateDialog = false"
+                />
+                <Button
+                    label="Confirm"
+                    class="p-button-danger"
+                    @click="deactivateAccount(this.userLogged)"
+                />
+            </template>
+        </Dialog>
         <Toast />
     </div>
 </template>
@@ -169,7 +218,7 @@ import { computed } from "vue";
 import { useStore } from "vuex";
 import NewsComponent from "./NewsComponent.vue";
 export default {
-    name: "BlockUserComponent",
+    name: "SettingComponent",
     components: {
         NewsComponent,
     },
@@ -179,7 +228,6 @@ export default {
             posts: computed(() => store.state.posts.posts),
             users: computed(() => store.state.users),
             block_users: computed(() => store.state.block_users),
-
             userLogged: computed(() => store.state.userLogged),
         };
     },
@@ -191,9 +239,64 @@ export default {
             selectedUser: null,
             blockDialog: false,
             unblockDialog: false,
+            deactivateDialog: false,
         };
     },
     methods: {
+        async deactivateAccount(data) {
+            this.process = true;
+            console.log("verify", data);
+            await axios({
+                method: "put",
+                url: "/api/user/" + data.id,
+                data: {
+                    first_name: data.first_name,
+                    last_name: data.last_name,
+                    gender: data.gender,
+                    block_lot_id:
+                        data.block_lot_id != null ? data.block_lot_id : null,
+                    email: data.email,
+                    verified: data.verified,
+                    status: data.status == "active" ? "inactive" : "active",
+                    has_voted: data.has_voted,
+                    age: data.age,
+                    contact_num: data.contact_num,
+                    role: data.role,
+                },
+            })
+                .then(() => {
+                    this.$toast.add({
+                        severity: "success",
+                        summary: "Successful",
+                        detail:
+                            data.status != "active"
+                                ? "User Activated"
+                                : "User Deactivated",
+                        life: 3000,
+                    });
+                    this.$store.dispatch("getAllUsers");
+                    this.process = false;
+                    axios({
+                        method: "get",
+                        url: "/api/logout",
+                    })
+                        .then((response) => {
+                            console.log(response);
+                            this.$router.push("/login");
+                            this.$store.dispatch("logout", null);
+                        })
+                        .catch((error) => {
+                            console.log(error.response);
+                        });
+                })
+                .catch((err) => {
+                    console.log(err.response);
+                    this.process = false;
+                });
+        },
+        openDeactivateDialog() {
+            this.deactivateDialog = true;
+        },
         showUnblockToast() {
             this.$toast.add({
                 severity: "success",

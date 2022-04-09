@@ -23,9 +23,9 @@
                         <template #end>
                             <div class="mr-2">
                                 <Button
-                                    label="Add Position"
+                                    label="Add"
                                     icon="pi pi-plus"
-                                    class="p-button-success p-mr-2"
+                                    class="p-button-primary p-mr-2"
                                     @click="createPosition"
                                 />
                             </div>
@@ -39,22 +39,27 @@
                         :value="positions"
                         :filters="filters"
                         breakpoint="1230px"
+                        :paginator="true"
+                        :rows="10"
                     >
                         <template #empty> No positions found </template>
-                        <!-- <Column header="ID" field="id"> </Column> -->
-                        <Column header="Position name" field="name"> </Column>
 
+                        <Column header="Position name" field="name"> </Column>
                         <Column header="Actions" field="actions">
                             <template #body="{ data }">
                                 <Button
-                                    icon="pi pi-pencil"
-                                    class="p-button-rounded p-button-primary mr-2"
-                                    @click="updatePosition(data)"
+                                    type="button"
+                                    icon="pi pi-ellipsis-h"
+                                    class="p-button-rounded p-button-info"
+                                    @click="toggle(data)"
+                                    aria-haspopup="true"
+                                    aria-controls="overlay_menu"
                                 />
-                                <Button
-                                    icon="pi pi-trash"
-                                    class="p-button-rounded p-button-danger"
-                                    @click="deletePosition(data)"
+                                <Menu
+                                    id="overlay_menu"
+                                    ref="menu"
+                                    :model="menus"
+                                    :popup="true"
                                 />
                             </template>
                         </Column>
@@ -233,9 +238,37 @@ export default {
             name: null,
             selected_user: null,
             error_name: null,
+
+            //action menu overlay
+            menus: [
+                {
+                    label: "Edit",
+                    icon: "pi pi-pencil",
+                    command: () => {
+                        this.updatePosition();
+                    },
+                },
+                {
+                    label: "Delete",
+                    icon: "pi pi-trash",
+                    command: () => {
+                        this.deletePosition();
+                    },
+                },
+            ],
         };
     },
     methods: {
+        toggle(data) {
+            this.$refs.menu.toggle(event);
+            this.populateFields(data);
+        },
+        populateFields(data) {
+            this.resetFields();
+            this.resetErrors();
+            this.id = data.id;
+            this.name = data.name;
+        },
         showSuccess() {
             this.$toast.add({
                 severity: "success",
@@ -250,9 +283,7 @@ export default {
             };
         },
 
-        deletePosition(data) {
-            this.id = data.id;
-            this.name = data.name;
+        deletePosition() {
             this.deletePositionDialog = true;
         },
         showDeletePositiontToast() {
@@ -282,11 +313,7 @@ export default {
                 });
         },
 
-        updatePosition(data) {
-            this.resetFields();
-            this.resetErrors();
-            this.id = data.id;
-            this.name = data.name;
+        updatePosition() {
             this.updatePositionDialog = true;
         },
         showUpdatePositionToast() {

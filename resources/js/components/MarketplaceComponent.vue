@@ -40,10 +40,10 @@
                     <PostComponent
                         v-if="
                             post.group.name.toUpperCase() === 'MARKETPLACE' &&
-                            post.approved === true
+                            post.approved === 1
                         "
                         v-bind:post="post"
-                    />
+                />
                 </div>
             </div>
         </div>

@@ -38,6 +38,7 @@ const lots = {
                 })
                 .catch((err) => {
                     console.log(err.response.data);
+                    commit("getBlockLots", null);
                 });
         },
     },

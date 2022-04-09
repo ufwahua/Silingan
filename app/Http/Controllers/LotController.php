@@ -3,11 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Lot;
+use App\Models\Block;
 use Illuminate\Http\Request;
+use App\Http\Requests\LotRequest;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\LotRequest;
 
 class LotController extends Controller
 {
@@ -28,8 +29,9 @@ class LotController extends Controller
     */
     public function show(Request $request) : JsonResponse
     {
+        $block_id = Block::where('number' , $request->route('lot'))->first()->id;
             return response()->json(  
-                DB::table('lots')->where('block_id' , $request->route('lot'))->orderBy('block_id','asc')->orderBy('number','asc')->get()
+                DB::table('lots')->where('block_id' , $block_id)->orderBy('number','asc')->get()
         );
     }
 

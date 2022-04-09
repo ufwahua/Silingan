@@ -19,6 +19,6 @@ class Lot extends Model
         'number',
     ];
     public function block(){
-        return $this->hasOne(Lot::class,'id','block_id');
+        return $this->hasOne(Block::class,'id','block_id');
     }
 }
