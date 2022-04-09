@@ -1,12 +1,13 @@
 <template>
     <div class="layout-topbar">
-        <router-link to="/admin/dashboard" class="layout-topbar-logo">
+        <router-link to="/admin/timeline" class="layout-topbar-logo">
             <img
                 alt="Silingan-Logo"
                 src="http://localhost:8000/storage/images/silingan-icon.png"
             />
         </router-link>
         <button
+            v-if="userLogged.status != 'inactive'"
             class="p-link layout-menu-button layout-topbar-button"
             @click="onMenuToggle"
         >
@@ -14,6 +15,7 @@
         </button>
 
         <button
+            v-if="userLogged.status != 'inactive'"
             class="p-link layout-topbar-menu-button layout-topbar-button"
             v-styleclass="{
                 selector: '@next',
@@ -27,7 +29,7 @@
             <i class="pi pi-ellipsis-v"></i>
         </button>
         <ul class="layout-topbar-menu hidden lg:flex origin-top">
-            <li>
+            <li v-if="userLogged.status != 'inactive'">
                 <Button
                     type="button"
                     label="Toggle"
@@ -101,7 +103,58 @@ export default {
                     ],
                 },
             ],
-            profile_menu: [
+            profile_menu: null,
+        };
+    },
+    methods: {
+        toggle(event) {
+            this.$refs.menu.toggle(event);
+        },
+        toggleNotification(event) {
+            this.$refs.menu2.toggle(event);
+        },
+        onMenuToggle(event) {
+            this.$emit("menu-toggle", event);
+        },
+        onTopbarMenuToggle(event) {
+            this.$emit("topbar-menu-toggle", event);
+        },
+    },
+    mounted() {
+        if (this.$store.state.userLogged.status != "active") {
+            this.profile_menu = [
+                {
+                    label:
+                        this.$store.state.userLogged.first_name +
+                        " " +
+                        this.$store.state.userLogged.last_name,
+                    items: [
+                        {
+                            label: "Logout",
+                            icon: "pi pi-sign-out",
+                            command: async () => {
+                                await axios({
+                                    method: "get",
+                                    url: "/api/logout",
+                                })
+                                    .then((response) => {
+                                        console.log(response);
+                                        this.$router.push("/login");
+                                        this.$store.dispatch("logout", null);
+                                    })
+                                    .catch((error) => {
+                                        console.log(error.response);
+                                    });
+                            },
+                        },
+                    ],
+                },
+            ];
+        } else if (
+            this.$store.state.userLogged.role === "admin" ||
+            this.$store.state.userLogged.role === "officer"
+        ) {
+            this.profile_menu = [
                 {
                     label:
                         this.userLogged.first_name +
@@ -119,6 +172,15 @@ export default {
                                         `/${this.userLogged.role}` + "/profile"
                                     );
                                 }
+                            },
+                        },
+                        {
+                            label: "Setting",
+                            icon: "pi pi-cog",
+                            command: () => {
+                                this.$router.push(
+                                    `/${this.userLogged.role}` + "/setting"
+                                );
                             },
                         },
                         {
@@ -141,22 +203,61 @@ export default {
                         },
                     ],
                 },
-            ],
-        };
-    },
-    methods: {
-        toggle(event) {
-            this.$refs.menu.toggle(event);
-        },
-        toggleNotification(event) {
-            this.$refs.menu2.toggle(event);
-        },
-        onMenuToggle(event) {
-            this.$emit("menu-toggle", event);
-        },
-        onTopbarMenuToggle(event) {
-            this.$emit("topbar-menu-toggle", event);
-        },
+            ];
+        } else {
+            this.profile_menu = [
+                {
+                    label:
+                        this.userLogged.first_name +
+                        " " +
+                        this.userLogged.last_name,
+                    items: [
+                        {
+                            label: "Profile",
+                            icon: "pi pi-pencil",
+                            command: () => {
+                                if (this.userLogged.role === "officer") {
+                                    this.$router.push("/admin/profile");
+                                } else {
+                                    this.$router.push(
+                                        `/${this.userLogged.role}` + "/profile"
+                                    );
+                                }
+                            },
+                        },
+
+                        {
+                            label: "Setting",
+                            icon: "pi pi-cog",
+                            command: () => {
+                                this.$router.push(
+                                    `/${this.userLogged.role}` + "/setting"
+                                );
+                            },
+                        },
+
+                        {
+                            label: "Logout",
+                            icon: "pi pi-sign-out",
+                            command: async () => {
+                                await axios({
+                                    method: "get",
+                                    url: "/api/logout",
+                                })
+                                    .then((response) => {
+                                        console.log(response);
+                                        this.$router.push("/login");
+                                        this.$store.dispatch("logout", null);
+                                    })
+                                    .catch((error) => {
+                                        console.log(error.response);
+                                    });
+                            },
+                        },
+                    ],
+                },
+            ];
+        }
     },
 };
 </script>

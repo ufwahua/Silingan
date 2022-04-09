@@ -2,9 +2,10 @@
 
 namespace Database\Factories;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class CardFactory extends Factory
+class BlockUserFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -14,8 +15,8 @@ class CardFactory extends Factory
     public function definition()
     {
         return [
-            'number' => $this->faker->unique()->numberBetween(1, 99),
-            'availability' => 1,
+            'user_id' =>  54,
+            'block_user_id' => User::factory(),
         ];
     }
 }

@@ -22,7 +22,7 @@ class BlockFactory extends Factory
     public function definition()
     {
         return [
-             'number' => rand(10,20),
+             'number' => $this->faker->unique()->numberBetween(1, 3),
         ];
     }
 }

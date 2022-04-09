@@ -3,11 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Lot;
+use App\Models\Block;
 use Illuminate\Http\Request;
+use App\Http\Requests\LotRequest;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\LotRequest;
 
 class LotController extends Controller
 {
@@ -18,7 +19,7 @@ class LotController extends Controller
     public function index(Request $request) : JsonResponse
     {
         return response()->json(
-            Lot::with(['block'])->orderBy('block_id','asc')->get()
+            Lot::with(['block'])->orderBy('number','asc')->get()
         );
     }
 
@@ -28,8 +29,9 @@ class LotController extends Controller
     */
     public function show(Request $request) : JsonResponse
     {
+        $block_id = Block::where('number' , $request->route('lot'))->first()->id;
             return response()->json(  
-                DB::table('lots')->where('block_id' , $request->route('lot'))->orderBy('block_id','asc')->orderBy('number','asc')->get()
+                DB::table('lots')->where('block_id' , $block_id)->orderBy('number','asc')->get()
         );
     }
 
@@ -39,39 +41,54 @@ class LotController extends Controller
      */
     public function store(LotRequest $request) : JsonResponse
     {
-        $lot="";
-        try{    
-            $lot = DB::table('lots')->where('block_id',$request['block_id'])->orderBy('number','desc')->first();
-            $number = $lot->number;
-             for($j = 0;$j<$request['number'];$j++)
-            {
-                $lot = Lot::query()->create([
-                    'block_id' => $request['block_id'],
-                    'number' => ++$number]);
-            }
+        $lots = Lot::where('block_id',$request['block_id'])->get();
 
-             $return=[
-                'lot' => $lot,
-                'return' => $number
-            ];
-        }
-        catch (\Throwable $th){
-            $number = 1;
-             for($j = 0;$j<$request['number'];$j++)
-            {
-                $lot = Lot::query()->create([
-                    'block_id' => $request['block_id'],
-                    'number' =>$number++]);
+        $found = false;
+        foreach($lots as $lot){
+            if($lot['number'] == $request['number']){
+                $found = true;
             }
-            $return=[
-                'lot' => $lot,
-                'return' => "catch"
-            ];
         }
+        if($found){
+             return response()->json(["error"=>"The number has already been taken."],401);
+        }else{
+             $lot = Lot::query()->create($request->validated());
+
+            return response()->json($lot);
+        }
+        // $lot="";
+        // try{    
+        //     $lot = DB::table('lots')->where('block_id',$request['block_id'])->orderBy('number','desc')->first();
+        //     $number = $lot->number;
+        //      for($j = 0;$j<$request['number'];$j++)
+        //     {
+        //         $lot = Lot::query()->create([
+        //             'block_id' => $request['block_id'],
+        //             'number' => ++$number]);
+        //     }
+
+        //      $return=[
+        //         'lot' => $lot,
+        //         'return' => $number
+        //     ];
+        // }
+        // catch (\Throwable $th){
+        //     $number = 1;
+        //      for($j = 0;$j<$request['number'];$j++)
+        //     {
+        //         $lot = Lot::query()->create([
+        //             'block_id' => $request['block_id'],
+        //             'number' =>$number++]);
+        //     }
+        //     $return=[
+        //         'lot' => $lot,
+        //         'return' => "catch"
+        //     ];
+        // }
 
        
 
-        return response()->json($return);
+       
     }
 
     /**

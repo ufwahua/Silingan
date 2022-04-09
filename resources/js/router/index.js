@@ -3,32 +3,35 @@ import Register from "../login/RegisterComponent.vue";
 import ForgotPassword from "../login/ForgotPasswordComponent.vue";
 import ResetPasswordComponent from "../login/ResetPasswordComponent.vue";
 //admin
-import HomeComponent from "../admin/dashboard/HomeComponent.vue";
-import DashboardComponent from "../admin/dashboard/DashboardComponent.vue";
-import Block_Lot from "../admin/dashboard/Block_LotComponent.vue";
-import RegisteredUsersComponent from "../admin/dashboard/RegisterUsersComponent.vue";
-import Announcement from "../admin/dashboard/Announcement.vue";
-import ResidentComponent from "../admin/dashboard/ResidentComponent.vue";
-import OfficerComponent from "../admin/dashboard/OfficerComponent.vue";
-import SecurityOfficerComponent from "../admin/dashboard/SecurityOfficerComponent.vue";
-import AppProfile from "../components/AppProfile.vue";
-import EmergencyContactDetail from "../admin/dashboard/EmergencyContactDetail.vue";
-import Position from "../admin/dashboard/PositionComponent.vue";
-import Candidate from "../admin/dashboard/CandidateComponent.vue";
-import ElectionComponent from "../admin/dashboard/ElectionComponent.vue";
+import AdminHomeComponent from "../admin/AdminHomeComponent.vue";
+import Block_Lot from "../admin/Block_LotComponent.vue";
+import RegisteredUsersComponent from "../admin/RegisterUsersComponent.vue";
+import Announcement from "../admin/Announcement.vue";
+import ResidentComponent from "../admin/ResidentComponent.vue";
+import OfficerComponent from "../admin/OfficerComponent.vue";
+import SecurityOfficerComponent from "../admin/SecurityOfficerComponent.vue";
+import EmergencyContactDetail from "../admin/EmergencyContactDetail.vue";
+import Position from "../admin/PositionComponent.vue";
+import Candidate from "../admin/CandidateComponent.vue";
+import ElectionComponent from "../admin/ElectionComponent.vue";
+import CardComponent from "../admin/CardComponent.vue";
 
-//user
-import UserHome from "../user/dashboard/UserHomeComponent.vue";
-import UserDashboard from "../user/dashboard/UserDashboardComponent.vue";
+//resident
+import ResidentHomeComponent from "../resident/ResidentHomeComponent.vue";
 
 //security officer
-import SecurityHome from "../security_officer/dashboard/SecurityHomeComponent.vue";
-import SecurityDashboard from "../security_officer/dashboard/SecurityDashboardComponent.vue";
-import LogComponent from "../security_officer/dashboard/LogComponent.vue";
+import SecurityHome from "../security_officer/SecurityHomeComponent.vue";
+import LogComponent from "../security_officer/LogComponent.vue";
 
+import TimelineComponent from "../components/TimelineComponent.vue";
+import MarketplaceComponent from "../components/MarketplaceComponent.vue";
 import IndexComponent from "../home/IndexComponent.vue";
 import AnnouncementComponent from "../components/AnnouncementComponent.vue";
+import EmergencyContactComponent from "../components/EmergencyContactComponent.vue";
 import NotFound from "../components/NotFoundComponent.vue";
+import AppProfile from "../components/AppProfile.vue";
+import SettingComponent from "../components/SettingComponent.vue";
+import ActivateAccountComponent from "../components/ActivateAccountComponent.vue";
 import { createRouter, createWebHistory } from "vue-router";
 import store from "../store/store";
 
@@ -46,19 +49,19 @@ function checkRole(to, from, next) {
             (userLogged.role === "admin" || userLogged.role === "officer") &&
             (to.meta.role === "resident" || to.meta.role === "security_officer")
         ) {
-            next("/admin/dashboard");
+            next("/admin/timeline");
         }
         if (
             userLogged.role === "resident" &&
             (to.meta.role === "admin" || to.meta.role === "security_officer")
         ) {
-            next("/resident/dashboard");
+            next("/resident/timeline");
         }
         if (
-            userLogged.role === "security_officer" &&
+            userLogged.role === "security officer" &&
             (to.meta.role === "admin" || to.meta.role === "resident")
         ) {
-            next("/security/dashboard");
+            next("/security/timeline");
         }
 
         next();
@@ -66,7 +69,6 @@ function checkRole(to, from, next) {
 }
 function checkLogged(to, from, next) {
     let isAuthenticated = false;
-    store.dispatch("getUserLogged");
     let userLogged = store.state.userLogged;
     if (userLogged) isAuthenticated = true;
     else isAuthenticated = false;
@@ -75,11 +77,11 @@ function checkLogged(to, from, next) {
         isAuthenticated &&
         (userLogged.role === "admin" || userLogged.role === "officer")
     ) {
-        next("/admin/dashboard");
+        next("/admin/timeline");
     } else if (isAuthenticated && userLogged.role === "resident") {
-        next("/resident/dashboard");
-    } else if (isAuthenticated && userLogged.role === "security_officer") {
-        next("/security_officer/dashboard");
+        next("/resident/timeline");
+    } else if (isAuthenticated && userLogged.role === "security officer") {
+        next("/security_officer/timeline");
     } else {
         next();
     }
@@ -124,7 +126,7 @@ const router = createRouter({
         },
         {
             path: "/admin",
-            component: HomeComponent,
+            component: AdminHomeComponent,
             beforeEnter: checkRole,
             name: "adminHome",
             meta: {
@@ -132,14 +134,25 @@ const router = createRouter({
             },
             children: [
                 {
-                    path: "/admin/dashboard",
+                    path: "/admin/timeline",
                     beforeEnter: checkRole,
                     meta: {
                         role: "admin",
                     },
                     components: {
                         default: NotFound,
-                        contents: DashboardComponent,
+                        contents: TimelineComponent,
+                    },
+                },
+                {
+                    path: "marketplace",
+                    beforeEnter: checkRole,
+                    meta: {
+                        role: "admin",
+                    },
+                    components: {
+                        default: NotFound,
+                        contents: MarketplaceComponent,
                     },
                 },
                 {
@@ -242,6 +255,17 @@ const router = createRouter({
                     },
                 },
                 {
+                    path: "setting",
+                    meta: {
+                        role: "admin",
+                    },
+                    beforeEnter: checkRole,
+                    components: {
+                        default: NotFound,
+                        contents: SettingComponent,
+                    },
+                },
+                {
                     path: "emergency-contact-detail",
                     meta: {
                         role: "admin",
@@ -250,6 +274,17 @@ const router = createRouter({
                     components: {
                         default: NotFound,
                         contents: EmergencyContactDetail,
+                    },
+                },
+                {
+                    path: "activate-account",
+                    meta: {
+                        role: "admin",
+                    },
+
+                    components: {
+                        default: NotFound,
+                        contents: ActivateAccountComponent,
                     },
                 },
                 {
@@ -263,11 +298,22 @@ const router = createRouter({
                         contents: ElectionComponent,
                     },
                 },
+                {
+                    path: "card",
+                    meta: {
+                        role: "admin",
+                    },
+                    beforeEnter: checkRole,
+                    components: {
+                        default: NotFound,
+                        contents: CardComponent,
+                    },
+                },
             ],
         },
         {
             path: "/resident",
-            component: UserHome,
+            component: ResidentHomeComponent,
             meta: {
                 role: "resident",
             },
@@ -275,7 +321,7 @@ const router = createRouter({
             name: "userhome",
             children: [
                 {
-                    path: "/resident/dashboard",
+                    path: "/resident/timeline",
                     meta: {
                         role: "resident",
                     },
@@ -285,7 +331,18 @@ const router = createRouter({
                     },
                     components: {
                         default: NotFound,
-                        contents: UserDashboard,
+                        contents: TimelineComponent,
+                    },
+                },
+                {
+                    path: "marketplace",
+                    beforeEnter: checkRole,
+                    meta: {
+                        role: "resident",
+                    },
+                    components: {
+                        default: NotFound,
+                        contents: MarketplaceComponent,
                     },
                 },
                 {
@@ -300,6 +357,18 @@ const router = createRouter({
                     },
                 },
                 {
+                    path: "/setting",
+                    meta: {
+                        role: "resident",
+                    },
+                    beforeEnter: checkRole,
+                    components: {
+                        default: NotFound,
+                        contents: SettingComponent,
+                    },
+                },
+
+                {
                     path: "announcement",
                     meta: {
                         role: "resident",
@@ -308,6 +377,28 @@ const router = createRouter({
                     components: {
                         default: NotFound,
                         contents: AnnouncementComponent,
+                    },
+                },
+                {
+                    path: "emergency",
+                    meta: {
+                        role: "resident",
+                    },
+                    beforeEnter: checkRole,
+                    components: {
+                        default: NotFound,
+                        contents: EmergencyContactComponent,
+                    },
+                },
+                {
+                    path: "activate-account",
+                    meta: {
+                        role: "resident",
+                    },
+
+                    components: {
+                        default: NotFound,
+                        contents: ActivateAccountComponent,
                     },
                 },
             ],
@@ -322,7 +413,7 @@ const router = createRouter({
             name: "securityhome",
             children: [
                 {
-                    path: "/security_officer/dashboard",
+                    path: "/security_officer/timeline",
                     meta: {
                         role: "security_officer",
                     },
@@ -332,7 +423,18 @@ const router = createRouter({
                     },
                     components: {
                         default: NotFound,
-                        contents: SecurityDashboard,
+                        contents: TimelineComponent,
+                    },
+                },
+                {
+                    path: "marketplace",
+                    beforeEnter: checkRole,
+                    meta: {
+                        role: "securit_officer",
+                    },
+                    components: {
+                        default: NotFound,
+                        contents: MarketplaceComponent,
                     },
                 },
                 {
@@ -347,6 +449,28 @@ const router = createRouter({
                     },
                 },
                 {
+                    path: "log",
+                    meta: {
+                        role: "security_officer",
+                    },
+                    beforeEnter: checkRole,
+                    components: {
+                        default: NotFound,
+                        contents: LogComponent,
+                    },
+                },
+                {
+                    path: "/setting",
+                    meta: {
+                        role: "security_officer",
+                    },
+                    beforeEnter: checkRole,
+                    components: {
+                        default: NotFound,
+                        contents: SettingComponent,
+                    },
+                },
+                {
                     path: "announcement",
                     meta: {
                         role: "security_officer",
@@ -358,14 +482,25 @@ const router = createRouter({
                     },
                 },
                 {
-                    path: "log",
+                    path: "emergency",
                     meta: {
                         role: "security_officer",
                     },
                     beforeEnter: checkRole,
                     components: {
                         default: NotFound,
-                        contents: LogComponent,
+                        contents: EmergencyContactComponent,
+                    },
+                },
+                {
+                    path: "activate-account",
+                    meta: {
+                        role: "security_officer",
+                    },
+
+                    components: {
+                        default: NotFound,
+                        contents: ActivateAccountComponent,
                     },
                 },
             ],

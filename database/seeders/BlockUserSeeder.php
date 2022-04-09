@@ -2,10 +2,10 @@
 
 namespace Database\Seeders;
 
-use App\Models\Lot;
+use App\Models\BlockUser;
 use Illuminate\Database\Seeder;
 
-class LotSeeder extends Seeder
+class BlockUserSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -14,8 +14,8 @@ class LotSeeder extends Seeder
      */
     public function run()
     {
-         Lot::factory()
-            ->count(200)
+         BlockUser::factory()
+            ->count(10)
             ->create();
     }
 }

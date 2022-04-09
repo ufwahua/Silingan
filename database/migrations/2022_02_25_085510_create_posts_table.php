@@ -19,6 +19,7 @@ class CreatePostsTable extends Migration
             $table->foreignId('user_id')->constrained();
             $table->string('images')->nullable();
             $table->text('content')->nullable();
+            $table->boolean('approved');
             $table->timestamps();
         });
     }

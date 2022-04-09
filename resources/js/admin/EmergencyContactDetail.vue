@@ -25,7 +25,7 @@
                                 <Button
                                     label="Add"
                                     icon="pi pi-plus"
-                                    class="p-button-success p-mr-2"
+                                    class="p-button-primary p-mr-2"
                                     @click="registerUser"
                                 />
                             </div>
@@ -39,14 +39,12 @@
                         :value="emergency_contact_details"
                         :filters="filters"
                         breakpoint="1230px"
+                        :paginator="true"
+                        :rows="10"
                     >
                         <template #empty> No registered users found </template>
                         <template #loading> Loading Users </template>
-                        <Column header="Id" field="id">
-                            <template #body="{ data }">
-                                {{ data.id }}
-                            </template>
-                        </Column>
+
                         <Column header="Contact Name" field="name">
                             <template #body="{ data }">
                                 {{ data.name }}
@@ -138,9 +136,7 @@
                             <div class="p-fluid formgrid grid">
                                 <div class="field col-12 md:col-6">
                                     <label>Name</label>
-                                    <label style="color: red" v-if="!form.name"
-                                        >*</label
-                                    >
+
                                     <InputText
                                         id="name"
                                         type="text"
@@ -156,11 +152,7 @@
 
                                 <div class="field col-12 md:col-6">
                                     <label>Contact Details</label>
-                                    <label
-                                        style="color: red"
-                                        v-if="!form.number"
-                                        >*</label
-                                    >
+
                                     <Textarea
                                         v-model="form.number"
                                         :autoResize="true"
@@ -212,9 +204,7 @@
                             <div class="p-fluid formgrid grid">
                                 <div class="field col-12 md:col-6">
                                     <label>Name</label>
-                                    <label style="color: red" v-if="!form.name"
-                                        >*</label
-                                    >
+
                                     <InputText
                                         id="firstname"
                                         type="text"
@@ -230,9 +220,6 @@
 
                                 <div class="field col-12 md:col-6">
                                     <label>Contact Details</label>
-                                    <label style="color: red" v-if="!number"
-                                        >*</label
-                                    >
                                     <Textarea
                                         v-model="form.number"
                                         :autoResize="true"
@@ -347,7 +334,7 @@ export default {
                 return "bg-gray-500";
             } else if (color == "resident") {
                 return "bg-orange-500";
-            } else if (color == "security_officer") {
+            } else if (color == "security officer") {
                 return "bg-yellow-500";
             } else {
                 return "bg-yellow-800";

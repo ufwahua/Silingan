@@ -150,22 +150,28 @@ export default {
                 .then((response) => {
                     this.error = "";
                     this.$store.commit("getUserLogged", response.data);
-                    if (response.data.role === "resident") {
+                    if (response.data.status == "inactive") {
+                        this.$router.push(
+                            "/" + response.data.role + "/activate-account"
+                        );
+                    } else if (response.data.role === "resident") {
                         this.loading = false;
-                        this.$router.push("/resident/dashboard");
-                    } else if (response.data.role === "security_officer") {
+                        this.$router.push("/resident/timeline");
+                    } else if (response.data.role === "security officer") {
                         this.loading = false;
-                        this.$router.push("/security_officer/dashboard");
+                        this.$router.push("/security_officer/timeline");
                     } else {
                         this.loading = false;
-                        this.$router.push("/admin/dashboard");
+                        this.$router.push("/admin/timeline");
                     }
                 })
                 .catch((err) => {
                     this.error = "";
-
-                    if (err.response.data.errors) {
-                        this.error = "Invalid Credentials";
+                    console.log(err.response);
+                    if (err.response.data.error) {
+                        this.error = err.response.data.error;
+                    }else{
+                        this.error = "Please enter password";
                     }
                     this.loading = false;
                 });

@@ -1,7 +1,15 @@
 <template>
     <div :class="containerClass" @click="onWrapperClick">
-        <AppTopBar @menu-toggle="onMenuToggle" />
-        <div class="layout-sidebar" @click="onSidebarClick">
+        <AppTopBar
+            v-if="userLogged.status != 'inactive'"
+            @menu-toggle="onMenuToggle"
+        />
+        <AppTopBar v-else @menu-toggle="onMenuToggle" />
+        <div
+            v-if="userLogged.status != 'inactive'"
+            class="layout-sidebar"
+            @click="onSidebarClick"
+        >
             <AppMenu :model="menu" @menuitem-click="onMenuItemClick" />
         </div>
 
@@ -14,7 +22,10 @@
             </div>
             <AppFooter />
         </div>
-        <ChatComponent :layoutMode="layoutMode" />
+        <ChatComponent
+            v-if="userLogged.status != 'inactive'"
+            :layoutMode="layoutMode"
+        />
         <transition name="layout-mask">
             <div
                 class="layout-mask p-component-overlay"
@@ -25,18 +36,19 @@
 </template>
 
 <script>
-import AppTopBar from "../../components/AppTopbar.vue";
-import AppMenu from "../../components/AppMenu.vue";
-import ChatComponent from "../../components/ChatComponent.vue";
-import AppFooter from "../../components/AppFooter.vue";
-
+import AppTopBar from "../components/AppTopbar.vue";
+import AppMenu from "../components/AppMenu.vue";
+import ChatComponent from "../components/ChatComponent.vue";
+import AppFooter from "../components/AppFooter.vue";
+import { computed } from "vue";
+import { useStore } from "vuex";
 export default {
-    name: "HomeComponent",
-    components: {
-        AppTopBar,
-        AppMenu,
-        ChatComponent: ChatComponent,
-        AppFooter,
+    name: "ResidentHomeComponent",
+    setup() {
+        const store = useStore();
+        return {
+            userLogged: computed(() => store.state.userLogged),
+        };
     },
     data() {
         return {
@@ -47,88 +59,27 @@ export default {
             mobileMenuActive: false,
             menu: [
                 {
-                    label: "Admin",
+                    label: "Resident",
                     items: [
                         {
                             label: "Timeline",
                             icon: "pi pi-fw pi-home",
-                            to: "/admin/dashboard",
+                            to: "/resident/timeline",
                         },
-
                         {
                             label: "Marketplace",
-                            icon: "pi pi-shopping-cart",
-                            to: "/admin/marketplace",
+                            icon: "pi pi-fw pi-shopping-cart",
+                            to: "/resident/marketplace",
                         },
-                    ],
-                },
-                {
-                    items: [
                         {
-                            label: "Maintain",
-                            icon: "pi pi-fw pi-sitemap",
-                            items: [
-                                {
-                                    label: "Users",
-                                    icon: "pi pi-users",
-                                    items: [
-                                        {
-                                            label: "Residents",
-                                            icon: "pi pi-user-edit",
-                                            to: "/admin/residents",
-                                        },
-                                        {
-                                            label: "Security Officers",
-                                            icon: "pi pi-user-edit",
-                                            to: "/admin/security-officers",
-                                        },
-                                        {
-                                            label: "Officers",
-                                            icon: "pi pi-user-edit",
-                                            to: "/admin/officers",
-                                        },
-                                        {
-                                            label: "All Users",
-                                            icon: "pi pi-user-edit",
-                                            to: "/admin/registered-users",
-                                        },
-                                    ],
-                                },
-                                {
-                                    label: "Block and Lot",
-                                    icon: "pi pi-info-circle",
-                                    to: "/admin/block-lot",
-                                },
-                                {
-                                    label: "Positions",
-                                    icon: "pi pi-info-circle",
-                                    to: "/admin/position",
-                                },
-                                {
-                                    label: "Candidates",
-                                    icon: "pi pi-info-circle",
-                                    to: "/admin/candidate",
-                                },
-                                {
-                                    label: "Announcement",
-                                    icon: "pi pi-info-circle",
-                                    to: "/admin/announcement",
-                                },
-                                {
-                                    label: "Emergency Details",
-                                    icon: "pi pi-info-circle",
-                                    to: "/admin/emergency-contact-detail",
-                                },
-                            ],
-                        },
-                    ],
-                },
-                {
-                    items: [
-                        {
-                            label: "Election",
+                            label: "Announcement",
                             icon: "pi pi-fw pi-calendar",
-                            to: "/admin/election",
+                            to: "/resident/announcement",
+                        },
+                        {
+                            label: "Emergency Contact",
+                            icon: "pi pi-fw pi-calendar",
+                            to: "/resident/emergency",
                         },
                     ],
                 },
@@ -179,9 +130,7 @@ export default {
                 this.mobileMenuActive = false;
             }
         },
-        onLayoutChange(layoutMode) {
-            this.layoutMode = layoutMode;
-        },
+
         onLayoutColorChange(layoutColorMode) {
             this.layoutColorMode = layoutColorMode;
         },
@@ -243,25 +192,25 @@ export default {
             this.addClass(document.body, "body-overflow-hidden");
         else this.removeClass(document.body, "body-overflow-hidden");
     },
-
-    mounted() {
+    components: {
+        AppTopBar: AppTopBar,
+        AppMenu: AppMenu,
+        ChatComponent: ChatComponent,
+        AppFooter: AppFooter,
+    },
+    created() {
         this.$store.dispatch("news/getAll");
-        this.$store.dispatch("blocks/getAll");
-        this.$store.dispatch("lots/getAll");
-        this.$store.dispatch("registeredUsers/getAll");
-        this.$store.commit("registeredUsers/getResidents");
-        this.$store.commit("registeredUsers/getOfficers");
-        this.$store.commit("registeredUsers/getAdmins");
-        this.$store.commit("registeredUsers/getSecurityOfficers");
-        this.$store.dispatch("registeredUsersFname/getAll");
-        this.$store.dispatch("announcements/getAll");
-        this.$store.dispatch("positions/getAll");
-        this.$store.dispatch("emergency_contact_details/getAll");
-        this.$store.dispatch("candidates/getAll");
+        this.$store.dispatch("posts/getAll");
+        this.$store.dispatch(
+            "getUsersNotBlocked",
+            this.$store.state.userLogged.id
+        );
+
+        this.$store.dispatch("getBlockUsers", this.$store.state.userLogged.id);
     },
 };
 </script>
 
-<style lang="scss">
-@import "../App.scss";
+<style>
+/* @import "./App.scss"; */
 </style>

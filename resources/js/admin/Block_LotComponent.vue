@@ -2,7 +2,45 @@
     <div>
         <div class="grid">
             <div class="col-12">
-                <h1>Block</h1>
+                <h1 class="text-center">Blocks</h1>
+            </div>
+        </div>
+        <div class="grid mb-2 flex justify-content-center">
+            <div class="col-12 lg:col-6 xl:col-3">
+                <div class="card mb-0 bg-yellow-400">
+                    <div class="flex justify-content-between mb-3">
+                        <div>
+                            <span
+                                class="block font-medium text-4xl font-bold mb-3"
+                                >{{ blocks.length }}</span
+                            >
+                            <div class="text-900">Blocks</div>
+                        </div>
+
+                        <div
+                            class="flex align-items-center justify-content-center"
+                            style="width: 2.5rem; height: 2.5rem"
+                        ></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 lg:col-6 xl:col-3">
+                <div class="card mb-0 bg-purple-100">
+                    <div class="flex justify-content-between mb-3">
+                        <div>
+                            <span
+                                class="block font-medium text-4xl font-bold mb-3"
+                                >{{ lots.length }}</span
+                            >
+                            <div class="text-900">Lots</div>
+                        </div>
+
+                        <div
+                            class="flex align-items-center justify-content-center"
+                            style="width: 2.5rem; height: 2.5rem"
+                        ></div>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="card">
@@ -24,7 +62,7 @@
                                 <Button
                                     label="Add"
                                     icon="pi pi-plus"
-                                    class="p-button-success p-mr-2"
+                                    class="p-button-primary p-mr-2"
                                     v-tooltip="'Add Blocks'"
                                     @click="openAddBlockModal"
                                 />
@@ -35,7 +73,12 @@
             </div>
             <div class="grid">
                 <div class="col-12">
-                    <DataTable :value="blocks" :filters="filters">
+                    <DataTable
+                        :value="blocks"
+                        :filters="filters"
+                        :paginator="true"
+                        :rows="10"
+                    >
                         <template #empty> No Blocks found </template>
                         <template #loading> Loading </template>
 
@@ -48,29 +91,18 @@
                         <Column header="Actions" field="actions">
                             <template #body="{ data }">
                                 <Button
-                                    icon="pi pi-plus"
-                                    class="p-button-rounded p-button-success mr-1"
-                                    v-tooltip="'Add lots'"
-                                    @click="openLotModal(data.number)"
+                                    type="button"
+                                    icon="pi pi-ellipsis-h"
+                                    class="p-button-rounded p-button-info"
+                                    @click="toggle(data)"
+                                    aria-haspopup="true"
+                                    aria-controls="overlay_menu"
                                 />
-                                <Button
-                                    icon="pi pi-pencil"
-                                    class="p-button-rounded p-button-primary mr-1"
-                                    v-tooltip="'Edit'"
-                                    @click="
-                                        openEditBlockModal(data.number, data.id)
-                                    "
-                                />
-                                <Button
-                                    icon="pi pi-trash"
-                                    class="p-button-rounded p-button-danger"
-                                    v-tooltip="'Delete'"
-                                    @click="
-                                        openDeleteBlockModal(
-                                            data.number,
-                                            data.id
-                                        )
-                                    "
+                                <Menu
+                                    id="overlay_menu"
+                                    ref="menu"
+                                    :model="menus"
+                                    :popup="true"
                                 />
                             </template>
                         </Column>
@@ -92,14 +124,10 @@
                             <InputText
                                 id="number"
                                 type="number"
-                                min="0"
-                                step="1"
-                                onfocus="this.previousValue = this.value"
-                                onkeydown="this.previousValue = this.value"
-                                oninput="validity.valid || (value = this.previousValue)"
+                                :class="{ 'p-invalid': error }"
+                                oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*?)\..*/g, '$1');"
                                 class="inputfield w-full"
                                 v-model="form_block_number"
-                                placeholder="How many blocks you want to create"
                             />
                             <label style="color: red" v-if="error">{{
                                 this.error
@@ -127,10 +155,32 @@
             <Dialog
                 v-model:visible="lotModal"
                 :style="{ width: '800px' }"
-                :header="number"
                 :modal="true"
                 :closeOnEscape="true"
             >
+                <template #header>
+                    <h3>Block {{ number }}</h3>
+                </template>
+                <div class="grid mb-2 flex justify-content-center">
+                    <div class="col-12 lg:col-6 xl:col-3">
+                        <div class="card mb-0 bg-purple-100">
+                            <div class="flex justify-content-between mb-3">
+                                <div>
+                                    <span
+                                        class="block font-medium text-4xl font-bold mb-3"
+                                        >{{ filteredLots.length }}</span
+                                    >
+                                    <div class="text-900">Lots</div>
+                                </div>
+
+                                <div
+                                    class="flex align-items-center justify-content-center"
+                                    style="width: 2.5rem; height: 2.5rem"
+                                ></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <div class="card">
                     <div class="grid mb-4">
                         <div class="col-12">
@@ -152,7 +202,7 @@
                                         <Button
                                             label="Add"
                                             icon="pi pi-plus"
-                                            class="p-button-success p-mr-2"
+                                            class="p-button-primary p-mr-2"
                                             @click="openAddLotModal()"
                                         />
                                     </div>
@@ -163,7 +213,7 @@
 
                     <div class="grid">
                         <div class="col-12">
-                            <DataTable :value="lots" :filters="filters">
+                            <DataTable :value="filteredLots" :filters="filters">
                                 <template #empty> No Lots found </template>
                                 <template #loading> Loading </template>
 
@@ -176,27 +226,18 @@
                                 <Column header="Actions" field="actions">
                                     <template #body="{ data }">
                                         <Button
-                                            icon="pi pi-pencil"
-                                            class="p-button-rounded p-button-primary mr-1"
-                                            v-tooltip="'Edit'"
-                                            @click="
-                                                openEditLotModal(
-                                                    data.id,
-                                                    data.block_id,
-                                                    data.number
-                                                )
-                                            "
+                                            type="button"
+                                            icon="pi pi-ellipsis-h"
+                                            class="p-button-rounded p-button-info"
+                                            @click="toggleLot(data)"
+                                            aria-haspopup="true"
+                                            aria-controls="lot_overlay"
                                         />
-                                        <Button
-                                            icon="pi pi-trash"
-                                            class="p-button-rounded p-button-danger"
-                                            v-tooltip="'Delete'"
-                                            @click="
-                                                openDeleteLotModal(
-                                                    data.id,
-                                                    data.number
-                                                )
-                                            "
+                                        <Menu
+                                            id="lot_overlay"
+                                            ref="menu_lot"
+                                            :model="lot_menu"
+                                            :popup="true"
                                         />
                                     </template>
                                 </Column>
@@ -218,14 +259,10 @@
                                     <InputText
                                         id="number"
                                         type="number"
-                                        min="0"
-                                        step="1"
-                                        onfocus="this.previousValue = this.value"
-                                        onkeydown="this.previousValue = this.value"
-                                        oninput="validity.valid || (value = this.previousValue)"
+                                        :class="{ 'p-invalid': error }"
+                                        oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*?)\..*/g, '$1');"
                                         class="inputfield w-full"
                                         v-model="form_lot_number"
-                                        placeholder="How many lots you want to create"
                                     />
                                     <label style="color: red" v-if="error">{{
                                         this.error
@@ -260,7 +297,11 @@
                             <div class="col-12">
                                 <div class="p-fluid">
                                     <h5>Lot Number</h5>
-                                    <InputText v-model="form_lot_number" />
+                                    <InputText
+                                        :class="{ 'p-invalid': error }"
+                                        oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*?)\..*/g, '$1');"
+                                        v-model="form_lot_number"
+                                    />
                                     <label style="color: red" v-if="error">{{
                                         this.error
                                     }}</label>
@@ -299,7 +340,7 @@
                                     />
                                     <span
                                         >Are you sure you want to delete
-                                        <b>Lot {{ number }}</b
+                                        <b>Lot {{ form_lot_number }}</b
                                         >?</span
                                     >
                                 </div>
@@ -353,7 +394,11 @@
                     <div class="col-12">
                         <div class="p-fluid">
                             <h5>Block Number</h5>
-                            <InputText v-model="number" />
+                            <InputText
+                                :class="{ 'p-invalid': error }"
+                                oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*?)\..*/g, '$1');"
+                                v-model="number"
+                            />
                             <label style="color: red" v-if="error">{{
                                 this.error
                             }}</label>
@@ -476,6 +521,7 @@ export default {
 
         return {
             blocks: computed(() => store.state.blocks.blocks),
+            filteredLots: computed(() => store.state.lots.filteredLots),
             lots: computed(() => store.state.lots.lots),
         };
     },
@@ -516,9 +562,68 @@ export default {
             addLotModal: false,
             updateLotModal: false,
             deleteLotModal: false,
+
+            //action menu overlay
+            menus: [
+                {
+                    label: "Add Lots",
+                    icon: "pi pi-plus",
+                    command: () => {
+                        this.openLotModal();
+                    },
+                },
+                {
+                    label: "Edit",
+                    icon: "pi pi-pencil",
+                    command: () => {
+                        this.openEditBlockModal();
+                    },
+                },
+                {
+                    label: "Delete",
+                    icon: "pi pi-trash",
+                    command: () => {
+                        this.openDeleteBlockModal();
+                    },
+                },
+            ],
+            lot_menu: [
+                {
+                    label: "Edit",
+                    icon: "pi pi-pencil",
+                    command: () => {
+                        this.openEditLotModal();
+                    },
+                },
+                {
+                    label: "Delete",
+                    icon: "pi pi-trash",
+                    command: () => {
+                        this.openDeleteLotModal();
+                    },
+                },
+            ],
         };
     },
     methods: {
+        toggleLot(data) {
+            this.$refs.menu_lot.toggle(event);
+            this.populateLotFields(data);
+        },
+        toggle(data) {
+            this.$refs.menu.toggle(event);
+            this.populateFields(data);
+        },
+        populateLotFields(data) {
+            this.resetFields();
+            this.lot_id = data.id;
+            this.block_id = data.block_id;
+            this.form_lot_number = data.number;
+        },
+        populateFields(data) {
+            this.number = data.number;
+            this.block_id = data.id;
+        },
         initFilters() {
             this.filters = {
                 global: { value: null, matchMode: FilterMatchMode.CONTAINS },
@@ -528,20 +633,6 @@ export default {
             this.form_block_number = null;
             this.form_lot_number = null;
             this.error = null;
-        },
-
-        //GET BLOCK
-        async getBlock() {
-            await axios({
-                method: "get",
-                url: "/api/block/",
-            })
-                .then((res) => {
-                    this.block = res.data;
-                })
-                .catch((error) => {
-                    console.log(error);
-                });
         },
 
         // Open Block Modal
@@ -575,7 +666,7 @@ export default {
             })
                 .then((res) => {
                     this.addBlockModal = false;
-                    this.getBlock();
+                    this.$store.dispatch("blocks/getAll");
                     this.showAddBlockToast();
                     this.loading = false;
                 })
@@ -586,9 +677,7 @@ export default {
                 });
         },
         // Edit Block Modal
-        openEditBlockModal(number, block_id) {
-            this.block_id = block_id;
-            this.number = number;
+        openEditBlockModal() {
             this.updateBlockModal = true;
         },
         closeUpdateBlockModal() {
@@ -615,7 +704,7 @@ export default {
             })
                 .then((res) => {
                     this.updateBlockModal = false;
-                    this.getBlock();
+                    this.$store.dispatch("blocks/getAll");
                     this.showUpdateBlockToast();
                     this.loading = false;
                 })
@@ -626,9 +715,7 @@ export default {
                 });
         },
         // Delete Block Modal
-        openDeleteBlockModal(number, block_id) {
-            this.block_id = block_id;
-            this.number = number;
+        openDeleteBlockModal() {
             this.deleteModal = true;
         },
 
@@ -650,7 +737,7 @@ export default {
             })
                 .then((res) => {
                     this.deleteModal = false;
-                    this.getBlock();
+                    this.$store.dispatch("blocks/getAll");
                     this.showDeleteBlockToast();
                     this.loading = false;
                 })
@@ -660,27 +747,10 @@ export default {
                 });
         },
 
-        //LOT
-        async getLot() {
-            await axios({
-                method: "get",
-                url: "/api/lot/" + this.block_id,
-            })
-                .then((res) => {
-                    this.lot = res.data;
-                })
-                .catch((error) => {
-                    this.lot = null;
-                    console.log(error);
-                });
-        },
-
         // Open Lot Modal
-        openLotModal(number) {
-            this.block_id = number;
-            this.number = "Block " + number;
+        openLotModal() {
             this.lotModal = true;
-            this.getLot();
+            this.$store.dispatch("lots/getBlockLots", this.block_id);
         },
         closeLotModal() {
             this.lotModal = false;
@@ -716,25 +786,24 @@ export default {
                 },
             })
                 .then((res) => {
+                    console.log("post lot", res.data);
                     this.addLotModal = false;
-                    this.getLot();
+                    this.$store.dispatch("lots/getAll");
+                    this.$store.dispatch("lots/getBlockLots", this.block_id);
                     this.showAddLotToast();
                     this.loading = false;
                 })
                 .catch((error) => {
-                    if (error.response.data.errors.lot)
-                        this.error = error.response.data.errors.number[0];
+                    console.log(error.response);
+                    if (error.response.data.error)
+                        this.error = error.response.data.error;
                     this.lot = [];
                     this.loading = false;
                 });
         },
 
         //Open  Edit Lot Modal
-        openEditLotModal(lot_id, block_id, number) {
-            this.resetFields();
-            this.lot_id = lot_id;
-            this.block_id = block_id;
-            this.form_lot_number = number;
+        openEditLotModal() {
             this.updateLotModal = true;
             console.log(this.lot_id, this.block_id, this.form_lot_number);
         },
@@ -764,7 +833,7 @@ export default {
             })
                 .then((res) => {
                     this.updateLotModal = false;
-                    this.getLot();
+                    this.$store.dispatch("lots/getBlockLots", this.block_id);
                     this.showUpdateLotToast();
                     this.loading = false;
                 })
@@ -774,9 +843,7 @@ export default {
                 });
         },
         // Delete Lot Modal
-        openDeleteLotModal(lot_id, number) {
-            this.lot_id = lot_id;
-            this.number = number;
+        openDeleteLotModal() {
             this.deleteLotModal = true;
         },
 
@@ -798,7 +865,7 @@ export default {
             })
                 .then((res) => {
                     this.deleteLotModal = false;
-                    this.getLot();
+                    this.$store.dispatch("lots/getBlockLots", this.block_id);
                     this.showDeleteToast();
                     this.loading = false;
                 })

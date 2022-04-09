@@ -117,7 +117,7 @@ export default {
             loading: false,
             items: [
                 {
-                    label: "Remove",
+                    label: "Delete Chat",
                     icon: "pi pi-trash",
                     command: () => {
                         this.removeModal = true;
@@ -135,15 +135,20 @@ export default {
             await axios({
                 method: "delete",
                 url: "/api/chat/" + this.chat.id,
+                data:{
+                    chat_room_id: this.chat.chat_room_id,
+                }
             })
-                .then(() => {
+                .then((res) => {
                     this.removeModal = false;
-                    this.$store.dispatch("getChats", this.chat.user_id);
+                    console.log('delete chat',res.data[0].chats);
+                    this.$store.commit("getChats", res.data[0].chats);
                     this.loading = false;
                 })
                 .catch((error) => {
                     console.log(error.response);
                     this.loading = false;
+
                 });
         },
     },

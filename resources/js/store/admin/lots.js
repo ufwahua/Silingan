@@ -27,17 +27,18 @@ const lots = {
                     console.log(err.response.data);
                 });
         },
-        async getBlockLots({ commit, state }, payload) {
+        async getBlockLots({ commit }, payload) {
             await axios({
                 method: "get",
                 url: "/api/lot/" + payload,
             })
                 .then((res) => {
-                    //console.log(res.data);
+                    console.log("filteredlots", res.data);
                     commit("getBlockLots", res.data);
                 })
                 .catch((err) => {
                     console.log(err.response.data);
+                    commit("getBlockLots", null);
                 });
         },
     },

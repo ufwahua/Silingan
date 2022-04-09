@@ -4,19 +4,6 @@
             class="col-12 sm:col-12 md:col-8 md:col-offset-2 lg:col-6 lg:col-offset-1 xl:col-6 xl:col-offset-1"
         >
             <div class="col justify-content-center pt-0">
-                <!-- <Fieldset class="mb-3" legend="Announcement">
-                    <p>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                        sed do eiusmod tempor incididunt ut labore et dolore
-                        magna aliqua. Ut enim ad minim veniam, quis nostrud
-                        exercitation ullamco laboris nisi ut aliquip ex ea
-                        commodo consequat. Duis aute irure dolor in
-                        reprehenderit in voluptate velit esse cillum dolore eu
-                        fugiat nulla pariatur. Excepteur sint occaecat cupidatat
-                        non proident, sunt in culpa qui officia deserunt mollit
-                        anim id est laborum.
-                    </p>
-                </Fieldset> -->
                 <div class="card p-3">
                     <div class="p-inputgroup mb-2">
                         <div v-if="userLogged.profile_pic">
@@ -50,9 +37,12 @@
                 </div>
                 <div v-for="post in posts" :key="post.id">
                     <PostComponent
-                        v-if="post.group.name.toUpperCase() === 'TIMELINE'"
+                        v-if="
+                            post.group.name.toUpperCase() === 'MARKETPLACE' &&
+                            post.approved === 1
+                        "
                         v-bind:post="post"
-                    />
+                />
                 </div>
             </div>
         </div>
@@ -134,10 +124,10 @@
 <script>
 import { computed } from "vue";
 import { useStore } from "vuex";
-import NewsComponent from "../../components/NewsComponent.vue";
-import PostComponent from "../../components/PostComponent.vue";
+import NewsComponent from "./NewsComponent.vue";
+import PostComponent from "./PostComponent.vue";
 export default {
-    name: "UserDashboardComponent",
+    name: "TimelineComponent",
     components: {
         NewsComponent,
         PostComponent,
@@ -158,29 +148,6 @@ export default {
             images: null,
             content: null,
             openPostModal: false,
-            data: [
-                {
-                    name: "Jayson Cadiz",
-                    date: "January 1, 2021",
-                    type: "Laptop",
-                    model: "Aspire-15",
-                    brand: "Acer",
-                },
-                {
-                    name: "Gio Alfanta",
-                    date: "January 2, 2021",
-                    type: "Desktop",
-                    model: "Aspire-15",
-                    brand: "Acer",
-                },
-                {
-                    name: "Godfrey Español",
-                    date: "January 3, 2021",
-                    type: "Mouse",
-                    model: "Abyssus",
-                    brand: "Razer",
-                },
-            ],
         };
     },
     methods: {
@@ -198,7 +165,7 @@ export default {
             this.$toast.add({
                 severity: "success",
                 summary: "Success Message",
-                detail: "Successfully posted",
+                detail: "Please wait for the admin/officers to accept your post",
                 life: 3000,
             });
         },
@@ -231,10 +198,11 @@ export default {
                 method: "post",
                 url: "/api/post",
                 data: {
-                    group_id: 1,
+                    group_id: 2,
                     user_id: this.$store.state.userLogged.id,
                     images: JSON.stringify(this.images),
                     content: this.content,
+                    approved: 0,
                 },
             })
                 .then((res) => {

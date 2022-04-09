@@ -41,7 +41,7 @@
             <div class="p-fluid formgrid grid">
                 <div class="field col-12 md:col-6">
                     <label>Firstname</label>
-                    <label style="color: red" v-if="!first_name">*</label>
+
                     <InputText
                         id="firstname"
                         :class="{
@@ -57,7 +57,7 @@
 
                 <div class="field col-12 md:col-6">
                     <label>Lastname</label>
-                    <label style="color: red" v-if="!last_name">*</label>
+
                     <InputText
                         :class="{
                             'p-invalid': error_last_name,
@@ -74,7 +74,6 @@
                 <div class="field col-12 md:col-6">
                     <div>
                         <label>Gender</label>
-                        <label style="color: red" v-if="!gender">*</label>
                     </div>
 
                     <div>
@@ -113,8 +112,7 @@
                     }}</label>
                 </div>
                 <div class="field col-12 md:col-12">
-                    <label>Age</label
-                    ><label style="color: red" v-if="!age">*</label>
+                    <label>Age</label>
                     <InputText
                         id="age"
                         :class="{
@@ -134,8 +132,7 @@
                 </div>
 
                 <div class="field col-12 md:col-12">
-                    <label>Contact Number</label
-                    ><label style="color: red" v-if="!contact_num">*</label>
+                    <label>Contact Number</label>
                     <InputText
                         :class="{
                             'p-invalid': error_contact_num,
@@ -150,7 +147,7 @@
 
                 <div class="field col-12 md:col-6">
                     <label>Block</label>
-                    <label style="color: red" v-if="!selected_block">*</label>
+
                     <Dropdown
                         v-model="selected_block"
                         :class="{
@@ -158,7 +155,7 @@
                         }"
                         :options="blocks"
                         optionLabel="number"
-                        optionValue="id"
+                        optionValue="number"
                         placeholder="Select Block"
                         @change="getBlockLot"
                     />
@@ -169,9 +166,7 @@
 
                 <div class="field col-12 md:col-6">
                     <label>Lot</label>
-                    <label style="color: red" v-if="!selected_block_lot"
-                        >*</label
-                    >
+
                     <Dropdown
                         v-model="selected_block_lot"
                         :class="{
@@ -187,8 +182,7 @@
                     }}</label>
                 </div>
                 <div class="field col-12 md:col-12">
-                    <label>Email</label
-                    ><label style="color: red" v-if="!email">*</label>
+                    <label>Email</label>
                     <InputText
                         type="text"
                         :class="{
@@ -196,6 +190,7 @@
                         }"
                         name="email"
                         v-model="email"
+                        disabled
                     />
                     <label style="color: red" v-if="error_email">{{
                         error_email
@@ -211,7 +206,7 @@
                         label="Update"
                         class="p-button p-button-primary"
                         @click="confirmUpdateUser"
-                        :disabled="!btnUpdate ? true : false"
+                        
                     />
                 </div>
             </div>
@@ -351,7 +346,7 @@ export default {
             role: [
                 { type: "officer", value: "officer" },
                 { type: "resident", value: "resident" },
-                { type: "security_officer", value: "security_officer" },
+                { type: "security officer", value: "security officer" },
                 { type: "admin", value: "admin" },
             ],
 
@@ -445,47 +440,49 @@ export default {
         },
         async confirmUpdateUser() {
             this.loading = true;
+            this.resetErrors();
             await axios({
-                method: "put",
-                url: "/api/user/" + this.id,
-                data: {
-                    first_name: this.first_name,
-                    last_name: this.last_name,
-                    gender: this.gender,
-                    block_lot_id: this.selected_block_lot,
-                    email: this.email,
-                    verified: 1,
-                    has_voted: 0,
-                    age: this.age,
-                    contact_num: this.contact_num,
-                    role: this.selected_role,
-                    profile_pic: this.profile_pic,
-                },
+            method: "put",
+            url: "/api/user/" + this.id,
+            data: {
+                first_name: this.first_name,
+                last_name: this.last_name,
+                gender: this.gender,
+                block_lot_id: this.selected_block_lot,
+                email: this.email,
+                verified: 1,
+                has_voted: 0,
+                age: this.age,
+                contact_num: this.contact_num,
+                role: this.selected_role,
+                profile_pic: this.profile_pic,
+                status: "active",
+            },
             })
-                .then((res) => {
-                    console.log(res.data);
-                    this.$toast.add({
-                        severity: "success",
-                        summary: "Successful Request",
-                        detail: "Updated User",
-                        life: 3000,
-                    });
-                    // this.$store.commit("getUserLogged", res.data);
-                    this.loading = false;
-                })
-                .catch((err) => {
-                    this.resetErrors();
-                    this.resetErrors();
-                    console.log(err.response);
-                    this.validate(err);
-                    this.loading = false;
+            .then((res) => {
+                console.log(res.data);
+                this.$toast.add({
+                    severity: "success",
+                    summary: "Successful Request",
+                    detail: "Updated User",
+                    life: 3000,
                 });
+                this.$store.dispatch("getUserLogged");
+                this.loading = false;
+            })
+            .catch((err) => {
+                console.log(err.response);
+                this.resetErrors();
+                this.validate(err);
+                this.loading = false;
+            });
+           
+           
         },
         resetErrors() {
             this.error_first_name = null;
             this.error_last_name = null;
             this.error_gender = null;
-            this.error_selected_block = null;
             this.error_selected_lot = null;
             this.error_email = null;
             this.error_old_password = null;
@@ -503,12 +500,6 @@ export default {
                 this.error_last_name = error.response.data.errors.last_name[0];
             if (error.response.data.errors.gender)
                 this.error_gender = error.response.data.errors.gender[0];
-            if (error.response.data.errors.selected_block)
-                this.error_selected_block =
-                    error.response.data.errors.selected_block[0];
-            if (error.response.data.errors.selected_block_lot)
-                this.error_selected_lot =
-                    error.response.data.errors.selected_block_lot[0];
             if (error.response.data.errors.email)
                 this.error_email = error.response.data.errors.email[0];
             if (error.response.data.errors.password)
@@ -523,11 +514,15 @@ export default {
                     error.response.data.errors.contact_num[0];
             if (error.response.data.errors.role)
                 this.error_role = error.response.data.errors.role[0];
+            if (error.response.data.errors.block_lot_id){
+                this.error_selected_lot = "This lot field is required";
+            }
+            
         },
 
         getBlockLot() {
-            this.$store.dispatch("lots/getBlockLots", this.selected_block);
             this.selected_block_lot = null;
+            this.$store.dispatch("lots/getBlockLots", this.selected_block);
         },
         populateData() {
             this.id = this.$store.state.userLogged.id;
@@ -549,22 +544,7 @@ export default {
             this.profile_pic = this.$store.state.userLogged.profile_pic;
         },
     },
-    watch: {
-        selected_block() {
-            if (this.selected_block && this.selected_block_lot) {
-                this.btnUpdate = true;
-            } else {
-                this.btnUpdate = false;
-            }
-        },
-        selected_block_lot() {
-            if (this.selected_block && this.selected_block_lot) {
-                this.btnUpdate = true;
-            } else {
-                this.btnUpdate = false;
-            }
-        },
-    },
+   
     mounted() {
         this.populateData();
     },

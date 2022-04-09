@@ -1,7 +1,15 @@
 <template>
     <div :class="containerClass" @click="onWrapperClick">
-        <AppTopBar @menu-toggle="onMenuToggle" />
-        <div class="layout-sidebar" @click="onSidebarClick">
+        <AppTopBar
+            v-if="userLogged.status != 'inactive'"
+            @menu-toggle="onMenuToggle"
+        />
+        <AppTopBar v-else @menu-toggle="onMenuToggle" />
+        <div
+            v-if="userLogged.status != 'inactive'"
+            class="layout-sidebar"
+            @click="onSidebarClick"
+        >
             <AppMenu :model="menu" @menuitem-click="onMenuItemClick" />
         </div>
 
@@ -14,7 +22,10 @@
             </div>
             <AppFooter />
         </div>
-        <ChatComponent :layoutMode="layoutMode" />
+        <ChatComponent
+            v-if="userLogged.status != 'inactive'"
+            :layoutMode="layoutMode"
+        />
         <transition name="layout-mask">
             <div
                 class="layout-mask p-component-overlay"
@@ -25,13 +36,20 @@
 </template>
 
 <script>
-import AppTopBar from "../../components/AppTopbar.vue";
-import AppMenu from "../../components/AppMenu.vue";
-import ChatComponent from "../../components/ChatComponent.vue";
-import AppFooter from "../../components/AppFooter.vue";
-
+import AppTopBar from "../components/AppTopbar.vue";
+import AppMenu from "../components/AppMenu.vue";
+import ChatComponent from "../components/ChatComponent.vue";
+import AppFooter from "../components/AppFooter.vue";
+import { computed } from "vue";
+import { useStore } from "vuex";
 export default {
     name: "SecurityHomeComponent",
+    setup() {
+        const store = useStore();
+        return {
+            userLogged: computed(() => store.state.userLogged),
+        };
+    },
     data() {
         return {
             layoutMode: "static",
@@ -46,12 +64,17 @@ export default {
                         {
                             label: "Timeline",
                             icon: "pi pi-fw pi-home",
-                            to: "/security_officer/dashboard",
+                            to: "/security_officer/timeline",
                         },
                         {
                             label: "Marketplace",
                             icon: "pi pi-fw pi-shopping-cart",
-                            to: "/security_officer/dashboard",
+                            to: "/security_officer/marketplace",
+                        },
+                        {
+                            label: "Log",
+                            icon: "pi pi-fw pi-calendar",
+                            to: "/security_officer/log",
                         },
                         {
                             label: "Announcement",
@@ -59,9 +82,9 @@ export default {
                             to: "/security_officer/announcement",
                         },
                         {
-                            label: "Log",
+                            label: "Emergency Contact",
                             icon: "pi pi-fw pi-calendar",
-                            to: "/security_officer/log",
+                            to: "/security_officer/emergency",
                         },
                     ],
                 },
@@ -184,11 +207,11 @@ export default {
         this.$store.dispatch("news/getAll");
         this.$store.dispatch("posts/getAll");
         this.$store.dispatch("cards/getAll");
-        this.$store.dispatch("registeredUsers/getAll");
-        this.$store.commit("registeredUsers/getResidents");
-        this.$store.commit("registeredUsers/getOfficers");
-        this.$store.commit("registeredUsers/getAdmins");
-        this.$store.commit("registeredUsers/getSecurityOfficers");
+        this.$store.dispatch("getAllUsers");
+        this.$store.dispatch("getBlockUsers", this.$store.state.userLogged.id);
+        this.$store.dispatch("logs/getAll");
+        this.$store.dispatch("cards/getAll");
+        this.$store.dispatch("emergency_contact_details/getAll");
     },
 };
 </script>
