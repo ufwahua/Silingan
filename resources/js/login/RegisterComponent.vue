@@ -29,8 +29,12 @@
                     <div class="p-fluid formgrid grid">
                         <div class="field col-12 md:col-6">
                             <label>Firstname</label>
+
                             <InputText
-                                :class="{ 'p-invalid': error_first_name }"
+                                id="firstname"
+                                :class="{
+                                    'p-invalid': error_first_name,
+                                }"
                                 type="text"
                                 v-model="first_name"
                             />
@@ -41,8 +45,12 @@
 
                         <div class="field col-12 md:col-6">
                             <label>Lastname</label>
+
                             <InputText
-                                :class="{ 'p-invalid': error_last_name }"
+                                :class="{
+                                    'p-invalid': error_last_name,
+                                }"
+                                id="last_name"
                                 type="text"
                                 v-model="last_name"
                             />
@@ -52,41 +60,51 @@
                         </div>
 
                         <div class="field col-12 md:col-6">
-                            <div class="field-radiobutton mb-0">
-                                <RadioButton
-                                    :class="{ 'p-invalid': error_gender }"
-                                    name="gender"
-                                    value="male"
-                                    v-model="gender"
-                                />
-                                <label class="mb-0 ml-1">Male</label>
+                            <div>
+                                <label>Gender</label>
                             </div>
-                        </div>
-                        <div class="field col-12 md:col-6">
-                            <div class="field-radiobutton mb-0">
-                                <RadioButton
-                                    :class="{ 'p-invalid': error_gender }"
-                                    name="gender"
-                                    value="female"
-                                    v-model="gender"
-                                />
-                                <label class="mb-0 ml-1">Female</label>
+
+                            <div>
+                                <div class="field-radiobutton mb-0">
+                                    <RadioButton
+                                        name="gender"
+                                        :class="{
+                                            'p-invalid': error_gender,
+                                        }"
+                                        value="male"
+                                        v-model="gender"
+                                        block_number
+                                    />
+                                    <label class="mb-0 ml-1 mr-5">Male</label>
+                                    <RadioButton
+                                        name="gender"
+                                        :class="{
+                                            'p-invalid': error_gender,
+                                        }"
+                                        value="female"
+                                        v-model="gender"
+                                        block_number
+                                    />
+                                    <label class="mb-0 ml-1">Female</label>
+                                </div>
+                                <div>
+                                    <label
+                                        style="color: red"
+                                        v-if="error_gender"
+                                        >{{ error_gender }}</label
+                                    >
+                                </div>
                             </div>
-                        </div>
-                        <div
-                            class="formgroup-inline flex justify-content-around"
-                        >
-                            <label style="color: red" v-if="error_gender">{{
-                                error_gender
-                            }}</label>
                         </div>
 
                         <div class="field col-12 md:col-6">
                             <label>Age</label>
                             <InputText
                                 id="age"
+                                :class="{
+                                    'p-invalid': error_age,
+                                }"
                                 type="number"
-                                :class="{ 'p-invalid': error_age }"
                                 min="0"
                                 step="1"
                                 onfocus="this.previousValue = this.value"
@@ -102,7 +120,9 @@
                         <div class="field col-12 md:col-6">
                             <label>Contact Number</label>
                             <InputText
-                                :class="{ 'p-invalid': error_contact_num }"
+                                :class="{
+                                    'p-invalid': error_contact_num,
+                                }"
                                 oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*?)\..*/g, '$1');"
                                 v-model="contact_num"
                             />
@@ -112,13 +132,33 @@
                                 >{{ error_contact_num }}</label
                             >
                         </div>
+                        <div class="field col-12 md:col-6">
+                            <label>Tag as</label>
 
+                            <Dropdown
+                                v-model="selected_tag"
+                                :class="{
+                                    'p-invalid': error_selected_tag,
+                                }"
+                                :options="tag"
+                                optionLabel="tag"
+                                optionValue="tag"
+                                placeholder="Select tag"
+                            />
+                            <label
+                                style="color: red"
+                                v-if="error_selected_tag"
+                                >{{ error_selected_tag }}</label
+                            >
+                        </div>
                         <div class="field col-12 md:col-6">
                             <label>Block</label>
 
                             <Dropdown
                                 v-model="selected_block"
-                                :class="{ 'p-invalid': error_selected_block }"
+                                :class="{
+                                    'p-invalid': error_selected_block,
+                                }"
                                 :options="blocks"
                                 optionLabel="number"
                                 optionValue="number"
@@ -136,8 +176,10 @@
                             <label>Lot</label>
 
                             <Dropdown
-                                v-model="selected_lot"
-                                :class="{ 'p-invalid': error_selected_lot }"
+                                v-model="selected_block_lot"
+                                :class="{
+                                    'p-invalid': error_selected_lot,
+                                }"
                                 :options="filteredLots"
                                 optionLabel="number"
                                 optionValue="id"
@@ -257,7 +299,7 @@ export default {
             first_name: null,
             last_name: null,
             gender: null,
-            selected_lot: null,
+            selected_block_lot: null,
             email: null,
             password: null,
             confirm_password: null,
@@ -266,9 +308,13 @@ export default {
             age: null,
             contact_num: null,
             role: "resident",
-            relationship: null,
             selected_block: null,
-
+            selected_tag: null,
+            tag: [
+                { tag: "owner" },
+                { tag: "renter" },
+                { tag: "family member" },
+            ],
             error_first_name: null,
             error_last_name: null,
             error_gender: null,
@@ -279,6 +325,7 @@ export default {
             error_confirm_password: null,
             error_age: null,
             error_contact_num: null,
+            error_selected_tag: null,
         };
     },
 
@@ -293,7 +340,7 @@ export default {
                     first_name: this.first_name,
                     last_name: this.last_name,
                     gender: this.gender,
-                    block_lot_id: this.selected_lot,
+                    block_lot_id: this.selected_block_lot,
                     email: this.email,
                     password: this.password,
                     confirm_password: this.confirm_password,
@@ -303,6 +350,7 @@ export default {
                     contact_num: this.contact_num,
                     role: "resident",
                     status: "active",
+                    tag_as: this.selected_tag,
                 },
             })
                 .then(() => {
@@ -320,7 +368,7 @@ export default {
             this.first_name = null;
             this.last_name = null;
             this.gender = null;
-            this.selected_lot = null;
+            this.selected_block_lot = null;
             this.email = null;
             this.password = null;
             this.confirm_password = null;
@@ -341,6 +389,7 @@ export default {
             this.error_confirm_password = null;
             this.error_age = null;
             this.error_contact_num = null;
+            this.error_selected_tag = null;
         },
         validate(error) {
             if (error.response.data.errors.first_name)
@@ -350,13 +399,11 @@ export default {
                 this.error_last_name = error.response.data.errors.last_name[0];
             if (error.response.data.errors.gender)
                 this.error_gender = error.response.data.errors.gender[0];
-            if (error.response.data.errors.block_lot_id){
-                 this.error_selected_block =
-                    "Complete block and lot field";
-                    this.error_selected_lot =
-                    "Complete block and lot field";
-            }   
-               
+            if (error.response.data.errors.block_lot_id) {
+                this.error_selected_block = "Complete block and lot field";
+                this.error_selected_lot = "Complete block and lot field";
+            }
+
             if (error.response.data.errors.email)
                 this.error_email = error.response.data.errors.email[0];
             if (error.response.data.errors.password)
@@ -369,10 +416,13 @@ export default {
             if (error.response.data.errors.contact_num)
                 this.error_contact_num =
                     error.response.data.errors.contact_num[0];
+            if (!this.selected_tag) {
+                this.error_selected_tag = "This tag field is required.";
+            }
         },
 
         getBlockLot() {
-            this.selected_lot = null;
+            this.selected_block_lot = null;
             this.$store.dispatch("lots/getBlockLots", this.selected_block);
         },
     },

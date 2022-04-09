@@ -354,6 +354,24 @@
                                         >{{ error_contact_num }}</label
                                     >
                                 </div>
+                                <div class="field col-12 md:col-12">
+                                    <label>Email</label>
+                                    <InputText
+                                        type="text"
+                                        name="email"
+                                        v-model="form.email"
+                                        @keydown.enter="onRegisterClick"
+                                        :class="{
+                                            'p-invalid': error_email,
+                                        }"
+                                        disabled
+                                    />
+                                    <label
+                                        style="color: red"
+                                        v-if="error_email"
+                                        >{{ error_email }}</label
+                                    >
+                                </div>
                             </div>
                         </div>
                         <template #footer>
@@ -773,49 +791,25 @@
                                         >{{ error_contact_num }}</label
                                     >
                                 </div>
-
-                                <div class="field col-12 md:col-6">
-                                    <label>Block</label>
-
-                                    <Dropdown
-                                        v-model="form.selected_block"
-                                        :options="blocks"
-                                        optionLabel="number"
-                                        optionValue="number"
-                                        placeholder="Select Block"
-                                        @change="getBlockLot"
+                                <div class="field col-12 md:col-12">
+                                    <label>Email</label>
+                                    <InputText
+                                        type="text"
+                                        name="email"
+                                        v-model="form.email"
+                                        @keydown.enter="onRegisterClick"
                                         :class="{
-                                            'p-invalid': error_selected_block,
+                                            'p-invalid': error_email,
                                         }"
                                         disabled
                                     />
                                     <label
                                         style="color: red"
-                                        v-if="error_selected_block"
-                                        >{{ error_selected_block }}</label
+                                        v-if="error_email"
+                                        >{{ error_email }}</label
                                     >
                                 </div>
 
-                                <div class="field col-12 md:col-6">
-                                    <label>Lot</label>
-
-                                    <Dropdown
-                                        v-model="form.selected_block_lot"
-                                        :options="filteredLots"
-                                        optionLabel="number"
-                                        optionValue="id"
-                                        placeholder="Select Lot"
-                                        :class="{
-                                            'p-invalid': error_selected_lot,
-                                        }"
-                                        disabled
-                                    />
-                                    <label
-                                        style="color: red"
-                                        v-if="error_selected_lot"
-                                        >{{ error_selected_lot }}</label
-                                    >
-                                </div>
                                 <br />
                             </div>
                         </div>

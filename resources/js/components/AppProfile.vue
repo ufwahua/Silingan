@@ -158,7 +158,7 @@
                         :options="tag"
                         optionLabel="tag"
                         optionValue="tag"
-                        placeholder="Select Tag"
+                        placeholder="Select tag"
                     />
                     <label style="color: red" v-if="error_selected_tag">{{
                         error_selected_tag
