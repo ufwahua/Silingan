@@ -80,7 +80,22 @@
                                         class="my-2"
                                     />
                                 </span>
-
+                                <Dropdown
+                                    v-model="filters['status'].value"
+                                    :showClear="true"
+                                    :options="status"
+                                    optionLabel="status"
+                                    optionValue="status"
+                                    placeholder="Filter by status"
+                                    style="width: 200px"
+                                    class="my-2"
+                                ></Dropdown>
+                                <Button
+                                    label="Clear"
+                                    icon="pi pi-filter-slash"
+                                    class="my-2 p-button-outlined p-button-secondary"
+                                    @click="clearFilter"
+                                />
                                 <Button
                                     label="Add"
                                     icon="pi pi-plus"
@@ -116,11 +131,7 @@
                                 }}
                             </template>
                         </Column>
-                        <Column header="Email" field="email">
-                            <template #body="{ data }">
-                                {{ data.email }}
-                            </template>
-                        </Column>
+
                         <Column header="Status" field="status">
                             <template #body="{ data }">
                                 <Badge :class="badgecolor(data.status)">{{
@@ -849,7 +860,7 @@ export default {
                 let temp = [];
                 let active = [];
                 store.state.users.forEach((elem) => {
-                    if (elem.role.toUpperCase() == "SECURITY_OFFICER") {
+                    if (elem.role.toUpperCase() == "SECURITY OFFICER") {
                         temp.push(elem);
                     }
                 });
@@ -864,7 +875,7 @@ export default {
                 let temp = [];
                 let inactive = [];
                 store.state.users.forEach((elem) => {
-                    if (elem.role.toUpperCase() == "SECURITY_OFFICER") {
+                    if (elem.role.toUpperCase() == "SECURITY OFFICER") {
                         temp.push(elem);
                     }
                 });
@@ -878,7 +889,7 @@ export default {
             total: computed(() => {
                 let temp = [];
                 store.state.users.forEach((elem) => {
-                    if (elem.role.toUpperCase() == "SECURITY_OFFICER") {
+                    if (elem.role.toUpperCase() == "SECURITY OFFICER") {
                         temp.push(elem);
                     }
                 });
@@ -939,6 +950,9 @@ export default {
         };
     },
     methods: {
+        clearFilter() {
+            this.filters["status"].value = null;
+        },
         viewSecurityOfficer() {
             this.viewSecurityDialog = true;
         },
@@ -1027,6 +1041,10 @@ export default {
                 global: { value: null, matchMode: FilterMatchMode.CONTAINS },
                 role: {
                     value: "security officer",
+                    matchMode: FilterMatchMode.EQUALS,
+                },
+                status: {
+                    value: null,
                     matchMode: FilterMatchMode.EQUALS,
                 },
             };

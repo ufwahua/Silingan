@@ -103,12 +103,22 @@
                                     class="my-2"
                                 ></Dropdown>
                                 <Dropdown
+                                    v-model="filters['tag_as'].value"
+                                    :showClear="true"
+                                    :options="tag"
+                                    optionLabel="tag"
+                                    optionValue="tag"
+                                    placeholder="Filter by tag"
+                                    style="width: 200px"
+                                    class="my-2"
+                                ></Dropdown>
+                                <Dropdown
                                     v-model="filters['status'].value"
                                     :showClear="true"
                                     :options="status"
                                     optionLabel="status"
                                     optionValue="status"
-                                    placeholder="Filter by Status"
+                                    placeholder="Filter by status"
                                     style="width: 200px"
                                     class="my-2"
                                 ></Dropdown>
@@ -118,7 +128,7 @@
                                     :options="verification"
                                     optionLabel="status"
                                     optionValue="value"
-                                    placeholder="Filter by Verification"
+                                    placeholder="Filter by verification"
                                     style="width: 215px"
                                     class="my-2"
                                 ></Dropdown>
@@ -175,14 +185,11 @@
                         </Column>
                         <Column header="Position" field="position.name">
                         </Column>
-                        <Column header="Email" field="email">
-                            <template #body="{ data }">
-                                {{ data.email }}
-                            </template>
-                        </Column>
+
                         <Column header="Block" field="lot.block.number">
                         </Column>
                         <Column header="Lot" field="lot.number"> </Column>
+                        <Column header="Tag" field="tag_as"> </Column>
                         <Column header="Status" field="status">
                             <template #body="{ data }">
                                 <Badge :class="badgecolor(data.status)">{{
@@ -1462,6 +1469,7 @@ export default {
         clearFilter() {
             this.filters["lot.block.number"].value = null;
             this.filters["lot.number"].value = null;
+            this.filters["tag_as"].value = null;
             this.filters["status"].value = null;
             this.filters["verified"].value = null;
         },
@@ -1482,6 +1490,10 @@ export default {
                     matchMode: FilterMatchMode.EQUALS,
                 },
                 "lot.number": {
+                    value: null,
+                    matchMode: FilterMatchMode.EQUALS,
+                },
+                tag_as: {
                     value: null,
                     matchMode: FilterMatchMode.EQUALS,
                 },
