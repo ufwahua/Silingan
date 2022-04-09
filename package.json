@@ -28,7 +28,7 @@
         "webpack-cli": "^4.9.1"
     },
     "dependencies": {
-        "laravel-echo": "^1.11.3",
+        "laravel-echo": "^1.11.4",
         "primeflex": "^3.1.2",
         "primeicons": "^5.0.0",
         "primevue": "^3.12.1",
