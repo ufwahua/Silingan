@@ -1396,6 +1396,69 @@ export default {
             filteredLots: computed(() => store.state.lots.filteredLots),
             lots: computed(() => store.state.lots.lots),
             users: computed(() => store.state.users),
+            active: computed(() => {
+                let active = [];
+                let temp = [];
+                store.state.users.forEach((elem) => {
+                    if (elem.role == "resident") {
+                        temp.push(elem);
+                    }
+                });
+                temp.forEach((elem) => {
+                    if (elem.status == "active") {
+                        active.push(elem);
+                    }
+                });
+                return active.length;
+            }),
+            inactive: computed(() => {
+                let inactive = [];
+                let temp = [];
+                store.state.users.forEach((elem) => {
+                    if (elem.role == "resident") {
+                        temp.push(elem);
+                    }
+                });
+                temp.forEach((elem) => {
+                    if (elem.status == "inactive") {
+                        inactive.push(elem);
+                    }
+                });
+                return inactive.length;
+            }),
+            verified: computed(() => {
+                let verified = [];
+                let temp = [];
+                store.state.users.forEach((elem) => {
+                    if (elem.role == "resident") {
+                        temp.push(elem);
+                    }
+                });
+                temp.forEach((elem) => {
+                    if (elem.verified == 1) {
+                        verified.push(elem);
+                    }
+                });
+                return verified.length;
+            }),
+            not_verified: computed(() => {
+                let not_verified = [];
+                let temp = [];
+                store.state.users.forEach((elem) => {
+                    if (elem.role == "resident") {
+                        temp.push(elem);
+                    }
+                });
+                temp.forEach((elem) => {
+                    if (elem.verified == 0) {
+                        not_verified.push(elem);
+                    }
+                });
+                return not_verified.length;
+            }),
+            total: computed(() => {
+                return store.state.users.length;
+            }),
         };
     },
     data() {

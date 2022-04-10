@@ -38,11 +38,11 @@
                 <div v-for="post in posts" :key="post.id">
                     <PostComponent
                         v-if="
-                            post.group.name.toUpperCase() === 'MARKETPLACE' &&
-                            post.approved === 1
+                            post.group.name.toUpperCase() == 'MARKETPLACE' &&
+                            post.approved == true
                         "
                         v-bind:post="post"
-                />
+                    />
                 </div>
             </div>
         </div>
