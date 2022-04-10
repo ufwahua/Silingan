@@ -357,7 +357,7 @@ const router = createRouter({
                     },
                 },
                 {
-                    path: "/setting",
+                    path: "setting",
                     meta: {
                         role: "resident",
                     },
@@ -460,7 +460,7 @@ const router = createRouter({
                     },
                 },
                 {
-                    path: "/setting",
+                    path: "setting",
                     meta: {
                         role: "security_officer",
                     },

@@ -20,7 +20,6 @@
                                 optionLabel="full_name"
                                 optionValue="id"
                                 :filter="true"
-                                style="width: 200px"
                                 placeholder="Select a user"
                                 :showClear="true"
                                 class="mr-2"
@@ -64,10 +63,7 @@
                     </div>
                 </Fieldset>
             </div>
-            <div
-                v-if="this.userLogged.status == 'active'"
-                class="col justify-content-center pt-0"
-            >
+            <div class="col justify-content-center pt-0">
                 <Fieldset class="mb-3" legend="Deactivate Account">
                     <p class="p-4 text-center">
                         Temporarily Deactivate your account
@@ -225,7 +221,6 @@ export default {
     setup() {
         const store = useStore();
         return {
-            posts: computed(() => store.state.posts.posts),
             users: computed(() => store.state.users),
             block_users: computed(() => store.state.block_users),
             userLogged: computed(() => store.state.userLogged),
@@ -262,6 +257,7 @@ export default {
                     age: data.age,
                     contact_num: data.contact_num,
                     role: data.role,
+                    tag_as: data.tag_as,
                 },
             })
                 .then(() => {
@@ -394,6 +390,9 @@ export default {
                 life: 3000,
             });
         },
+    },
+    mounted() {
+        console.log("users", this.users);
     },
 };
 </script>

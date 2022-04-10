@@ -118,6 +118,7 @@ export default {
                     age: data.age,
                     contact_num: data.contact_num,
                     role: data.role,
+                    tag_as: data.tag_as,
                 },
             })
                 .then(() => {
