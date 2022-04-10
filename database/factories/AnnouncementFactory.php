@@ -24,8 +24,8 @@ class AnnouncementFactory extends Factory
     {
         return [
             'user_id' => User::where('role','admin')->orWhere('role','officer')->get()->random()->id,
-            'title' => $this->faker->text(rand(20,50)),
-            'content' => $this->faker->text(rand(20,200)),
+            'title' =>  $this->faker->realText(rand(20,50)),
+            'content' =>  $this->faker->realText(rand(20,200)),
         ];
     }
 }

@@ -1457,7 +1457,14 @@ export default {
                 return not_verified.length;
             }),
             total: computed(() => {
-                return store.state.users.length;
+                let temp = [];
+                store.state.users.forEach((elem) => {
+                    if (elem.role == "resident") {
+                        temp.push(elem);
+                    }
+                });
+
+                return temp.length;
             }),
         };
     },

@@ -26,7 +26,7 @@ class ReplyFactory extends Factory
         return [
             'comment_id' => Comment::all()->random()->id,
             'user_id' => User::all()->random()->id,
-            'message' => $this->faker->text(200),
+            'message' =>  $this->faker->realText(200),
         ];
     }
 }

@@ -36,6 +36,8 @@
                             <Button
                                 label="Block"
                                 @click="openBlockDialog"
+                                class="p-button-outlined"
+                                :disabled="selectedUser ? false : true"
                             ></Button>
                         </div>
                     </div>
@@ -45,13 +47,13 @@
                             :key="block_user.id"
                             class="flex flex-row justify-content-center"
                         >
-                            <span class="text-center p-1">
+                            <span class="text-center p-2">
                                 {{ block_user.block_user.first_name }}
                                 {{ block_user.block_user.last_name }}
                             </span>
-                            <span
-                                ><Button
-                                    class="p-button-text p-button-sm p-1"
+                            <span>
+                                <Button
+                                    class="p-button-text p-button-sm p-2"
                                     label="Unblock"
                                     @click="openUnblockDialog(block_user)"
                                 ></Button
@@ -60,6 +62,99 @@
                     </div>
                     <div v-else class="card flex justify-content-center">
                         <p>You haven't added anyone to your block list.</p>
+                    </div>
+                </Fieldset>
+            </div>
+            <div class="col justify-content-center pt-0">
+                <Fieldset class="mb-3">
+                    <template #legend>
+                        <span>
+                            Manage Vehicle
+
+                            <Button
+                                icon="pi pi-plus"
+                                class="ml-2 p-button-rounded p-button-outlined p-button-success"
+                                v-tooltip="`Add vehicle`"
+                                @click="showAddVehicleDialog"
+                        /></span>
+                    </template>
+                    <p class="p-4 text-center">
+                        Register your vehicles in the database
+                    </p>
+
+                    <div v-if="userVehicles" class="flex flex-column">
+                        <Card
+                            v-for="userVehicle in userVehicles"
+                            :key="userVehicle.id"
+                            class="card flex flex-column justify-content-center"
+                        >
+                            <template #header>
+                                <div class="flex justify-content-center">
+                                    <div v-if="profile_pic">
+                                        <Avatar
+                                            :image="`http://127.0.0.1:8000${profile_pic}`"
+                                            style="width: 300px; height: 300px"
+                                            shape="circle"
+                                        />
+                                    </div>
+                                    <div v-else>
+                                        <Avatar
+                                            image="http://127.0.0.1:8000/storage/images/default-prof-pic.png"
+                                            style="width: 300px; height: 300px"
+                                            shape="circle"
+                                        />
+                                    </div>
+                                </div>
+                            </template>
+                            <template #title>
+                                <div class="flex justify-content-center">
+                                    <span class="text-center m-4">
+                                        <p>
+                                            <b>Type: </b>
+                                            {{ userVehicle.type }}
+                                        </p>
+
+                                        <p>
+                                            <b>Make: </b>
+                                            {{ userVehicle.make }}
+                                        </p>
+
+                                        <p>
+                                            <b>Model: </b>
+                                            {{ userVehicle.model }}
+                                        </p>
+                                        <p>
+                                            <b>Color: </b>
+                                            {{ userVehicle.color }}
+                                        </p>
+                                        <p>
+                                            <b>Plate Number: </b>
+                                            {{ userVehicle.plate_number }}
+                                        </p>
+                                    </span>
+                                </div>
+                            </template>
+
+                            <template #footer>
+                                <div class="flex justify-content-center">
+                                    <Button
+                                        icon="pi pi-trash"
+                                        class="p-button-rounded p-button-outlined p-button-danger mr-2"
+                                        @click="deleteCandidate(candidate)"
+                                        v-tooltip="'Delete Vehicle'"
+                                    />
+                                    <Button
+                                        icon="pi pi-pencil"
+                                        class="p-button-rounded p-button-outlined p-button-primary"
+                                        @click="updateCandidate(candidate)"
+                                        v-tooltip="'Edit Vehicle'"
+                                    />
+                                </div>
+                            </template>
+                        </Card>
+                    </div>
+                    <div v-else class="card flex justify-content-center">
+                        <p>You haven't added vehicles.</p>
                     </div>
                 </Fieldset>
             </div>
@@ -205,6 +300,118 @@
                 />
             </template>
         </Dialog>
+        <!-- Add Modal -->
+        <Dialog
+            v-model:visible="addVehicleDialog"
+            :style="{ width: '500px' }"
+            header="Add Vehicle"
+            :modal="true"
+            :draggable="false"
+        >
+            <div class="grid">
+                <div class="col-12">
+                    <div class="p-fluid mb-2">
+                        <FileUpload
+                            name="image[]"
+                            accept="image/*"
+                            v-model="image"
+                            :customUpload="true"
+                            @uploader="onUpload"
+                            :fileLimit="1"
+                            :maxFileSize="2097152"
+                        >
+                            <template #empty>
+                                <p>Drag and drop files to here to upload.</p>
+                            </template>
+                        </FileUpload>
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <div class="grid">
+                    <div class="col-12">
+                        <div class="p-fluid mb-2">
+                            <h6>Type</h6>
+                            <Dropdown
+                                :class="{
+                                    'p-invalid': error_selected_type,
+                                }"
+                                v-model="selected_type"
+                                :options="type"
+                                optionLabel="type"
+                                optionValue="type"
+                                placeholder="Select type"
+                            />
+                            <small v-if="error_selected_type" class="p-error">{{
+                                error_selected_type
+                            }}</small>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="p-fluid mb-2">
+                            <h6>Make</h6>
+                            <InputText
+                                v-model="make"
+                                :class="{ 'p-invalid': error_make }"
+                            />
+                            <small v-if="error_make" class="p-error">{{
+                                error_make
+                            }}</small>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="p-fluid mb-2">
+                            <h6>Model</h6>
+                            <InputText
+                                v-model="model"
+                                :class="{ 'p-invalid': error_model }"
+                            />
+                            <small v-if="error_model" class="p-error">{{
+                                error_model
+                            }}</small>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="p-fluid mb-2">
+                            <h6>Color</h6>
+                            <InputText
+                                v-model="color"
+                                :class="{ 'p-invalid': error_color }"
+                            />
+                            <small v-if="error_color" class="p-error">{{
+                                error_color
+                            }}</small>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="p-fluid mb-2">
+                            <h6>Plate number</h6>
+                            <InputText
+                                v-model="plate_number"
+                                :class="{ 'p-invalid': error_plate_number }"
+                            />
+                            <small v-if="error_plate_number" class="p-error">{{
+                                error_plate_number
+                            }}</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <template #footer>
+                <Button
+                    label="Cancel"
+                    class="p-button-text p-button-danger"
+                    @click="addVehicleDialog = false"
+                />
+                <Button
+                    label="Confirm"
+                    class="p-button p-button-primary"
+                    @click="addVehicle"
+                />
+            </template>
+        </Dialog>
         <Toast />
     </div>
 </template>
@@ -224,20 +431,114 @@ export default {
             users: computed(() => store.state.users),
             block_users: computed(() => store.state.block_users),
             userLogged: computed(() => store.state.userLogged),
+            userVehicles: computed(() => store.state.userVehicles.userVehicles),
+            adminVehicles: computed(
+                () => store.state.adminVehicles.adminVehicles
+            ),
         };
     },
     data() {
         return {
             loading: null,
+
             id: null,
             name: null,
+
             selectedUser: null,
             blockDialog: false,
             unblockDialog: false,
             deactivateDialog: false,
+            addVehicleDialog: false,
+            //vehicle dialog
+            image: null,
+            selected_type: null,
+            make: null,
+            model: null,
+            color: null,
+            plate_number: null,
+            type: [{ type: "Car" }, { type: "Motorcycle" }],
+
+            error_selected_type: null,
+            error_make: null,
+            error_model: null,
+            error_color: null,
+            error_plate_number: null,
         };
     },
     methods: {
+        showAddVehicleDialog() {
+            this.resetFields();
+            this.resetErrors();
+            this.addVehicleDialog = true;
+        },
+        async addVehicle() {
+            this.loading = true;
+            this.resetErrors();
+            await axios({
+                method: "post",
+                url: "/api/vehicle/",
+                data: {
+                    image: this.image,
+                    user_id: this.$store.state.userLogged.id,
+                    type: this.selected_type,
+                    make: this.make,
+                    model: this.model,
+                    color: this.color,
+                    plate_number: this.plate_number,
+                },
+            })
+                .then((res) => {
+                    this.$toast.add({
+                        severity: "success",
+                        summary: "Successful Request",
+                        detail: "Added Vehicle",
+                        life: 3000,
+                    });
+                    this.$store.dispatch(
+                        "userVehicles/getAll",
+                        this.$store.state.userLogged.id
+                    );
+                    this.loading = false;
+                })
+                .catch((err) => {
+                    this.resetErrors();
+                    this.validate(err);
+                    this.loading = false;
+                });
+        },
+        resetFields() {
+            this.image = null;
+            this.selected_type = null;
+            this.make = null;
+            this.model = null;
+            this.color = null;
+            this.plate_number = null;
+        },
+        resetErrors() {
+            this.error_selected_type = null;
+            this.error_make = null;
+            this.error_model = null;
+            this.error_color = null;
+            this.error_plate_number = null;
+        },
+        async onUpload(event) {
+            let formData = new FormData();
+            formData.append("images[]", event.files[0]);
+            formData.append("user_id", this.$store.state.userLogged.id);
+            await axios
+                .post("/upload", formData, {
+                    headers: {
+                        "Content-Type": "multipart/form-data",
+                    },
+                })
+                .then((res) => {
+                    this.image = res.data[0];
+                    console.log(this.image);
+                })
+                .catch((e) => {
+                    console.log(e.response);
+                });
+        },
         async deactivateAccount(data) {
             this.process = true;
             console.log("verify", data);
@@ -328,7 +629,6 @@ export default {
                 });
         },
         async openUnblockDialog(data) {
-            this.loading = true;
             this.unblockDialog = true;
             this.id = data.id;
             this.name =
@@ -390,9 +690,6 @@ export default {
                 life: 3000,
             });
         },
-    },
-    mounted() {
-        console.log("users", this.users);
     },
 };
 </script>

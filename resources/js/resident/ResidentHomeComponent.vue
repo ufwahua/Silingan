@@ -207,6 +207,11 @@ export default {
         );
 
         this.$store.dispatch("getBlockUsers", this.$store.state.userLogged.id);
+        this.$store.dispatch("adminVehicles/getAll");
+        this.$store.dispatch(
+            "userVehicles/getAll",
+            this.$store.state.userLogged.id
+        );
     },
 };
 </script>

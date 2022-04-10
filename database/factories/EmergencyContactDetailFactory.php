@@ -24,7 +24,7 @@ class EmergencyContactDetailFactory extends Factory
     {
         return [
             'user_id' => User::where('role','admin')->orWhere('role','officer')->get()->random()->id,
-            'name' => $this->faker->text(rand(20,50)),
+            'name' => $this->faker->name(),
             'number' => "+".rand(639000000000,639999999999),
         ];
     }

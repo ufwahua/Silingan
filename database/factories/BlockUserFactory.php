@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\User;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class BlockUserFactory extends Factory
@@ -14,9 +15,10 @@ class BlockUserFactory extends Factory
      */
     public function definition()
     {
+        $varbie = User::where('email','varbie.sumido@gmail.com')->first();
         return [
-            'user_id' =>  54,
-            'block_user_id' => User::factory(),
+            'user_id' =>  $varbie['id'],
+            'block_user_id' => User::all()->random()->id,
         ];
     }
 }
