@@ -16,7 +16,7 @@ class VehicleController extends Controller
     public function index(Request $request) : JsonResponse
     {
         return response()->json(
-            Vehicle::with(['user'])->latest()->get()
+            Vehicle::with(['user.lot.block','user.position'])->latest()->get()
         );
     }
 

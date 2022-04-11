@@ -184,9 +184,17 @@ export default {
                             label: "Setting",
                             icon: "pi pi-cog",
                             command: () => {
-                                this.$router.push(
-                                    `/${this.userLogged.role}` + "/setting"
-                                );
+                                if (
+                                    this.userLogged.role === "security officer"
+                                ) {
+                                    this.$router.push(
+                                        "/security_officer/setting"
+                                    );
+                                } else {
+                                    this.$router.push(
+                                        `/${this.userLogged.role}` + "/setting"
+                                    );
+                                }
                             },
                         },
                         {
@@ -242,9 +250,17 @@ export default {
                             label: "Setting",
                             icon: "pi pi-cog",
                             command: () => {
-                                this.$router.push(
-                                    `/${this.userLogged.role}` + "/setting"
-                                );
+                                if (
+                                    this.userLogged.role === "security officer"
+                                ) {
+                                    this.$router.push(
+                                        "/security_officer/setting"
+                                    );
+                                } else {
+                                    this.$router.push(
+                                        `/${this.userLogged.role}` + "/setting"
+                                    );
+                                }
                             },
                         },
 

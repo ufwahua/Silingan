@@ -212,6 +212,10 @@ export default {
         this.$store.dispatch("logs/getAll");
         this.$store.dispatch("cards/getAll");
         this.$store.dispatch("emergency_contact_details/getAll");
+        this.$store.dispatch(
+            "userVehicles/getAll",
+            this.$store.state.userLogged.id
+        );
     },
 };
 </script>

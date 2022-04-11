@@ -78,9 +78,7 @@
                                 @click="showAddVehicleDialog"
                         /></span>
                     </template>
-                    <p class="p-4 text-center">
-                        Register your vehicles in the database
-                    </p>
+                    <p class="p-1 text-center">Register your vehicles</p>
 
                     <div v-if="userVehicles" class="flex flex-column">
                         <Card
@@ -90,9 +88,9 @@
                         >
                             <template #header>
                                 <div class="flex justify-content-center">
-                                    <div v-if="profile_pic">
+                                    <div v-if="userVehicle.image">
                                         <Avatar
-                                            :image="`http://127.0.0.1:8000${profile_pic}`"
+                                            :image="`http://127.0.0.1:8000${userVehicle.image}`"
                                             style="width: 300px; height: 300px"
                                             shape="circle"
                                         />
@@ -140,13 +138,13 @@
                                     <Button
                                         icon="pi pi-trash"
                                         class="p-button-rounded p-button-outlined p-button-danger mr-2"
-                                        @click="deleteCandidate(candidate)"
+                                        @click="showDeleteVehicle(userVehicle)"
                                         v-tooltip="'Delete Vehicle'"
                                     />
                                     <Button
                                         icon="pi pi-pencil"
                                         class="p-button-rounded p-button-outlined p-button-primary"
-                                        @click="updateCandidate(candidate)"
+                                        @click="showUpdateVehicle(userVehicle)"
                                         v-tooltip="'Edit Vehicle'"
                                     />
                                 </div>
@@ -309,22 +307,35 @@
             :draggable="false"
         >
             <div class="grid">
-                <div class="col-12">
-                    <div class="p-fluid mb-2">
-                        <FileUpload
-                            name="image[]"
-                            accept="image/*"
-                            v-model="image"
-                            :customUpload="true"
-                            @uploader="onUpload"
-                            :fileLimit="1"
-                            :maxFileSize="2097152"
-                        >
-                            <template #empty>
-                                <p>Drag and drop files to here to upload.</p>
-                            </template>
-                        </FileUpload>
+                <div class="col-12 flex justify-content-center">
+                    <div v-if="image" class="flex justify-content-center">
+                        <Avatar
+                            :image="`http://127.0.0.1:8000${image}`"
+                            style="width: 300px; height: 300px"
+                            shape="circle"
+                        />
                     </div>
+                    <div v-else class="flex justify-content-center">
+                        <Avatar
+                            image="http://127.0.0.1:8000/storage/images/default-prof-pic.png"
+                            style="width: 300px; height: 300px"
+                            shape="circle"
+                        />
+                    </div>
+                </div>
+                <div class="col-12 flex justify-content-center">
+                    <FileUpload
+                        name="demo[]"
+                        mode="basic"
+                        accept="image/*"
+                        :customUpload="true"
+                        v-model="image"
+                        @uploader="onUpload"
+                        :auto="true"
+                        :fileLimit="1"
+                        :maxFileSize="2000000"
+                        v-tooltip="'Add Vehicle Image'"
+                    />
                 </div>
             </div>
 
@@ -350,7 +361,13 @@
                     </div>
                     <div class="col-6">
                         <div class="p-fluid mb-2">
-                            <h6>Make</h6>
+                            <h6>
+                                Make
+                                <span class="text-blue-500"
+                                    ><small>ex: Honda,Yamaha,etc.</small></span
+                                >
+                            </h6>
+
                             <InputText
                                 v-model="make"
                                 :class="{ 'p-invalid': error_make }"
@@ -362,7 +379,14 @@
                     </div>
                     <div class="col-6">
                         <div class="p-fluid mb-2">
-                            <h6>Model</h6>
+                            <h6>
+                                Model
+                                <span class="text-blue-500"
+                                    ><small
+                                        >ex: NMax,XRM,Sniper,etc.</small
+                                    ></span
+                                >
+                            </h6>
                             <InputText
                                 v-model="model"
                                 :class="{ 'p-invalid': error_model }"
@@ -412,6 +436,196 @@
                 />
             </template>
         </Dialog>
+        <!-- Update Modal -->
+        <Dialog
+            v-model:visible="updateVehicleDialog"
+            :style="{ width: '500px' }"
+            header="Update Vehicle"
+            :modal="true"
+            :draggable="false"
+        >
+            <div class="grid">
+                <div class="col-12 flex justify-content-center">
+                    <div v-if="image" class="flex justify-content-center">
+                        <Avatar
+                            :image="`http://127.0.0.1:8000${image}`"
+                            style="width: 300px; height: 300px"
+                            shape="circle"
+                        />
+                    </div>
+                    <div v-else class="flex justify-content-center">
+                        <Avatar
+                            image="http://127.0.0.1:8000/storage/images/default-prof-pic.png"
+                            style="width: 300px; height: 300px"
+                            shape="circle"
+                        />
+                    </div>
+                </div>
+                <div class="col-12 flex justify-content-center">
+                    <FileUpload
+                        name="demo[]"
+                        mode="basic"
+                        accept="image/*"
+                        :customUpload="true"
+                        v-model="image"
+                        @uploader="onUpload"
+                        :auto="true"
+                        :fileLimit="1"
+                        :maxFileSize="2000000"
+                        v-tooltip="'Update Vehicle Image'"
+                    />
+                </div>
+            </div>
+
+            <div>
+                <div class="grid">
+                    <div class="col-12">
+                        <div class="p-fluid mb-2">
+                            <h6>Type</h6>
+                            <Dropdown
+                                :class="{
+                                    'p-invalid': error_selected_type,
+                                }"
+                                v-model="selected_type"
+                                :options="type"
+                                optionLabel="type"
+                                optionValue="type"
+                                placeholder="Select type"
+                            />
+                            <small v-if="error_selected_type" class="p-error">{{
+                                error_selected_type
+                            }}</small>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="p-fluid mb-2">
+                            <h6>
+                                Make
+                                <span class="text-blue-500"
+                                    ><small>ex: Honda,Yamaha,etc.</small></span
+                                >
+                            </h6>
+
+                            <InputText
+                                v-model="make"
+                                :class="{ 'p-invalid': error_make }"
+                            />
+                            <small v-if="error_make" class="p-error">{{
+                                error_make
+                            }}</small>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="p-fluid mb-2">
+                            <h6>
+                                Model
+                                <span class="text-blue-500"
+                                    ><small
+                                        >ex: NMax,XRM,Sniper,etc.</small
+                                    ></span
+                                >
+                            </h6>
+                            <InputText
+                                v-model="model"
+                                :class="{ 'p-invalid': error_model }"
+                            />
+                            <small v-if="error_model" class="p-error">{{
+                                error_model
+                            }}</small>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="p-fluid mb-2">
+                            <h6>Color</h6>
+                            <InputText
+                                v-model="color"
+                                :class="{ 'p-invalid': error_color }"
+                            />
+                            <small v-if="error_color" class="p-error">{{
+                                error_color
+                            }}</small>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="p-fluid mb-2">
+                            <h6>Plate number</h6>
+                            <InputText
+                                v-model="plate_number"
+                                :class="{ 'p-invalid': error_plate_number }"
+                            />
+                            <small v-if="error_plate_number" class="p-error">{{
+                                error_plate_number
+                            }}</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <template #footer>
+                <Button
+                    label="Cancel"
+                    class="p-button-text p-button-danger"
+                    @click="updateVehicleDialog = false"
+                />
+                <Button
+                    label="Confirm"
+                    class="p-button p-button-primary"
+                    @click="updateVehicle"
+                />
+            </template>
+        </Dialog>
+        <Dialog
+            v-model:visible="deleteVehicleDialog"
+            :style="{ width: '450px' }"
+            header="Confirm"
+            :modal="true"
+        >
+            <div class="confirmation-content">
+                <div class="grid">
+                    <div
+                        class="col-12 flex align-items-center justify-content-center"
+                    >
+                        <span class="text-center m-5">
+                            <p>Are you sure you want to delete vehicle?</p>
+                            <p>
+                                <b>Type: </b>
+                                {{ selected_type }}
+                            </p>
+
+                            <p>
+                                <b>Make: </b>
+                                {{ make }}
+                            </p>
+
+                            <p>
+                                <b>Model: </b>
+                                {{ model }}
+                            </p>
+                            <p>
+                                <b>Color: </b>
+                                {{ color }}
+                            </p>
+                            <p>
+                                <b>Plate Number: </b>
+                                {{ plate_number }}
+                            </p>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <template #footer>
+                <Button
+                    label="Cancel"
+                    class="p-button-text"
+                    @click="deleteVehicleDialog = false"
+                />
+                <Button
+                    label="Delete"
+                    class="p-button-danger"
+                    @click="deleteVehicle"
+                />
+            </template>
+        </Dialog>
         <Toast />
     </div>
 </template>
@@ -449,6 +663,8 @@ export default {
             unblockDialog: false,
             deactivateDialog: false,
             addVehicleDialog: false,
+            updateVehicleDialog: false,
+            deleteVehicleDialog: false,
             //vehicle dialog
             image: null,
             selected_type: null,
@@ -466,10 +682,95 @@ export default {
         };
     },
     methods: {
+        populateFields(data) {
+            console.log("populate fields", data);
+            this.id = data.id;
+            this.image = data.image;
+            this.selected_type = data.type;
+            this.make = data.make;
+            this.model = data.model;
+            this.color = data.color;
+            this.plate_number = data.plate_number;
+        },
+        showDeleteVehicle(data) {
+            this.resetFields();
+            this.resetErrors();
+            this.populateFields(data);
+            this.deleteVehicleDialog = true;
+        },
+        showUpdateVehicle(data) {
+            this.resetFields();
+            this.resetErrors();
+            this.populateFields(data);
+            this.updateVehicleDialog = true;
+        },
         showAddVehicleDialog() {
             this.resetFields();
             this.resetErrors();
             this.addVehicleDialog = true;
+        },
+        async updateVehicle() {
+            this.loading = true;
+            this.resetErrors();
+            await axios({
+                method: "put",
+                url: "/api/vehicle/" + this.id,
+                data: {
+                    image: this.image,
+                    user_id: this.$store.state.userLogged.id,
+                    type: this.selected_type,
+                    make: this.make,
+                    model: this.model,
+                    color: this.color,
+                    plate_number: this.plate_number,
+                },
+            })
+                .then((res) => {
+                    this.updateVehicleDialog = false;
+                    this.$toast.add({
+                        severity: "success",
+                        summary: "Successful Request",
+                        detail: "Updated Vehicle",
+                        life: 3000,
+                    });
+                    this.$store.dispatch(
+                        "userVehicles/getAll",
+                        this.$store.state.userLogged.id
+                    );
+                    this.loading = false;
+                })
+                .catch((err) => {
+                    this.resetErrors();
+                    this.validate(err);
+                    this.loading = false;
+                });
+        },
+        async deleteVehicle() {
+            this.loading = true;
+            this.resetErrors();
+            await axios({
+                method: "delete",
+                url: "/api/vehicle/" + this.id,
+            })
+                .then((res) => {
+                    this.deleteVehicleDialog = false;
+                    this.$toast.add({
+                        severity: "success",
+                        summary: "Successful Request",
+                        detail: "Deleted Vehicle",
+                        life: 3000,
+                    });
+                    this.$store.dispatch(
+                        "userVehicles/getAll",
+                        this.$store.state.userLogged.id
+                    );
+                    this.loading = false;
+                })
+                .catch((err) => {
+                    this.resetErrors();
+                    this.validate(err);
+                    this.loading = false;
+                });
         },
         async addVehicle() {
             this.loading = true;
@@ -488,6 +789,7 @@ export default {
                 },
             })
                 .then((res) => {
+                    this.addVehicleDialog = false;
                     this.$toast.add({
                         severity: "success",
                         summary: "Successful Request",
@@ -506,7 +808,22 @@ export default {
                     this.loading = false;
                 });
         },
+        validate(error) {
+            console.log(error.response.data);
+            if (error.response.data.errors.type)
+                this.error_selected_type = error.response.data.errors.type[0];
+            if (error.response.data.errors.make)
+                this.error_make = error.response.data.errors.make[0];
+            if (error.response.data.errors.model)
+                this.error_model = error.response.data.errors.model[0];
+            if (error.response.data.errors.color)
+                this.error_color = error.response.data.errors.color[0];
+            if (error.response.data.errors.plate_number)
+                this.error_plate_number =
+                    error.response.data.errors.plate_number[0];
+        },
         resetFields() {
+            this.id = null;
             this.image = null;
             this.selected_type = null;
             this.make = null;
