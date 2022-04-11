@@ -69,12 +69,16 @@ export default {
                         {
                             label: "Marketplace",
                             icon: "pi pi-fw pi-shopping-cart",
+<<<<<<< HEAD:resources/js/security_officer/SecurityHomeComponent.vue
                             to: "/security_officer/marketplace",
                         },
                         {
                             label: "Log",
                             icon: "pi pi-fw pi-calendar",
                             to: "/security_officer/log",
+=======
+                            to: "/security/marketplace",
+>>>>>>> fbfdf505e05154b0c1909100722795c69f7f7542:resources/js/security_officer/dashboard/SecurityHomeComponent.vue
                         },
                         {
                             label: "Announcement",

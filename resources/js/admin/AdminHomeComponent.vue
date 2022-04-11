@@ -72,11 +72,15 @@ export default {
                             icon: "pi pi-fw pi-home",
                             to: "/admin/timeline",
                         },
-
                         {
                             label: "Marketplace",
                             icon: "pi pi-shopping-cart",
                             to: "/admin/marketplace",
+                        },
+                        {
+                            label: "Announcement",
+                            icon: "pi pi-info",
+                            to: "/admin/view-announcement",
                         },
                     ],
                 },

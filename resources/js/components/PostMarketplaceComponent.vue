@@ -3,7 +3,9 @@
         <div
             class="col-12 sm:col-12 md:col-8 md:col-offset-2 lg:col-6 lg:col-offset-1 xl:col-6 xl:col-offset-1"
         >
-        <h3>Timeline</h3>
+        <div class="col-12">
+                <h3>Marketplace</h3>
+            </div>
             <div class="col justify-content-center pt-0">
                 <div class="card p-3">
                     <div class="p-inputgroup mb-2">
@@ -38,7 +40,7 @@
                 </div>
                 <div v-for="post in posts" :key="post.id">
                     <PostComponent
-                        v-if="post.group.name.toUpperCase() === 'TIMELINE'"
+                        v-if="post.group.name.toUpperCase() === 'MARKETPLACE'"
                         v-bind:post="post"
                     />
                 </div>
@@ -125,7 +127,7 @@ import { useStore } from "vuex";
 import NewsComponent from "./NewsComponent.vue";
 import PostComponent from "./PostComponent.vue";
 export default {
-    name: "TimelineComponent",
+    name: "UserDashboardComponent",
     components: {
         NewsComponent,
         PostComponent,
@@ -146,6 +148,29 @@ export default {
             images: null,
             content: null,
             openPostModal: false,
+            data: [
+                {
+                    name: "Jayson Cadiz",
+                    date: "January 1, 2021",
+                    type: "Laptop",
+                    model: "Aspire-15",
+                    brand: "Acer",
+                },
+                {
+                    name: "Gio Alfanta",
+                    date: "January 2, 2021",
+                    type: "Desktop",
+                    model: "Aspire-15",
+                    brand: "Acer",
+                },
+                {
+                    name: "Godfrey Español",
+                    date: "January 3, 2021",
+                    type: "Mouse",
+                    model: "Abyssus",
+                    brand: "Razer",
+                },
+            ],
         };
     },
     methods: {
@@ -200,7 +225,6 @@ export default {
                     user_id: this.$store.state.userLogged.id,
                     images: JSON.stringify(this.images),
                     content: this.content,
-                    approved: 1,
                 },
             })
                 .then((res) => {
