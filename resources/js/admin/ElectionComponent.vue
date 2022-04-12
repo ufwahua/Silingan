@@ -83,15 +83,6 @@
                                         {{ candidate.user.last_name }}
                                     </h5>
                                 </template>
-<<<<<<< HEAD:resources/js/admin/ElectionComponent.vue
-
-=======
-                                <template #subtitle>
-                                    <!-- Block:
-                                    {{ candidate.user.block_lot.block_id }}
-                                    Lot: {{ candidate.user.block_lot.number }} -->
-                                </template>
->>>>>>> fbfdf505e05154b0c1909100722795c69f7f7542:resources/js/admin/dashboard/ElectionComponent.vue
                                 <template #footer>
                                     <div
                                         v-if="!checkElection"
@@ -240,6 +231,16 @@
                                     :filter="true"
                                     :showClear="true"
                                 >
+                                    <template #value="slotProps">
+                                        <div v-if="slotProps.value.id">
+                                            <div>
+                                                {{
+                                                    (slotProps.option["id"] =
+                                                        slotProps.value.id)
+                                                }}
+                                            </div>
+                                        </div>
+                                    </template>
                                     <template #option="slotProps">
                                         {{
                                             (slotProps.option["full_name"] =
@@ -373,7 +374,7 @@ export default {
             candidates: computed(() => store.state.candidates.candidates),
             users: computed(() => {
                 var temp = store.state.users.filter((elem) => {
-                    return elem.role === "resident";
+                    return elem.role === "resident" || elem.role === "officer";
                 });
                 return temp;
             }),
@@ -497,9 +498,10 @@ export default {
         updateCandidate(data) {
             this.resetFields();
             this.resetErrors();
+            console.log("data", data);
             this.id = data.id;
             this.position_id = data.position.id;
-            this.user_id = data.user.id;
+            this.user_id = data.user_id;
             this.updateCandidateDialog = true;
         },
         showUpdateCandidateToast() {

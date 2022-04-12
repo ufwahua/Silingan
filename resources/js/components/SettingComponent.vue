@@ -337,88 +337,81 @@
                         v-tooltip="'Add Vehicle Image'"
                     />
                 </div>
-            </div>
+                <div class="col-12">
+                    <div class="p-fluid mb-2">
+                        <h6>Type</h6>
+                        <Dropdown
+                            :class="{
+                                'p-invalid': error_selected_type,
+                            }"
+                            v-model="selected_type"
+                            :options="type"
+                            optionLabel="type"
+                            optionValue="type"
+                            placeholder="Select type"
+                        />
+                        <small v-if="error_selected_type" class="p-error">{{
+                            error_selected_type
+                        }}</small>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="p-fluid mb-2">
+                        <h6>
+                            Make
+                            <span class="text-blue-500"
+                                ><small>ex: Honda,Yamaha,etc.</small></span
+                            >
+                        </h6>
 
-            <div>
-                <div class="grid">
-                    <div class="col-12">
-                        <div class="p-fluid mb-2">
-                            <h6>Type</h6>
-                            <Dropdown
-                                :class="{
-                                    'p-invalid': error_selected_type,
-                                }"
-                                v-model="selected_type"
-                                :options="type"
-                                optionLabel="type"
-                                optionValue="type"
-                                placeholder="Select type"
-                            />
-                            <small v-if="error_selected_type" class="p-error">{{
-                                error_selected_type
-                            }}</small>
-                        </div>
+                        <InputText
+                            v-model="make"
+                            :class="{ 'p-invalid': error_make }"
+                        />
+                        <small v-if="error_make" class="p-error">{{
+                            error_make
+                        }}</small>
                     </div>
-                    <div class="col-6">
-                        <div class="p-fluid mb-2">
-                            <h6>
-                                Make
-                                <span class="text-blue-500"
-                                    ><small>ex: Honda,Yamaha,etc.</small></span
-                                >
-                            </h6>
-
-                            <InputText
-                                v-model="make"
-                                :class="{ 'p-invalid': error_make }"
-                            />
-                            <small v-if="error_make" class="p-error">{{
-                                error_make
-                            }}</small>
-                        </div>
+                </div>
+                <div class="col-6">
+                    <div class="p-fluid mb-2">
+                        <h6>
+                            Model
+                            <span class="text-blue-500"
+                                ><small>ex: NMax,XRM,Sniper,etc.</small></span
+                            >
+                        </h6>
+                        <InputText
+                            v-model="model"
+                            :class="{ 'p-invalid': error_model }"
+                        />
+                        <small v-if="error_model" class="p-error">{{
+                            error_model
+                        }}</small>
                     </div>
-                    <div class="col-6">
-                        <div class="p-fluid mb-2">
-                            <h6>
-                                Model
-                                <span class="text-blue-500"
-                                    ><small
-                                        >ex: NMax,XRM,Sniper,etc.</small
-                                    ></span
-                                >
-                            </h6>
-                            <InputText
-                                v-model="model"
-                                :class="{ 'p-invalid': error_model }"
-                            />
-                            <small v-if="error_model" class="p-error">{{
-                                error_model
-                            }}</small>
-                        </div>
+                </div>
+                <div class="col-12">
+                    <div class="p-fluid mb-2">
+                        <h6>Color</h6>
+                        <InputText
+                            v-model="color"
+                            :class="{ 'p-invalid': error_color }"
+                        />
+                        <small v-if="error_color" class="p-error">{{
+                            error_color
+                        }}</small>
                     </div>
-                    <div class="col-12">
-                        <div class="p-fluid mb-2">
-                            <h6>Color</h6>
-                            <InputText
-                                v-model="color"
-                                :class="{ 'p-invalid': error_color }"
-                            />
-                            <small v-if="error_color" class="p-error">{{
-                                error_color
-                            }}</small>
-                        </div>
-                    </div>
-                    <div class="col-12">
-                        <div class="p-fluid mb-2">
-                            <h6>Plate number</h6>
-                            <InputText
-                                v-model="plate_number"
-                                :class="{ 'p-invalid': error_plate_number }"
-                            />
-                            <small v-if="error_plate_number" class="p-error">{{
-                                error_plate_number
-                            }}</small>
-                        </div>
+                </div>
+                <div class="col-12">
+                    <div class="p-fluid mb-2">
+                        <h6>Plate number</h6>
+                        <InputText
+                            v-model="plate_number"
+                            :class="{ 'p-invalid': error_plate_number }"
+                        />
+                        <small v-if="error_plate_number" class="p-error">{{
+                            error_plate_number
+                        }}</small>
                     </div>
                 </div>
             </div>
@@ -577,16 +570,31 @@
         <Dialog
             v-model:visible="deleteVehicleDialog"
             :style="{ width: '450px' }"
-            header="Confirm"
+            header="Delete Vehicle?"
             :modal="true"
         >
             <div class="confirmation-content">
                 <div class="grid">
+                    <div class="col-12 flex justify-content-center">
+                        <div v-if="image" class="flex justify-content-center">
+                            <Avatar
+                                :image="`http://127.0.0.1:8000${image}`"
+                                style="width: 300px; height: 300px"
+                                shape="circle"
+                            />
+                        </div>
+                        <div v-else class="flex justify-content-center">
+                            <Avatar
+                                image="http://127.0.0.1:8000/storage/images/default-prof-pic.png"
+                                style="width: 300px; height: 300px"
+                                shape="circle"
+                            />
+                        </div>
+                    </div>
                     <div
                         class="col-12 flex align-items-center justify-content-center"
                     >
                         <span class="text-center m-5">
-                            <p>Are you sure you want to delete vehicle?</p>
                             <p>
                                 <b>Type: </b>
                                 {{ selected_type }}
@@ -809,7 +817,6 @@ export default {
                 });
         },
         validate(error) {
-            console.log(error.response.data);
             if (error.response.data.errors.type)
                 this.error_selected_type = error.response.data.errors.type[0];
             if (error.response.data.errors.make)
