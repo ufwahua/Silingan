@@ -79,7 +79,7 @@ export default {
                         {
                             label: "Announcement",
                             icon: "pi pi-fw pi-calendar",
-                            to: "/security_officer/announcement",
+                            to: "/security_officer/view-announcement",
                         },
                         {
                             label: "Emergency Contact",

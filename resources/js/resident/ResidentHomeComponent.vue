@@ -74,7 +74,7 @@ export default {
                         {
                             label: "Announcement",
                             icon: "pi pi-fw pi-calendar",
-                            to: "/resident/announcement",
+                            to: "/resident/view-announcement",
                         },
                         {
                             label: "Emergency Contact",
