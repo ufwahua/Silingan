@@ -1,7 +1,7 @@
 <?php
 
 use App\Models\User;
-use Illuminate\Support\Facades\Auth;
+
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LotController;
 use App\Http\Controllers\ChatController;
@@ -20,6 +20,7 @@ use App\Http\Controllers\BlockUserController;
 use App\Http\Controllers\CardController;
 use App\Http\Controllers\EmergencyContactDetailController;
 use App\Http\Controllers\LogController;
+use App\Http\Controllers\VehicleController;
 
 /*
 |--------------------------------------------------------------------------
@@ -66,4 +67,5 @@ Route::apiResources([
     'card'             => CardController::class,
     'log'             => LogController::class,
     'block_user'             => BlockUserController::class,
+    'vehicle'             => VehicleController::class,
 ]);

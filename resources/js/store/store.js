@@ -9,10 +9,11 @@ import positions from "./admin/positions";
 import emergency_contact_details from "./admin/emergency_contact_details";
 import candidates from "./admin/candidates";
 import timeNow from "./admin/timeNow";
-
+import adminVehicles from "./admin/vehicles";
 //user
 import news from "./user/news";
 import posts from "./user/posts";
+import userVehicles from "./user/vehicles";
 
 //security officer
 import cards from "./security_officer/cards";
@@ -142,6 +143,8 @@ export default createStore({
         timeNow,
         cards,
         logs,
+        userVehicles,
+        adminVehicles,
     },
 
     plugins: [createPersistedState()],

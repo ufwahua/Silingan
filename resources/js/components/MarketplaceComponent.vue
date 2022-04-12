@@ -3,6 +3,7 @@
         <div
             class="col-12 sm:col-12 md:col-8 md:col-offset-2 lg:col-6 lg:col-offset-1 xl:col-6 xl:col-offset-1"
         >
+        <h3>Timeline</h3>
             <div class="col justify-content-center pt-0">
                 <div class="card p-3">
                     <div class="p-inputgroup mb-2">
@@ -38,11 +39,11 @@
                 <div v-for="post in posts" :key="post.id">
                     <PostComponent
                         v-if="
-                            post.group.name.toUpperCase() === 'MARKETPLACE' &&
-                            post.approved === 1
+                            post.group.name.toUpperCase() == 'MARKETPLACE' &&
+                            post.approved == true
                         "
                         v-bind:post="post"
-                />
+                    />
                 </div>
             </div>
         </div>

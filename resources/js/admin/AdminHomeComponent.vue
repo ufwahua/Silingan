@@ -72,11 +72,15 @@ export default {
                             icon: "pi pi-fw pi-home",
                             to: "/admin/timeline",
                         },
-
                         {
                             label: "Marketplace",
                             icon: "pi pi-shopping-cart",
                             to: "/admin/marketplace",
+                        },
+                        {
+                            label: "Announcement",
+                            icon: "pi pi-info",
+                            to: "/admin/view-announcement",
                         },
                     ],
                 },
@@ -118,14 +122,19 @@ export default {
                                     to: "/admin/block-lot",
                                 },
                                 {
-                                    label: "Positions",
+                                    label: "Vehicles",
                                     icon: "pi pi-info-circle",
-                                    to: "/admin/position",
+                                    to: "/admin/vehicle",
                                 },
                                 {
                                     label: "Cards",
                                     icon: "pi pi-info-circle",
                                     to: "/admin/card",
+                                },
+                                {
+                                    label: "Positions",
+                                    icon: "pi pi-info-circle",
+                                    to: "/admin/position",
                                 },
                             ],
                         },
@@ -273,6 +282,11 @@ export default {
         this.$store.dispatch("getAllUsers");
         this.$store.dispatch("cards/getAllCards");
         this.$store.dispatch("getBlockUsers", this.$store.state.userLogged.id);
+        this.$store.dispatch("adminVehicles/getAll");
+        this.$store.dispatch(
+            "userVehicles/getAll",
+            this.$store.state.userLogged.id
+        );
     },
 };
 </script>

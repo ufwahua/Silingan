@@ -486,7 +486,7 @@
                                         :options="tag"
                                         optionLabel="tag"
                                         optionValue="tag"
-                                        placeholder="Select Tag"
+                                        placeholder="Select tag"
                                     />
                                     <label
                                         style="color: red"
@@ -513,44 +513,22 @@
                                     >
                                 </div>
 
-                                <div class="field col-12 md:col-6">
-                                    <label>Block</label>
-
-                                    <Dropdown
-                                        v-model="form.selected_block"
-                                        :options="blocks"
-                                        optionLabel="number"
-                                        optionValue="number"
-                                        placeholder="Select Block"
-                                        @change="getBlockLot"
+                                <div class="field col-12 md:col-12">
+                                    <label>Email</label>
+                                    <InputText
+                                        type="text"
+                                        name="email"
+                                        v-model="form.email"
+                                        @keydown.enter="onRegisterClick"
                                         :class="{
-                                            'p-invalid': error_selected_block,
+                                            'p-invalid': error_email,
                                         }"
+                                        disabled
                                     />
                                     <label
                                         style="color: red"
-                                        v-if="error_selected_block"
-                                        >{{ error_selected_block }}</label
-                                    >
-                                </div>
-
-                                <div class="field col-12 md:col-6">
-                                    <label>Lot</label>
-
-                                    <Dropdown
-                                        v-model="form.selected_block_lot"
-                                        :options="filteredLots"
-                                        optionLabel="number"
-                                        optionValue="id"
-                                        placeholder="Select Lot"
-                                        :class="{
-                                            'p-invalid': error_selected_lot,
-                                        }"
-                                    />
-                                    <label
-                                        style="color: red"
-                                        v-if="error_selected_lot"
-                                        >{{ error_selected_lot }}</label
+                                        v-if="error_email"
+                                        >{{ error_email }}</label
                                     >
                                 </div>
                                 <br />
@@ -761,7 +739,7 @@
                                         :options="tag"
                                         optionLabel="tag"
                                         optionValue="tag"
-                                        placeholder="Select Tag"
+                                        placeholder="Select tag"
                                     />
                                     <label
                                         style="color: red"
@@ -1067,7 +1045,7 @@
                                         :options="tag"
                                         optionLabel="tag"
                                         optionValue="tag"
-                                        placeholder="Select Tag"
+                                        placeholder="Select tag"
                                         disabled
                                     />
                                     <label
@@ -1095,49 +1073,24 @@
                                         >{{ error_contact_num }}</label
                                     >
                                 </div>
-
-                                <div class="field col-12 md:col-6">
-                                    <label>Block</label>
-
-                                    <Dropdown
-                                        v-model="form.selected_block"
-                                        :options="blocks"
-                                        optionLabel="number"
-                                        optionValue="number"
-                                        placeholder="Select Block"
-                                        @change="getBlockLot"
+                                <div class="field col-12 md:col-12">
+                                    <label>Email</label>
+                                    <InputText
+                                        type="text"
+                                        v-model="form.email"
+                                        @keydown.enter="onRegisterClick"
                                         :class="{
-                                            'p-invalid': error_selected_block,
+                                            'p-invalid': error_email,
                                         }"
                                         disabled
                                     />
                                     <label
                                         style="color: red"
-                                        v-if="error_selected_block"
-                                        >{{ error_selected_block }}</label
+                                        v-if="error_email"
+                                        >{{ error_email }}</label
                                     >
                                 </div>
 
-                                <div class="field col-12 md:col-6">
-                                    <label>Lot</label>
-
-                                    <Dropdown
-                                        v-model="form.selected_block_lot"
-                                        :options="filteredLots"
-                                        optionLabel="number"
-                                        optionValue="id"
-                                        placeholder="Select Lot"
-                                        :class="{
-                                            'p-invalid': error_selected_lot,
-                                        }"
-                                        disabled
-                                    />
-                                    <label
-                                        style="color: red"
-                                        v-if="error_selected_lot"
-                                        >{{ error_selected_lot }}</label
-                                    >
-                                </div>
                                 <br />
                             </div>
                         </div>
@@ -1340,7 +1293,7 @@
                                         :options="tag"
                                         optionLabel="tag"
                                         optionValue="tag"
-                                        placeholder="Select Tag"
+                                        placeholder="Select tag"
                                         disabled
                                     />
                                     <label
@@ -1368,49 +1321,24 @@
                                         >{{ error_contact_num }}</label
                                     >
                                 </div>
-
-                                <div class="field col-12 md:col-6">
-                                    <label>Block</label>
-
-                                    <Dropdown
-                                        v-model="form.selected_block"
-                                        :options="blocks"
-                                        optionLabel="number"
-                                        optionValue="number"
-                                        placeholder="Select Block"
-                                        @change="getBlockLot"
+                                <div class="field col-12 md:col-12">
+                                    <label>Email</label>
+                                    <InputText
+                                        type="text"
+                                        v-model="form.email"
+                                        @keydown.enter="onRegisterClick"
                                         :class="{
-                                            'p-invalid': error_selected_block,
+                                            'p-invalid': error_email,
                                         }"
                                         disabled
                                     />
                                     <label
                                         style="color: red"
-                                        v-if="error_selected_block"
-                                        >{{ error_selected_block }}</label
+                                        v-if="error_email"
+                                        >{{ error_email }}</label
                                     >
                                 </div>
 
-                                <div class="field col-12 md:col-6">
-                                    <label>Lot</label>
-
-                                    <Dropdown
-                                        v-model="form.selected_block_lot"
-                                        :options="filteredLots"
-                                        optionLabel="number"
-                                        optionValue="id"
-                                        placeholder="Select Lot"
-                                        :class="{
-                                            'p-invalid': error_selected_lot,
-                                        }"
-                                        disabled
-                                    />
-                                    <label
-                                        style="color: red"
-                                        v-if="error_selected_lot"
-                                        >{{ error_selected_lot }}</label
-                                    >
-                                </div>
                                 <br />
                             </div>
                         </div>
@@ -1469,10 +1397,10 @@ export default {
             lots: computed(() => store.state.lots.lots),
             users: computed(() => store.state.users),
             active: computed(() => {
-                let temp = [];
                 let active = [];
+                let temp = [];
                 store.state.users.forEach((elem) => {
-                    if (elem.role.toUpperCase() == "RESIDENT") {
+                    if (elem.role == "resident") {
                         temp.push(elem);
                     }
                 });
@@ -1484,10 +1412,10 @@ export default {
                 return active.length;
             }),
             inactive: computed(() => {
-                let temp = [];
                 let inactive = [];
+                let temp = [];
                 store.state.users.forEach((elem) => {
-                    if (elem.role.toUpperCase() == "RESIDENT") {
+                    if (elem.role == "resident") {
                         temp.push(elem);
                     }
                 });
@@ -1499,10 +1427,10 @@ export default {
                 return inactive.length;
             }),
             verified: computed(() => {
-                let temp = [];
                 let verified = [];
+                let temp = [];
                 store.state.users.forEach((elem) => {
-                    if (elem.role.toUpperCase() == "RESIDENT") {
+                    if (elem.role == "resident") {
                         temp.push(elem);
                     }
                 });
@@ -1514,10 +1442,10 @@ export default {
                 return verified.length;
             }),
             not_verified: computed(() => {
-                let temp = [];
                 let not_verified = [];
+                let temp = [];
                 store.state.users.forEach((elem) => {
-                    if (elem.role.toUpperCase() == "RESIDENT") {
+                    if (elem.role == "resident") {
                         temp.push(elem);
                     }
                 });
@@ -1531,10 +1459,11 @@ export default {
             total: computed(() => {
                 let temp = [];
                 store.state.users.forEach((elem) => {
-                    if (elem.role.toUpperCase() == "RESIDENT") {
+                    if (elem.role == "resident") {
                         temp.push(elem);
                     }
                 });
+
                 return temp.length;
             }),
         };

@@ -3,45 +3,10 @@
         <Toast />
         <div class="grid">
             <div class="col-12">
-                <h1 class="text-center">Security Officers</h1>
+                <h1 class="text-center">Vehicles</h1>
             </div>
         </div>
         <div class="grid mb-2 flex justify-content-center">
-            <div class="col-12 lg:col-6 xl:col-3">
-                <div class="card mb-0 bg-green-100">
-                    <div class="flex justify-content-between mb-3">
-                        <div>
-                            <span
-                                class="block font-medium text-4xl font-bold mb-3"
-                                >{{ active }}</span
-                            >
-                            <div class="text-900">Active</div>
-                        </div>
-                        <div
-                            class="flex align-items-center justify-content-center"
-                            style="width: 2.5rem; height: 2.5rem"
-                        ></div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-12 lg:col-6 xl:col-3">
-                <div class="card mb-0 bg-pink-100">
-                    <div class="flex justify-content-between mb-3">
-                        <div>
-                            <span
-                                class="block font-medium text-4xl font-bold mb-3"
-                                >{{ inactive }}</span
-                            >
-                            <div class="text-900">Inactive</div>
-                        </div>
-
-                        <div
-                            class="flex align-items-center justify-content-center"
-                            style="width: 2.5rem; height: 2.5rem"
-                        ></div>
-                    </div>
-                </div>
-            </div>
             <div class="col-12 lg:col-6 xl:col-3">
                 <div class="card mb-0 bg-blue-100">
                     <div class="flex justify-content-between mb-3">
@@ -64,7 +29,7 @@
             <div class="grid">
                 <div class="col-12">
                     <DataTable
-                        :value="users"
+                        :value="adminVehicles"
                         :filters="filters"
                         breakpoint="1350px"
                         :paginator="true"
@@ -81,21 +46,38 @@
                                     />
                                 </span>
                                 <Dropdown
-                                    v-model="filters['status'].value"
+                                    v-model="filters['user.role'].value"
                                     :showClear="true"
-                                    :options="status"
-                                    optionLabel="status"
-                                    optionValue="status"
-                                    placeholder="Filter by status"
+                                    :options="role"
+                                    optionLabel="role"
+                                    optionValue="role"
+                                    placeholder="Filter by role"
                                     style="width: 200px"
                                     class="my-2"
                                 ></Dropdown>
-                                <Button
-                                    label="Clear"
-                                    icon="pi pi-filter-slash"
-                                    class="my-2 p-button-outlined p-button-secondary"
-                                    @click="clearFilter"
-                                />
+                                <Dropdown
+                                    v-model="
+                                        filters['user.lot.block.number'].value
+                                    "
+                                    :showClear="true"
+                                    :options="blocks"
+                                    optionLabel="number"
+                                    optionValue="number"
+                                    placeholder="Filter by block"
+                                    class="my-2"
+                                    style="width: 200px"
+                                    @change="getFilterBlockLot"
+                                ></Dropdown>
+                                <Dropdown
+                                    v-model="filters['user.lot.number'].value"
+                                    :showClear="true"
+                                    :options="filteredLots"
+                                    optionLabel="number"
+                                    optionValue="number"
+                                    placeholder="Filter by lot"
+                                    style="width: 200px"
+                                    class="my-2"
+                                ></Dropdown>
                                 <Button
                                     label="Add"
                                     icon="pi pi-plus"
@@ -104,13 +86,15 @@
                                 />
                             </div>
                         </template>
-                        <template #empty> No registered users found </template>
+                        <template #empty>
+                            No registered vehicles found
+                        </template>
                         <template #loading> Loading Users </template>
-                        <Column header="Profile Pic">
+                        <Column header="Image">
                             <template #body="{ data }">
-                                <div v-if="data.profile_pic">
+                                <div v-if="data.image">
                                     <Avatar
-                                        :image="`http://127.0.0.1:8000${data.profile_pic}`"
+                                        :image="`http://127.0.0.1:8000${data.image}`"
                                         style="width: 100px; height: 100px"
                                         shape="circle"
                                     />
@@ -123,22 +107,15 @@
                                     />
                                 </div> </template
                         ></Column>
-                        <Column header="Name" field="name">
-                            <template #body="{ data }">
-                                {{
-                                    (data["name"] =
-                                        data.first_name + " " + data.last_name)
-                                }}
-                            </template>
+                        <Column header="Type" field="type"> </Column>
+                        <Column header="Make" field="make"> </Column>
+                        <Column header="Model" field="model"> </Column>
+                        <Column header="Color" field="color"> </Column>
+                        <Column header="Role" field="user.role"> </Column>
+                        <Column header="Block" field="user.lot.block.number">
                         </Column>
+                        <Column header="Lot" field="user.lot.number"> </Column>
 
-                        <Column header="Status" field="status">
-                            <template #body="{ data }">
-                                <Badge :class="badgecolor(data.status)">{{
-                                    data.status
-                                }}</Badge>
-                            </template>
-                        </Column>
                         <Column header="Actions" field="actions">
                             <template #body="{ data }">
                                 <Button
@@ -200,7 +177,7 @@
                     <Dialog
                         v-model:visible="updateUserDialog"
                         :style="{ width: '500px' }"
-                        header="Update Security Officer"
+                        header="Update User"
                         :modal="true"
                     >
                         <div class="grid">
@@ -296,26 +273,6 @@
                                 </div>
 
                                 <div class="field col-12 md:col-6">
-                                    <label>Role</label>
-
-                                    <Dropdown
-                                        v-model="form.selected_role"
-                                        :class="{
-                                            'p-invalid': error_role,
-                                        }"
-                                        :options="role"
-                                        optionLabel="type"
-                                        optionValue="value"
-                                        placeholder="Select Role"
-                                    />
-                                    <label
-                                        style="color: red"
-                                        v-if="error_role"
-                                        >{{ error_role }}</label
-                                    >
-                                </div>
-
-                                <div class="field col-12 md:col-12">
                                     <label>Age</label>
                                     <InputText
                                         id="age"
@@ -336,6 +293,84 @@
                                         >{{ error_age }}</label
                                     >
                                 </div>
+                                <div class="field col-12 md:col-6">
+                                    <label>Block</label>
+
+                                    <Dropdown
+                                        v-model="form.selected_block"
+                                        :options="blocks"
+                                        optionLabel="number"
+                                        optionValue="number"
+                                        placeholder="Select Block"
+                                        @change="getBlockLot"
+                                        :class="{
+                                            'p-invalid': error_selected_block,
+                                        }"
+                                    />
+                                    <label
+                                        style="color: red"
+                                        v-if="error_selected_block"
+                                        >{{ error_selected_block }}</label
+                                    >
+                                </div>
+
+                                <div class="field col-12 md:col-6">
+                                    <label>Lot</label>
+
+                                    <Dropdown
+                                        v-model="form.selected_block_lot"
+                                        :options="filteredLots"
+                                        optionLabel="number"
+                                        optionValue="id"
+                                        placeholder="Select Lot"
+                                        :class="{
+                                            'p-invalid': error_selected_lot,
+                                        }"
+                                    />
+                                    <label
+                                        style="color: red"
+                                        v-if="error_selected_lot"
+                                        >{{ error_selected_lot }}</label
+                                    >
+                                </div>
+                                <div class="field col-12 md:col-6">
+                                    <label>Role</label>
+
+                                    <Dropdown
+                                        v-model="form.selected_role"
+                                        :class="{
+                                            'p-invalid': error_role,
+                                        }"
+                                        :options="role"
+                                        optionLabel="role"
+                                        optionValue="role"
+                                        placeholder="Select Role"
+                                    />
+                                    <label
+                                        style="color: red"
+                                        v-if="error_role"
+                                        >{{ error_role }}</label
+                                    >
+                                </div>
+                                <div class="field col-12 md:col-6">
+                                    <label>Tag as</label>
+
+                                    <Dropdown
+                                        v-model="form.selected_tag"
+                                        :class="{
+                                            'p-invalid': error_selected_tag,
+                                        }"
+                                        :options="tag"
+                                        optionLabel="tag"
+                                        optionValue="tag"
+                                        placeholder="Select tag"
+                                    />
+                                    <label
+                                        style="color: red"
+                                        v-if="error_selected_tag"
+                                        >{{ error_selected_tag }}</label
+                                    >
+                                </div>
                                 <div class="field col-12 md:col-12">
                                     <label>Contact Number</label>
                                     <InputText
@@ -354,6 +389,7 @@
                                         >{{ error_contact_num }}</label
                                     >
                                 </div>
+
                                 <div class="field col-12 md:col-12">
                                     <label>Email</label>
                                     <InputText
@@ -372,6 +408,7 @@
                                         >{{ error_email }}</label
                                     >
                                 </div>
+                                <br />
                             </div>
                         </div>
                         <template #footer>
@@ -393,7 +430,7 @@
                     <Dialog
                         v-model:visible="registerUserDialog"
                         :style="{ width: '500px' }"
-                        header="Register Security Officer"
+                        header="Register User"
                         :modal="true"
                     >
                         <div class="grid">
@@ -487,6 +524,7 @@
                                         </div>
                                     </div>
                                 </div>
+
                                 <div class="field col-12 md:col-6">
                                     <label>Age</label>
                                     <InputText
@@ -508,7 +546,47 @@
                                         >{{ error_age }}</label
                                     >
                                 </div>
-                                <div class="field col-12 md:col-12">
+                                <div class="field col-12 md:col-6">
+                                    <label>Block</label>
+
+                                    <Dropdown
+                                        v-model="form.selected_block"
+                                        :options="blocks"
+                                        optionLabel="number"
+                                        optionValue="number"
+                                        placeholder="Select Block"
+                                        @change="getBlockLot"
+                                        :class="{
+                                            'p-invalid': error_selected_block,
+                                        }"
+                                    />
+                                    <label
+                                        style="color: red"
+                                        v-if="error_selected_block"
+                                        >{{ error_selected_block }}</label
+                                    >
+                                </div>
+
+                                <div class="field col-12 md:col-6">
+                                    <label>Lot</label>
+
+                                    <Dropdown
+                                        v-model="form.selected_block_lot"
+                                        :options="filteredLots"
+                                        optionLabel="number"
+                                        optionValue="id"
+                                        placeholder="Select Lot"
+                                        :class="{
+                                            'p-invalid': error_selected_lot,
+                                        }"
+                                    />
+                                    <label
+                                        style="color: red"
+                                        v-if="error_selected_lot"
+                                        >{{ error_selected_lot }}</label
+                                    >
+                                </div>
+                                <div class="field col-12 md:col-6">
                                     <label>Role</label>
 
                                     <Dropdown
@@ -517,8 +595,8 @@
                                             'p-invalid': error_role,
                                         }"
                                         :options="role"
-                                        optionLabel="type"
-                                        optionValue="value"
+                                        optionLabel="role"
+                                        optionValue="role"
                                         placeholder="Select Role"
                                     />
                                     <label
@@ -527,7 +605,25 @@
                                         >{{ error_role }}</label
                                     >
                                 </div>
+                                <div class="field col-12 md:col-6">
+                                    <label>Tag as</label>
 
+                                    <Dropdown
+                                        v-model="form.selected_tag"
+                                        :class="{
+                                            'p-invalid': error_selected_tag,
+                                        }"
+                                        :options="tag"
+                                        optionLabel="tag"
+                                        optionValue="tag"
+                                        placeholder="Select tag"
+                                    />
+                                    <label
+                                        style="color: red"
+                                        v-if="error_selected_tag"
+                                        >{{ error_selected_tag }}</label
+                                    >
+                                </div>
                                 <div class="field col-12 md:col-12">
                                     <label>Contact Number</label>
                                     <InputText
@@ -546,6 +642,8 @@
                                         >{{ error_contact_num }}</label
                                     >
                                 </div>
+
+                                <br />
 
                                 <div class="col-12 title-form">
                                     <Badge
@@ -626,11 +724,10 @@
                             />
                         </template>
                     </Dialog>
-
                     <Dialog
-                        v-model:visible="viewSecurityDialog"
+                        v-model:visible="viewResidentDialog"
                         :style="{ width: '500px' }"
-                        header="View Security Officer"
+                        header="View Resident"
                         :modal="true"
                     >
                         <div class="grid">
@@ -751,7 +848,50 @@
                                     >
                                 </div>
 
-                                <div class="field col-12 md:col-12">
+                                <div class="field col-12 md:col-6">
+                                    <label>Block</label>
+
+                                    <Dropdown
+                                        v-model="form.selected_block"
+                                        :options="blocks"
+                                        optionLabel="number"
+                                        optionValue="number"
+                                        placeholder="Select Block"
+                                        @change="getBlockLot"
+                                        :class="{
+                                            'p-invalid': error_selected_block,
+                                        }"
+                                        disabled
+                                    />
+                                    <label
+                                        style="color: red"
+                                        v-if="error_selected_block"
+                                        >{{ error_selected_block }}</label
+                                    >
+                                </div>
+
+                                <div class="field col-12 md:col-6">
+                                    <label>Lot</label>
+
+                                    <Dropdown
+                                        v-model="form.selected_block_lot"
+                                        :options="filteredLots"
+                                        optionLabel="number"
+                                        optionValue="id"
+                                        placeholder="Select Lot"
+                                        :class="{
+                                            'p-invalid': error_selected_lot,
+                                        }"
+                                        disabled
+                                    />
+                                    <label
+                                        style="color: red"
+                                        v-if="error_selected_lot"
+                                        >{{ error_selected_lot }}</label
+                                    >
+                                </div>
+
+                                <div class="field col-12 md:col-6">
                                     <label>Role</label>
 
                                     <Dropdown
@@ -760,8 +900,8 @@
                                             'p-invalid': error_role,
                                         }"
                                         :options="role"
-                                        optionLabel="type"
-                                        optionValue="value"
+                                        optionLabel="role"
+                                        optionValue="role"
                                         placeholder="Select Role"
                                         disabled
                                     />
@@ -771,7 +911,26 @@
                                         >{{ error_role }}</label
                                     >
                                 </div>
+                                <div class="field col-12 md:col-6">
+                                    <label>Tag as</label>
 
+                                    <Dropdown
+                                        v-model="form.selected_tag"
+                                        :class="{
+                                            'p-invalid': error_selected_tag,
+                                        }"
+                                        :options="tag"
+                                        optionLabel="tag"
+                                        optionValue="tag"
+                                        placeholder="Select tag"
+                                        disabled
+                                    />
+                                    <label
+                                        style="color: red"
+                                        v-if="error_selected_tag"
+                                        >{{ error_selected_tag }}</label
+                                    >
+                                </div>
                                 <div class="field col-12 md:col-12">
                                     <label>Contact Number</label>
                                     <InputText
@@ -795,7 +954,6 @@
                                     <label>Email</label>
                                     <InputText
                                         type="text"
-                                        name="email"
                                         v-model="form.email"
                                         @keydown.enter="onRegisterClick"
                                         :class="{
@@ -813,6 +971,268 @@
                                 <br />
                             </div>
                         </div>
+                    </Dialog>
+                    <Dialog
+                        v-model:visible="viewVerifytDialog"
+                        :style="{ width: '500px' }"
+                        header="Verify Resident"
+                        :modal="true"
+                    >
+                        <div class="grid">
+                            <div class="col-12 title-form">
+                                <Badge
+                                    :value="1"
+                                    severity="info"
+                                    class="mr-2 mb-2"
+                                    size="large"
+                                ></Badge>
+                                <label><h6>Basic Information</h6></label>
+                            </div>
+
+                            <div class="p-fluid formgrid grid">
+                                <div class="field col-12 md:col-6">
+                                    <label>Firstname</label>
+
+                                    <InputText
+                                        id="firstname"
+                                        type="text"
+                                        v-model="form.first_name"
+                                        :class="{
+                                            'p-invalid': error_first_name,
+                                        }"
+                                        @keydown.enter="onRegisterClick"
+                                        disabled
+                                    />
+                                    <label
+                                        style="color: red"
+                                        v-if="error_first_name"
+                                        >{{ error_first_name }}</label
+                                    >
+                                </div>
+
+                                <div class="field col-12 md:col-6">
+                                    <label>Lastname</label>
+
+                                    <InputText
+                                        id="last_name"
+                                        type="text"
+                                        v-model="form.last_name"
+                                        :class="{
+                                            'p-invalid': error_last_name,
+                                        }"
+                                        @keydown.enter="onRegisterClick"
+                                        disabled
+                                    />
+                                    <label
+                                        style="color: red"
+                                        v-if="error_last_name"
+                                        >{{ error_last_name }}</label
+                                    >
+                                </div>
+
+                                <div class="field col-12 md:col-6">
+                                    <div>
+                                        <label>Gender</label>
+                                    </div>
+
+                                    <div>
+                                        <div class="field-radiobutton mb-0">
+                                            <RadioButton
+                                                name="gender"
+                                                value="male"
+                                                v-model="form.gender"
+                                                :disabled="true"
+                                                :class="{
+                                                    'p-invalid': error_gender,
+                                                }"
+                                                @keydown.enter="onRegisterClick"
+                                            />
+                                            <label class="mb-0 ml-1 mr-5"
+                                                >Male</label
+                                            >
+                                            <RadioButton
+                                                name="gender"
+                                                value="female"
+                                                :disabled="true"
+                                                :class="{
+                                                    'p-invalid': error_gender,
+                                                }"
+                                                v-model="form.gender"
+                                                @keydown.enter="onRegisterClick"
+                                            />
+                                            <label class="mb-0 ml-1"
+                                                >Female</label
+                                            >
+                                        </div>
+                                        <div>
+                                            <label
+                                                style="color: red"
+                                                v-if="error_gender"
+                                                >{{ error_gender }}</label
+                                            >
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="field col-12 md:col-6">
+                                    <label>Age</label>
+                                    <InputText
+                                        id="age"
+                                        type="number"
+                                        min="0"
+                                        step="1"
+                                        onfocus="this.previousValue = this.value"
+                                        onkeydown="this.previousValue = this.value"
+                                        oninput="validity.valid || (value = this.previousValue)"
+                                        v-model="form.age"
+                                        :class="{
+                                            'p-invalid': error_age,
+                                        }"
+                                        disabled
+                                    />
+                                    <label
+                                        style="color: red"
+                                        v-if="error_age"
+                                        >{{ error_age }}</label
+                                    >
+                                </div>
+
+                                <div class="field col-12 md:col-6">
+                                    <label>Block</label>
+
+                                    <Dropdown
+                                        v-model="form.selected_block"
+                                        :options="blocks"
+                                        optionLabel="number"
+                                        optionValue="number"
+                                        placeholder="Select Block"
+                                        @change="getBlockLot"
+                                        :class="{
+                                            'p-invalid': error_selected_block,
+                                        }"
+                                        disabled
+                                    />
+                                    <label
+                                        style="color: red"
+                                        v-if="error_selected_block"
+                                        >{{ error_selected_block }}</label
+                                    >
+                                </div>
+
+                                <div class="field col-12 md:col-6">
+                                    <label>Lot</label>
+
+                                    <Dropdown
+                                        v-model="form.selected_block_lot"
+                                        :options="filteredLots"
+                                        optionLabel="number"
+                                        optionValue="id"
+                                        placeholder="Select Lot"
+                                        :class="{
+                                            'p-invalid': error_selected_lot,
+                                        }"
+                                        disabled
+                                    />
+                                    <label
+                                        style="color: red"
+                                        v-if="error_selected_lot"
+                                        >{{ error_selected_lot }}</label
+                                    >
+                                </div>
+
+                                <div class="field col-12 md:col-6">
+                                    <label>Role</label>
+
+                                    <Dropdown
+                                        v-model="form.selected_role"
+                                        :class="{
+                                            'p-invalid': error_role,
+                                        }"
+                                        :options="role"
+                                        optionLabel="role"
+                                        optionValue="role"
+                                        placeholder="Select Role"
+                                        disabled
+                                    />
+                                    <label
+                                        style="color: red"
+                                        v-if="error_role"
+                                        >{{ error_role }}</label
+                                    >
+                                </div>
+                                <div class="field col-12 md:col-6">
+                                    <label>Tag as</label>
+
+                                    <Dropdown
+                                        v-model="form.selected_tag"
+                                        :class="{
+                                            'p-invalid': error_selected_tag,
+                                        }"
+                                        :options="tag"
+                                        optionLabel="tag"
+                                        optionValue="tag"
+                                        placeholder="Select tag"
+                                        disabled
+                                    />
+                                    <label
+                                        style="color: red"
+                                        v-if="error_selected_tag"
+                                        >{{ error_selected_tag }}</label
+                                    >
+                                </div>
+                                <div class="field col-12 md:col-12">
+                                    <label>Contact Number</label>
+                                    <InputText
+                                        id="contact_num"
+                                        type="text"
+                                        oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*?)\..*/g, '$1');"
+                                        v-model="form.contact_num"
+                                        @keydown.enter="onRegisterClick"
+                                        :class="{
+                                            'p-invalid': error_contact_num,
+                                        }"
+                                        disabled
+                                    />
+                                    <label
+                                        style="color: red"
+                                        v-if="error_contact_num"
+                                        >{{ error_contact_num }}</label
+                                    >
+                                </div>
+                                <div class="field col-12 md:col-12">
+                                    <label>Email</label>
+                                    <InputText
+                                        type="text"
+                                        v-model="form.email"
+                                        @keydown.enter="onRegisterClick"
+                                        :class="{
+                                            'p-invalid': error_email,
+                                        }"
+                                        disabled
+                                    />
+                                    <label
+                                        style="color: red"
+                                        v-if="error_email"
+                                        >{{ error_email }}</label
+                                    >
+                                </div>
+
+                                <br />
+                            </div>
+                        </div>
+                        <template #footer>
+                            <Button
+                                label="Cancel"
+                                icon="pi pi-times"
+                                class="p-button-text"
+                                @click="viewVerifytDialog = false"
+                            />
+                            <Button
+                                label="Verify"
+                                icon="pi pi-check"
+                                class="p-button-text p-button-success"
+                                @click="verifyUser"
+                            />
+                        </template>
                     </Dialog>
                     <Dialog
                         v-model:visible="process"
@@ -845,56 +1265,24 @@ import { FilterMatchMode } from "primevue/api";
 import { computed } from "vue";
 import { useStore } from "vuex";
 export default {
-    name: "RegisterUsersComponent",
+    name: "VehicleComponent",
     setup() {
         const store = useStore();
         return {
-            users: computed(() => store.state.users),
-            active: computed(() => {
-                let temp = [];
-                let active = [];
-                store.state.users.forEach((elem) => {
-                    if (elem.role.toUpperCase() == "SECURITY OFFICER") {
-                        temp.push(elem);
-                    }
-                });
-                temp.forEach((elem) => {
-                    if (elem.status == "active") {
-                        active.push(elem);
-                    }
-                });
-                return active.length;
-            }),
-            inactive: computed(() => {
-                let temp = [];
-                let inactive = [];
-                store.state.users.forEach((elem) => {
-                    if (elem.role.toUpperCase() == "SECURITY OFFICER") {
-                        temp.push(elem);
-                    }
-                });
-                temp.forEach((elem) => {
-                    if (elem.status == "inactive") {
-                        inactive.push(elem);
-                    }
-                });
-                return inactive.length;
-            }),
+            blocks: computed(() => store.state.blocks.blocks),
+            filteredLots: computed(() => store.state.lots.filteredLots),
+            lots: computed(() => store.state.lots.lots),
+
             total: computed(() => {
-                let temp = [];
-                store.state.users.forEach((elem) => {
-                    if (elem.role.toUpperCase() == "SECURITY OFFICER") {
-                        temp.push(elem);
-                    }
-                });
-                return temp.length;
+                return store.state.adminVehicles.adminVehicles.length;
             }),
+            adminVehicles: computed(
+                () => store.state.adminVehicles.adminVehicles
+            ),
         };
     },
     data() {
         return {
-            //menu
-
             menus: null,
             isInvalid: false,
             filters: {},
@@ -904,13 +1292,14 @@ export default {
             registerUserDialog: false,
             deleteUserDialog: false,
             updateUserDialog: false,
-            viewOfficerDialog: false,
-            viewSecurityDialog: false,
+            viewResidentDialog: false,
+            viewVerifytDialog: false,
             form: {
                 first_name: "",
                 last_name: "",
                 gender: "",
-
+                selected_block: "",
+                selected_block_lot: "",
                 email: "",
                 password: "",
                 confirm_password: "",
@@ -920,10 +1309,23 @@ export default {
                 verified: "",
                 has_voted: "",
                 status: "",
+                selected_tag: "",
             },
 
+            first_name: null,
+            last_name: null,
+            gender: null,
+            block_lot_id: null,
+            email: null,
+            password: null,
+            confirm_password: null,
+
+            has_voted: 0,
+            age: null,
+            contact_num: null,
+            selected_role: null,
             user: null,
-            role: [{ type: "security officer", value: "security officer" }],
+
             error_first_name: "",
             error_last_name: "",
             error_gender: "",
@@ -935,59 +1337,120 @@ export default {
             error_age: "",
             error_contact_num: "",
             error_role: "",
+            error_selected_tag: "",
 
-            status: [{ status: "active" }, { status: "inactive" }],
-            verification: [
-                { status: "verified", value: true },
-                { status: "not verified", value: false },
+            role: [
+                { role: "admin" },
+                { role: "resident" },
+                { role: "officer" },
+                { role: "security officer" },
             ],
         };
     },
     methods: {
-        clearFilter() {
-            this.filters["status"].value = null;
-        },
-        viewSecurityOfficer() {
-            this.viewSecurityDialog = true;
+        viewResident() {
+            this.viewResidentDialog = true;
         },
         toggle(data) {
-            this.$refs.menu.toggle(event);
-            this.populateFields(data);
-            if (data.status == "active") {
+            if (data.status == "active" && data.verified == 1) {
                 this.menus = [
                     {
-                        label: "View Security Officer",
+                        label: "View Resident",
                         icon: "pi pi-user",
                         command: () => {
-                            this.viewSecurityOfficer();
+                            this.viewResident();
                         },
                     },
                     {
-                        label: "Update Security Officer",
+                        label: "Update Resident",
                         icon: "pi pi-pencil",
                         command: () => {
                             this.updateUser();
                         },
                     },
                     {
-                        label: "Deactivate Security Officer",
+                        label: "Deactivate Resident",
                         icon: "pi pi-lock",
                         command: () => {
-                            this.changeStatus(data);
+                            this.changeStatus();
+                        },
+                    },
+                ];
+            } else if (data.status == "active" && data.verified == 0) {
+                this.menus = [
+                    {
+                        label: "View Resident",
+                        icon: "pi pi-user",
+                        command: () => {
+                            this.viewResident();
+                        },
+                    },
+                    {
+                        label: "Verify Resident",
+                        icon: "pi pi-check",
+                        command: () => {
+                            this.viewVerifytDialog = true;
+                        },
+                    },
+                    {
+                        label: "Update Resident",
+                        icon: "pi pi-pencil",
+                        command: () => {
+                            this.updateUser();
+                        },
+                    },
+
+                    {
+                        label: "Deactivate Resident",
+                        icon: "pi pi-unlock",
+                        command: () => {
+                            this.changeStatus();
+                        },
+                    },
+                ];
+            } else if (data.status == "inactive" && data.verified == 1) {
+                this.menus = [
+                    {
+                        label: "View Resident",
+                        icon: "pi pi-user",
+                        command: () => {
+                            this.viewResident();
+                        },
+                    },
+                    {
+                        label: "Update Resident",
+                        icon: "pi pi-pencil",
+                        command: () => {
+                            this.updateUser();
+                        },
+                    },
+
+                    {
+                        label: "Activate Resident",
+                        icon: "pi pi-unlock",
+                        command: () => {
+                            this.changeStatus();
                         },
                     },
                 ];
             } else {
                 this.menus = [
                     {
-                        label: "View Security Officer",
+                        label: "View Resident",
                         icon: "pi pi-user",
                         command: () => {
-                            this.viewSecurityOfficer();
+                            this.viewResident();
                         },
                     },
                     {
-                        label: "Update Security Officer",
+                        label: "Verify Resident",
+                        icon: "pi pi-check",
+                        command: () => {
+                            this.viewVerifytDialog = true;
+                        },
+                    },
+                    {
+                        label: "Update Resident",
                         icon: "pi pi-pencil",
                         command: () => {
                             this.updateUser();
@@ -995,14 +1458,16 @@ export default {
                     },
 
                     {
-                        label: "Activate Security Officer",
+                        label: "Activate Resident",
                         icon: "pi pi-unlock",
                         command: () => {
-                            this.changeStatus(data);
+                            this.changeStatus();
                         },
                     },
                 ];
             }
+            this.$refs.menu.toggle(event);
+            this.populateFields(data);
         },
         populateFields(data) {
             this.resetFields();
@@ -1013,6 +1478,9 @@ export default {
             this.form.first_name = data.first_name;
             this.form.last_name = data.last_name;
             this.form.gender = data.gender;
+            this.form.selected_block = data.lot.block.number;
+            this.getBlockLot();
+            this.form.selected_block_lot = data.block_lot_id;
             this.form.email = data.email;
             this.form.age = data.age;
             this.form.contact_num = data.contact_num;
@@ -1020,8 +1488,13 @@ export default {
             this.form.verified = data.verified;
             this.form.has_voted = data.has_voted;
             this.form.status = data.status;
+            this.form.selected_tag = data.tag_as;
         },
-
+        clearFilter() {
+            this.filters["user.lot.block.number"].value = null;
+            this.filters["user.lot.number"].value = null;
+            this.filters["user.role"].value = null;
+        },
         showSuccess() {
             this.$toast.add({
                 severity: "success",
@@ -1033,11 +1506,16 @@ export default {
         initFilters() {
             this.filters = {
                 global: { value: null, matchMode: FilterMatchMode.CONTAINS },
-                role: {
-                    value: "security officer",
+
+                "user.lot.block.number": {
+                    value: null,
                     matchMode: FilterMatchMode.EQUALS,
                 },
-                status: {
+                "user.lot.number": {
+                    value: null,
+                    matchMode: FilterMatchMode.EQUALS,
+                },
+                "user.role": {
                     value: null,
                     matchMode: FilterMatchMode.EQUALS,
                 },
@@ -1072,7 +1550,7 @@ export default {
                 this.$toast.add({
                     severity: "success",
                     summary: "Successful Request",
-                    detail: "Deleted Security Officer",
+                    detail: "Deleted User",
                     life: 3000,
                 });
             } catch (err) {
@@ -1092,7 +1570,7 @@ export default {
                     first_name: this.form.first_name,
                     last_name: this.form.last_name,
                     gender: this.form.gender,
-                    block_lot_id: null,
+                    block_lot_id: this.form.selected_block_lot,
                     email: this.form.email,
                     password: this.form.password,
                     confirm_password: this.form.confirm_password,
@@ -1102,13 +1580,14 @@ export default {
                     contact_num: this.form.contact_num,
                     role: this.form.selected_role,
                     status: this.form.status,
+                    tag_as: this.form.selected_tag,
                 },
             })
                 .then(() => {
                     this.$toast.add({
                         severity: "success",
                         summary: "Successful Request",
-                        detail: "Updated Security Officer",
+                        detail: "Updated User",
                         life: 3000,
                     });
                     this.$store.dispatch("getAllUsers");
@@ -1123,35 +1602,36 @@ export default {
                     this.process = false;
                 });
         },
-        async verifyUser(data) {
+        async verifyUser() {
             this.process = true;
-            console.log("verify", data);
             await axios({
                 method: "put",
-                url: "/api/user/" + data.id,
+                url: "/api/user/" + this.id,
                 data: {
-                    first_name: data.first_name,
-                    last_name: data.last_name,
-                    gender: data.gender,
-                    block_lot_id: null,
-                    email: data.email,
+                    first_name: this.form.first_name,
+                    last_name: this.form.last_name,
+                    gender: this.form.gender,
+                    block_lot_id: this.form.selected_block_lot,
+                    email: this.form.email,
                     verified: 1,
-                    status: data.status,
-                    has_voted: data.has_voted,
-                    age: data.age,
-                    contact_num: data.contact_num,
-                    role: data.role,
+                    has_voted: this.form.has_voted,
+                    age: this.form.age,
+                    contact_num: this.form.contact_num,
+                    role: this.form.selected_role,
+                    status: this.form.status,
+                    tag_as: this.form.selected_tag,
                 },
             })
                 .then(() => {
                     this.$toast.add({
                         severity: "success",
                         summary: "Successful",
-                        detail: "Security Officer Verified",
+                        detail: "Resident Verified",
                         life: 3000,
                     });
                     this.$store.dispatch("getAllUsers");
                     this.resetFields();
+                    this.viewVerifytDialog = false;
                     this.process = false;
                 })
                 .catch((err) => {
@@ -1161,24 +1641,26 @@ export default {
                     this.process = false;
                 });
         },
-        async changeStatus(data) {
+        async changeStatus() {
             this.process = true;
-            console.log("verify", data);
+
             await axios({
                 method: "put",
-                url: "/api/user/" + data.id,
+                url: "/api/user/" + this.id,
                 data: {
-                    first_name: data.first_name,
-                    last_name: data.last_name,
-                    gender: data.gender,
-                    block_lot_id: null,
-                    email: data.email,
-                    verified: data.verified,
-                    status: data.status == "active" ? "inactive" : "active",
-                    has_voted: data.has_voted,
-                    age: data.age,
-                    contact_num: data.contact_num,
-                    role: data.role,
+                    first_name: this.form.first_name,
+                    last_name: this.form.last_name,
+                    gender: this.form.gender,
+                    block_lot_id: this.form.selected_block_lot,
+                    email: this.form.email,
+                    verified: this.form.verified,
+                    has_voted: this.form.has_voted,
+                    age: this.form.age,
+                    contact_num: this.form.contact_num,
+                    role: this.form.selected_role,
+                    status:
+                        this.form.status == "active" ? "inactive" : "active",
+                    tag_as: this.form.selected_tag,
                 },
             })
                 .then(() => {
@@ -1186,9 +1668,9 @@ export default {
                         severity: "success",
                         summary: "Successful",
                         detail:
-                            data.status != "active"
-                                ? "Security Officer Activated"
-                                : "Security Officer Deactivated",
+                            this.form.status != "active"
+                                ? "User Activated"
+                                : "User Deactivated",
                         life: 3000,
                     });
                     this.$store.dispatch("getAllUsers");
@@ -1218,7 +1700,7 @@ export default {
                     first_name: this.form.first_name,
                     last_name: this.form.last_name,
                     gender: this.form.gender,
-                    block_lot_id: null,
+                    block_lot_id: this.form.selected_block_lot,
                     email: this.form.email,
                     password: this.form.password,
                     confirm_password: this.form.confirm_password,
@@ -1228,6 +1710,7 @@ export default {
                     contact_num: this.form.contact_num,
                     role: this.form.selected_role,
                     status: "active",
+                    tag_as: this.form.selected_tag,
                 },
             })
                 .then(() => {
@@ -1237,7 +1720,7 @@ export default {
                     this.$toast.add({
                         severity: "success",
                         summary: "Successful Request",
-                        detail: "Registered Security Officer",
+                        detail: "Registered User",
                         life: 3000,
                     });
                     this.process = false;
@@ -1254,26 +1737,30 @@ export default {
                 first_name: "",
                 last_name: "",
                 gender: "",
-
+                selected_block: "",
+                selected_block_lot: "",
                 email: "",
                 password: "",
                 confirm_password: "",
                 age: "",
                 contact_num: "",
-                selected_role: "security officer",
+                selected_role: "resident",
+                selected_tag: "",
             };
         },
         resetErrors() {
             this.error_first_name = "";
             this.error_last_name = "";
             this.error_gender = "";
-
+            this.error_selected_block = "";
+            this.error_selected_lot = "";
             this.error_email = "";
             this.error_password = "";
             this.error_confirm_password = "";
             this.error_age = "";
             this.error_contact_num = "";
             this.error_role = "";
+            this.error_selected_tag = "";
         },
         validate(error) {
             if (error.response.data.errors.first_name)
@@ -1298,9 +1785,28 @@ export default {
                     error.response.data.errors.contact_num[0];
             if (error.response.data.errors.role)
                 this.error_role = error.response.data.errors.role[0];
+            if (!this.form.selected_block)
+                this.error_selected_block = "The block field is required";
+            if (!this.form.selected_block_lot)
+                this.error_selected_lot = "The lot field is required";
+            if (!this.form.selected_tag)
+                this.error_selected_tag = "The tag field is required";
+        },
+
+        getBlockLot() {
+            this.form.selected_block_lot = null;
+            this.$store.dispatch("lots/getBlockLots", this.form.selected_block);
+        },
+        getFilterBlockLot() {
+            this.$store.dispatch(
+                "lots/getBlockLots",
+                this.filters["lot.block.number"].value
+            );
         },
     },
-
+    mounted() {
+        console.log("show admin Vehicles", this.adminVehicles);
+    },
     created() {
         this.initFilters();
     },
