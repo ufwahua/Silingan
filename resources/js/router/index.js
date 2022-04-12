@@ -24,6 +24,7 @@ import ResidentHomeComponent from "../resident/ResidentHomeComponent.vue";
 import SecurityHome from "../security_officer/SecurityHomeComponent.vue";
 import LogComponent from "../security_officer/LogComponent.vue";
 
+//all
 import TimelineComponent from "../components/TimelineComponent.vue";
 import MarketplaceComponent from "../components/MarketplaceComponent.vue";
 import IndexComponent from "../home/IndexComponent.vue";
@@ -321,6 +322,17 @@ const router = createRouter({
                         contents: VehicleComponent,
                     },
                 },
+                {
+                    path: "view-announcement",
+                    meta: {
+                        role: "admin",
+                    },
+                    beforeEnter: checkRole,
+                    components: {
+                        default: NotFound,
+                        contents: AnnouncementComponent,
+                    },
+                },
             ],
         },
         {
@@ -381,7 +393,7 @@ const router = createRouter({
                 },
 
                 {
-                    path: "announcement",
+                    path: "view-announcement",
                     meta: {
                         role: "resident",
                     },
@@ -483,7 +495,7 @@ const router = createRouter({
                     },
                 },
                 {
-                    path: "announcement",
+                    path: "view-announcement",
                     meta: {
                         role: "security_officer",
                     },

@@ -41,7 +41,7 @@ class PostController extends Controller
     {   
        
         $block_user_ids = DB::table('block_users')->where('user_id', $request->route('post'))->pluck('block_user_id')->toArray();
-        $post_with_block_users = Post::whereNotIn('user_id', $block_user_ids)->where('group_id',2)->with(['user','group','comment','comment.user','comment.reply.user'])->withCount(['comment','reply'])->latest()->get();
+        $post_with_block_users = Post::whereNotIn('user_id', $block_user_ids)->where('group_id',2)->with(['user','group','comment','comment.user','comment.reply.user'])->withCount(['comment','reply'])->orderBy('updated_at','desc')->get();
 
         return response()->json(
             $post_with_block_users
