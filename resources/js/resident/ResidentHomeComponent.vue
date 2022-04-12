@@ -200,7 +200,7 @@ export default {
     },
     created() {
         this.$store.dispatch("news/getAll");
-        this.$store.dispatch("posts/getAll");
+
         this.$store.dispatch(
             "getUsersNotBlocked",
             this.$store.state.userLogged.id

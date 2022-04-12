@@ -24,6 +24,7 @@ export default createStore({
         users: null,
         userLogged: null,
         chat_room: null,
+        not_blocked_users: null,
         block_users: null,
         chats: null,
     },
@@ -35,7 +36,7 @@ export default createStore({
         },
 
         getUsersNotBlocked(state, payload) {
-            state.users = payload;
+            state.not_blocked_users = payload;
         },
         getUserLogged(state, payload) {
             state.userLogged = payload;
@@ -76,7 +77,6 @@ export default createStore({
             })
                 .then((res) => {
                     commit("getUsersNotBlocked", res.data);
-                    console.log("registeredUsersNotBlocked", res.data);
                 })
                 .catch((err) => {
                     console.log(err.response.data);

@@ -3,7 +3,7 @@
         <div
             class="col-12 sm:col-12 md:col-8 md:col-offset-2 lg:col-6 lg:col-offset-1 xl:col-6 xl:col-offset-1"
         >
-        <h3>Timeline</h3>
+            <h3>Marketplace</h3>
             <div class="col justify-content-center pt-0">
                 <div class="card p-3">
                     <div class="p-inputgroup mb-2">
@@ -208,7 +208,10 @@ export default {
             })
                 .then((res) => {
                     this.openPostModal = false;
-                    this.$store.dispatch("posts/getAll");
+                    this.$store.dispatch(
+                        "posts/getMarketPlace",
+                        this.$store.state.userLogged.id
+                    );
                     this.showPostedToast();
                     this.loading = false;
                 })
@@ -219,7 +222,10 @@ export default {
         },
     },
     mounted() {
-        this.$store.dispatch("posts/getAll");
+        this.$store.dispatch(
+            "posts/getMarketPlace",
+            this.$store.state.userLogged.id
+        );
     },
 };
 </script>

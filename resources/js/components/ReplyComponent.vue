@@ -49,6 +49,9 @@ export default {
         reply: {
             type: Object,
         },
+        group_id: {
+            type: Number,
+        },
     },
 };
 </script>

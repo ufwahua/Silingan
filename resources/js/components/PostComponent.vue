@@ -41,11 +41,7 @@
                             </div>
                         </div>
                     </div>
-                    <div
-                        v-if="post.group_id === 1"
-                        class="col-fix"
-                        style="width: 30px"
-                    >
+                    <div class="col-fix" style="width: 30px">
                         <Button
                             class="p-button-text w-full h-full"
                             icon="pi pi-ellipsis-v"
@@ -149,7 +145,8 @@
                 <div v-for="comment in post.comment" :key="comment.id">
                     <CommentComponent
                         v-if="comment.id"
-                        v-bind:comment="comment"
+                        :comment="comment"
+                        :group_id="group_id"
                     />
                 </div>
             </div>
@@ -273,6 +270,44 @@
                 </div>
             </div>
         </Dialog>
+        <Dialog
+            v-model:visible="blockDialog"
+            :style="{ width: '450px' }"
+            :header="`Are you sure you want to block ${name}`"
+            :modal="true"
+        >
+            <div class="confirmation-content">
+                <div class="grid">
+                    <div
+                        class="col-12 flex align-items-center justify-content-center"
+                    >
+                        <i
+                            class="pi pi-exclamation-triangle mr-3"
+                            style="font-size: 2rem"
+                        />
+                        <span
+                            ><b>{{ name }} will no longer be able to: </b></span
+                        >
+                        <ul>
+                            <li>Start a conversation with you</li>
+                            <li>See things you post on your timeline</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <template #footer>
+                <Button
+                    label="Cancel"
+                    class="p-button-text"
+                    @click="blockDialog = false"
+                />
+                <Button
+                    label="Block"
+                    class="p-button p-button-danger"
+                    @click="blockUser"
+                />
+            </template>
+        </Dialog>
     </div>
 </template>
 
@@ -291,6 +326,7 @@ export default {
         post: {
             type: Object,
         },
+        group_id: { type: Number },
     },
     components: {
         CommentComponent,
@@ -301,6 +337,7 @@ export default {
             loading: false,
             editModal: false,
             deleteModal: false,
+            blockDialog: false,
             content: null,
             message: null,
             comment_count: 0,
@@ -333,7 +370,17 @@ export default {
                 },
             })
                 .then((res) => {
-                    this.$store.dispatch("posts/getAll");
+                    if (this.group_id == 1) {
+                        this.$store.dispatch(
+                            "posts/getTimeLine",
+                            this.$store.state.userLogged.id
+                        );
+                    } else {
+                        this.$store.dispatch(
+                            "posts/getMarketPlace",
+                            this.$store.state.userLogged.id
+                        );
+                    }
                     this.message = null;
                 })
                 .catch((error) => {
@@ -362,7 +409,17 @@ export default {
             })
                 .then((res) => {
                     this.deleteModal = false;
-                    this.$store.dispatch("posts/getAll");
+                    if (this.group_id == 1) {
+                        this.$store.dispatch(
+                            "posts/getTimeLine",
+                            this.$store.state.userLogged.id
+                        );
+                    } else {
+                        this.$store.dispatch(
+                            "posts/getMarketPlace",
+                            this.$store.state.userLogged.id
+                        );
+                    }
                     this.showDeletedPostToast();
                     this.loading = false;
                 })
@@ -393,12 +450,80 @@ export default {
             })
                 .then((res) => {
                     this.editModal = false;
-                    this.$store.dispatch("posts/getAll");
+                    if (this.group_id == 1) {
+                        this.$store.dispatch(
+                            "posts/getTimeLine",
+                            this.$store.state.userLogged.id
+                        );
+                    } else {
+                        this.$store.dispatch(
+                            "posts/getMarketPlace",
+                            this.$store.state.userLogged.id
+                        );
+                    }
                     this.showEditPostToast();
                     this.loading = false;
                 })
                 .catch((error) => {
                     console.log(error.response);
+                    this.loading = false;
+                });
+        },
+
+        async openBlockDialog() {
+            this.loading = true;
+            this.blockDialog = true;
+            await axios({
+                method: "get",
+                url: "/api/user/" + this.selectedUser,
+            })
+                .then((res) => {
+                    this.name = res.data.first_name + " " + res.data.last_name;
+                    this.loading = false;
+                })
+                .catch((error) => {
+                    this.loading = false;
+                });
+        },
+        async blockUser() {
+            this.loading = true;
+            await axios({
+                method: "post",
+                url: "/api/block_user",
+                data: {
+                    user_id: this.$store.state.userLogged.id,
+                    block_user_id: this.selectedUser,
+                },
+            })
+                .then((res) => {
+                    if (this.group_id == 1) {
+                        this.$store.dispatch(
+                            "posts/getTimeLine",
+                            this.$store.state.userLogged.id
+                        );
+                    } else {
+                        this.$store.dispatch(
+                            "posts/getMarketPlace",
+                            this.$store.state.userLogged.id
+                        );
+                    }
+                    this.$store.dispatch(
+                        "getUsersNotBlocked",
+                        this.$store.state.userLogged.id
+                    );
+
+                    this.$store.dispatch(
+                        "getBlockUsers",
+                        this.$store.state.userLogged.id
+                    );
+                    this.showBlockToast();
+                    this.selectedUser = null;
+                    this.blockDialog = false;
+                    this.loading = false;
+                })
+                .catch((error) => {
+                    console.log(error.response);
+                    this.blockDialog = false;
                     this.loading = false;
                 });
         },
@@ -426,7 +551,10 @@ export default {
                     {
                         label: "Block " + this.post.user.first_name,
                         icon: "pi pi-user-edit",
-                        command: () => {},
+                        command: () => {
+                            this.selectedUser = this.post.user.id;
+                            this.openBlockDialog();
+                        },
                     },
                 ];
             }

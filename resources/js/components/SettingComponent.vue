@@ -16,7 +16,7 @@
                             >
                             <Dropdown
                                 v-model="selectedUser"
-                                :options="users"
+                                :options="not_blocked_users"
                                 optionLabel="full_name"
                                 optionValue="id"
                                 :filter="true"
@@ -29,7 +29,10 @@
                                         (slotProps.option["full_name"] =
                                             slotProps.option.first_name +
                                             " " +
-                                            slotProps.option.last_name)
+                                            slotProps.option.last_name +
+                                            " [" +
+                                            slotProps.option.role +
+                                            "]")
                                     }}
                                 </template>
                             </Dropdown>
@@ -49,7 +52,8 @@
                         >
                             <span class="text-center p-2">
                                 {{ block_user.block_user.first_name }}
-                                {{ block_user.block_user.last_name }}
+                                {{ block_user.block_user.last_name }} [
+                                {{ block_user.block_user.role }}]
                             </span>
                             <span>
                                 <Button
@@ -650,7 +654,7 @@ export default {
     setup() {
         const store = useStore();
         return {
-            users: computed(() => store.state.users),
+            not_blocked_users: computed(() => store.state.not_blocked_users),
             block_users: computed(() => store.state.block_users),
             userLogged: computed(() => store.state.userLogged),
             userVehicles: computed(() => store.state.userVehicles.userVehicles),
@@ -966,7 +970,6 @@ export default {
                 url: "/api/user/" + this.selectedUser,
             })
                 .then((res) => {
-                    console.log("fullname", res.data);
                     this.name = res.data.first_name + " " + res.data.last_name;
                     this.loading = false;
                 })
@@ -1014,6 +1017,12 @@ export default {
                 life: 3000,
             });
         },
+    },
+    mounted() {
+        this.$store.dispatch(
+            "getUsersNotBlocked",
+            this.$store.state.userLogged.id
+        );
     },
 };
 </script>
