@@ -3,7 +3,6 @@ import Register from "../login/RegisterComponent.vue";
 import ForgotPassword from "../login/ForgotPasswordComponent.vue";
 import ResetPasswordComponent from "../login/ResetPasswordComponent.vue";
 //admin
-<<<<<<< HEAD
 import AdminHomeComponent from "../admin/AdminHomeComponent.vue";
 import Block_Lot from "../admin/Block_LotComponent.vue";
 import RegisteredUsersComponent from "../admin/RegisterUsersComponent.vue";
@@ -20,28 +19,6 @@ import VehicleComponent from "../admin/VehicleComponent.vue";
 
 //resident
 import ResidentHomeComponent from "../resident/ResidentHomeComponent.vue";
-=======
-import HomeComponent from "../admin/dashboard/HomeComponent.vue";
-import DashboardComponent from "../admin/dashboard/DashboardComponent.vue";
-import Block_Lot from "../admin/dashboard/Block_LotComponent.vue";
-import RegisteredUsersComponent from "../admin/dashboard/RegisterUsersComponent.vue";
-import Announcement from "../admin/dashboard/Announcement.vue";
-import ResidentComponent from "../admin/dashboard/ResidentComponent.vue";
-import OfficerComponent from "../admin/dashboard/OfficerComponent.vue";
-import SecurityOfficerComponent from "../admin/dashboard/SecurityOfficerComponent.vue";
-import AppProfile from "../components/AppProfile.vue";
-import EmergencyContactDetail from "../admin/dashboard/EmergencyContactDetail.vue";
-import Position from "../admin/dashboard/PositionComponent.vue";
-import Candidate from "../admin/dashboard/CandidateComponent.vue";
-import ElectionComponent from "../admin/dashboard/ElectionComponent.vue";
-import ViewAnnouncement from "../components/AnnouncementComponent.vue";
-import Marketplace from "../components/PostMarketplaceComponent.vue";
-
-//user
-import UserHome from "../user/dashboard/UserHomeComponent.vue";
-import UserDashboard from "../user/dashboard/UserDashboardComponent.vue";
-//import AnnouncementComponent from "../components/AnnouncementComponent.vue";
->>>>>>> fbfdf505e05154b0c1909100722795c69f7f7542
 
 //security officer
 import SecurityHome from "../security_officer/SecurityHomeComponent.vue";
@@ -323,41 +300,25 @@ const router = createRouter({
                     },
                 },
                 {
-<<<<<<< HEAD
                     path: "card",
-=======
-                    path: "view-announcement",
->>>>>>> fbfdf505e05154b0c1909100722795c69f7f7542
                     meta: {
                         role: "admin",
                     },
                     beforeEnter: checkRole,
                     components: {
                         default: NotFound,
-<<<<<<< HEAD
                         contents: CardComponent,
                     },
                 },
                 {
                     path: "vehicle",
-=======
-                        contents: ViewAnnouncement,
-                    },
-                },
-                {
-                    path: "marketplace",
->>>>>>> fbfdf505e05154b0c1909100722795c69f7f7542
                     meta: {
                         role: "admin",
                     },
                     beforeEnter: checkRole,
                     components: {
                         default: NotFound,
-<<<<<<< HEAD
                         contents: VehicleComponent,
-=======
-                        contents: Marketplace,
->>>>>>> fbfdf505e05154b0c1909100722795c69f7f7542
                     },
                 },
             ],
@@ -431,18 +392,13 @@ const router = createRouter({
                     },
                 },
                 {
-<<<<<<< HEAD
                     path: "emergency",
-=======
-                    path: "marketplace",
->>>>>>> fbfdf505e05154b0c1909100722795c69f7f7542
                     meta: {
                         role: "resident",
                     },
                     beforeEnter: checkRole,
                     components: {
                         default: NotFound,
-<<<<<<< HEAD
                         contents: EmergencyContactComponent,
                     },
                 },
@@ -455,9 +411,6 @@ const router = createRouter({
                     components: {
                         default: NotFound,
                         contents: ActivateAccountComponent,
-=======
-                        contents: Marketplace,
->>>>>>> fbfdf505e05154b0c1909100722795c69f7f7542
                     },
                 },
             ],
@@ -570,7 +523,7 @@ const router = createRouter({
                     beforeEnter: checkRole,
                     components: {
                         default: NotFound,
-                        contents: Marketplace,
+                        contents: MarketplaceComponent,
                     },
                 },
             ],

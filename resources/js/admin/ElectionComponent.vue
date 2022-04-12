@@ -83,15 +83,6 @@
                                         {{ candidate.user.last_name }}
                                     </h5>
                                 </template>
-<<<<<<< HEAD:resources/js/admin/ElectionComponent.vue
-
-=======
-                                <template #subtitle>
-                                    <!-- Block:
-                                    {{ candidate.user.block_lot.block_id }}
-                                    Lot: {{ candidate.user.block_lot.number }} -->
-                                </template>
->>>>>>> fbfdf505e05154b0c1909100722795c69f7f7542:resources/js/admin/dashboard/ElectionComponent.vue
                                 <template #footer>
                                     <div
                                         v-if="!checkElection"
