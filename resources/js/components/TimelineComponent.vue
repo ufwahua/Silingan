@@ -37,7 +37,11 @@
                     </div>
                 </div>
                 <div v-for="post in posts" :key="post.id">
-                    <PostComponent :post="post" :group_id="post.group_id" />
+                    <PostComponent
+                        :post="post"
+                        :group_id="post.group_id"
+                        :approved="post.approved"
+                    />
                 </div>
             </div>
         </div>

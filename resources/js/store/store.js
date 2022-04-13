@@ -73,7 +73,7 @@ export default createStore({
         async getUsersNotBlocked({ commit }, payload) {
             await axios({
                 method: "get",
-                url: "/api/user/not_blocked/" + payload,
+                url: "/api/user/not-blocked/" + payload,
             })
                 .then((res) => {
                     commit("getUsersNotBlocked", res.data);
@@ -85,7 +85,7 @@ export default createStore({
         async getUserLogged({ commit }) {
             await axios({
                 method: "get",
-                url: "/api/user_logged",
+                url: "/api/user-logged",
             })
                 .then((res) => {
                     commit("getUserLogged", res.data[0]);

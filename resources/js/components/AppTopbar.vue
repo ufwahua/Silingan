@@ -139,8 +139,8 @@ export default {
                                 })
                                     .then((response) => {
                                         console.log(response);
-                                        this.$router.push("/login");
                                         this.$store.dispatch("logout", null);
+                                        this.$router.push("/login");
                                     })
                                     .catch((error) => {
                                         console.log(error.response);
@@ -207,8 +207,9 @@ export default {
                                 })
                                     .then((response) => {
                                         console.log(response);
-                                        this.$router.push("/login");
+
                                         this.$store.dispatch("logout", null);
+                                        this.$router.push("/login");
                                     })
                                     .catch((error) => {
                                         console.log(error.response);
@@ -274,8 +275,9 @@ export default {
                                 })
                                     .then((response) => {
                                         console.log(response);
-                                        this.$router.push("/login");
+
                                         this.$store.dispatch("logout", null);
+                                        this.$router.push("/login");
                                     })
                                     .catch((error) => {
                                         console.log(error.response);

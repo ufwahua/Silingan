@@ -141,7 +141,7 @@ export default {
                         );
                     } else {
                         this.$store.dispatch(
-                            "posts/getMarketPlace",
+                            "posts/getMarketPlaceVerified",
                             this.$store.state.userLogged.id
                         );
                     }

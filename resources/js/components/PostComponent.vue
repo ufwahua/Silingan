@@ -41,7 +41,11 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-fix" style="width: 30px">
+                    <div
+                        v-if="approved == true"
+                        class="col-fix"
+                        style="width: 30px"
+                    >
                         <Button
                             class="p-button-text w-full h-full"
                             icon="pi pi-ellipsis-v"
@@ -58,7 +62,7 @@
                     </div>
                 </div>
             </div>
-            <div class="card-body p-0 m-0">
+            <div class="card-body pt-2 p-0 m-0">
                 <p class="p-2 m-">{{ post.content }}</p>
                 <Galleria
                     v-if="images"
@@ -89,28 +93,47 @@
                 </Galleria>
             </div>
             <hr />
-            <div class="flex justify-content-between p-0 m-0">
-                <Button
-                    label="Comment"
-                    icon="pi pi-comment"
-                    style="width: 150px"
-                    class="p-button-outlined p-button-primary ml-5"
-                    @click="commentShow"
-                />
-                <Button
-                    v-if="comment_count === 1"
-                    :label="`${comment_count.toString()} comment`"
-                    class="p-button-primary p-button-text"
-                    @click="commentShow"
-                />
-                <Button
-                    v-if="comment_count > 1"
-                    :label="`${comment_count.toString()} comments`"
-                    class="p-button-primary p-button-text"
-                    @click="commentShow"
-                />
+            <div
+                v-if="approved == true"
+                class="flex justify-content-between p-0 m-0"
+            >
+                <div>
+                    <Button
+                        label="Comment"
+                        icon="pi pi-comment"
+                        style="width: 150px"
+                        class="p-button-outlined p-button-primary ml-5"
+                        @click="commentShow"
+                    />
+                    <Button
+                        v-if="comment_count === 1"
+                        :label="`${comment_count.toString()} comment`"
+                        class="p-button-primary p-button-text"
+                        @click="commentShow"
+                    />
+                    <Button
+                        v-if="comment_count > 1"
+                        :label="`${comment_count.toString()} comments`"
+                        class="p-button-primary p-button-text"
+                        @click="commentShow"
+                    />
+                </div>
             </div>
 
+            <div v-else class="flex justify-content-end">
+                <Button
+                    icon="pi pi-times"
+                    class="p-button-danger mr-3"
+                    v-tooltip="'Decline'"
+                    @click="openDeclineDialog"
+                />
+                <Button
+                    icon="pi pi-check"
+                    class="p-button-primary mr-3"
+                    v-tooltip="'Approve'"
+                    @click="openApproveDialog"
+                />
+            </div>
             <hr />
             <div class="p-3" v-if="comment_show">
                 <div class="p-inputgroup mb-2">
@@ -271,9 +294,9 @@
             </div>
         </Dialog>
         <Dialog
-            v-model:visible="blockDialog"
+            v-model:visible="approveDialog"
             :style="{ width: '450px' }"
-            :header="`Are you sure you want to block ${name}`"
+            :header="`Approved Post?`"
             :modal="true"
         >
             <div class="confirmation-content">
@@ -286,7 +309,87 @@
                             style="font-size: 2rem"
                         />
                         <span
-                            ><b>{{ name }} will no longer be able to: </b></span
+                            >Are you sure you want to approve post of
+                            <b
+                                >{{ post.user.first_name }}
+                                {{ post.user.last_name }}?</b
+                            ></span
+                        >
+                    </div>
+                </div>
+            </div>
+            <template #footer>
+                <Button
+                    label="Cancel"
+                    class="p-button-text p-button-danger"
+                    @click="approveDialog = false"
+                />
+                <Button
+                    label="Approve"
+                    class="p-button p-button-primary"
+                    @click="approvePost"
+                />
+            </template>
+        </Dialog>
+        <Dialog
+            v-model:visible="declineDialog"
+            :style="{ width: '450px' }"
+            :header="`Decline Post?`"
+            :modal="true"
+        >
+            <div class="confirmation-content">
+                <div class="grid">
+                    <div
+                        class="col-12 flex align-items-center justify-content-center"
+                    >
+                        <i
+                            class="pi pi-exclamation-triangle mr-3"
+                            style="font-size: 2rem"
+                        />
+                        <span
+                            >Are you sure you want to decline post of
+                            <b
+                                >{{ post.user.first_name }}
+                                {{ post.user.last_name }}?</b
+                            >
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <template #footer>
+                <Button
+                    label="Cancel"
+                    class="p-button-text"
+                    @click="declineDialog = false"
+                />
+                <Button
+                    label="Decline"
+                    class="p-button p-button-danger"
+                    @click="declinePost"
+                />
+            </template>
+        </Dialog>
+        <Dialog
+            v-model:visible="blockDialog"
+            :style="{ width: '450px' }"
+            :header="`Are you sure you want to block ${post.user.first_name} ${post.user.last_name}`"
+            :modal="true"
+        >
+            <div class="confirmation-content">
+                <div class="grid">
+                    <div
+                        class="col-12 flex align-items-center justify-content-center"
+                    >
+                        <i
+                            class="pi pi-exclamation-triangle mr-3"
+                            style="font-size: 2rem"
+                        />
+                        <span
+                            ><b
+                                >{{ post.user.first_name }}
+                                {{ post.user.last_name }} will no longer be able
+                                to:
+                            </b></span
                         >
                         <ul>
                             <li>Start a conversation with you</li>
@@ -327,6 +430,7 @@ export default {
             type: Object,
         },
         group_id: { type: Number },
+        approved: { type: Boolean },
     },
     components: {
         CommentComponent,
@@ -338,6 +442,8 @@ export default {
             editModal: false,
             deleteModal: false,
             blockDialog: false,
+            declineDialog: false,
+            approveDialog: false,
             content: null,
             message: null,
             comment_count: 0,
@@ -359,6 +465,81 @@ export default {
     },
 
     methods: {
+        async approvePost() {
+            this.loading = true;
+            await axios({
+                method: "put",
+                url: "/api/post/" + this.post.id,
+                data: {
+                    group_id: this.post.group.id,
+                    user_id: this.post.user.id,
+                    content: this.post.content,
+                    approved: 1,
+                },
+            })
+                .then((res) => {
+                    this.approveDialog = false;
+                    if (this.group_id == 1) {
+                        this.$store.dispatch(
+                            "posts/getTimeLine",
+                            this.$store.state.userLogged.id
+                        );
+                    } else {
+                        this.$store.dispatch(
+                            "posts/getMarketPlaceNotVerified",
+                            this.$store.state.userLogged.id
+                        );
+                    }
+                    this.showApprovedToast();
+                    this.loading = false;
+                })
+                .catch((error) => {
+                    console.log(error.response);
+                    this.loading = false;
+                });
+        },
+        async declinePost() {
+            this.loading = true;
+            await axios({
+                method: "delete",
+                url: "/api/post/" + this.post.id,
+            })
+                .then((res) => {
+                    this.declineDialog = false;
+                    this.$store.dispatch(
+                        "posts/getMarketPlaceNotVerified",
+                        this.$store.state.userLogged.id
+                    );
+                    this.showDeclinedToast();
+                    this.loading = false;
+                })
+                .catch((error) => {
+                    console.log(error.response);
+                    this.loading = false;
+                });
+        },
+        openApproveDialog() {
+            this.approveDialog = true;
+        },
+        openDeclineDialog() {
+            this.declineDialog = true;
+        },
+        showApprovedToast() {
+            this.$toast.add({
+                severity: "success",
+                summary: "Success Message",
+                detail: "Approved post",
+                life: 3000,
+            });
+        },
+        showDeclinedToast() {
+            this.$toast.add({
+                severity: "success",
+                summary: "Success Message",
+                detail: "Declined post",
+                life: 3000,
+            });
+        },
         async commentPost() {
             await axios({
                 method: "post",
@@ -377,7 +558,7 @@ export default {
                         );
                     } else {
                         this.$store.dispatch(
-                            "posts/getMarketPlace",
+                            "posts/getMarketPlaceVerified",
                             this.$store.state.userLogged.id
                         );
                     }
@@ -416,7 +597,7 @@ export default {
                         );
                     } else {
                         this.$store.dispatch(
-                            "posts/getMarketPlace",
+                            "posts/getMarketPlaceVerified",
                             this.$store.state.userLogged.id
                         );
                     }
@@ -457,7 +638,7 @@ export default {
                         );
                     } else {
                         this.$store.dispatch(
-                            "posts/getMarketPlace",
+                            "posts/getMarketPlaceVerified",
                             this.$store.state.userLogged.id
                         );
                     }
@@ -503,7 +684,7 @@ export default {
                         );
                     } else {
                         this.$store.dispatch(
-                            "posts/getMarketPlace",
+                            "posts/getMarketPlaceVerified",
                             this.$store.state.userLogged.id
                         );
                     }

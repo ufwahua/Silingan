@@ -64,12 +64,12 @@ export default {
                         {
                             label: "Timeline",
                             icon: "pi pi-fw pi-home",
-                            to: "/security_officer/timeline",
+                            to: "/security-officer/timeline",
                         },
                         {
                             label: "Marketplace",
                             icon: "pi pi-fw pi-shopping-cart",
-                            to: "/security_officer/marketplace",
+                            to: "/security-officer/marketplace",
                         },
                         {
                             label: "Log",
