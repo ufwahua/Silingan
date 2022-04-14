@@ -157,6 +157,11 @@ export default {
                             icon: "pi pi-fw pi-calendar",
                             to: "/admin/election",
                         },
+                        {
+                            label: "Cash Flow",
+                            icon: "pi pi-dollar",
+                            to: "/admin/cashflow"
+                        }
                     ],
                 },
             ],

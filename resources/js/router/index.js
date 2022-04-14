@@ -16,6 +16,7 @@ import Candidate from "../admin/CandidateComponent.vue";
 import ElectionComponent from "../admin/ElectionComponent.vue";
 import CardComponent from "../admin/CardComponent.vue";
 import VehicleComponent from "../admin/VehicleComponent.vue";
+import CashflowComponent from "../admin/CashflowComponent.vue";
 
 //resident
 import ResidentHomeComponent from "../resident/ResidentHomeComponent.vue";
@@ -68,6 +69,7 @@ function checkRole(to, from, next) {
         next();
     }
 }
+
 function checkLogged(to, from, next) {
     let isAuthenticated = false;
     let userLogged = store.state.userLogged;
@@ -133,8 +135,7 @@ const router = createRouter({
             meta: {
                 role: "admin",
             },
-            children: [
-                {
+            children: [{
                     path: "/admin/timeline",
                     beforeEnter: checkRole,
                     meta: {
@@ -321,6 +322,17 @@ const router = createRouter({
                         contents: VehicleComponent,
                     },
                 },
+                {
+                    path: "cashflow",
+                    meta: {
+                        role: "admin",
+                    },
+                    beforeEnter: checkRole,
+                    components: {
+                        default: NotFound,
+                        contents: CashflowComponent,
+                    },
+                },
             ],
         },
         {
@@ -331,8 +343,7 @@ const router = createRouter({
             },
             beforeEnter: checkRole,
             name: "userhome",
-            children: [
-                {
+            children: [{
                     path: "/resident/timeline",
                     meta: {
                         role: "resident",
@@ -423,8 +434,7 @@ const router = createRouter({
             },
             beforeEnter: checkRole,
             name: "securityhome",
-            children: [
-                {
+            children: [{
                     path: "/security_officer/timeline",
                     meta: {
                         role: "security_officer",
