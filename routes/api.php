@@ -39,7 +39,7 @@ use App\Http\Controllers\FundController;
 Route::middleware(['auth:sanctum'])->group(function () {
 });
 //Check if User is Logged in
-Route::get('/user_logged', [UserController::class, 'userLogged']);
+Route::get('/user-logged', [UserController::class, 'userLogged']);
 //PUBLIC
 Route::get('/getAllCards', [CardController::class, 'getAllCards']);
 Route::put('/change-password/{user}', [UserController::class, 'changePassword']);
@@ -47,8 +47,10 @@ Route::post('/reset-password', [UserController::class, 'resetPassword']);
 Route::post('/forgot-password', [UserController::class, 'forgotPassword']);
 Route::post('/login', [UserController::class, 'login']);
 Route::get('/logout', [UserController::class, 'logout']);
-Route::get('/user/not_blocked/{user}', [UserController::class, 'notBlockedUsers']);
+Route::get('/user/not-blocked/{user}', [UserController::class, 'notBlockedUsers']);
 Route::delete('/candidate/election/{candidate}', [CandidateController::class, 'deleteAllCandidate']);
+Route::get('/post/marketplace/verified/{post}', [PostController::class, 'getMarketPlaceVerified']);
+Route::get('/post/marketplace/not-verified/{post}', [PostController::class, 'getMarketPlaceNotVerified']);
 
 
 

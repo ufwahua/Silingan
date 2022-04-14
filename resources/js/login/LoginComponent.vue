@@ -159,7 +159,7 @@ export default {
                         this.$router.push("/resident/timeline");
                     } else if (response.data.role === "security officer") {
                         this.loading = false;
-                        this.$router.push("/security_officer/timeline");
+                        this.$router.push("/security-officer/timeline");
                     } else {
                         this.loading = false;
                         this.$router.push("/admin/timeline");
@@ -170,7 +170,7 @@ export default {
                     console.log(err.response);
                     if (err.response.data.error) {
                         this.error = err.response.data.error;
-                    }else{
+                    } else {
                         this.error = "Please enter password";
                     }
                     this.loading = false;

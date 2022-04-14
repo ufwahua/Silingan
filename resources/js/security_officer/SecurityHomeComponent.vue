@@ -64,12 +64,13 @@ export default {
                         {
                             label: "Timeline",
                             icon: "pi pi-fw pi-home",
-                            to: "/security_officer/timeline",
+                            to: "/security-officer/timeline",
                         },
                         {
                             label: "Marketplace",
                             icon: "pi pi-fw pi-shopping-cart",
-                            to: "/security_officer/marketplace",
+
+                            to: "/security-officer/marketplace",
                         },
                         {
                             label: "Log",
@@ -79,7 +80,7 @@ export default {
                         {
                             label: "Announcement",
                             icon: "pi pi-fw pi-calendar",
-                            to: "/security_officer/announcement",
+                            to: "/security_officer/view-announcement",
                         },
                         {
                             label: "Emergency Contact",
@@ -205,7 +206,6 @@ export default {
     },
     created() {
         this.$store.dispatch("news/getAll");
-        this.$store.dispatch("posts/getAll");
         this.$store.dispatch("cards/getAll");
         this.$store.dispatch("getAllUsers");
         this.$store.dispatch("getBlockUsers", this.$store.state.userLogged.id);

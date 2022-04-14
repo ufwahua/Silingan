@@ -148,6 +148,11 @@ export default {
                             to: "/admin/announcement",
                         },
                         {
+                            label: "Verify Marketplace Post",
+                            icon: "pi pi-info-circle",
+                            to: "/admin/verify-marketplace",
+                        },
+                        {
                             label: "Emergency Details",
                             icon: "pi pi-info-circle",
                             to: "/admin/emergency-contact-detail",

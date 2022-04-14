@@ -3,7 +3,7 @@
         <div
             class="col-12 sm:col-12 md:col-8 md:col-offset-2 lg:col-6 lg:col-offset-1 xl:col-6 xl:col-offset-1"
         >
-        <h3>Timeline</h3>
+            <h2>Timeline</h2>
             <div class="col justify-content-center pt-0">
                 <div class="card p-3">
                     <div class="p-inputgroup mb-2">
@@ -38,8 +38,9 @@
                 </div>
                 <div v-for="post in posts" :key="post.id">
                     <PostComponent
-                        v-if="post.group.name.toUpperCase() === 'TIMELINE'"
-                        v-bind:post="post"
+                        :post="post"
+                        :group_id="post.group_id"
+                        :approved="post.approved"
                     />
                 </div>
             </div>
@@ -205,7 +206,10 @@ export default {
             })
                 .then((res) => {
                     this.openPostModal = false;
-                    this.$store.dispatch("posts/getAll");
+                    this.$store.dispatch(
+                        "posts/getTimeLine",
+                        this.$store.state.userLogged.id
+                    );
                     this.showPostedToast();
                     this.loading = false;
                 })
@@ -216,7 +220,10 @@ export default {
         },
     },
     mounted() {
-        this.$store.dispatch("posts/getAll");
+        this.$store.dispatch(
+            "posts/getTimeLine",
+            this.$store.state.userLogged.id
+        );
     },
 };
 </script>

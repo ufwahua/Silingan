@@ -24,6 +24,7 @@ export default createStore({
         users: null,
         userLogged: null,
         chat_room: null,
+        not_blocked_users: null,
         block_users: null,
         chats: null,
     },
@@ -35,7 +36,7 @@ export default createStore({
         },
 
         getUsersNotBlocked(state, payload) {
-            state.users = payload;
+            state.not_blocked_users = payload;
         },
         getUserLogged(state, payload) {
             state.userLogged = payload;
@@ -72,11 +73,10 @@ export default createStore({
         async getUsersNotBlocked({ commit }, payload) {
             await axios({
                 method: "get",
-                url: "/api/user/not_blocked/" + payload,
+                url: "/api/user/not-blocked/" + payload,
             })
                 .then((res) => {
                     commit("getUsersNotBlocked", res.data);
-                    console.log("registeredUsersNotBlocked", res.data);
                 })
                 .catch((err) => {
                     console.log(err.response.data);
@@ -85,7 +85,7 @@ export default createStore({
         async getUserLogged({ commit }) {
             await axios({
                 method: "get",
-                url: "/api/user_logged",
+                url: "/api/user-logged",
             })
                 .then((res) => {
                     commit("getUserLogged", res.data[0]);
