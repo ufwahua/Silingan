@@ -69,11 +69,8 @@ export default {
                         {
                             label: "Marketplace",
                             icon: "pi pi-fw pi-shopping-cart",
-<<<<<<< HEAD
+
                             to: "/security-officer/marketplace",
-=======
-                            to: "/security_officer/marketplace",
->>>>>>> 6bd69422ec61dbfe77db952004a624b743774561
                         },
                         {
                             label: "Log",
