@@ -15,7 +15,7 @@ class CollectionController extends Controller
      */
     public function index() : JsonResponse{
         return response()->json(
-            Collection::query()->orderBy('id','asc')->get()
+            Collection::with(['collectionType','user','lot'])->orderBy('id','asc')->get()
         );
     }
 
