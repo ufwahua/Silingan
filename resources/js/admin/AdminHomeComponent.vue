@@ -297,6 +297,10 @@ export default {
             "userVehicles/getAll",
             this.$store.state.userLogged.id
         );
+        this.$store.dispatch("collectionType/getAll");
+        this.$store.dispatch("collection/getAll");
+        this.$store.dispatch("fund/getAll");
+        this.$store.dispatch("expense/getAll");
     },
 };
 </script>
