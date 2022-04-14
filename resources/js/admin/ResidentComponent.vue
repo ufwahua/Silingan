@@ -1762,7 +1762,6 @@ export default {
         },
         updateUser() {
             this.updateUserDialog = true;
-<<<<<<< HEAD
             this.first_name = data.first_name;
             this.last_name = data.last_name;
             this.gender = data.gender;
@@ -1786,8 +1785,6 @@ export default {
             this.form.verified = data.verified;
             this.form.has_voted = data.has_voted;
             this.form.status = data.status;
-=======
->>>>>>> 93a0b687bdbe533ab8541a140dc2888ec33e514a
         },
         async confirmUpdateUser() {
             this.process = true;

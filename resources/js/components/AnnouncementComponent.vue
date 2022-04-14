@@ -4,9 +4,7 @@
             class="col-12 sm:col-12 md:col-10 md:col-offset-1 lg:col-6 lg:col-offset-1 xl:col-6 xl:col-offset-1"
         >
             <div class="col justify-content-center pt-0">
-<<<<<<< HEAD
                 <p class="p-2 m-">{{ post.content }}</p>
-=======
                 <h1 class="text-center">Announcement</h1>
                 <div v-if="announcements">
                     <div
