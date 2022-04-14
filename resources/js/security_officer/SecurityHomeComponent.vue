@@ -75,17 +75,12 @@ export default {
                         {
                             label: "Log",
                             icon: "pi pi-fw pi-calendar",
-                            to: "/security_officer/log",
+                            to: "/security-officer/log",
                         },
                         {
                             label: "Announcement",
                             icon: "pi pi-fw pi-calendar",
-                            to: "/security_officer/view-announcement",
-                        },
-                        {
-                            label: "Emergency Contact",
-                            icon: "pi pi-fw pi-calendar",
-                            to: "/security_officer/emergency",
+                            to: "/security-officer/view-announcement",
                         },
                     ],
                 },
@@ -219,7 +214,3 @@ export default {
     },
 };
 </script>
-
-<style>
-/* @import "./App.scss"; */
-</style>

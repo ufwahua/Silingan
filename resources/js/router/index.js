@@ -10,13 +10,11 @@ import Announcement from "../admin/Announcement.vue";
 import ResidentComponent from "../admin/ResidentComponent.vue";
 import OfficerComponent from "../admin/OfficerComponent.vue";
 import SecurityOfficerComponent from "../admin/SecurityOfficerComponent.vue";
-import EmergencyContactDetail from "../admin/EmergencyContactDetail.vue";
 import Position from "../admin/PositionComponent.vue";
 import Candidate from "../admin/CandidateComponent.vue";
 import ElectionComponent from "../admin/ElectionComponent.vue";
 import CardComponent from "../admin/CardComponent.vue";
 import VehicleComponent from "../admin/VehicleComponent.vue";
-
 import VerifyMarketPlaceComponent from "../admin/VerifyMarketPlaceComponent.vue";
 import CashflowComponent from "../admin/CashflowComponent.vue";
 
@@ -32,7 +30,6 @@ import TimelineComponent from "../components/TimelineComponent.vue";
 import MarketplaceComponent from "../components/MarketplaceComponent.vue";
 import IndexComponent from "../home/IndexComponent.vue";
 import AnnouncementComponent from "../components/AnnouncementComponent.vue";
-import EmergencyContactComponent from "../components/EmergencyContactComponent.vue";
 import NotFound from "../components/NotFoundComponent.vue";
 import AppProfile from "../components/AppProfile.vue";
 import SettingComponent from "../components/SettingComponent.vue";
@@ -271,17 +268,7 @@ const router = createRouter({
                         contents: SettingComponent,
                     },
                 },
-                {
-                    path: "emergency-contact-detail",
-                    meta: {
-                        role: "admin",
-                    },
-                    beforeEnter: checkRole,
-                    components: {
-                        default: NotFound,
-                        contents: EmergencyContactDetail,
-                    },
-                },
+
                 {
                     path: "activate-account",
                     meta: {
@@ -432,17 +419,7 @@ const router = createRouter({
                         contents: AnnouncementComponent,
                     },
                 },
-                {
-                    path: "emergency",
-                    meta: {
-                        role: "resident",
-                    },
-                    beforeEnter: checkRole,
-                    components: {
-                        default: NotFound,
-                        contents: EmergencyContactComponent,
-                    },
-                },
+
                 {
                     path: "activate-account",
                     meta: {
@@ -536,17 +513,7 @@ const router = createRouter({
                         contents: AnnouncementComponent,
                     },
                 },
-                {
-                    path: "emergency",
-                    meta: {
-                        role: "security_officer",
-                    },
-                    beforeEnter: checkRole,
-                    components: {
-                        default: NotFound,
-                        contents: EmergencyContactComponent,
-                    },
-                },
+
                 {
                     path: "activate-account",
                     meta: {

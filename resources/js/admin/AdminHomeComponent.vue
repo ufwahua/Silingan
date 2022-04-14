@@ -152,11 +152,7 @@ export default {
                             icon: "pi pi-info-circle",
                             to: "/admin/verify-marketplace",
                         },
-                        {
-                            label: "Emergency Details",
-                            icon: "pi pi-info-circle",
-                            to: "/admin/emergency-contact-detail",
-                        },
+
                         {
                             label: "Election",
                             icon: "pi pi-fw pi-calendar",
@@ -165,8 +161,8 @@ export default {
                         {
                             label: "Cash Flow",
                             icon: "pi pi-dollar",
-                            to: "/admin/cashflow"
-                        }
+                            to: "/admin/cashflow",
+                        },
                     ],
                 },
             ],
