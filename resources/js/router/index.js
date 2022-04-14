@@ -16,7 +16,9 @@ import Candidate from "../admin/CandidateComponent.vue";
 import ElectionComponent from "../admin/ElectionComponent.vue";
 import CardComponent from "../admin/CardComponent.vue";
 import VehicleComponent from "../admin/VehicleComponent.vue";
+
 import VerifyMarketPlaceComponent from "../admin/VerifyMarketPlaceComponent.vue";
+import CashflowComponent from "../admin/CashflowComponent.vue";
 
 //resident
 import ResidentHomeComponent from "../resident/ResidentHomeComponent.vue";
@@ -70,6 +72,7 @@ function checkRole(to, from, next) {
         next();
     }
 }
+
 function checkLogged(to, from, next) {
     let isAuthenticated = false;
     let userLogged = store.state.userLogged;
@@ -331,6 +334,7 @@ const router = createRouter({
                     beforeEnter: checkRole,
                     components: {
                         default: NotFound,
+
                         contents: AnnouncementComponent,
                     },
                 },
@@ -342,7 +346,20 @@ const router = createRouter({
                     beforeEnter: checkRole,
                     components: {
                         default: NotFound,
+
                         contents: VerifyMarketPlaceComponent,
+                    },
+                },
+                {
+                    path: "cashflow",
+                    meta: {
+                        role: "admin",
+                    },
+                    beforeEnter: checkRole,
+                    components: {
+                        default: NotFound,
+
+                        contents: CashflowComponent,
                     },
                 },
             ],
@@ -447,9 +464,11 @@ const router = createRouter({
             },
             beforeEnter: checkRole,
             name: "securityhome",
+
             children: [
                 {
                     path: "/security-officer/timeline",
+
                     meta: {
                         role: "security_officer",
                     },

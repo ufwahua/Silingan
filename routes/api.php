@@ -21,7 +21,9 @@ use App\Http\Controllers\CardController;
 use App\Http\Controllers\EmergencyContactDetailController;
 use App\Http\Controllers\LogController;
 use App\Http\Controllers\VehicleController;
-
+use App\Http\Controllers\CollectionTypeController;
+use App\Http\Controllers\CollectionController;
+use App\Http\Controllers\ExpenseController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -70,4 +72,7 @@ Route::apiResources([
     'log'             => LogController::class,
     'block_user'             => BlockUserController::class,
     'vehicle'             => VehicleController::class,
+    'collection_type' => CollectionTypeController::class,
+    'collection' => CollectionController::class,
+    'expense' => ExpenseController::class
 ]);
