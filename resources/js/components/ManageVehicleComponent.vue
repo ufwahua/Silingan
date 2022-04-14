@@ -7,7 +7,7 @@
 
                     <Button
                         icon="pi pi-plus"
-                        class="ml-2 p-button-rounded p-button-outlined p-button-success"
+                        class="ml-2 p-button-rounded p-button-outlined p-button-primary"
                         v-tooltip="`Add vehicle`"
                         @click="showAddVehicleDialog"
                 /></span>
@@ -377,6 +377,7 @@
                 />
             </template>
         </Dialog>
+        <!-- Delete Modal -->
         <Dialog
             v-model:visible="deleteVehicleDialog"
             :style="{ width: '450px' }"
@@ -656,12 +657,6 @@ export default {
                     console.log(e.response);
                 });
         },
-    },
-    mounted() {
-        this.$store.dispatch(
-            "getUsersNotBlocked",
-            this.$store.state.userLogged.id
-        );
     },
 };
 </script>

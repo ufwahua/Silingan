@@ -23,9 +23,9 @@ class EmergencyContactDetailFactory extends Factory
     public function definition()
     {
         return [
-            'user_id' => User::where('role','admin')->orWhere('role','officer')->get()->random()->id,
+            'user_id' => User::all()->random()->id,
             'name' => $this->faker->name(),
-            'number' => "+".rand(639000000000,639999999999),
+            'contact_number' => "+".rand(639000000000,639999999999),
         ];
     }
 }

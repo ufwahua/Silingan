@@ -14,19 +14,12 @@ class EmergencyContactDetail extends Model
     protected $fillable= [
         'user_id',
         'name',
-        'number',
+        'contact_number',
     ];
 
     public function user(){
         return $this->hasOne(User::class,'id','user_id');
     }
 
-    public function getCreatedAtAttribute(){
-        
-        return Carbon::createFromTimeStamp(strtotime($this->attributes['created_at']) )->diffForHumans();
-    }
-    public function getUpdatedAtAttribute(){
-        
-        return Carbon::createFromTimeStamp(strtotime($this->attributes['updated_at']) )->diffForHumans();
-    }
+    
 }

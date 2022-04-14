@@ -1,72 +1,177 @@
 <template>
     <div>
-        <Fieldset class="mb-3" legend="Emergency Contact Details">
-            <p class="p-4">
-                Once you block someone, that person can no longer see things you
-                post on your timeline and in the marketplace.
-            </p>
-            <div>
-                <div class="flex justify-content-center mb-4">
-                    <b class="flex align-items-center mr-2 p-2">Block Users</b>
-                    <Dropdown
-                        v-model="selectedUser"
-                        :options="not_blocked_users"
-                        optionLabel="full_name"
-                        optionValue="id"
-                        :filter="true"
-                        placeholder="Select a user"
-                        :showClear="true"
-                        class="mr-2"
-                    >
-                        <template #option="slotProps">
-                            {{
-                                (slotProps.option["full_name"] =
-                                    slotProps.option.first_name +
-                                    " " +
-                                    slotProps.option.last_name +
-                                    " [" +
-                                    slotProps.option.role +
-                                    "]")
-                            }}
-                        </template>
-                    </Dropdown>
+        <Fieldset class="mb-3">
+            <template #legend>
+                <span>
+                    Emergency Contact Details
+
                     <Button
-                        label="Block"
-                        @click="openBlockDialog"
-                        class="p-button-outlined"
-                        :disabled="selectedUser ? false : true"
-                    ></Button>
-                </div>
-            </div>
-            <div v-if="block_users[0]" class="card flex flex-column">
-                <div
-                    v-for="block_user in block_users"
-                    :key="block_user.id"
-                    class="flex flex-row justify-content-center"
+                        icon="pi pi-plus"
+                        class="ml-2 p-button-rounded p-button-outlined p-button-primary"
+                        v-tooltip="`Add Emergency Contact`"
+                        @click="showAddEmergencyContactDialog"
+                /></span>
+            </template>
+
+            <div v-if="emergency_contact_details[0]" class="card">
+                <DataTable
+                    :value="emergency_contact_details"
+                    :filters="filters"
+                    :paginator="true"
+                    breakpoint="1300px"
+                    :rows="10"
                 >
-                    <span class="text-center p-2">
-                        {{ block_user.block_user.first_name }}
-                        {{ block_user.block_user.last_name }} [
-                        {{ block_user.block_user.role }}]
-                    </span>
-                    <span>
-                        <Button
-                            class="p-button-text p-button-sm p-2"
-                            label="Unblock"
-                            @click="openUnblockDialog(block_user)"
-                        ></Button
-                    ></span>
-                </div>
+                    <template #empty> No registered users found </template>
+                    <template #loading> Loading Users </template>
+
+                    <Column header="Contact Name" field="name">
+                        <template #body="{ data }">
+                            {{ data.name }}
+                        </template>
+                    </Column>
+                    <Column header="Contact Number" field="contact_number">
+                        <template #body="{ data }">
+                            {{ data.contact_number }}
+                        </template>
+                    </Column>
+
+                    <Column header="Actions" field="actions">
+                        <template #body="{ data }">
+                            <Button
+                                type="button"
+                                icon="pi pi-ellipsis-h"
+                                class="p-button-rounded p-button-info"
+                                @click="toggle(data)"
+                                aria-haspopup="true"
+                                aria-controls="overlay_menu"
+                            />
+                            <Menu
+                                id="overlay_menu"
+                                ref="menu"
+                                :model="menus"
+                                :popup="true"
+                            />
+                        </template>
+                    </Column>
+                </DataTable>
             </div>
             <div v-else class="card flex justify-content-center">
-                <p>You haven't added anyone to your block list.</p>
+                <p>
+                    You haven't added anyone to your emergency contact details.
+                </p>
             </div>
         </Fieldset>
 
+        <!-- Add Modal -->
         <Dialog
-            v-model:visible="blockDialog"
+            v-model:visible="addEmergencyContactDialog"
+            :style="{ width: '500px' }"
+            header="Add Emergency Contact"
+            :modal="true"
+            :draggable="false"
+        >
+            <div class="grid">
+                <div class="col-12">
+                    <div class="p-fluid mb-2">
+                        <h6>Name</h6>
+                        <InputText
+                            v-model="name"
+                            :class="{ 'p-invalid': error_name }"
+                        />
+                        <small v-if="error_name" class="p-error">{{
+                            error_name
+                        }}</small>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="p-fluid mb-2">
+                        <h6>Contact Number</h6>
+                        <InputText
+                            id="contact_num"
+                            type="text"
+                            oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*?)\..*/g, '$1');"
+                            v-model="contact_number"
+                            :class="{
+                                'p-invalid': error_contact_number,
+                            }"
+                        />
+                        <small v-if="error_contact_number" class="p-error">{{
+                            error_contact_number
+                        }}</small>
+                    </div>
+                </div>
+            </div>
+
+            <template #footer>
+                <Button
+                    label="Cancel"
+                    class="p-button-text p-button-danger"
+                    @click="addEmergencyContactDialog = false"
+                />
+                <Button
+                    label="Confirm"
+                    class="p-button p-button-primary"
+                    @click="addEmergencyContact"
+                />
+            </template>
+        </Dialog>
+        <!-- Update Modal -->
+        <Dialog
+            v-model:visible="updateEmergencyContactDialog"
+            :style="{ width: '500px' }"
+            header="Update Emergency Contact"
+            :modal="true"
+            :draggable="false"
+        >
+            <div class="grid">
+                <div class="col-12">
+                    <div class="p-fluid mb-2">
+                        <h6>Name</h6>
+                        <InputText
+                            v-model="name"
+                            :class="{ 'p-invalid': error_name }"
+                        />
+                        <small v-if="error_name" class="p-error">{{
+                            error_name
+                        }}</small>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="p-fluid mb-2">
+                        <h6>Contact Number</h6>
+                        <InputText
+                            id="contact_num"
+                            type="text"
+                            oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*?)\..*/g, '$1');"
+                            v-model="contact_number"
+                            :class="{
+                                'p-invalid': error_contact_number,
+                            }"
+                        />
+                        <small v-if="error_contact_number" class="p-error">{{
+                            error_contact_number
+                        }}</small>
+                    </div>
+                </div>
+            </div>
+            <template #footer>
+                <Button
+                    label="Cancel"
+                    class="p-button-text p-button-danger"
+                    @click="updateEmergencyContactDialog = false"
+                />
+                <Button
+                    label="Confirm"
+                    class="p-button p-button-primary"
+                    @click="updateContact"
+                />
+            </template>
+        </Dialog>
+        <!-- Delete Modal -->
+        <Dialog
+            v-model:visible="deleteEmergencyContactDialog"
             :style="{ width: '450px' }"
-            :header="`Are you sure you want to block ${name}`"
+            header="Delete Emergency Contact?"
             :modal="true"
         >
             <div class="confirmation-content">
@@ -79,12 +184,9 @@
                             style="font-size: 2rem"
                         />
                         <span
-                            ><b>{{ name }} will no longer be able to: </b></span
+                            >Are you sure you want to delete <b>{{ name }}</b
+                            >?</span
                         >
-                        <ul>
-                            <li>Start a conversation with you</li>
-                            <li>See things you post on your timeline</li>
-                        </ul>
                     </div>
                 </div>
             </div>
@@ -92,42 +194,12 @@
                 <Button
                     label="Cancel"
                     class="p-button-text"
-                    @click="blockDialog = false"
+                    @click="deleteEmergencyContactDialog = false"
                 />
                 <Button
-                    label="Block"
-                    class="p-button p-button-danger"
-                    @click="blockUser"
-                />
-            </template>
-        </Dialog>
-        <Dialog
-            v-model:visible="unblockDialog"
-            :style="{ width: '450px' }"
-            :header="`Unblock ${name}`"
-            :modal="true"
-        >
-            <div class="confirmation-content">
-                <div class="grid">
-                    <div
-                        class="col-12 flex align-items-center justify-content-center"
-                    >
-                        <span
-                            >Are you sure you want to unblock {{ name }}?
-                        </span>
-                    </div>
-                </div>
-            </div>
-            <template #footer>
-                <Button
-                    label="Cancel"
-                    class="p-button-text"
-                    @click="unblockDialog = false"
-                />
-                <Button
-                    label="Confirm"
-                    class="p-button-primary"
-                    @click="unblockUser"
+                    label="Delete"
+                    class="p-button-danger"
+                    @click="confirmDeleteItem"
                 />
             </template>
         </Dialog>
@@ -160,121 +232,167 @@ export default {
     setup() {
         const store = useStore();
         return {
-            not_blocked_users: computed(() => store.state.not_blocked_users),
-            block_users: computed(() => store.state.block_users),
+            emergency_contact_details: computed(
+                () =>
+                    store.state.emergency_contact_details
+                        .emergency_contact_details
+            ),
         };
     },
     data() {
         return {
-            name: null,
             loading: false,
-            selectedUser: null,
-            blockDialog: false,
-            unblockDialog: false,
+            menus: null,
+            addEmergencyContactDialog: false,
+            updateEmergencyContactDialog: false,
+            deleteEmergencyContactDialog: false,
+            //Emergency Contact dialog
+
+            name: null,
+            user_id: null,
+            contact_number: null,
+
+            error_name: null,
+            error_contact_number: null,
         };
     },
     methods: {
-        showUnblockToast() {
-            this.$toast.add({
-                severity: "success",
-                summary: "Success Message",
-                detail: "Successfully unblocked a user",
-                life: 3000,
-            });
+        toggle(data) {
+            this.menus = [
+                {
+                    label: "Update Contact",
+                    icon: "pi pi-user-edit",
+                    command: () => {
+                        this.showUpdateEmergencyContact();
+                    },
+                },
+                {
+                    label: "Delete Contact",
+                    icon: "pi pi-trash",
+                    command: () => {
+                        this.showDeleteEmergencyContact();
+                    },
+                },
+            ];
+
+            this.$refs.menu.toggle(event);
+            this.populateFields(data);
         },
-        async unblockUser() {
+        populateFields(data) {
+            this.resetErrors();
+            this.resetFields();
+            this.id = data.id;
+            this.name = data.name;
+            this.user_id = data.user_id;
+            this.contact_number = data.contact_number;
+        },
+        showDeleteEmergencyContact() {
+            this.deleteEmergencyContactDialog = true;
+        },
+        async confirmDeleteItem() {
             this.loading = true;
             await axios({
                 method: "delete",
-                url: "/api/block_user/" + this.id,
+                url: "/api/emergency-contact-detail/" + this.id,
             })
                 .then((res) => {
-                    this.$store.dispatch(
-                        "getUsersNotBlocked",
-                        this.$store.state.userLogged.id
-                    );
-
-                    this.$store.dispatch(
-                        "getBlockUsers",
-                        this.$store.state.userLogged.id
-                    );
-                    this.showUnblockToast();
-                    this.unblockDialog = false;
+                    this.deleteEmergencyContactDialog = false;
+                    this.$store.dispatch("emergency_contact_details/getAll");
                     this.loading = false;
-                })
-                .catch((error) => {
-                    console.log(error.response);
-                    this.unblockDialog = false;
-                    this.loading = false;
-                });
-        },
-        async openUnblockDialog(data) {
-            this.unblockDialog = true;
-            this.id = data.id;
-            this.name =
-                data.block_user.first_name + " " + data.block_user.last_name;
-        },
-        async openBlockDialog() {
-            this.loading = true;
-            this.blockDialog = true;
-            await axios({
-                method: "get",
-                url: "/api/user/" + this.selectedUser,
-            })
-                .then((res) => {
-                    this.name = res.data.first_name + " " + res.data.last_name;
-                    this.loading = false;
+                    this.$toast.add({
+                        severity: "success",
+                        summary: "Successful Request",
+                        detail: "Deleted Contact",
+                        life: 3000,
+                    });
                 })
                 .catch((error) => {
                     this.loading = false;
+                    console.log(err.response);
                 });
         },
-        async blockUser() {
+        showAddEmergencyContactDialog() {
+            this.resetFields();
+            this.resetErrors();
+            this.addEmergencyContactDialog = true;
+        },
+        async addEmergencyContact() {
             this.loading = true;
             await axios({
                 method: "post",
-                url: "/api/block_user",
+                url: "/api/emergency-contact-detail",
                 data: {
+                    name: this.name,
+                    contact_number: this.contact_number,
                     user_id: this.$store.state.userLogged.id,
-                    block_user_id: this.selectedUser,
                 },
             })
-                .then((res) => {
-                    this.$store.dispatch(
-                        "getUsersNotBlocked",
-                        this.$store.state.userLogged.id
-                    );
-
-                    this.$store.dispatch(
-                        "getBlockUsers",
-                        this.$store.state.userLogged.id
-                    );
-                    this.showBlockToast();
-                    this.selectedUser = null;
-                    this.blockDialog = false;
+                .then(() => {
+                    this.addEmergencyContactDialog = false;
+                    this.resetFields();
+                    this.$store.dispatch("emergency_contact_details/getAll");
+                    this.$toast.add({
+                        severity: "success",
+                        summary: "Successful Request",
+                        detail: "Added Emergency Contact",
+                        life: 3000,
+                    });
                     this.loading = false;
                 })
-                .catch((error) => {
-                    console.log(error.response);
-                    this.blockDialog = false;
+                .catch((err) => {
+                    this.resetErrors();
+                    this.validate(err);
                     this.loading = false;
                 });
         },
-
-        showBlockToast() {
-            this.$toast.add({
-                severity: "success",
-                summary: "Success Message",
-                detail: "Successfully Blocked a user",
-                life: 3000,
-            });
+        showUpdateEmergencyContact() {
+            this.updateEmergencyContactDialog = true;
         },
-    },
-    mounted() {
-        this.$store.dispatch(
-            "getUsersNotBlocked",
-            this.$store.state.userLogged.id
-        );
+        async updateContact() {
+            this.loading = true;
+            await axios({
+                method: "put",
+                url: "/api/emergency-contact-detail/" + this.id,
+                data: {
+                    name: this.name,
+                    contact_number: this.contact_number,
+                    user_id: this.$store.state.userLogged.id,
+                },
+            })
+                .then((res) => {
+                    this.updateEmergencyContactDialog = false;
+                    this.$toast.add({
+                        severity: "success",
+                        summary: "Successful Request",
+                        detail: "Updated Contact",
+                        life: 3000,
+                    });
+                    this.$store.dispatch("emergency_contact_details/getAll");
+                    this.loading = false;
+                })
+                .catch((err) => {
+                    console.log(err.response);
+                    this.resetErrors();
+                    this.validate(err);
+                    this.loading = false;
+                });
+        },
+        validate(error) {
+            if (error.response.data.errors.name)
+                this.error_name = error.response.data.errors.name[0];
+            if (error.response.data.errors.contact_number)
+                this.error_contact_number =
+                    error.response.data.errors.contact_number[0];
+        },
+        resetFields() {
+            this.name = null;
+            this.user_id = null;
+            this.contact_number = null;
+        },
+        resetErrors() {
+            this.error_name = null;
+            this.error_contact_number = null;
+        },
     },
 };
 </script>

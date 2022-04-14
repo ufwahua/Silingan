@@ -14,7 +14,7 @@ const emergency_contact_details = {
         async getAll({ commit }) {
             await axios({
                 method: "get",
-                url: "/api/emergency_contact_detail/",
+                url: "/api/emergency-contact-detail/",
             })
                 .then((res) => {
                     commit("getAll", res.data);

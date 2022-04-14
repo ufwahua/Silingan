@@ -65,7 +65,7 @@ Route::apiResources([
     'chat_room'             => ChatRoomController::class,
     'chat'             => ChatController::class,
     'position'             => PositionController::class,
-    'emergency_contact_detail' => EmergencyContactDetailController::class,
+    'emergency-contact-detail' => EmergencyContactDetailController::class,
     'candidate'             => CandidateController::class,
     'election'             => ElectionController::class,
     'card'             => CardController::class,

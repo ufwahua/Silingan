@@ -45,6 +45,9 @@ class User extends Authenticatable
     public function position(){
         return $this->hasOne(Position::class,'id','position_id');
     }
+    public function emergency_contact(){
+        return $this->hasMany(EmergencyContactDetail::class,'user_id','id');
+    }
 
     
     /**

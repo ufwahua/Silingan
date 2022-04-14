@@ -99,7 +99,7 @@ class UserController extends Controller
     public function index(Request $request): JsonResponse
     {
         return response()->json(
-            User::with(['lot.block','position'])->orderBy('role', 'asc')->orderBy('id', 'asc')->get()
+            User::with(['lot.block','position','emergency_contact'])->orderBy('role', 'asc')->orderBy('id', 'asc')->get()
         );
     }
 
