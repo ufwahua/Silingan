@@ -139,12 +139,22 @@
                                     class="my-2"
                                 ></Dropdown>
                                 <Dropdown
+                                    v-model="filters['tag_as'].value"
+                                    :showClear="true"
+                                    :options="tag"
+                                    optionLabel="tag"
+                                    optionValue="tag"
+                                    placeholder="Filter by tag"
+                                    style="width: 200px"
+                                    class="my-2"
+                                ></Dropdown>
+                                <Dropdown
                                     v-model="filters['status'].value"
                                     :showClear="true"
                                     :options="status"
                                     optionLabel="status"
                                     optionValue="status"
-                                    placeholder="Filter by Status"
+                                    placeholder="Filter by status"
                                     style="width: 200px"
                                     class="my-2"
                                 ></Dropdown>
@@ -154,7 +164,7 @@
                                     :options="verification"
                                     optionLabel="status"
                                     optionValue="value"
-                                    placeholder="Filter by Verification"
+                                    placeholder="Filter by verification"
                                     style="width: 215px"
                                     class="my-2"
                                 ></Dropdown>
@@ -199,14 +209,11 @@
                                 }}
                             </template>
                         </Column>
-                        <Column header="Email" field="email">
-                            <template #body="{ data }">
-                                {{ data.email }}
-                            </template>
-                        </Column>
+
                         <Column header="Block" field="lot.block.number">
                         </Column>
                         <Column header="Lot" field="lot.number"> </Column>
+                        <Column header="Tag" field="tag_as"> </Column>
                         <Column header="Status" field="status">
                             <template #body="{ data }">
                                 <Badge :class="badgecolor(data.status)">{{
@@ -389,26 +396,6 @@
                                 </div>
 
                                 <div class="field col-12 md:col-6">
-                                    <label>Role</label>
-
-                                    <Dropdown
-                                        v-model="form.selected_role"
-                                        :class="{
-                                            'p-invalid': error_role,
-                                        }"
-                                        :options="role"
-                                        optionLabel="type"
-                                        optionValue="value"
-                                        placeholder="Select Role"
-                                    />
-                                    <label
-                                        style="color: red"
-                                        v-if="error_role"
-                                        >{{ error_role }}</label
-                                    >
-                                </div>
-
-                                <div class="field col-12 md:col-12">
                                     <label>Age</label>
                                     <InputText
                                         id="age"
@@ -429,25 +416,6 @@
                                         >{{ error_age }}</label
                                     >
                                 </div>
-                                <div class="field col-12 md:col-12">
-                                    <label>Contact Number</label>
-                                    <InputText
-                                        id="contact_num"
-                                        type="text"
-                                        oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*?)\..*/g, '$1');"
-                                        v-model="form.contact_num"
-                                        @keydown.enter="onRegisterClick"
-                                        :class="{
-                                            'p-invalid': error_contact_num,
-                                        }"
-                                    />
-                                    <label
-                                        style="color: red"
-                                        v-if="error_contact_num"
-                                        >{{ error_contact_num }}</label
-                                    >
-                                </div>
-
                                 <div class="field col-12 md:col-6">
                                     <label>Block</label>
 
@@ -486,6 +454,81 @@
                                         style="color: red"
                                         v-if="error_selected_lot"
                                         >{{ error_selected_lot }}</label
+                                    >
+                                </div>
+                                <div class="field col-12 md:col-6">
+                                    <label>Role</label>
+
+                                    <Dropdown
+                                        v-model="form.selected_role"
+                                        :class="{
+                                            'p-invalid': error_role,
+                                        }"
+                                        :options="role"
+                                        optionLabel="type"
+                                        optionValue="value"
+                                        placeholder="Select Role"
+                                    />
+                                    <label
+                                        style="color: red"
+                                        v-if="error_role"
+                                        >{{ error_role }}</label
+                                    >
+                                </div>
+                                <div class="field col-12 md:col-6">
+                                    <label>Tag as</label>
+
+                                    <Dropdown
+                                        v-model="form.selected_tag"
+                                        :class="{
+                                            'p-invalid': error_selected_tag,
+                                        }"
+                                        :options="tag"
+                                        optionLabel="tag"
+                                        optionValue="tag"
+                                        placeholder="Select tag"
+                                    />
+                                    <label
+                                        style="color: red"
+                                        v-if="error_selected_tag"
+                                        >{{ error_selected_tag }}</label
+                                    >
+                                </div>
+                                <div class="field col-12 md:col-12">
+                                    <label>Contact Number</label>
+                                    <InputText
+                                        id="contact_num"
+                                        type="text"
+                                        oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*?)\..*/g, '$1');"
+                                        v-model="form.contact_num"
+                                        @keydown.enter="onRegisterClick"
+                                        :class="{
+                                            'p-invalid': error_contact_num,
+                                        }"
+                                    />
+                                    <label
+                                        style="color: red"
+                                        v-if="error_contact_num"
+                                        >{{ error_contact_num }}</label
+                                    >
+                                </div>
+
+                                <div class="field col-12 md:col-12">
+                                    <label>Email</label>
+                                    <InputText
+                                        type="text"
+                                        name="email"
+                                        v-model="form.email"
+                                        @keydown.enter="onRegisterClick"
+                                        :class="{
+                                            'p-invalid': error_email,
+                                        }"
+                                        disabled
+                                    />
+                                    <label
+                                        style="color: red"
+                                        v-if="error_email"
+                                        >{{ error_email }}</label
                                     >
                                 </div>
                                 <br />
@@ -606,26 +649,6 @@
                                 </div>
 
                                 <div class="field col-12 md:col-6">
-                                    <label>Role</label>
-
-                                    <Dropdown
-                                        v-model="form.selected_role"
-                                        :class="{
-                                            'p-invalid': error_role,
-                                        }"
-                                        :options="role"
-                                        optionLabel="type"
-                                        optionValue="value"
-                                        placeholder="Select Role"
-                                    />
-                                    <label
-                                        style="color: red"
-                                        v-if="error_role"
-                                        >{{ error_role }}</label
-                                    >
-                                </div>
-
-                                <div class="field col-12 md:col-12">
                                     <label>Age</label>
                                     <InputText
                                         id="age"
@@ -646,25 +669,6 @@
                                         >{{ error_age }}</label
                                     >
                                 </div>
-                                <div class="field col-12 md:col-12">
-                                    <label>Contact Number</label>
-                                    <InputText
-                                        id="contact_num"
-                                        type="text"
-                                        oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*?)\..*/g, '$1');"
-                                        v-model="form.contact_num"
-                                        @keydown.enter="onRegisterClick"
-                                        :class="{
-                                            'p-invalid': error_contact_num,
-                                        }"
-                                    />
-                                    <label
-                                        style="color: red"
-                                        v-if="error_contact_num"
-                                        >{{ error_contact_num }}</label
-                                    >
-                                </div>
-
                                 <div class="field col-12 md:col-6">
                                     <label>Block</label>
 
@@ -705,6 +709,63 @@
                                         >{{ error_selected_lot }}</label
                                     >
                                 </div>
+                                <div class="field col-12 md:col-6">
+                                    <label>Role</label>
+
+                                    <Dropdown
+                                        v-model="form.selected_role"
+                                        :class="{
+                                            'p-invalid': error_role,
+                                        }"
+                                        :options="role"
+                                        optionLabel="type"
+                                        optionValue="value"
+                                        placeholder="Select Role"
+                                    />
+                                    <label
+                                        style="color: red"
+                                        v-if="error_role"
+                                        >{{ error_role }}</label
+                                    >
+                                </div>
+                                <div class="field col-12 md:col-6">
+                                    <label>Tag as</label>
+
+                                    <Dropdown
+                                        v-model="form.selected_tag"
+                                        :class="{
+                                            'p-invalid': error_selected_tag,
+                                        }"
+                                        :options="tag"
+                                        optionLabel="tag"
+                                        optionValue="tag"
+                                        placeholder="Select tag"
+                                    />
+                                    <label
+                                        style="color: red"
+                                        v-if="error_selected_tag"
+                                        >{{ error_selected_tag }}</label
+                                    >
+                                </div>
+                                <div class="field col-12 md:col-12">
+                                    <label>Contact Number</label>
+                                    <InputText
+                                        id="contact_num"
+                                        type="text"
+                                        oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*?)\..*/g, '$1');"
+                                        v-model="form.contact_num"
+                                        @keydown.enter="onRegisterClick"
+                                        :class="{
+                                            'p-invalid': error_contact_num,
+                                        }"
+                                    />
+                                    <label
+                                        style="color: red"
+                                        v-if="error_contact_num"
+                                        >{{ error_contact_num }}</label
+                                    >
+                                </div>
+
                                 <br />
 
                                 <div class="col-12 title-form">
@@ -787,6 +848,516 @@
                         </template>
                     </Dialog>
                     <Dialog
+                        v-model:visible="viewResidentDialog"
+                        :style="{ width: '500px' }"
+                        header="View Resident"
+                        :modal="true"
+                    >
+                        <div class="grid">
+                            <div class="col-12 title-form">
+                                <Badge
+                                    :value="1"
+                                    severity="info"
+                                    class="mr-2 mb-2"
+                                    size="large"
+                                ></Badge>
+                                <label><h6>Basic Information</h6></label>
+                            </div>
+
+                            <div class="p-fluid formgrid grid">
+                                <div class="field col-12 md:col-6">
+                                    <label>Firstname</label>
+
+                                    <InputText
+                                        id="firstname"
+                                        type="text"
+                                        v-model="form.first_name"
+                                        :class="{
+                                            'p-invalid': error_first_name,
+                                        }"
+                                        @keydown.enter="onRegisterClick"
+                                        disabled
+                                    />
+                                    <label
+                                        style="color: red"
+                                        v-if="error_first_name"
+                                        >{{ error_first_name }}</label
+                                    >
+                                </div>
+
+                                <div class="field col-12 md:col-6">
+                                    <label>Lastname</label>
+
+                                    <InputText
+                                        id="last_name"
+                                        type="text"
+                                        v-model="form.last_name"
+                                        :class="{
+                                            'p-invalid': error_last_name,
+                                        }"
+                                        @keydown.enter="onRegisterClick"
+                                        disabled
+                                    />
+                                    <label
+                                        style="color: red"
+                                        v-if="error_last_name"
+                                        >{{ error_last_name }}</label
+                                    >
+                                </div>
+
+                                <div class="field col-12 md:col-6">
+                                    <div>
+                                        <label>Gender</label>
+                                    </div>
+
+                                    <div>
+                                        <div class="field-radiobutton mb-0">
+                                            <RadioButton
+                                                name="gender"
+                                                value="male"
+                                                v-model="form.gender"
+                                                :disabled="true"
+                                                :class="{
+                                                    'p-invalid': error_gender,
+                                                }"
+                                                @keydown.enter="onRegisterClick"
+                                            />
+                                            <label class="mb-0 ml-1 mr-5"
+                                                >Male</label
+                                            >
+                                            <RadioButton
+                                                name="gender"
+                                                value="female"
+                                                :disabled="true"
+                                                :class="{
+                                                    'p-invalid': error_gender,
+                                                }"
+                                                v-model="form.gender"
+                                                @keydown.enter="onRegisterClick"
+                                            />
+                                            <label class="mb-0 ml-1"
+                                                >Female</label
+                                            >
+                                        </div>
+                                        <div>
+                                            <label
+                                                style="color: red"
+                                                v-if="error_gender"
+                                                >{{ error_gender }}</label
+                                            >
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="field col-12 md:col-6">
+                                    <label>Age</label>
+                                    <InputText
+                                        id="age"
+                                        type="number"
+                                        min="0"
+                                        step="1"
+                                        onfocus="this.previousValue = this.value"
+                                        onkeydown="this.previousValue = this.value"
+                                        oninput="validity.valid || (value = this.previousValue)"
+                                        v-model="form.age"
+                                        :class="{
+                                            'p-invalid': error_age,
+                                        }"
+                                        disabled
+                                    />
+                                    <label
+                                        style="color: red"
+                                        v-if="error_age"
+                                        >{{ error_age }}</label
+                                    >
+                                </div>
+
+                                <div class="field col-12 md:col-6">
+                                    <label>Block</label>
+
+                                    <Dropdown
+                                        v-model="form.selected_block"
+                                        :options="blocks"
+                                        optionLabel="number"
+                                        optionValue="number"
+                                        placeholder="Select Block"
+                                        @change="getBlockLot"
+                                        :class="{
+                                            'p-invalid': error_selected_block,
+                                        }"
+                                        disabled
+                                    />
+                                    <label
+                                        style="color: red"
+                                        v-if="error_selected_block"
+                                        >{{ error_selected_block }}</label
+                                    >
+                                </div>
+
+                                <div class="field col-12 md:col-6">
+                                    <label>Lot</label>
+
+                                    <Dropdown
+                                        v-model="form.selected_block_lot"
+                                        :options="filteredLots"
+                                        optionLabel="number"
+                                        optionValue="id"
+                                        placeholder="Select Lot"
+                                        :class="{
+                                            'p-invalid': error_selected_lot,
+                                        }"
+                                        disabled
+                                    />
+                                    <label
+                                        style="color: red"
+                                        v-if="error_selected_lot"
+                                        >{{ error_selected_lot }}</label
+                                    >
+                                </div>
+
+                                <div class="field col-12 md:col-6">
+                                    <label>Role</label>
+
+                                    <Dropdown
+                                        v-model="form.selected_role"
+                                        :class="{
+                                            'p-invalid': error_role,
+                                        }"
+                                        :options="role"
+                                        optionLabel="type"
+                                        optionValue="value"
+                                        placeholder="Select Role"
+                                        disabled
+                                    />
+                                    <label
+                                        style="color: red"
+                                        v-if="error_role"
+                                        >{{ error_role }}</label
+                                    >
+                                </div>
+                                <div class="field col-12 md:col-6">
+                                    <label>Tag as</label>
+
+                                    <Dropdown
+                                        v-model="form.selected_tag"
+                                        :class="{
+                                            'p-invalid': error_selected_tag,
+                                        }"
+                                        :options="tag"
+                                        optionLabel="tag"
+                                        optionValue="tag"
+                                        placeholder="Select tag"
+                                        disabled
+                                    />
+                                    <label
+                                        style="color: red"
+                                        v-if="error_selected_tag"
+                                        >{{ error_selected_tag }}</label
+                                    >
+                                </div>
+                                <div class="field col-12 md:col-12">
+                                    <label>Contact Number</label>
+                                    <InputText
+                                        id="contact_num"
+                                        type="text"
+                                        oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*?)\..*/g, '$1');"
+                                        v-model="form.contact_num"
+                                        @keydown.enter="onRegisterClick"
+                                        :class="{
+                                            'p-invalid': error_contact_num,
+                                        }"
+                                        disabled
+                                    />
+                                    <label
+                                        style="color: red"
+                                        v-if="error_contact_num"
+                                        >{{ error_contact_num }}</label
+                                    >
+                                </div>
+                                <div class="field col-12 md:col-12">
+                                    <label>Email</label>
+                                    <InputText
+                                        type="text"
+                                        v-model="form.email"
+                                        @keydown.enter="onRegisterClick"
+                                        :class="{
+                                            'p-invalid': error_email,
+                                        }"
+                                        disabled
+                                    />
+                                    <label
+                                        style="color: red"
+                                        v-if="error_email"
+                                        >{{ error_email }}</label
+                                    >
+                                </div>
+
+                                <br />
+                            </div>
+                        </div>
+                    </Dialog>
+                    <Dialog
+                        v-model:visible="viewVerifytDialog"
+                        :style="{ width: '500px' }"
+                        header="Verify Resident"
+                        :modal="true"
+                    >
+                        <div class="grid">
+                            <div class="col-12 title-form">
+                                <Badge
+                                    :value="1"
+                                    severity="info"
+                                    class="mr-2 mb-2"
+                                    size="large"
+                                ></Badge>
+                                <label><h6>Basic Information</h6></label>
+                            </div>
+
+                            <div class="p-fluid formgrid grid">
+                                <div class="field col-12 md:col-6">
+                                    <label>Firstname</label>
+
+                                    <InputText
+                                        id="firstname"
+                                        type="text"
+                                        v-model="form.first_name"
+                                        :class="{
+                                            'p-invalid': error_first_name,
+                                        }"
+                                        @keydown.enter="onRegisterClick"
+                                        disabled
+                                    />
+                                    <label
+                                        style="color: red"
+                                        v-if="error_first_name"
+                                        >{{ error_first_name }}</label
+                                    >
+                                </div>
+
+                                <div class="field col-12 md:col-6">
+                                    <label>Lastname</label>
+
+                                    <InputText
+                                        id="last_name"
+                                        type="text"
+                                        v-model="form.last_name"
+                                        :class="{
+                                            'p-invalid': error_last_name,
+                                        }"
+                                        @keydown.enter="onRegisterClick"
+                                        disabled
+                                    />
+                                    <label
+                                        style="color: red"
+                                        v-if="error_last_name"
+                                        >{{ error_last_name }}</label
+                                    >
+                                </div>
+
+                                <div class="field col-12 md:col-6">
+                                    <div>
+                                        <label>Gender</label>
+                                    </div>
+
+                                    <div>
+                                        <div class="field-radiobutton mb-0">
+                                            <RadioButton
+                                                name="gender"
+                                                value="male"
+                                                v-model="form.gender"
+                                                :disabled="true"
+                                                :class="{
+                                                    'p-invalid': error_gender,
+                                                }"
+                                                @keydown.enter="onRegisterClick"
+                                            />
+                                            <label class="mb-0 ml-1 mr-5"
+                                                >Male</label
+                                            >
+                                            <RadioButton
+                                                name="gender"
+                                                value="female"
+                                                :disabled="true"
+                                                :class="{
+                                                    'p-invalid': error_gender,
+                                                }"
+                                                v-model="form.gender"
+                                                @keydown.enter="onRegisterClick"
+                                            />
+                                            <label class="mb-0 ml-1"
+                                                >Female</label
+                                            >
+                                        </div>
+                                        <div>
+                                            <label
+                                                style="color: red"
+                                                v-if="error_gender"
+                                                >{{ error_gender }}</label
+                                            >
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="field col-12 md:col-6">
+                                    <label>Age</label>
+                                    <InputText
+                                        id="age"
+                                        type="number"
+                                        min="0"
+                                        step="1"
+                                        onfocus="this.previousValue = this.value"
+                                        onkeydown="this.previousValue = this.value"
+                                        oninput="validity.valid || (value = this.previousValue)"
+                                        v-model="form.age"
+                                        :class="{
+                                            'p-invalid': error_age,
+                                        }"
+                                        disabled
+                                    />
+                                    <label
+                                        style="color: red"
+                                        v-if="error_age"
+                                        >{{ error_age }}</label
+                                    >
+                                </div>
+
+                                <div class="field col-12 md:col-6">
+                                    <label>Block</label>
+
+                                    <Dropdown
+                                        v-model="form.selected_block"
+                                        :options="blocks"
+                                        optionLabel="number"
+                                        optionValue="number"
+                                        placeholder="Select Block"
+                                        @change="getBlockLot"
+                                        :class="{
+                                            'p-invalid': error_selected_block,
+                                        }"
+                                        disabled
+                                    />
+                                    <label
+                                        style="color: red"
+                                        v-if="error_selected_block"
+                                        >{{ error_selected_block }}</label
+                                    >
+                                </div>
+
+                                <div class="field col-12 md:col-6">
+                                    <label>Lot</label>
+
+                                    <Dropdown
+                                        v-model="form.selected_block_lot"
+                                        :options="filteredLots"
+                                        optionLabel="number"
+                                        optionValue="id"
+                                        placeholder="Select Lot"
+                                        :class="{
+                                            'p-invalid': error_selected_lot,
+                                        }"
+                                        disabled
+                                    />
+                                    <label
+                                        style="color: red"
+                                        v-if="error_selected_lot"
+                                        >{{ error_selected_lot }}</label
+                                    >
+                                </div>
+
+                                <div class="field col-12 md:col-6">
+                                    <label>Role</label>
+
+                                    <Dropdown
+                                        v-model="form.selected_role"
+                                        :class="{
+                                            'p-invalid': error_role,
+                                        }"
+                                        :options="role"
+                                        optionLabel="type"
+                                        optionValue="value"
+                                        placeholder="Select Role"
+                                        disabled
+                                    />
+                                    <label
+                                        style="color: red"
+                                        v-if="error_role"
+                                        >{{ error_role }}</label
+                                    >
+                                </div>
+                                <div class="field col-12 md:col-6">
+                                    <label>Tag as</label>
+
+                                    <Dropdown
+                                        v-model="form.selected_tag"
+                                        :class="{
+                                            'p-invalid': error_selected_tag,
+                                        }"
+                                        :options="tag"
+                                        optionLabel="tag"
+                                        optionValue="tag"
+                                        placeholder="Select tag"
+                                        disabled
+                                    />
+                                    <label
+                                        style="color: red"
+                                        v-if="error_selected_tag"
+                                        >{{ error_selected_tag }}</label
+                                    >
+                                </div>
+                                <div class="field col-12 md:col-12">
+                                    <label>Contact Number</label>
+                                    <InputText
+                                        id="contact_num"
+                                        type="text"
+                                        oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*?)\..*/g, '$1');"
+                                        v-model="form.contact_num"
+                                        @keydown.enter="onRegisterClick"
+                                        :class="{
+                                            'p-invalid': error_contact_num,
+                                        }"
+                                        disabled
+                                    />
+                                    <label
+                                        style="color: red"
+                                        v-if="error_contact_num"
+                                        >{{ error_contact_num }}</label
+                                    >
+                                </div>
+                                <div class="field col-12 md:col-12">
+                                    <label>Email</label>
+                                    <InputText
+                                        type="text"
+                                        v-model="form.email"
+                                        @keydown.enter="onRegisterClick"
+                                        :class="{
+                                            'p-invalid': error_email,
+                                        }"
+                                        disabled
+                                    />
+                                    <label
+                                        style="color: red"
+                                        v-if="error_email"
+                                        >{{ error_email }}</label
+                                    >
+                                </div>
+
+                                <br />
+                            </div>
+                        </div>
+                        <template #footer>
+                            <Button
+                                label="Cancel"
+                                icon="pi pi-times"
+                                class="p-button-text"
+                                @click="viewVerifytDialog = false"
+                            />
+                            <Button
+                                label="Verify"
+                                icon="pi pi-check"
+                                class="p-button-text p-button-success"
+                                @click="verifyUser"
+                            />
+                        </template>
+                    </Dialog>
+                    <Dialog
                         v-model:visible="process"
                         :style="{ width: '450px' }"
                         :modal="true"
@@ -826,10 +1397,10 @@ export default {
             lots: computed(() => store.state.lots.lots),
             users: computed(() => store.state.users),
             active: computed(() => {
-                let temp = [];
                 let active = [];
+                let temp = [];
                 store.state.users.forEach((elem) => {
-                    if (elem.role.toUpperCase() == "RESIDENT") {
+                    if (elem.role == "resident") {
                         temp.push(elem);
                     }
                 });
@@ -841,10 +1412,10 @@ export default {
                 return active.length;
             }),
             inactive: computed(() => {
-                let temp = [];
                 let inactive = [];
+                let temp = [];
                 store.state.users.forEach((elem) => {
-                    if (elem.role.toUpperCase() == "RESIDENT") {
+                    if (elem.role == "resident") {
                         temp.push(elem);
                     }
                 });
@@ -856,10 +1427,10 @@ export default {
                 return inactive.length;
             }),
             verified: computed(() => {
-                let temp = [];
                 let verified = [];
+                let temp = [];
                 store.state.users.forEach((elem) => {
-                    if (elem.role.toUpperCase() == "RESIDENT") {
+                    if (elem.role == "resident") {
                         temp.push(elem);
                     }
                 });
@@ -871,10 +1442,10 @@ export default {
                 return verified.length;
             }),
             not_verified: computed(() => {
-                let temp = [];
                 let not_verified = [];
+                let temp = [];
                 store.state.users.forEach((elem) => {
-                    if (elem.role.toUpperCase() == "RESIDENT") {
+                    if (elem.role == "resident") {
                         temp.push(elem);
                     }
                 });
@@ -888,18 +1459,17 @@ export default {
             total: computed(() => {
                 let temp = [];
                 store.state.users.forEach((elem) => {
-                    if (elem.role.toUpperCase() == "RESIDENT") {
+                    if (elem.role == "resident") {
                         temp.push(elem);
                     }
                 });
+
                 return temp.length;
             }),
         };
     },
     data() {
         return {
-            //menu
-
             menus: null,
             isInvalid: false,
             filters: {},
@@ -909,6 +1479,8 @@ export default {
             registerUserDialog: false,
             deleteUserDialog: false,
             updateUserDialog: false,
+            viewResidentDialog: false,
+            viewVerifytDialog: false,
             form: {
                 first_name: "",
                 last_name: "",
@@ -924,6 +1496,7 @@ export default {
                 verified: "",
                 has_voted: "",
                 status: "",
+                selected_tag: "",
             },
 
             first_name: null,
@@ -952,8 +1525,14 @@ export default {
             error_age: "",
             error_contact_num: "",
             error_role: "",
+            error_selected_tag: "",
 
             status: [{ status: "active" }, { status: "inactive" }],
+            tag: [
+                { tag: "owner" },
+                { tag: "renter" },
+                { tag: "family member" },
+            ],
             verification: [
                 { status: "verified", value: true },
                 { status: "not verified", value: false },
@@ -961,55 +1540,80 @@ export default {
         };
     },
     methods: {
+        viewResident() {
+            this.viewResidentDialog = true;
+        },
         toggle(data) {
             if (data.status == "active" && data.verified == 1) {
                 this.menus = [
                     {
+                        label: "View Resident",
+                        icon: "pi pi-user",
+                        command: () => {
+                            this.viewResident();
+                        },
+                    },
+                    {
                         label: "Update Resident",
                         icon: "pi pi-pencil",
                         command: () => {
-                            this.updateUser(data);
+                            this.updateUser();
                         },
                     },
                     {
                         label: "Deactivate Resident",
                         icon: "pi pi-lock",
                         command: () => {
-                            this.changeStatus(data);
+                            this.changeStatus();
                         },
                     },
                 ];
             } else if (data.status == "active" && data.verified == 0) {
                 this.menus = [
                     {
-                        label: "Update Resident",
-                        icon: "pi pi-pencil",
+                        label: "View Resident",
+                        icon: "pi pi-user",
                         command: () => {
-                            this.updateUser(data);
+                            this.viewResident();
                         },
                     },
                     {
                         label: "Verify Resident",
                         icon: "pi pi-check",
                         command: () => {
-                            this.verifyUser(data);
+                            this.viewVerifytDialog = true;
                         },
                     },
                     {
-                        label: "Activate Resident",
+                        label: "Update Resident",
+                        icon: "pi pi-pencil",
+                        command: () => {
+                            this.updateUser();
+                        },
+                    },
+
+                    {
+                        label: "Deactivate Resident",
                         icon: "pi pi-unlock",
                         command: () => {
-                            this.changeStatus(data);
+                            this.changeStatus();
                         },
                     },
                 ];
             } else if (data.status == "inactive" && data.verified == 1) {
                 this.menus = [
                     {
+                        label: "View Resident",
+                        icon: "pi pi-user",
+                        command: () => {
+                            this.viewResident();
+                        },
+                    },
+                    {
                         label: "Update Resident",
                         icon: "pi pi-pencil",
                         command: () => {
-                            this.updateUser(data);
+                            this.updateUser();
                         },
                     },
 
@@ -1017,31 +1621,39 @@ export default {
                         label: "Activate Resident",
                         icon: "pi pi-unlock",
                         command: () => {
-                            this.changeStatus(data);
+                            this.changeStatus();
                         },
                     },
                 ];
             } else {
                 this.menus = [
                     {
-                        label: "Update Resident",
-                        icon: "pi pi-pencil",
+                        label: "View Resident",
+                        icon: "pi pi-user",
                         command: () => {
-                            this.updateUser(data);
+                            this.viewResident();
                         },
                     },
                     {
                         label: "Verify Resident",
                         icon: "pi pi-check",
                         command: () => {
-                            this.verifyUser(data);
+                            this.viewVerifytDialog = true;
                         },
                     },
+                    {
+                        label: "Update Resident",
+                        icon: "pi pi-pencil",
+                        command: () => {
+                            this.updateUser();
+                        },
+                    },
+
                     {
                         label: "Activate Resident",
                         icon: "pi pi-unlock",
                         command: () => {
-                            this.changeStatus(data);
+                            this.changeStatus();
                         },
                     },
                 ];
@@ -1050,13 +1662,30 @@ export default {
             this.populateFields(data);
         },
         populateFields(data) {
-            this.id = data.id;
+            this.resetFields();
+            this.resetErrors();
             this.name = data.name;
             this.position = data.position;
+            this.id = data.id;
+            this.form.first_name = data.first_name;
+            this.form.last_name = data.last_name;
+            this.form.gender = data.gender;
+            this.form.selected_block = data.lot.block.number;
+            this.getBlockLot();
+            this.form.selected_block_lot = data.block_lot_id;
+            this.form.email = data.email;
+            this.form.age = data.age;
+            this.form.contact_num = data.contact_num;
+            this.form.selected_role = data.role;
+            this.form.verified = data.verified;
+            this.form.has_voted = data.has_voted;
+            this.form.status = data.status;
+            this.form.selected_tag = data.tag_as;
         },
         clearFilter() {
             this.filters["lot.block.number"].value = null;
             this.filters["lot.number"].value = null;
+            this.filters["tag_as"].value = null;
             this.filters["status"].value = null;
             this.filters["verified"].value = null;
         },
@@ -1077,6 +1706,10 @@ export default {
                     matchMode: FilterMatchMode.EQUALS,
                 },
                 "lot.number": {
+                    value: null,
+                    matchMode: FilterMatchMode.EQUALS,
+                },
+                tag_as: {
                     value: null,
                     matchMode: FilterMatchMode.EQUALS,
                 },
@@ -1127,12 +1760,9 @@ export default {
                 console.log(err.response);
             }
         },
-        updateUser(data) {
-            console.log("update", data);
-            this.resetFields();
-            this.resetErrors();
-            this.id = data.id;
+        updateUser() {
             this.updateUserDialog = true;
+<<<<<<< HEAD
             this.first_name = data.first_name;
             this.last_name = data.last_name;
             this.gender = data.gender;
@@ -1156,6 +1786,8 @@ export default {
             this.form.verified = data.verified;
             this.form.has_voted = data.has_voted;
             this.form.status = data.status;
+=======
+>>>>>>> 93a0b687bdbe533ab8541a140dc2888ec33e514a
         },
         async confirmUpdateUser() {
             this.process = true;
@@ -1176,6 +1808,7 @@ export default {
                     contact_num: this.form.contact_num,
                     role: this.form.selected_role,
                     status: this.form.status,
+                    tag_as: this.form.selected_tag,
                 },
             })
                 .then(() => {
@@ -1197,24 +1830,24 @@ export default {
                     this.process = false;
                 });
         },
-        async verifyUser(data) {
+        async verifyUser() {
             this.process = true;
-            console.log("verify", data);
             await axios({
                 method: "put",
-                url: "/api/user/" + data.id,
+                url: "/api/user/" + this.id,
                 data: {
-                    first_name: data.first_name,
-                    last_name: data.last_name,
-                    gender: data.gender,
-                    block_lot_id: data.block_lot_id,
-                    email: data.email,
+                    first_name: this.form.first_name,
+                    last_name: this.form.last_name,
+                    gender: this.form.gender,
+                    block_lot_id: this.form.selected_block_lot,
+                    email: this.form.email,
                     verified: 1,
-                    status: data.status,
-                    has_voted: data.has_voted,
-                    age: data.age,
-                    contact_num: data.contact_num,
-                    role: data.role,
+                    has_voted: this.form.has_voted,
+                    age: this.form.age,
+                    contact_num: this.form.contact_num,
+                    role: this.form.selected_role,
+                    status: this.form.status,
+                    tag_as: this.form.selected_tag,
                 },
             })
                 .then(() => {
@@ -1226,6 +1859,7 @@ export default {
                     });
                     this.$store.dispatch("getAllUsers");
                     this.resetFields();
+                    this.viewVerifytDialog = false;
                     this.process = false;
                 })
                 .catch((err) => {
@@ -1235,24 +1869,26 @@ export default {
                     this.process = false;
                 });
         },
-        async changeStatus(data) {
+        async changeStatus() {
             this.process = true;
-            console.log("verify", data);
+
             await axios({
                 method: "put",
-                url: "/api/user/" + data.id,
+                url: "/api/user/" + this.id,
                 data: {
-                    first_name: data.first_name,
-                    last_name: data.last_name,
-                    gender: data.gender,
-                    block_lot_id: data.block_lot_id,
-                    email: data.email,
-                    verified: data.verified,
-                    status: data.status == "active" ? "inactive" : "active",
-                    has_voted: data.has_voted,
-                    age: data.age,
-                    contact_num: data.contact_num,
-                    role: data.role,
+                    first_name: this.form.first_name,
+                    last_name: this.form.last_name,
+                    gender: this.form.gender,
+                    block_lot_id: this.form.selected_block_lot,
+                    email: this.form.email,
+                    verified: this.form.verified,
+                    has_voted: this.form.has_voted,
+                    age: this.form.age,
+                    contact_num: this.form.contact_num,
+                    role: this.form.selected_role,
+                    status:
+                        this.form.status == "active" ? "inactive" : "active",
+                    tag_as: this.form.selected_tag,
                 },
             })
                 .then(() => {
@@ -1260,7 +1896,7 @@ export default {
                         severity: "success",
                         summary: "Successful",
                         detail:
-                            data.status != "active"
+                            this.form.status != "active"
                                 ? "User Activated"
                                 : "User Deactivated",
                         life: 3000,
@@ -1302,6 +1938,7 @@ export default {
                     contact_num: this.form.contact_num,
                     role: this.form.selected_role,
                     status: "active",
+                    tag_as: this.form.selected_tag,
                 },
             })
                 .then(() => {
@@ -1336,6 +1973,7 @@ export default {
                 age: "",
                 contact_num: "",
                 selected_role: "resident",
+                selected_tag: "",
             };
         },
         resetErrors() {
@@ -1350,6 +1988,7 @@ export default {
             this.error_age = "";
             this.error_contact_num = "";
             this.error_role = "";
+            this.error_selected_tag = "";
         },
         validate(error) {
             if (error.response.data.errors.first_name)
@@ -1378,6 +2017,8 @@ export default {
                 this.error_selected_block = "The block field is required";
             if (!this.form.selected_block_lot)
                 this.error_selected_lot = "The lot field is required";
+            if (!this.form.selected_tag)
+                this.error_selected_tag = "The tag field is required";
         },
 
         getBlockLot() {

@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+
 use App\Models\User;
 use App\Models\Position;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -17,7 +18,7 @@ class CandidateFactory extends Factory
     {
         return [
             'position_id' => Position::all()->random()->id,
-            'user_id' => User::factory(),
+            'user_id' => User::all()->random()->id,
             'election_id' => 1,
 
         ];

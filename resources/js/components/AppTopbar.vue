@@ -139,8 +139,8 @@ export default {
                                 })
                                     .then((response) => {
                                         console.log(response);
-                                        this.$router.push("/login");
                                         this.$store.dispatch("logout", null);
+                                        this.$router.push("/login");
                                     })
                                     .catch((error) => {
                                         console.log(error.response);
@@ -167,6 +167,12 @@ export default {
                             command: () => {
                                 if (this.userLogged.role === "officer") {
                                     this.$router.push("/admin/profile");
+                                } else if (
+                                    this.userLogged.role === "security officer"
+                                ) {
+                                    this.$router.push(
+                                        "/security_officer/profile"
+                                    );
                                 } else {
                                     this.$router.push(
                                         `/${this.userLogged.role}` + "/profile"
@@ -178,9 +184,17 @@ export default {
                             label: "Setting",
                             icon: "pi pi-cog",
                             command: () => {
-                                this.$router.push(
-                                    `/${this.userLogged.role}` + "/setting"
-                                );
+                                if (
+                                    this.userLogged.role === "security officer"
+                                ) {
+                                    this.$router.push(
+                                        "/security_officer/setting"
+                                    );
+                                } else {
+                                    this.$router.push(
+                                        `/${this.userLogged.role}` + "/setting"
+                                    );
+                                }
                             },
                         },
                         {
@@ -193,8 +207,9 @@ export default {
                                 })
                                     .then((response) => {
                                         console.log(response);
-                                        this.$router.push("/login");
+
                                         this.$store.dispatch("logout", null);
+                                        this.$router.push("/login");
                                     })
                                     .catch((error) => {
                                         console.log(error.response);
@@ -218,6 +233,12 @@ export default {
                             command: () => {
                                 if (this.userLogged.role === "officer") {
                                     this.$router.push("/admin/profile");
+                                } else if (
+                                    this.userLogged.role === "security officer"
+                                ) {
+                                    this.$router.push(
+                                        "/security_officer/profile"
+                                    );
                                 } else {
                                     this.$router.push(
                                         `/${this.userLogged.role}` + "/profile"
@@ -230,9 +251,17 @@ export default {
                             label: "Setting",
                             icon: "pi pi-cog",
                             command: () => {
-                                this.$router.push(
-                                    `/${this.userLogged.role}` + "/setting"
-                                );
+                                if (
+                                    this.userLogged.role === "security officer"
+                                ) {
+                                    this.$router.push(
+                                        "/security_officer/setting"
+                                    );
+                                } else {
+                                    this.$router.push(
+                                        `/${this.userLogged.role}` + "/setting"
+                                    );
+                                }
                             },
                         },
 
@@ -246,8 +275,9 @@ export default {
                                 })
                                     .then((response) => {
                                         console.log(response);
-                                        this.$router.push("/login");
+
                                         this.$store.dispatch("logout", null);
+                                        this.$router.push("/login");
                                     })
                                     .catch((error) => {
                                         console.log(error.response);

@@ -24,9 +24,9 @@ class CommentFactory extends Factory
     public function definition()
     {
         return [
-            'post_id' => Post::all()->random()->id,
+            'post_id' => Post::where('approved',1)->get()->random()->id,
             'user_id' => User::all()->random()->id,
-            'message' => $this->faker->text(rand(20,200)),
+            'message' =>  $this->faker->realText(rand(20,200)),
         ];
     }
 }

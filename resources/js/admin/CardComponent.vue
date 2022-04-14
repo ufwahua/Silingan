@@ -6,7 +6,7 @@
                 <h1>Cards</h1>
             </div>
         </div>
-         <div class="grid mb-2 flex justify-content-center">
+        <div class="grid mb-2 flex justify-content-center">
             <div class="col-12 lg:col-6 xl:col-3">
                 <div class="card mb-0 bg-green-100">
                     <div class="flex justify-content-between mb-3">
@@ -42,8 +42,6 @@
                     </div>
                 </div>
             </div>
-           
-           
 
             <div class="col-12 lg:col-6 xl:col-3">
                 <div class="card mb-0 bg-blue-100">
@@ -64,7 +62,6 @@
             </div>
         </div>
         <div class="card">
-            
             <div class="grid">
                 <div class="col-12">
                     <DataTable
@@ -75,7 +72,7 @@
                         :rows="15"
                     >
                         <template #empty> No cards found </template>
-                         <template #header>
+                        <template #header>
                             <div class="flex flex-wrap justify-content-between">
                                 <span class="p-input-icon-left inline-block">
                                     <i class="pi pi-search" />
@@ -96,9 +93,7 @@
                                     style="width: 200px"
                                     @change="getFilterBlockLot"
                                 ></Dropdown>
-                               
-                                
-                               
+
                                 <Button
                                     label="Clear"
                                     icon="pi pi-filter-slash"
@@ -113,43 +108,49 @@
                                 />
                             </div>
                         </template>
-                        <Column header="Number" field="card_number"> 
+                        <Column header="Number" field="card_number">
                             <template #body="{ data }">
                                 {{
                                     (data["card_number"] =
-                                         "Card #" + data.number)
+                                        "Card #" + data.number)
                                 }}
                             </template>
                         </Column>
-                        
-                        <Column header="Logged by" field="name"> 
-                              <template #body="{ data }">
-                                 <div v-if="data.log">{{
-                                    (data["name"] =
-                                        data.log.user.first_name + " " + data.log.user.last_name)
-                                }}</div>
-                                
+
+                        <Column header="Logged by" field="name">
+                            <template #body="{ data }">
+                                <div v-if="data.log">
+                                    {{
+                                        (data["name"] =
+                                            data.log.user.first_name +
+                                            " " +
+                                            data.log.user.last_name)
+                                    }}
+                                </div>
                             </template>
                         </Column>
-                        <Column  header="Holder" field="logged_named"> 
-                        
-                             <template #body="{ data }">
-                                 <div v-if="data.log">{{
-                                    (data["logged_named"] =
-                                        data.log.name)
-                                }}</div>
-                                
-                                
+                        <Column header="Holder" field="logged_named">
+                            <template #body="{ data }">
+                                <div v-if="data.log">
+                                    {{ (data["logged_named"] = data.log.name) }}
+                                </div>
                             </template>
                         </Column>
-                        <Column header="Availability" field="availability"> 
-                             <template #body="{ data }">
-                                
-                                <Badge v-if="data.availability" :class="badgecolor(data.availability)">available</Badge>
-                                <Badge v-else :class="badgecolor(data.availability)">not available</Badge>
+                        <Column header="Availability" field="availability">
+                            <template #body="{ data }">
+                                <Badge
+                                    v-if="data.availability"
+                                    :class="badgecolor(data.availability)"
+                                    >available</Badge
+                                >
+                                <Badge
+                                    v-else
+                                    :class="badgecolor(data.availability)"
+                                    >not available</Badge
+                                >
                             </template>
                         </Column>
-                        <Column header="Date Logged" field="log.created_at"> 
+                        <Column header="Date Logged" field="log.created_at">
                         </Column>
                         <Column header="Actions" field="actions">
                             <template #body="{ data }">
@@ -187,8 +188,8 @@
                                         style="font-size: 2rem"
                                     />
                                     <span
-                                        >Are you sure you want to delete
-                                        card # <b>{{ number }}</b
+                                        >Are you sure you want to delete card #
+                                        <b>{{ number }}</b
                                         >?</span
                                     >
                                 </div>
@@ -329,14 +330,14 @@ export default {
         return {
             cards: computed(() => store.state.cards.allCards),
             users: computed(() => store.state.users),
-             available: computed(() => {
+            available: computed(() => {
                 let available = [];
                 store.state.cards.allCards.forEach((elem) => {
                     if (elem.availability == true) {
                         available.push(elem);
                     }
                 });
-                
+
                 return available.length;
             }),
             not_available: computed(() => {
@@ -346,16 +347,14 @@ export default {
                         not_available.push(elem);
                     }
                 });
-                
+
                 return not_available.length;
             }),
-            
-            
+
             total: computed(() => {
                 let total = [];
                 store.state.cards.allCards.forEach((elem) => {
                     total.push(elem);
-                  
                 });
                 return total.length;
             }),
@@ -372,12 +371,12 @@ export default {
 
             id: null,
             number: null,
-            card_availability:null,
+            card_availability: null,
             selected_user: null,
             error_number: null,
-            availability:[
-                {availability:"available",value:1},
-                {availability:"not available",value:0},
+            availability: [
+                { availability: "available", value: true },
+                { availability: "not available", value: false },
             ],
             //action menu overlay
             menus: [
@@ -401,12 +400,11 @@ export default {
     methods: {
         clearFilter() {
             this.filters["availability"].value = null;
-
         },
         badgecolor(color) {
             if (color == 1) {
                 return "bg-green-500";
-            }  else {
+            } else {
                 return "bg-gray-500";
             }
         },
@@ -419,7 +417,7 @@ export default {
             this.resetErrors();
             this.id = data.id;
             this.number = data.number;
-            this.card_availability =data.availability
+            this.card_availability = data.availability;
         },
         showSuccess() {
             this.$toast.add({
@@ -432,9 +430,11 @@ export default {
         initFilters() {
             this.filters = {
                 global: { value: null, matchMode: FilterMatchMode.CONTAINS },
-                availability: { value: null, matchMode: FilterMatchMode.EQUALS },
+                availability: {
+                    value: null,
+                    matchMode: FilterMatchMode.EQUALS,
+                },
             };
-           
         },
 
         deletePosition() {
@@ -485,7 +485,7 @@ export default {
                 url: "/api/card/" + this.id,
                 data: {
                     number: this.number,
-                    availability:this.card_availability,
+                    availability: this.card_availability,
                 },
             })
                 .then(() => {
@@ -521,7 +521,7 @@ export default {
                 url: "/api/card",
                 data: {
                     number: this.number,
-                    availability:1,
+                    availability: 1,
                 },
             })
                 .then(() => {

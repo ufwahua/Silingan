@@ -86,7 +86,11 @@
         </div>
         <div v-if="show_reply" class="col-11 col-offset-1 py-0 my-0">
             <div v-for="reply in comment.reply" :key="reply.id">
-                <ReplyComponent v-if="reply.id" v-bind:reply="reply" />
+                <ReplyComponent
+                    v-if="reply.id"
+                    :reply="reply"
+                    :group_id="group_id"
+                />
             </div>
         </div>
     </div>
@@ -106,6 +110,7 @@ export default {
         comment: {
             type: Object,
         },
+        group_id: { type: Number },
     },
     components: {
         ReplyComponent,
@@ -129,7 +134,17 @@ export default {
                 },
             })
                 .then((res) => {
-                    this.$store.dispatch("posts/getAll");
+                    if (this.group_id == 1) {
+                        this.$store.dispatch(
+                            "posts/getTimeLine",
+                            this.$store.state.userLogged.id
+                        );
+                    } else {
+                        this.$store.dispatch(
+                            "posts/getMarketPlaceVerified",
+                            this.$store.state.userLogged.id
+                        );
+                    }
                     this.message = null;
                 })
                 .catch((error) => {

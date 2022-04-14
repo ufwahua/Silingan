@@ -3,43 +3,8 @@
         <div
             class="col-12 sm:col-12 md:col-8 md:col-offset-2 lg:col-6 lg:col-offset-1 xl:col-6 xl:col-offset-1"
         >
-<<<<<<< HEAD
-        <h3>Timeline</h3>
-=======
-            <h2>Timeline</h2>
->>>>>>> 93a0b687bdbe533ab8541a140dc2888ec33e514a
+            <h2>Verify Post in Marketplace</h2>
             <div class="col justify-content-center pt-0">
-                <div class="card p-3">
-                    <div class="p-inputgroup mb-2">
-                        <div v-if="userLogged.profile_pic">
-                            <Avatar
-                                :image="`http://127.0.0.1:8000${userLogged.profile_pic}`"
-                                class="mr-2"
-                                size="large"
-                                shape="circle"
-                                alt="Image"
-                            />
-                        </div>
-                        <div v-else>
-                            <Avatar
-                                image="http://127.0.0.1:8000/storage/images/default-prof-pic.png"
-                                class="mr-2"
-                                size="large"
-                                shape="circle"
-                                alt="Image"
-                            />
-                        </div>
-
-                        <Textarea
-                            @click="openAddLotModal"
-                            :autoResize="true"
-                            class="w-full"
-                            placeholder="What's on you mind?"
-                            rows="1"
-                        >
-                        </Textarea>
-                    </div>
-                </div>
                 <div v-for="post in posts" :key="post.id">
                     <PostComponent
                         :post="post"
@@ -127,10 +92,10 @@
 <script>
 import { computed } from "vue";
 import { useStore } from "vuex";
-import NewsComponent from "./NewsComponent.vue";
-import PostComponent from "./PostComponent.vue";
+import NewsComponent from "../components/NewsComponent.vue";
+import PostComponent from "../components/PostComponent.vue";
 export default {
-    name: "TimelineComponent",
+    name: "VerifyMarketPlaceComponent",
     components: {
         NewsComponent,
         PostComponent,
@@ -168,7 +133,7 @@ export default {
             this.$toast.add({
                 severity: "success",
                 summary: "Success Message",
-                detail: "Successfully posted",
+                detail: "Please wait for the admin/officers to accept your post",
                 life: 3000,
             });
         },
@@ -201,17 +166,17 @@ export default {
                 method: "post",
                 url: "/api/post",
                 data: {
-                    group_id: 1,
+                    group_id: 2,
                     user_id: this.$store.state.userLogged.id,
                     images: JSON.stringify(this.images),
                     content: this.content,
-                    approved: 1,
+                    approved: 0,
                 },
             })
                 .then((res) => {
                     this.openPostModal = false;
                     this.$store.dispatch(
-                        "posts/getTimeLine",
+                        "posts/getMarketPlaceNotVerified",
                         this.$store.state.userLogged.id
                     );
                     this.showPostedToast();
@@ -225,7 +190,7 @@ export default {
     },
     mounted() {
         this.$store.dispatch(
-            "posts/getTimeLine",
+            "posts/getMarketPlaceNotVerified",
             this.$store.state.userLogged.id
         );
     },

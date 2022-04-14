@@ -12,8 +12,6 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Requests\LoginRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use App\Http\Requests\RegisterRequest;
-use App\Models\BlockUser;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Validation\ValidationException;
@@ -43,7 +41,7 @@ class UserController extends Controller
 
     public function store(Request $request): JsonResponse
     {
-        if ($request['role'] == 'security_officer') {
+        if ($request['role'] == 'security officer' || $request['role'] == 'admin') {
             $user = User::query()->create($request->validate([
                 'email'                 => ['required', 'string', 'email', 'max:255', Rule::unique('users')->ignore($request->route('user'))],
                 'password'              => ['required', 'min:8'],
@@ -58,6 +56,8 @@ class UserController extends Controller
                 'verified'              => ['required'],
                 'status'                => ['required'],
                 'role'                  => ['required'],
+                'position_id'           => ['sometimes'],
+                'tag_as'                => ['sometimes'],
             ]));
         } else {
             $user = User::query()->create($request->validate([
@@ -75,10 +75,10 @@ class UserController extends Controller
                 'verified'              => ['required'],
                 'status'                => ['required'],
                 'role'                  => ['required'],
-
+                'position_id'           => ['sometimes'],
+                'tag_as'                => ['required'],
             ]));
-        }
-
+            }
 
         return response()->json($user);
     }
@@ -99,7 +99,7 @@ class UserController extends Controller
     public function index(Request $request): JsonResponse
     {
         return response()->json(
-            User::with(['lot.block'])->orderBy('role', 'asc')->orderBy('id', 'asc')->get()
+            User::with(['lot.block','position'])->orderBy('role', 'asc')->orderBy('id', 'asc')->get()
         );
     }
 
@@ -132,7 +132,7 @@ class UserController extends Controller
      */
     public function update(Request $request): JsonResponse
     {
-        if ($request['role'] == 'security_officer') {
+        if ($request['role'] == 'security officer' || $request['role'] == 'admin' ) {
             User::query()->where('id', $request->route('user'))->update($request->validate([
                 'block_lot_id' => ['sometimes'],
                 'first_name' => ['required', 'string', 'max:255'],
@@ -145,8 +145,8 @@ class UserController extends Controller
                 'status' => ['required'],
                 'verified' => ['required'],
                 'has_voted' => ['required'],
-
-                'profile_pic' => ['sometimes'],
+                'tag_as' => ['sometimes'],
+                'profile_pic'=> ['sometimes'],
             ]));
         } else {
             User::query()->where('id', $request->route('user'))->update($request->validate([
@@ -160,8 +160,8 @@ class UserController extends Controller
                 'status' => ['required'],
                 'verified' => ['required'],
                 'has_voted' => ['required'],
-                'email' => ['sometimes', 'string', 'email', 'max:255', Rule::unique('users')->ignore($request->route('user'))],
-                'profile_pic' => ['sometimes'],
+                'profile_pic'=> ['sometimes'],
+                'tag_as' => ['required'],
             ]));
         }
 

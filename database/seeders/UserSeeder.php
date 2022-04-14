@@ -21,7 +21,7 @@ class UserSeeder extends Seeder
     public function run()
     {
         User::factory()
-            ->count(150)
+            ->count(100)
             ->create();
 
         User::create([
@@ -29,7 +29,7 @@ class UserSeeder extends Seeder
             'last_name' => "Diamos",
             'role' => 'admin',
             'status' => 'active',
-            'block_lot_id' => 1,
+            'block_lot_id' => null,
             'gender' =>'male',
             'age' => rand(1,100),     
             'verified' => 1,
@@ -37,6 +37,7 @@ class UserSeeder extends Seeder
             'contact_num' => rand(639111111111,63999999999),
             'email' => 'jh.diamos@gmail.com',
             'password'=> Hash::make("12345678"),
+            'tag_as' => 'owner',
         ]);
         
         User::create([
@@ -52,6 +53,7 @@ class UserSeeder extends Seeder
             'contact_num' => rand(639111111111,63999999999),
             'email' => 'jh.security@gmail.com',
             'password'=> Hash::make("12345678"),
+            
         ]);
         
         User::create([
@@ -67,6 +69,7 @@ class UserSeeder extends Seeder
             'contact_num' => rand(639111111111,63999999999),
             'email' => 'varbie.sumido@gmail.com',
             'password'=> Hash::make("12345678"),
+            'tag_as' => 'owner',
         ]);
 
         User::create([
@@ -82,6 +85,7 @@ class UserSeeder extends Seeder
             'contact_num' => rand(639111111111,63999999999),
             'email' => 'reynard.dahunan@gmail.com',
             'password'=> Hash::make("12345678"),
+            'tag_as' => 'owner',
         ]);
         User::create([
             'first_name' => "Joshua Henry",
@@ -97,6 +101,7 @@ class UserSeeder extends Seeder
             'contact_num' => rand(639111111111,63999999999),
             'email' => 'jh.officer@gmail.com',
             'password'=> Hash::make("12345678"),
+            'tag_as' => 'owner',
         ]);
         User::create([
             'first_name' => "Steven Mitch",
@@ -112,6 +117,7 @@ class UserSeeder extends Seeder
             'contact_num' => rand(639111111111,63999999999),
             'email' => 'stevenmitch.espina@gmail.com',
             'password'=> Hash::make("12345678"),
+            'tag_as' => 'owner',
         ]);
 
         User::create([
@@ -128,6 +134,7 @@ class UserSeeder extends Seeder
             'contact_num' => rand(639111111111,63999999999),
             'email' => 'rodrigo.natad@gmail.com',
             'password'=> Hash::make("12345678"),
+            'tag_as' => 'owner',
         ]);
 
         User::create([
@@ -144,6 +151,7 @@ class UserSeeder extends Seeder
             'contact_num' => rand(639111111111,63999999999),
             'email' => 'warren.ngujo@gmail.com',
             'password'=> Hash::make("12345678"),
+            'tag_as' => 'owner',
         ]);
 
         User::create([
@@ -160,6 +168,7 @@ class UserSeeder extends Seeder
             'contact_num' => rand(639111111111,63999999999),
             'email' => 'guilamae.bagolor@gmail.com',
             'password'=> Hash::make("12345678"),
+            'tag_as' => 'owner',
         ]);
 
         User::create([
@@ -176,6 +185,7 @@ class UserSeeder extends Seeder
             'contact_num' => rand(639111111111,63999999999),
             'email' => 'kentluke.pescadero@gmail.com',
             'password'=> Hash::make("12345678"),
+            'tag_as' => 'owner',
         ]);
 
        
@@ -194,6 +204,7 @@ class UserSeeder extends Seeder
             'contact_num' => rand(639111111111,63999999999),
             'email' => 'rikamae.diamos@gmail.com',
             'password'=> Hash::make("12345678"),
+            'tag_as' => 'owner',
         ]);
     }
 }

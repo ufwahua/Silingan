@@ -103,12 +103,22 @@
                                     class="my-2"
                                 ></Dropdown>
                                 <Dropdown
+                                    v-model="filters['tag_as'].value"
+                                    :showClear="true"
+                                    :options="tag"
+                                    optionLabel="tag"
+                                    optionValue="tag"
+                                    placeholder="Filter by tag"
+                                    style="width: 200px"
+                                    class="my-2"
+                                ></Dropdown>
+                                <Dropdown
                                     v-model="filters['status'].value"
                                     :showClear="true"
                                     :options="status"
                                     optionLabel="status"
                                     optionValue="status"
-                                    placeholder="Filter by Status"
+                                    placeholder="Filter by status"
                                     style="width: 200px"
                                     class="my-2"
                                 ></Dropdown>
@@ -118,7 +128,7 @@
                                     :options="verification"
                                     optionLabel="status"
                                     optionValue="value"
-                                    placeholder="Filter by Verification"
+                                    placeholder="Filter by verification"
                                     style="width: 215px"
                                     class="my-2"
                                 ></Dropdown>
@@ -175,14 +185,11 @@
                         </Column>
                         <Column header="Position" field="position.name">
                         </Column>
-                        <Column header="Email" field="email">
-                            <template #body="{ data }">
-                                {{ data.email }}
-                            </template>
-                        </Column>
+
                         <Column header="Block" field="lot.block.number">
                         </Column>
                         <Column header="Lot" field="lot.number"> </Column>
+                        <Column header="Tag" field="tag_as"> </Column>
                         <Column header="Status" field="status">
                             <template #body="{ data }">
                                 <Badge :class="badgecolor(data.status)">{{
@@ -370,66 +377,6 @@
                                 </div>
 
                                 <div class="field col-12 md:col-6">
-                                    <label>Role</label>
-
-                                    <Dropdown
-                                        v-model="form.selected_role"
-                                        :class="{
-                                            'p-invalid': error_role,
-                                        }"
-                                        :options="role"
-                                        optionLabel="type"
-                                        optionValue="value"
-                                        placeholder="Select Role"
-                                        disabled
-                                    />
-                                    <label
-                                        style="color: red"
-                                        v-if="error_role"
-                                        >{{ error_role }}</label
-                                    >
-                                </div>
-                                <div class="field col-12 md:col-6">
-                                    <label>Position</label>
-
-                                    <Dropdown
-                                        v-model="form.selected_position"
-                                        :class="{
-                                            'p-invalid':
-                                                error_selected_position,
-                                        }"
-                                        :options="positions"
-                                        optionLabel="name"
-                                        optionValue="id"
-                                        placeholder="Select Role"
-                                        disabled
-                                    />
-                                    <label
-                                        style="color: red"
-                                        v-if="error_selected_position"
-                                        >{{ error_selected_position }}</label
-                                    >
-                                </div>
-                                <div class="field col-12 md:col-12">
-                                    <label>Contact Number</label>
-                                    <InputText
-                                        id="contact_num"
-                                        type="text"
-                                        oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*?)\..*/g, '$1');"
-                                        v-model="form.contact_num"
-                                        @keydown.enter="onRegisterClick"
-                                        :class="{
-                                            'p-invalid': error_contact_num,
-                                        }"
-                                    />
-                                    <label
-                                        style="color: red"
-                                        v-if="error_contact_num"
-                                        >{{ error_contact_num }}</label
-                                    >
-                                </div>
-
-                                <div class="field col-12 md:col-6">
                                     <label>Block</label>
 
                                     <Dropdown
@@ -449,7 +396,6 @@
                                         >{{ error_selected_block }}</label
                                     >
                                 </div>
-
                                 <div class="field col-12 md:col-6">
                                     <label>Lot</label>
 
@@ -467,6 +413,101 @@
                                         style="color: red"
                                         v-if="error_selected_lot"
                                         >{{ error_selected_lot }}</label
+                                    >
+                                </div>
+                                <div class="field col-12 md:col-6">
+                                    <label>Tag as</label>
+
+                                    <Dropdown
+                                        v-model="form.selected_tag"
+                                        :class="{
+                                            'p-invalid': error_selected_tag,
+                                        }"
+                                        :options="tag"
+                                        optionLabel="tag"
+                                        optionValue="tag"
+                                        placeholder="Select tag"
+                                    />
+                                    <label
+                                        style="color: red"
+                                        v-if="error_selected_tag"
+                                        >{{ error_selected_tag }}</label
+                                    >
+                                </div>
+
+                                <div class="field col-12 md:col-6">
+                                    <label>Contact Number</label>
+                                    <InputText
+                                        id="contact_num"
+                                        type="text"
+                                        oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*?)\..*/g, '$1');"
+                                        v-model="form.contact_num"
+                                        @keydown.enter="onRegisterClick"
+                                        :class="{
+                                            'p-invalid': error_contact_num,
+                                        }"
+                                    />
+                                    <label
+                                        style="color: red"
+                                        v-if="error_contact_num"
+                                        >{{ error_contact_num }}</label
+                                    >
+                                </div>
+                                <div class="field col-12 md:col-6">
+                                    <label>Role</label>
+
+                                    <Dropdown
+                                        v-model="form.selected_role"
+                                        :class="{
+                                            'p-invalid': error_role,
+                                        }"
+                                        :options="role"
+                                        optionLabel="type"
+                                        optionValue="value"
+                                        placeholder="Select Role"
+                                    />
+                                    <label
+                                        style="color: red"
+                                        v-if="error_role"
+                                        >{{ error_role }}</label
+                                    >
+                                </div>
+                                <div class="field col-12 md:col-6">
+                                    <label>Position</label>
+
+                                    <Dropdown
+                                        v-model="form.selected_position"
+                                        :class="{
+                                            'p-invalid':
+                                                error_selected_position,
+                                        }"
+                                        :options="positions"
+                                        optionLabel="name"
+                                        optionValue="id"
+                                        placeholder="Select position"
+                                    />
+                                    <label
+                                        style="color: red"
+                                        v-if="error_selected_position"
+                                        >{{ error_selected_position }}</label
+                                    >
+                                </div>
+
+                                <div class="field col-12 md:col-12">
+                                    <label>Email</label>
+                                    <InputText
+                                        type="text"
+                                        v-model="form.email"
+                                        @keydown.enter="onRegisterClick"
+                                        :class="{
+                                            'p-invalid': error_email,
+                                        }"
+                                        disabled
+                                    />
+                                    <label
+                                        style="color: red"
+                                        v-if="error_email"
+                                        >{{ error_email }}</label
                                     >
                                 </div>
                                 <br />
@@ -560,7 +601,7 @@
                                                     'p-invalid': error_gender,
                                                 }"
                                                 @keydown.enter="onRegisterClick"
-                                                disabled
+                                                :disabled="true"
                                             />
                                             <label class="mb-0 ml-1 mr-5"
                                                 >Male</label
@@ -573,7 +614,7 @@
                                                 }"
                                                 v-model="form.gender"
                                                 @keydown.enter="onRegisterClick"
-                                                disabled
+                                                :disabled="true"
                                             />
                                             <label class="mb-0 ml-1"
                                                 >Female</label
@@ -613,6 +654,87 @@
                                 </div>
 
                                 <div class="field col-12 md:col-6">
+                                    <label>Block</label>
+
+                                    <Dropdown
+                                        v-model="form.selected_block"
+                                        :options="blocks"
+                                        optionLabel="number"
+                                        optionValue="number"
+                                        placeholder="Select Block"
+                                        @change="getBlockLot"
+                                        :class="{
+                                            'p-invalid': error_selected_block,
+                                        }"
+                                        disabled
+                                    />
+                                    <label
+                                        style="color: red"
+                                        v-if="error_selected_block"
+                                        >{{ error_selected_block }}</label
+                                    >
+                                </div>
+                                <div class="field col-12 md:col-6">
+                                    <label>Lot</label>
+
+                                    <Dropdown
+                                        v-model="form.selected_block_lot"
+                                        :options="filteredLots"
+                                        optionLabel="number"
+                                        optionValue="id"
+                                        placeholder="Select Lot"
+                                        :class="{
+                                            'p-invalid': error_selected_lot,
+                                        }"
+                                        disabled
+                                    />
+                                    <label
+                                        style="color: red"
+                                        v-if="error_selected_lot"
+                                        >{{ error_selected_lot }}</label
+                                    >
+                                </div>
+                                <div class="field col-12 md:col-6">
+                                    <label>Tag as</label>
+
+                                    <Dropdown
+                                        v-model="form.selected_tag"
+                                        :class="{
+                                            'p-invalid': error_selected_tag,
+                                        }"
+                                        :options="tag"
+                                        optionLabel="tag"
+                                        optionValue="tag"
+                                        placeholder="Select tag"
+                                        disabled
+                                    />
+                                    <label
+                                        style="color: red"
+                                        v-if="error_selected_tag"
+                                        >{{ error_selected_tag }}</label
+                                    >
+                                </div>
+
+                                <div class="field col-12 md:col-6">
+                                    <label>Contact Number</label>
+                                    <InputText
+                                        id="contact_num"
+                                        type="text"
+                                        oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*?)\..*/g, '$1');"
+                                        v-model="form.contact_num"
+                                        @keydown.enter="onRegisterClick"
+                                        :class="{
+                                            'p-invalid': error_contact_num,
+                                        }"
+                                        disabled
+                                    />
+                                    <label
+                                        style="color: red"
+                                        v-if="error_contact_num"
+                                        >{{ error_contact_num }}</label
+                                    >
+                                </div>
+                                <div class="field col-12 md:col-6">
                                     <label>Role</label>
 
                                     <Dropdown
@@ -644,7 +766,7 @@
                                         :options="positions"
                                         optionLabel="name"
                                         optionValue="id"
-                                        placeholder="Select Role"
+                                        placeholder="Select position"
                                         disabled
                                     />
                                     <label
@@ -653,68 +775,25 @@
                                         >{{ error_selected_position }}</label
                                     >
                                 </div>
+
                                 <div class="field col-12 md:col-12">
-                                    <label>Contact Number</label>
+                                    <label>Email</label>
                                     <InputText
-                                        id="contact_num"
                                         type="text"
-                                        oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*?)\..*/g, '$1');"
-                                        v-model="form.contact_num"
+                                        v-model="form.email"
                                         @keydown.enter="onRegisterClick"
                                         :class="{
-                                            'p-invalid': error_contact_num,
+                                            'p-invalid': error_email,
                                         }"
                                         disabled
                                     />
                                     <label
                                         style="color: red"
-                                        v-if="error_contact_num"
-                                        >{{ error_contact_num }}</label
+                                        v-if="error_email"
+                                        >{{ error_email }}</label
                                     >
                                 </div>
 
-                                <div class="field col-12 md:col-6">
-                                    <label>Block</label>
-
-                                    <Dropdown
-                                        v-model="form.selected_block"
-                                        :options="blocks"
-                                        optionLabel="number"
-                                        optionValue="number"
-                                        placeholder="Select Block"
-                                        @change="getBlockLot"
-                                        :class="{
-                                            'p-invalid': error_selected_block,
-                                        }"
-                                        disabled
-                                    />
-                                    <label
-                                        style="color: red"
-                                        v-if="error_selected_block"
-                                        >{{ error_selected_block }}</label
-                                    >
-                                </div>
-
-                                <div class="field col-12 md:col-6">
-                                    <label>Lot</label>
-
-                                    <Dropdown
-                                        v-model="form.selected_block_lot"
-                                        :options="filteredLots"
-                                        optionLabel="number"
-                                        optionValue="id"
-                                        placeholder="Select Lot"
-                                        :class="{
-                                            'p-invalid': error_selected_lot,
-                                        }"
-                                        disabled
-                                    />
-                                    <label
-                                        style="color: red"
-                                        v-if="error_selected_lot"
-                                        >{{ error_selected_lot }}</label
-                                    >
-                                </div>
                                 <br />
                             </div>
                         </div>
@@ -838,7 +917,83 @@
                                         >{{ error_age }}</label
                                     >
                                 </div>
+                                <div class="field col-12 md:col-6">
+                                    <label>Block</label>
 
+                                    <Dropdown
+                                        v-model="form.selected_block"
+                                        :options="blocks"
+                                        optionLabel="number"
+                                        optionValue="number"
+                                        placeholder="Select Block"
+                                        @change="getBlockLot"
+                                        :class="{
+                                            'p-invalid': error_selected_block,
+                                        }"
+                                    />
+                                    <label
+                                        style="color: red"
+                                        v-if="error_selected_block"
+                                        >{{ error_selected_block }}</label
+                                    >
+                                </div>
+                                <div class="field col-12 md:col-6">
+                                    <label>Lot</label>
+
+                                    <Dropdown
+                                        v-model="form.selected_block_lot"
+                                        :options="filteredLots"
+                                        optionLabel="number"
+                                        optionValue="id"
+                                        placeholder="Select Lot"
+                                        :class="{
+                                            'p-invalid': error_selected_lot,
+                                        }"
+                                    />
+                                    <label
+                                        style="color: red"
+                                        v-if="error_selected_lot"
+                                        >{{ error_selected_lot }}</label
+                                    >
+                                </div>
+                                <div class="field col-12 md:col-6">
+                                    <label>Tag as</label>
+
+                                    <Dropdown
+                                        v-model="form.selected_tag"
+                                        :class="{
+                                            'p-invalid': error_selected_tag,
+                                        }"
+                                        :options="tag"
+                                        optionLabel="tag"
+                                        optionValue="tag"
+                                        placeholder="Select tag"
+                                    />
+                                    <label
+                                        style="color: red"
+                                        v-if="error_selected_tag"
+                                        >{{ error_selected_tag }}</label
+                                    >
+                                </div>
+
+                                <div class="field col-12 md:col-6">
+                                    <label>Contact Number</label>
+                                    <InputText
+                                        id="contact_num"
+                                        type="text"
+                                        oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*?)\..*/g, '$1');"
+                                        v-model="form.contact_num"
+                                        @keydown.enter="onRegisterClick"
+                                        :class="{
+                                            'p-invalid': error_contact_num,
+                                        }"
+                                    />
+                                    <label
+                                        style="color: red"
+                                        v-if="error_contact_num"
+                                        >{{ error_contact_num }}</label
+                                    >
+                                </div>
                                 <div class="field col-12 md:col-6">
                                     <label>Role</label>
 
@@ -878,65 +1033,7 @@
                                         >{{ error_selected_position }}</label
                                     >
                                 </div>
-                                <div class="field col-12 md:col-12">
-                                    <label>Contact Number</label>
-                                    <InputText
-                                        id="contact_num"
-                                        type="text"
-                                        oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*?)\..*/g, '$1');"
-                                        v-model="form.contact_num"
-                                        @keydown.enter="onRegisterClick"
-                                        :class="{
-                                            'p-invalid': error_contact_num,
-                                        }"
-                                    />
-                                    <label
-                                        style="color: red"
-                                        v-if="error_contact_num"
-                                        >{{ error_contact_num }}</label
-                                    >
-                                </div>
 
-                                <div class="field col-12 md:col-6">
-                                    <label>Block</label>
-
-                                    <Dropdown
-                                        v-model="form.selected_block"
-                                        :options="blocks"
-                                        optionLabel="number"
-                                        optionValue="number"
-                                        placeholder="Select Block"
-                                        @change="getBlockLot"
-                                        :class="{
-                                            'p-invalid': error_selected_block,
-                                        }"
-                                    />
-                                    <label
-                                        style="color: red"
-                                        v-if="error_selected_block"
-                                        >{{ error_selected_block }}</label
-                                    >
-                                </div>
-
-                                <div class="field col-12 md:col-6">
-                                    <label>Lot</label>
-
-                                    <Dropdown
-                                        v-model="form.selected_block_lot"
-                                        :options="filteredLots"
-                                        optionLabel="number"
-                                        optionValue="id"
-                                        placeholder="Select Lot"
-                                        :class="{
-                                            'p-invalid': error_selected_lot,
-                                        }"
-                                    />
-                                    <label
-                                        style="color: red"
-                                        v-if="error_selected_lot"
-                                        >{{ error_selected_lot }}</label
-                                    >
-                                </div>
                                 <br />
 
                                 <div class="col-12 title-form">
@@ -1173,6 +1270,7 @@ export default {
                 has_voted: "",
                 status: "",
                 selected_position: "",
+                selected_tag: "",
             },
 
             first_name: null,
@@ -1201,8 +1299,14 @@ export default {
             error_contact_num: "",
             error_role: "",
             error_selected_position: "",
+            error_selected_tag: "",
 
             status: [{ status: "active" }, { status: "inactive" }],
+            tag: [
+                { tag: "owner" },
+                { tag: "renter" },
+                { tag: "family member" },
+            ],
             verification: [
                 { status: "verified", value: true },
                 { status: "not verified", value: false },
@@ -1234,7 +1338,7 @@ export default {
                         label: "Deactivate Officer",
                         icon: "pi pi-lock",
                         command: () => {
-                            this.changeStatus(data);
+                            this.changeStatus();
                         },
                     },
                 ];
@@ -1261,7 +1365,7 @@ export default {
                         label: "Activate Officer",
                         icon: "pi pi-lock",
                         command: () => {
-                            this.changeStatus(data);
+                            this.changeStatus();
                         },
                     },
                 ];
@@ -1316,10 +1420,12 @@ export default {
             this.form.has_voted = data.has_voted;
             this.form.status = data.status;
             this.form.selected_position = data.position_id;
+            this.form.selected_tag = data.tag_as;
         },
         clearFilter() {
             this.filters["lot.block.number"].value = null;
             this.filters["lot.number"].value = null;
+            this.filters["tag_as"].value = null;
             this.filters["status"].value = null;
             this.filters["verified"].value = null;
         },
@@ -1340,6 +1446,10 @@ export default {
                     matchMode: FilterMatchMode.EQUALS,
                 },
                 "lot.number": {
+                    value: null,
+                    matchMode: FilterMatchMode.EQUALS,
+                },
+                tag_as: {
                     value: null,
                     matchMode: FilterMatchMode.EQUALS,
                 },
@@ -1430,6 +1540,7 @@ export default {
                     role: this.form.selected_role,
                     status: this.form.status,
                     position_id: this.form.selected_position,
+                    tag_as: this.form.selected_tag,
                 },
             })
                 .then(() => {
@@ -1489,24 +1600,27 @@ export default {
                     this.process = false;
                 });
         },
-        async changeStatus(data) {
+        async changeStatus() {
             this.process = true;
-            console.log("verify", data);
+
             await axios({
                 method: "put",
-                url: "/api/user/" + data.id,
+                url: "/api/user/" + this.id,
                 data: {
-                    first_name: data.first_name,
-                    last_name: data.last_name,
-                    gender: data.gender,
-                    block_lot_id: data.block_lot_id,
-                    email: data.email,
-                    verified: data.verified,
-                    status: data.status == "active" ? "inactive" : "active",
-                    has_voted: data.has_voted,
-                    age: data.age,
-                    contact_num: data.contact_num,
-                    role: data.role,
+                    first_name: this.form.first_name,
+                    last_name: this.form.last_name,
+                    gender: this.form.gender,
+                    block_lot_id: this.form.selected_block_lot,
+                    email: this.form.email,
+                    verified: this.form.verified,
+                    has_voted: this.form.has_voted,
+                    age: this.form.age,
+                    contact_num: this.form.contact_num,
+                    role: this.form.selected_role,
+                    status:
+                        this.form.status == "active" ? "inactive" : "active",
+                    position_id: this.form.selected_position,
+                    tag_as: this.form.selected_tag,
                 },
             })
                 .then(() => {
@@ -1514,7 +1628,7 @@ export default {
                         severity: "success",
                         summary: "Successful",
                         detail:
-                            data.status != "active"
+                            this.form.status != "active"
                                 ? "Officer Activated"
                                 : "Officer Deactivated",
                         life: 3000,
@@ -1557,6 +1671,7 @@ export default {
                     role: this.form.selected_role,
                     status: "active",
                     position_id: this.form.selected_position,
+                    tag_as: this.form.selected_tag,
                 },
             })
                 .then(() => {
@@ -1591,6 +1706,7 @@ export default {
                 age: "",
                 contact_num: "",
                 selected_role: "officer",
+                selected_tag: "",
             };
         },
         resetErrors() {
@@ -1606,6 +1722,7 @@ export default {
             this.error_contact_num = "";
             this.error_role = "";
             this.error_selected_position = "";
+            this.error_selected_tag = "";
         },
         validate(error) {
             if (error.response.data.errors.first_name)
@@ -1636,6 +1753,8 @@ export default {
                 this.error_selected_lot = "The lot field is required";
             if (!this.form.selected_position)
                 this.error_selected_position = "The position field is required";
+            if (!this.form.selected_tag)
+                this.error_selected_tag = "The tag field is required";
         },
 
         getBlockLot() {

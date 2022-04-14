@@ -27,7 +27,7 @@ class ChatFactory extends Factory
         return [
             'chat_room_id' => ChatRoom::all()->random()->id,
             'user_id' => rand(26,27),
-            'message' => $this->faker->text(rand(20,200)),
+            'message' => $this->faker->realText(rand(20,200)),
         ];
     }
 }

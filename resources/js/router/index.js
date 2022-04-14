@@ -15,6 +15,8 @@ import Position from "../admin/PositionComponent.vue";
 import Candidate from "../admin/CandidateComponent.vue";
 import ElectionComponent from "../admin/ElectionComponent.vue";
 import CardComponent from "../admin/CardComponent.vue";
+import VehicleComponent from "../admin/VehicleComponent.vue";
+import VerifyMarketPlaceComponent from "../admin/VerifyMarketPlaceComponent.vue";
 
 //resident
 import ResidentHomeComponent from "../resident/ResidentHomeComponent.vue";
@@ -23,6 +25,7 @@ import ResidentHomeComponent from "../resident/ResidentHomeComponent.vue";
 import SecurityHome from "../security_officer/SecurityHomeComponent.vue";
 import LogComponent from "../security_officer/LogComponent.vue";
 
+//all
 import TimelineComponent from "../components/TimelineComponent.vue";
 import MarketplaceComponent from "../components/MarketplaceComponent.vue";
 import IndexComponent from "../home/IndexComponent.vue";
@@ -81,7 +84,7 @@ function checkLogged(to, from, next) {
     } else if (isAuthenticated && userLogged.role === "resident") {
         next("/resident/timeline");
     } else if (isAuthenticated && userLogged.role === "security officer") {
-        next("/security_officer/timeline");
+        next("/security-officer/timeline");
     } else {
         next();
     }
@@ -309,6 +312,39 @@ const router = createRouter({
                         contents: CardComponent,
                     },
                 },
+                {
+                    path: "vehicle",
+                    meta: {
+                        role: "admin",
+                    },
+                    beforeEnter: checkRole,
+                    components: {
+                        default: NotFound,
+                        contents: VehicleComponent,
+                    },
+                },
+                {
+                    path: "view-announcement",
+                    meta: {
+                        role: "admin",
+                    },
+                    beforeEnter: checkRole,
+                    components: {
+                        default: NotFound,
+                        contents: AnnouncementComponent,
+                    },
+                },
+                {
+                    path: "verify-marketplace",
+                    meta: {
+                        role: "admin",
+                    },
+                    beforeEnter: checkRole,
+                    components: {
+                        default: NotFound,
+                        contents: VerifyMarketPlaceComponent,
+                    },
+                },
             ],
         },
         {
@@ -357,7 +393,7 @@ const router = createRouter({
                     },
                 },
                 {
-                    path: "/setting",
+                    path: "setting",
                     meta: {
                         role: "resident",
                     },
@@ -369,7 +405,7 @@ const router = createRouter({
                 },
 
                 {
-                    path: "announcement",
+                    path: "view-announcement",
                     meta: {
                         role: "resident",
                     },
@@ -404,7 +440,7 @@ const router = createRouter({
             ],
         },
         {
-            path: "/security_officer",
+            path: "/security-officer",
             component: SecurityHome,
             meta: {
                 role: "security_officer",
@@ -413,7 +449,7 @@ const router = createRouter({
             name: "securityhome",
             children: [
                 {
-                    path: "/security_officer/timeline",
+                    path: "/security-officer/timeline",
                     meta: {
                         role: "security_officer",
                     },
@@ -460,7 +496,7 @@ const router = createRouter({
                     },
                 },
                 {
-                    path: "/setting",
+                    path: "setting",
                     meta: {
                         role: "security_officer",
                     },
@@ -471,7 +507,7 @@ const router = createRouter({
                     },
                 },
                 {
-                    path: "announcement",
+                    path: "view-announcement",
                     meta: {
                         role: "security_officer",
                     },
@@ -501,6 +537,17 @@ const router = createRouter({
                     components: {
                         default: NotFound,
                         contents: ActivateAccountComponent,
+                    },
+                },
+                {
+                    path: "marketplace",
+                    meta: {
+                        role: "security_officer",
+                    },
+                    beforeEnter: checkRole,
+                    components: {
+                        default: NotFound,
+                        contents: MarketplaceComponent,
                     },
                 },
             ],

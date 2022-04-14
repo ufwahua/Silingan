@@ -9,10 +9,11 @@ import positions from "./admin/positions";
 import emergency_contact_details from "./admin/emergency_contact_details";
 import candidates from "./admin/candidates";
 import timeNow from "./admin/timeNow";
-
+import adminVehicles from "./admin/vehicles";
 //user
 import news from "./user/news";
 import posts from "./user/posts";
+import userVehicles from "./user/vehicles";
 
 //security officer
 import cards from "./security_officer/cards";
@@ -23,6 +24,7 @@ export default createStore({
         users: null,
         userLogged: null,
         chat_room: null,
+        not_blocked_users: null,
         block_users: null,
         chats: null,
     },
@@ -34,7 +36,7 @@ export default createStore({
         },
 
         getUsersNotBlocked(state, payload) {
-            state.users = payload;
+            state.not_blocked_users = payload;
         },
         getUserLogged(state, payload) {
             state.userLogged = payload;
@@ -71,11 +73,10 @@ export default createStore({
         async getUsersNotBlocked({ commit }, payload) {
             await axios({
                 method: "get",
-                url: "/api/user/not_blocked/" + payload,
+                url: "/api/user/not-blocked/" + payload,
             })
                 .then((res) => {
                     commit("getUsersNotBlocked", res.data);
-                    console.log("registeredUsersNotBlocked", res.data);
                 })
                 .catch((err) => {
                     console.log(err.response.data);
@@ -84,7 +85,7 @@ export default createStore({
         async getUserLogged({ commit }) {
             await axios({
                 method: "get",
-                url: "/api/user_logged",
+                url: "/api/user-logged",
             })
                 .then((res) => {
                     commit("getUserLogged", res.data[0]);
@@ -142,6 +143,8 @@ export default createStore({
         timeNow,
         cards,
         logs,
+        userVehicles,
+        adminVehicles,
     },
 
     plugins: [createPersistedState()],

@@ -64,13 +64,17 @@ export default {
                         {
                             label: "Timeline",
                             icon: "pi pi-fw pi-home",
-                            to: "/security_officer/timeline",
+                            to: "/security-officer/timeline",
                         },
                         {
                             label: "Marketplace",
                             icon: "pi pi-fw pi-shopping-cart",
+<<<<<<< HEAD
                             to: "/security/marketplace",
                             to: "/security_officer/marketplace",
+=======
+                            to: "/security-officer/marketplace",
+>>>>>>> 93a0b687bdbe533ab8541a140dc2888ec33e514a
                         },
                         {
                             label: "Log",
@@ -80,7 +84,7 @@ export default {
                         {
                             label: "Announcement",
                             icon: "pi pi-fw pi-calendar",
-                            to: "/security_officer/announcement",
+                            to: "/security_officer/view-announcement",
                         },
                         {
                             label: "Emergency Contact",
@@ -206,13 +210,16 @@ export default {
     },
     created() {
         this.$store.dispatch("news/getAll");
-        this.$store.dispatch("posts/getAll");
         this.$store.dispatch("cards/getAll");
         this.$store.dispatch("getAllUsers");
         this.$store.dispatch("getBlockUsers", this.$store.state.userLogged.id);
         this.$store.dispatch("logs/getAll");
         this.$store.dispatch("cards/getAll");
         this.$store.dispatch("emergency_contact_details/getAll");
+        this.$store.dispatch(
+            "userVehicles/getAll",
+            this.$store.state.userLogged.id
+        );
     },
 };
 </script>

@@ -25,12 +25,13 @@ class DatabaseSeeder extends Seeder
             CommentSeeder::class,
             ReplySeeder::class,
             AnnouncementSeeder::class,
-            ChatRoomSeeder::class,
-            ChatSeeder::class,
+            // ChatRoomSeeder::class,
+            // ChatSeeder::class,
             EmergencyContactDetailSeeder::class,
             CandidateSeeder::class,
             CardSeeder::class,
             BlockUserSeeder::class,
+            VehicleSeeder::class,
         ]);
     }
 }
