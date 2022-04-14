@@ -3,7 +3,7 @@
     <h1>Total Funds</h1>
     <div class="grid">
       <div class="col-6">
-        <h1 class="ml-4">₱{{ total_funds.toLocaleString() }}</h1>
+        <h1 class="ml-4">₱ {{ total_funds }}</h1>
       </div>
     </div>
     <div class="card">
@@ -163,9 +163,22 @@
       :style="{ width: '40vw' }"
       :modal="true"
     >
-      <div class="grid">
+      <div class="grid p-fluid">
+        <div class="col-12 lg:col-6">
+          <h5>Collection Type</h5>
+          <Dropdown v-model="revenue.collection_type" :options="[{name:'test',code:'test'}]" optionLabel="name" optionValue="code" placeholder="Select Collection Type" />
+        </div>
+        <div class="col-12 lg:col-6">
+          <h5>Block and Lot</h5>
+          <Dropdown v-model="revenue.blockandlot" :options="[{name:'test',code:'test'}]" optionLabel="name" optionValue="code" placeholder="Select Block and Lot" />
+        </div>
+        <div class="col-12 lg:col-6">
+          <h5>Amount</h5>
+          <InputNumber v-model="revenue.amount" mode="currency" currency="PHP"  :useGrouping="false"/>
+        </div>
         <div class="col-12">
-          <h1>Sample</h1>
+          <h5>Notes</h5>
+          <Textarea type="text" v-model="value1" />
         </div>
       </div>
       <template #footer>
@@ -183,6 +196,7 @@
 
 <script>
 import { FilterMatchMode } from "primevue/api";
+import axios from "axios";
 export default {
   setup() {},
   data() {
@@ -190,8 +204,14 @@ export default {
       //Modal Control
       addRevenueModal: false,
 
+      //Revenue
+      revenue: {
+        amount:null,
+        collection_type: null,
+        blockandlot:null
+      },
       filters: {},
-      total_funds: 1000,
+      total_funds: null,
       cashflow: [
         {
           user: "Joshua",
@@ -234,6 +254,19 @@ export default {
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
       };
     },
+  },
+  mounted(){
+    try {
+      axios({
+        url:"http://localhost:8000/api/fund",
+        method: "get"
+      }).then((res)=>{
+        this.total_funds = res.data[0].amount.toLocaleString()
+      })
+    } catch (error) {
+      console.log(error.response)
+    }
+
   },
   created() {
     this.initFilters();
