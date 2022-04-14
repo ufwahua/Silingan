@@ -1399,7 +1399,6 @@ export default {
         },
         updateUser() {
             this.updateUserDialog = true;
-<<<<<<< HEAD
             this.first_name = data.first_name;
             this.last_name = data.last_name;
             this.gender = data.gender;
@@ -1410,8 +1409,6 @@ export default {
             this.selected_block = data.block_lot.block.id;
             this.getBlockLot();
             this.selected_block_lot = data.block_lot.id;
-=======
->>>>>>> a8ee47987571651c89aa09033f41163dc78c6e5f
         },
         async confirmUpdateUser() {
             this.process = true;
