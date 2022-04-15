@@ -19,7 +19,8 @@ class CreateCollectionsTable extends Migration
             $table->foreignId('collection_type_id');
             $table->foreignId('block_lot_id');
             $table->double('amount', 8, 2);
-            $table->text('notes');
+            $table->text('notes')->nullable();
+            $table->double('running_balance',8,2);
             $table->timestamps();
         });
     }

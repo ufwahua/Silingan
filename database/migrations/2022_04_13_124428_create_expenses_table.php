@@ -19,6 +19,7 @@ class CreateExpensesTable extends Migration
             $table->double('amount', 8, 2);
             $table->text('notes');
             $table->string('official_receipt')->nullable();
+            $table->double('running_balance',8,2);
             $table->timestamps();
         });
     }

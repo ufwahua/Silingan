@@ -24,6 +24,7 @@ use App\Http\Controllers\VehicleController;
 use App\Http\Controllers\CollectionTypeController;
 use App\Http\Controllers\CollectionController;
 use App\Http\Controllers\ExpenseController;
+use App\Http\Controllers\FundController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -74,5 +75,6 @@ Route::apiResources([
     'vehicle'             => VehicleController::class,
     'collection_type' => CollectionTypeController::class,
     'collection' => CollectionController::class,
-    'expense' => ExpenseController::class
+    'expense' => ExpenseController::class,
+    'fund' => FundController::class
 ]);

@@ -10,6 +10,10 @@ import emergency_contact_details from "./admin/emergency_contact_details";
 import candidates from "./admin/candidates";
 import timeNow from "./admin/timeNow";
 import adminVehicles from "./admin/vehicles";
+import collectionType from "./admin/collection_type"
+import fund from "./admin/fund"
+import collection from "./admin/collection"
+import expense from "./admin/expense"
 //user
 import news from "./user/news";
 import posts from "./user/posts";
@@ -58,9 +62,9 @@ export default createStore({
     actions: {
         async getAllUsers({ commit }) {
             await axios({
-                method: "get",
-                url: "/api/user/",
-            })
+                    method: "get",
+                    url: "/api/user/",
+                })
                 .then((res) => {
                     commit("getAllUsers", res.data);
                     console.log("users", res.data);
@@ -72,9 +76,9 @@ export default createStore({
 
         async getUsersNotBlocked({ commit }, payload) {
             await axios({
-                method: "get",
-                url: "/api/user/not-blocked/" + payload,
-            })
+                    method: "get",
+                    url: "/api/user/not-blocked/" + payload,
+                })
                 .then((res) => {
                     commit("getUsersNotBlocked", res.data);
                 })
@@ -84,9 +88,9 @@ export default createStore({
         },
         async getUserLogged({ commit }) {
             await axios({
-                method: "get",
-                url: "/api/user-logged",
-            })
+                    method: "get",
+                    url: "/api/user-logged",
+                })
                 .then((res) => {
                     commit("getUserLogged", res.data[0]);
                 })
@@ -96,9 +100,9 @@ export default createStore({
         },
         async getBlockUsers({ commit }, payload) {
             await axios({
-                method: "get",
-                url: "/api/block_user/" + payload,
-            })
+                    method: "get",
+                    url: "/api/block_user/" + payload,
+                })
                 .then((res) => {
                     console.log("block users", res.data);
                     commit("getBlockUsers", res.data);
@@ -113,9 +117,9 @@ export default createStore({
         },
         async getChats({ commit }, id) {
             await axios({
-                method: "get",
-                url: "/api/chat_room/" + id,
-            })
+                    method: "get",
+                    url: "/api/chat_room/" + id,
+                })
                 .then((res) => {
                     commit("getChats", res.data[0].chats);
                 })
@@ -145,6 +149,10 @@ export default createStore({
         logs,
         userVehicles,
         adminVehicles,
+        collectionType,
+        fund,
+        collection,
+        expense
     },
 
     plugins: [createPersistedState()],

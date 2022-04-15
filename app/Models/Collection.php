@@ -14,7 +14,8 @@ class Collection extends Model
        'user_id',
        'block_lot_id',
        'amount',
-       'notes' 
+       'notes',
+       'running_balance'
     ];
 
     public function collectionType(){
