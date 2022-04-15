@@ -13,9 +13,9 @@
                 /></span>
             </template>
 
-            <div v-if="emergency_contact_details[0]" class="card">
+            <div v-if="emergency_contacts" class="card">
                 <DataTable
-                    :value="emergency_contact_details"
+                    :value="emergency_contacts"
                     :filters="filters"
                     :paginator="true"
                     breakpoint="1300px"
@@ -227,15 +227,15 @@
 <script>
 import { computed } from "vue";
 import { useStore } from "vuex";
+
 export default {
-    name: "EmergencyContactDetailComponent.vue",
+    name: "EmergencyContactDetailComponent",
+
     setup() {
         const store = useStore();
         return {
-            emergency_contact_details: computed(
-                () =>
-                    store.state.emergency_contact_details
-                        .emergency_contact_details
+            emergency_contacts: computed(
+                () => store.state.emergency_contact_details.emergency_contacts
             ),
         };
     },
@@ -297,7 +297,10 @@ export default {
             })
                 .then((res) => {
                     this.deleteEmergencyContactDialog = false;
-                    this.$store.dispatch("emergency_contact_details/getAll");
+                    this.$store.dispatch(
+                        "emergency_contact_details/getContacts",
+                        this.$store.state.userLogged.id
+                    );
                     this.loading = false;
                     this.$toast.add({
                         severity: "success",
@@ -330,7 +333,10 @@ export default {
                 .then(() => {
                     this.addEmergencyContactDialog = false;
                     this.resetFields();
-                    this.$store.dispatch("emergency_contact_details/getAll");
+                    this.$store.dispatch(
+                        "emergency_contact_details/getContacts",
+                        this.$store.state.userLogged.id
+                    );
                     this.$toast.add({
                         severity: "success",
                         summary: "Successful Request",
@@ -367,7 +373,10 @@ export default {
                         detail: "Updated Contact",
                         life: 3000,
                     });
-                    this.$store.dispatch("emergency_contact_details/getAll");
+                    this.$store.dispatch(
+                        "emergency_contact_details/getContacts",
+                        this.$store.state.userLogged.id
+                    );
                     this.loading = false;
                 })
                 .catch((err) => {
@@ -393,6 +402,12 @@ export default {
             this.error_name = null;
             this.error_contact_number = null;
         },
+    },
+    mounted() {
+        this.$store.dispatch(
+            "emergency_contact_details/getContacts",
+            this.$store.state.userLogged.id
+        );
     },
 };
 </script>

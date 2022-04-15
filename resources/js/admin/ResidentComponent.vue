@@ -1358,6 +1358,36 @@
                         </template>
                     </Dialog>
                     <Dialog
+                        v-model:visible="emergencyContactDialog"
+                        :style="{ width: '500px' }"
+                        header="Emergency Contacts"
+                        :modal="true"
+                    >
+                        <DataTable
+                            :value="emergency_contacts"
+                            :paginator="true"
+                            :rows="10"
+                        >
+                            <template #empty>
+                                No emergency contacts found
+                            </template>
+
+                            <Column header="Contact Name" field="name">
+                                <template #body="{ data }">
+                                    {{ data.name }}
+                                </template>
+                            </Column>
+                            <Column
+                                header="Contact Number"
+                                field="contact_number"
+                            >
+                                <template #body="{ data }">
+                                    {{ data.contact_number }}
+                                </template>
+                            </Column>
+                        </DataTable>
+                    </Dialog>
+                    <Dialog
                         v-model:visible="process"
                         :style="{ width: '450px' }"
                         :modal="true"
@@ -1389,6 +1419,7 @@ import { computed } from "vue";
 import { useStore } from "vuex";
 export default {
     name: "RegisterUsersComponent",
+
     setup() {
         const store = useStore();
         return {
@@ -1396,6 +1427,7 @@ export default {
             filteredLots: computed(() => store.state.lots.filteredLots),
             lots: computed(() => store.state.lots.lots),
             users: computed(() => store.state.users),
+
             active: computed(() => {
                 let active = [];
                 let temp = [];
@@ -1481,6 +1513,7 @@ export default {
             updateUserDialog: false,
             viewResidentDialog: false,
             viewVerifytDialog: false,
+
             form: {
                 first_name: "",
                 last_name: "",
@@ -1537,9 +1570,28 @@ export default {
                 { status: "verified", value: true },
                 { status: "not verified", value: false },
             ],
+
+            emergencyContactDialog: false,
+            emergency_contacts: null,
         };
     },
     methods: {
+        async viewEmergencyContacts() {
+            this.loading = true;
+            await axios({
+                method: "get",
+                url: "/api/emergency-contact-detail/" + this.id,
+            })
+                .then((res) => {
+                    console.log("emergency", res.data);
+                    this.emergency_contacts = res.data;
+                    this.emergencyContactDialog = true;
+                    this.loading = false;
+                })
+                .catch((err) => {
+                    console.log(err.response.data);
+                });
+        },
         viewResident() {
             this.viewResidentDialog = true;
         },
@@ -1558,6 +1610,13 @@ export default {
                         icon: "pi pi-pencil",
                         command: () => {
                             this.updateUser();
+                        },
+                    },
+                    {
+                        label: "Emergency Contacts",
+                        icon: "pi pi-id-card",
+                        command: () => {
+                            this.viewEmergencyContacts();
                         },
                     },
                     {
@@ -1591,7 +1650,13 @@ export default {
                             this.updateUser();
                         },
                     },
-
+                    {
+                        label: "Emergency Contacts",
+                        icon: "pi pi-id-card",
+                        command: () => {
+                            this.viewEmergencyContacts();
+                        },
+                    },
                     {
                         label: "Deactivate Resident",
                         icon: "pi pi-unlock",
@@ -1616,7 +1681,13 @@ export default {
                             this.updateUser();
                         },
                     },
-
+                    {
+                        label: "Emergency Contacts",
+                        icon: "pi pi-id-card",
+                        command: () => {
+                            this.viewEmergencyContacts();
+                        },
+                    },
                     {
                         label: "Activate Resident",
                         icon: "pi pi-unlock",
@@ -1648,7 +1719,13 @@ export default {
                             this.updateUser();
                         },
                     },
-
+                    {
+                        label: "Emergency Contacts",
+                        icon: "pi pi-id-card",
+                        command: () => {
+                            this.viewEmergencyContacts();
+                        },
+                    },
                     {
                         label: "Activate Resident",
                         icon: "pi pi-unlock",

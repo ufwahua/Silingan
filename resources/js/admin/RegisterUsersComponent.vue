@@ -203,100 +203,7 @@
                                         @click="registerUser"
                                     />
                                 </div>
-                                <!-- <div class="formgroup-inline">
-                                        <div class="col-3 mb-2 lg:col-1.5 lg:mb-0 field">
-                                            <InputText
-                                                type="text"
-                                                placeholder="Username"
-                                                v-tooltip="'Your username'"
-                                            />
-                                        </div>
-                                        <div class="col-3 mb-2 lg:col-1.5 lg:mb-0 field">
-
-                                        <Button
-                                            type="button"
-                                            label="Save"
-                                            icon="pi pi-check"
-                                            v-tooltip="'Click to proceed'"
-                                        />
-                                        </div>
-                                    </div> -->
                             </div>
-                            <!-- <div class="col-12 mb-2 lg:col-3 lg:mb-0">
-                                <Dropdown
-                                    v-model="filters['lot.block.number'].value"
-                                    :showClear="true"
-                                    :options="blocks"
-                                    optionLabel="number"
-                                    optionValue="number"
-                                    placeholder="Filter by block"
-                                    class="my-2"
-                                    style="width: 200px"
-                                    @change="getFilterBlockLot"
-                                ></Dropdown>
-                                <Dropdown
-                                    v-model="filters['lot.number'].value"
-                                    :showClear="true"
-                                    :options="filteredLots"
-                                    optionLabel="number"
-                                    optionValue="number"
-                                    placeholder="Filter by lot"
-                                    style="width: 200px"
-                                    class="my-2"
-                                ></Dropdown>
-                                <Dropdown
-                                    v-model="filters['tag_as'].value"
-                                    :showClear="true"
-                                    :options="tag"
-                                    optionLabel="tag"
-                                    optionValue="tag"
-                                    placeholder="Filter by tag"
-                                    style="width: 200px"
-                                    class="my-2"
-                                ></Dropdown>
-                            </div> -->
-                            <!-- <Dropdown
-                                v-model="filters['role'].value"
-                                :showClear="true"
-                                :options="role"
-                                optionLabel="role"
-                                optionValue="role"
-                                placeholder="Filter by role"
-                                style="width: 200px"
-                                class="my-2"
-                            ></Dropdown>
-                            <Dropdown
-                                v-model="filters['status'].value"
-                                :showClear="true"
-                                :options="status"
-                                optionLabel="status"
-                                optionValue="status"
-                                placeholder="Filter by status"
-                                style="width: 200px"
-                                class="my-2"
-                            ></Dropdown>
-                            <Dropdown
-                                v-model="filters['verified'].value"
-                                :showClear="true"
-                                :options="verification"
-                                optionLabel="status"
-                                optionValue="value"
-                                placeholder="Filter by verification"
-                                style="width: 215px"
-                                class="my-2"
-                            ></Dropdown> -->
-                            <!-- <Button
-                                label="Clear"
-                                icon="pi pi-filter-slash"
-                                class="my-2 p-button-outlined p-button-secondary"
-                                @click="clearFilter"
-                            />
-                            <Button
-                                label="Add"
-                                icon="pi pi-plus"
-                                class="p-button-primary my-2"
-                                @click="registerUser"
-                            /> -->
                         </div>
 
                         <template #empty> No registered users found </template>
@@ -1911,7 +1818,7 @@
                             />
                         </template>
                     </Dialog>
-                    <!-- <Dialog
+                    <Dialog
                         v-model:visible="registerUserDialog"
                         :style="{ width: '500px' }"
                         header="Register User"
@@ -2725,7 +2632,7 @@
                                 @click="onRegisterClick"
                             />
                         </template>
-                    </Dialog> -->
+                    </Dialog>
                     <Dialog
                         v-model:visible="viewUserDialog"
                         :style="{ width: '500px' }"
@@ -3680,6 +3587,36 @@
                         </template>
                     </Dialog>
                     <Dialog
+                        v-model:visible="emergencyContactDialog"
+                        :style="{ width: '500px' }"
+                        header="Emergency Contacts"
+                        :modal="true"
+                    >
+                        <DataTable
+                            :value="emergency_contacts"
+                            :paginator="true"
+                            :rows="10"
+                        >
+                            <template #empty>
+                                No emergency contacts found
+                            </template>
+
+                            <Column header="Contact Name" field="name">
+                                <template #body="{ data }">
+                                    {{ data.name }}
+                                </template>
+                            </Column>
+                            <Column
+                                header="Contact Number"
+                                field="contact_number"
+                            >
+                                <template #body="{ data }">
+                                    {{ data.contact_number }}
+                                </template>
+                            </Column>
+                        </DataTable>
+                    </Dialog>
+                    <Dialog
                         v-model:visible="process"
                         :style="{ width: '450px' }"
                         :modal="true"
@@ -3844,9 +3781,27 @@ export default {
                 { status: "verified", value: true },
                 { status: "not verified", value: false },
             ],
+            emergencyContactDialog: false,
+            emergency_contacts: null,
         };
     },
     methods: {
+        async viewEmergencyContacts() {
+            this.loading = true;
+            await axios({
+                method: "get",
+                url: "/api/emergency-contact-detail/" + this.id,
+            })
+                .then((res) => {
+                    console.log("emergency", res.data);
+                    this.emergency_contacts = res.data;
+                    this.emergencyContactDialog = true;
+                    this.loading = false;
+                })
+                .catch((err) => {
+                    console.log(err.response.data);
+                });
+        },
         viewUser() {
             this.viewUserDialog = true;
         },
@@ -3889,6 +3844,13 @@ export default {
                         },
                     },
                     {
+                        label: "Emergency Contacts",
+                        icon: "pi pi-id-card",
+                        command: () => {
+                            this.viewEmergencyContacts();
+                        },
+                    },
+                    {
                         label: `Deactivate ${data.role}`,
                         icon: "pi pi-lock",
                         command: () => {
@@ -3919,7 +3881,13 @@ export default {
                             this.updateUser();
                         },
                     },
-
+                    {
+                        label: "Emergency Contacts",
+                        icon: "pi pi-id-card",
+                        command: () => {
+                            this.viewEmergencyContacts();
+                        },
+                    },
                     {
                         label: `Deactivate ${data.role}`,
                         icon: "pi pi-unlock",
@@ -3944,7 +3912,13 @@ export default {
                             this.updateUser();
                         },
                     },
-
+                    {
+                        label: "Emergency Contacts",
+                        icon: "pi pi-id-card",
+                        command: () => {
+                            this.viewEmergencyContacts();
+                        },
+                    },
                     {
                         label: `Activate ${data.role}`,
                         icon: "pi pi-unlock",
@@ -3974,6 +3948,13 @@ export default {
                         icon: "pi pi-pencil",
                         command: () => {
                             this.updateUser();
+                        },
+                    },
+                    {
+                        label: "Emergency Contacts",
+                        icon: "pi pi-id-card",
+                        command: () => {
+                            this.viewEmergencyContacts();
                         },
                     },
 

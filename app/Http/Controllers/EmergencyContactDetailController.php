@@ -27,7 +27,7 @@ class EmergencyContactDetailController extends Controller
      */
     public function show(Request $request) : JsonResponse
     {
-        $EmergencyContactDetail = EmergencyContactDetail::where('id',$request->route('EmergencyContactDetail'))->with(['user'])->get();
+        $EmergencyContactDetail = EmergencyContactDetail::where('user_id',$request->route('emergency_contact_detail'))->with(['user'])->get();
         return response()->json($EmergencyContactDetail);
     }
 
