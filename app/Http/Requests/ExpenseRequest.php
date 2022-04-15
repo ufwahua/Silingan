@@ -27,8 +27,9 @@ class ExpenseRequest extends FormRequest
         return [
             'user_id' => ['required', Rule::exists('users', 'id')],
             'amount'=> ['required'],
-            'notes'=> ['sometimes'],
-            'official_receipt' => ['sometimes']
+            'notes'=> ['required'],
+            'official_receipt' => ['sometimes'],
+            'running_balance' => ['required']
         ];
     }
 }

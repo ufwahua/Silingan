@@ -13,7 +13,8 @@ class Expense extends Model
         'user_id',
         'amount',
         'notes',
-        'official_receipt'
+        'official_receipt',
+        'running_balance'
     ];
 
     public function user(){

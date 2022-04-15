@@ -15,7 +15,7 @@ class ExpenseController extends Controller
      */
     public function index() : JsonResponse{
         return response()->json(
-            Expense::query()->orderBy('id','asc')->get()
+            Expense::with(['user'])->latest()->get()
         );
     }
 
