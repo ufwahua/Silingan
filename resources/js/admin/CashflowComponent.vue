@@ -297,7 +297,6 @@
             mode="currency"
             currency="PHP"
             :useGrouping="false"
-            :placeholder="amount_placeholder"
             :class="{ 'p-invalid': expense_valid.state.amount }"
           />
           <small v-if="expense_valid.state.amount" class="p-error">{{

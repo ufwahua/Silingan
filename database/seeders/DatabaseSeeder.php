@@ -32,6 +32,8 @@ class DatabaseSeeder extends Seeder
             CardSeeder::class,
             BlockUserSeeder::class,
             VehicleSeeder::class,
+            CollectionTypeSeeder::class,
+            FundSeeder::class
         ]);
     }
 }
