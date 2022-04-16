@@ -126,6 +126,7 @@
                                 <InputMask
                                     mask="(999) 99-999-9999"
                                     placeholder="(639) 99-999-9999"
+                                    :unmask="true"
                                     :class="{
                                         'p-invalid': error_contact_num,
                                     }"

@@ -25,6 +25,8 @@ use App\Http\Controllers\CollectionTypeController;
 use App\Http\Controllers\CollectionController;
 use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\FundController;
+use App\Http\Controllers\SmsController;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -51,7 +53,7 @@ Route::get('/user/not-blocked/{user}', [UserController::class, 'notBlockedUsers'
 Route::delete('/candidate/election/{candidate}', [CandidateController::class, 'deleteAllCandidate']);
 Route::get('/post/marketplace/verified/{post}', [PostController::class, 'getMarketPlaceVerified']);
 Route::get('/post/marketplace/not-verified/{post}', [PostController::class, 'getMarketPlaceNotVerified']);
-
+Route::post('/sms',[SmsController::class, 'sendSmsNotification']);
 
 
 Route::apiResources([

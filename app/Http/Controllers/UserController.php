@@ -99,7 +99,7 @@ class UserController extends Controller
     public function index(Request $request): JsonResponse
     {
         return response()->json(
-            User::with(['lot.block','position','emergency_contact'])->orderBy('role', 'asc')->orderBy('id', 'asc')->get()
+            User::with(['lot.block','position','emergency_contact'])->latest()->get()
         );
     }
 
@@ -107,7 +107,7 @@ class UserController extends Controller
     {
 
         $block_user_ids = DB::table('block_users')->where('user_id', $request->route('user'))->pluck('block_user_id')->toArray();
-        $block_users = User::whereNotIn('id', $block_user_ids)->get();
+        $block_users = User::whereNotIn('id', $block_user_ids)->latest()->get();
 
         return response()->json(
             $block_users

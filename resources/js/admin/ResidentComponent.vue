@@ -503,6 +503,7 @@
                                         <InputMask
                                             mask="(999) 99-999-9999"
                                             placeholder="(639) 99-999-9999"
+                                            :unmask="true"
                                             id="contact_num"
                                             type="text"
                                             oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*?)\..*/g, '$1');"
@@ -764,6 +765,7 @@
                                         <InputMask
                                             mask="(999) 99-999-9999"
                                             placeholder="(639) 99-999-9999"
+                                            :unmask="true"
                                             id="contact_num"
                                             type="text"
                                             oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*?)\..*/g, '$1');"
@@ -1078,6 +1080,7 @@
                                         ><InputMask
                                             mask="(999) 99-999-9999"
                                             placeholder="(639) 99-999-9999"
+                                            :unmask="true"
                                             id="contact_num"
                                             type="text"
                                             oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*?)\..*/g, '$1');"
@@ -1333,6 +1336,7 @@
                                         ><InputMask
                                             mask="(999) 99-999-9999"
                                             placeholder="(639) 99-999-9999"
+                                            :unmask="true"
                                             id="contact_num"
                                             type="text"
                                             oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*?)\..*/g, '$1');"
@@ -1931,7 +1935,14 @@ export default {
                     tag_as: this.form.selected_tag,
                 },
             })
-                .then(() => {
+                .then(async () => {
+                    await axios({
+                        method: "post",
+                        url: "/api/sms/",
+                        data: {
+                            contact_num: this.form.contact_num,
+                        },
+                    });
                     this.$toast.add({
                         severity: "success",
                         summary: "Successful",

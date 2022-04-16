@@ -541,6 +541,7 @@
                                         <InputMask
                                             mask="(999) 99-999-9999"
                                             placeholder="(639) 99-999-9999"
+                                            :unmask="true"
                                             id="contact_num"
                                             type="text"
                                             oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*?)\..*/g, '$1');"
@@ -763,6 +764,7 @@
                                         <InputMask
                                             mask="(999) 99-999-9999"
                                             placeholder="(639) 99-999-9999"
+                                            :unmask="true"
                                             type="text"
                                             oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*?)\..*/g, '$1');"
                                             v-model="form.contact_num"
@@ -981,6 +983,7 @@
                                         <InputMask
                                             mask="(999) 99-999-9999"
                                             placeholder="(639) 99-999-9999"
+                                            :unmask="true"
                                             id="contact_num"
                                             type="text"
                                             oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*?)\..*/g, '$1');"
@@ -1238,6 +1241,7 @@
                                         <InputMask
                                             mask="(999) 99-999-9999"
                                             placeholder="(639) 99-999-9999"
+                                            :unmask="true"
                                             id="contact_num"
                                             type="text"
                                             oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*?)\..*/g, '$1');"
@@ -1505,6 +1509,7 @@
                                         <InputMask
                                             mask="(999) 99-999-9999"
                                             placeholder="(639) 99-999-9999"
+                                            :unmask="true"
                                             id="contact_num"
                                             type="text"
                                             oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*?)\..*/g, '$1');"
@@ -1768,6 +1773,7 @@
                                         ><InputMask
                                             mask="(999) 99-999-9999"
                                             placeholder="(639) 99-999-9999"
+                                            :unmask="true"
                                             id="contact_num"
                                             type="text"
                                             oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*?)\..*/g, '$1');"
@@ -2072,6 +2078,7 @@
                                         ><InputMask
                                             mask="(999) 99-999-9999"
                                             placeholder="(639) 99-999-9999"
+                                            :unmask="true"
                                             id="contact_num"
                                             type="text"
                                             oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*?)\..*/g, '$1');"
@@ -2340,6 +2347,7 @@
                                         ><InputMask
                                             mask="(999) 99-999-9999"
                                             placeholder="(639) 99-999-9999"
+                                            :unmask="true"
                                             id="contact_num"
                                             type="text"
                                             oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*?)\..*/g, '$1');"
@@ -2603,6 +2611,7 @@
                                         ><InputMask
                                             mask="(999) 99-999-9999"
                                             placeholder="(639) 99-999-9999"
+                                            :unmask="true"
                                             id="contact_num"
                                             type="text"
                                             oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*?)\..*/g, '$1');"
@@ -2917,6 +2926,7 @@
                                         ><InputMask
                                             mask="(999) 99-999-9999"
                                             placeholder="(639) 99-999-9999"
+                                            :unmask="true"
                                             id="contact_num"
                                             type="text"
                                             oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*?)\..*/g, '$1');"
@@ -3148,6 +3158,7 @@
                                         ><InputMask
                                             mask="(999) 99-999-9999"
                                             placeholder="(639) 99-999-9999"
+                                            :unmask="true"
                                             id="contact_num"
                                             type="text"
                                             oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*?)\..*/g, '$1');"
@@ -3375,6 +3386,7 @@
                                         ><InputMask
                                             mask="(999) 99-999-9999"
                                             placeholder="(639) 99-999-9999"
+                                            :unmask="true"
                                             id="contact_num"
                                             type="text"
                                             oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*?)\..*/g, '$1');"
@@ -3629,6 +3641,7 @@
                                         <InputMask
                                             mask="(999) 99-999-9999"
                                             placeholder="(639) 99-999-9999"
+                                            :unmask="true"
                                             id="contact_num"
                                             type="text"
                                             oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*?)\..*/g, '$1');"
