@@ -122,16 +122,7 @@
                                     style="width: 200px"
                                     class="my-2"
                                 ></Dropdown>
-                                <Dropdown
-                                    v-model="filters['verified'].value"
-                                    :showClear="true"
-                                    :options="verification"
-                                    optionLabel="status"
-                                    optionValue="value"
-                                    placeholder="Filter by verification"
-                                    style="width: 215px"
-                                    class="my-2"
-                                ></Dropdown>
+
                                 <Dropdown
                                     v-model="filters['position.name'].value"
                                     :showClear="true"
@@ -437,16 +428,25 @@
 
                                 <div class="field col-12 md:col-6">
                                     <label>Contact Number</label>
-                                    <InputText
-                                        id="contact_num"
-                                        type="text"
-                                        oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*?)\..*/g, '$1');"
-                                        v-model="form.contact_num"
-                                        @keydown.enter="onRegisterClick"
-                                        :class="{
-                                            'p-invalid': error_contact_num,
-                                        }"
-                                    />
+
+                                    <div class="p-inputgroup">
+                                        <span class="p-inputgroup-addon">
+                                            +63
+                                        </span>
+                                        <InputMask
+                                            mask="(999) 99-999-9999"
+                                            placeholder="(639) 99-999-9999"
+                                            id="contact_num"
+                                            type="text"
+                                            oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*?)\..*/g, '$1');"
+                                            v-model="form.contact_num"
+                                            @keydown.enter="onRegisterClick"
+                                            :class="{
+                                                'p-invalid': error_contact_num,
+                                            }"
+                                        />
+                                    </div>
+
                                     <label
                                         style="color: red"
                                         v-if="error_contact_num"
@@ -717,17 +717,25 @@
 
                                 <div class="field col-12 md:col-6">
                                     <label>Contact Number</label>
-                                    <InputText
-                                        id="contact_num"
-                                        type="text"
-                                        oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*?)\..*/g, '$1');"
-                                        v-model="form.contact_num"
-                                        @keydown.enter="onRegisterClick"
-                                        :class="{
-                                            'p-invalid': error_contact_num,
-                                        }"
-                                        disabled
-                                    />
+                                    <div class="p-inputgroup">
+                                        <span class="p-inputgroup-addon">
+                                            +63
+                                        </span>
+                                        <InputMask
+                                            mask="(999) 99-999-9999"
+                                            placeholder="(639) 99-999-9999"
+                                            id="contact_num"
+                                            type="text"
+                                            oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*?)\..*/g, '$1');"
+                                            v-model="form.contact_num"
+                                            @keydown.enter="onRegisterClick"
+                                            :class="{
+                                                'p-invalid': error_contact_num,
+                                            }"
+                                            disabled
+                                        />
+                                    </div>
+
                                     <label
                                         style="color: red"
                                         v-if="error_contact_num"
@@ -978,16 +986,24 @@
 
                                 <div class="field col-12 md:col-6">
                                     <label>Contact Number</label>
-                                    <InputText
-                                        id="contact_num"
-                                        type="text"
-                                        oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*?)\..*/g, '$1');"
-                                        v-model="form.contact_num"
-                                        @keydown.enter="onRegisterClick"
-                                        :class="{
-                                            'p-invalid': error_contact_num,
-                                        }"
-                                    />
+                                    <div class="p-inputgroup">
+                                        <span class="p-inputgroup-addon">
+                                            +63
+                                        </span>
+                                        <InputMask
+                                            mask="(999) 99-999-9999"
+                                            placeholder="(639) 99-999-9999"
+                                            id="contact_num"
+                                            type="text"
+                                            oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*?)\..*/g, '$1');"
+                                            v-model="form.contact_num"
+                                            @keydown.enter="onRegisterClick"
+                                            :class="{
+                                                'p-invalid': error_contact_num,
+                                            }"
+                                        />
+                                    </div>
+
                                     <label
                                         style="color: red"
                                         v-if="error_contact_num"

@@ -33,7 +33,7 @@ class RegisterRequest extends FormRequest
             'last_name'             => ['required','string' , 'max:255'],
             'gender'                => ['required'],
             'age'                   => ['required','integer','numeric','gt:0', 'max:130'],
-            'contact_num'           => ['required','string','min:11'],
+            'contact_num'           => ['required','string','min:10'],
             'profile_pic'           => ['sometimes'],
             'has_voted'             => ['required'],
             'verified'              => ['required'],

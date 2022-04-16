@@ -86,15 +86,21 @@
                 <div class="col-12">
                     <div class="p-fluid mb-2">
                         <h6>Contact Number</h6>
-                        <InputText
-                            id="contact_num"
-                            type="text"
-                            oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*?)\..*/g, '$1');"
-                            v-model="contact_number"
-                            :class="{
-                                'p-invalid': error_contact_number,
-                            }"
-                        />
+                        <div class="p-inputgroup">
+                            <span class="p-inputgroup-addon"> +63 </span>
+                            <InputMask
+                                mask="(999) 99-999-9999"
+                                placeholder="(639) 99-999-9999"
+                                id="contact_num"
+                                type="text"
+                                oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*?)\..*/g, '$1');"
+                                v-model="contact_number"
+                                :class="{
+                                    'p-invalid': error_contact_number,
+                                }"
+                            />
+                        </div>
+
                         <small v-if="error_contact_number" class="p-error">{{
                             error_contact_number
                         }}</small>
@@ -139,15 +145,21 @@
                 <div class="col-12">
                     <div class="p-fluid mb-2">
                         <h6>Contact Number</h6>
-                        <InputText
-                            id="contact_num"
-                            type="text"
-                            oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*?)\..*/g, '$1');"
-                            v-model="contact_number"
-                            :class="{
-                                'p-invalid': error_contact_number,
-                            }"
-                        />
+                        <div class="p-inputgroup">
+                            <span class="p-inputgroup-addon"> +63 </span>
+                            <InputMask
+                                mask="(999) 99-999-9999"
+                                placeholder="(639) 99-999-9999"
+                                id="contact_num"
+                                type="text"
+                                oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*?)\..*/g, '$1');"
+                                v-model="contact_number"
+                                :class="{
+                                    'p-invalid': error_contact_number,
+                                }"
+                            />
+                        </div>
+
                         <small v-if="error_contact_number" class="p-error">{{
                             error_contact_number
                         }}</small>

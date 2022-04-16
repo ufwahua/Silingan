@@ -17,7 +17,7 @@ class UserSeeder extends Seeder
      * @return void
      */
 
-    
+
     public function run()
     {
         User::factory()
@@ -30,45 +30,45 @@ class UserSeeder extends Seeder
             'role' => 'admin',
             'status' => 'active',
             'block_lot_id' => null,
-            'gender' =>'male',
-            'age' => rand(1,100),     
+            'gender' => 'male',
+            'age' => rand(1, 100),
             'verified' => 1,
             'has_voted' => 0,
-            'contact_num' => rand(639111111111,63999999999),
+            'contact_num' => '639083024328',
             'email' => 'jh.diamos@gmail.com',
-            'password'=> Hash::make("12345678"),
+            'password' => Hash::make("12345678"),
             'tag_as' => 'owner',
         ]);
-        
+
         User::create([
             'first_name' => "Joshua Henry",
             'last_name' => "Diamos",
             'role' => 'security officer',
             'status' => 'active',
             'block_lot_id' => null,
-            'gender' =>'male',
-            'age' => rand(1,100),     
+            'gender' => 'male',
+            'age' => rand(1, 100),
             'verified' => 1,
             'has_voted' => 0,
-            'contact_num' => rand(639111111111,63999999999),
+            'contact_num' => rand(639111111111, 63999999999),
             'email' => 'jh.security@gmail.com',
-            'password'=> Hash::make("12345678"),
-            
+            'password' => Hash::make("12345678"),
+
         ]);
-        
+
         User::create([
             'first_name' => "Varbie",
             'last_name' => "Sumido",
             'role' => 'resident',
             'status' => 'active',
             'block_lot_id' => 3,
-            'gender' =>'female',
-            'age' => rand(1,100),     
-            'verified' => 1,
+            'gender' => 'female',
+            'age' => rand(1, 100),
+            'verified' => 0,
             'has_voted' => 0,
-            'contact_num' => rand(639111111111,63999999999),
+            'contact_num' => '639083024328',
             'email' => 'varbie.sumido@gmail.com',
-            'password'=> Hash::make("12345678"),
+            'password' => Hash::make("12345678"),
             'tag_as' => 'owner',
         ]);
 
@@ -77,14 +77,14 @@ class UserSeeder extends Seeder
             'last_name' => "Dahunan",
             'role' => 'resident',
             'status' => 'active',
-            'gender' =>'male',
+            'gender' => 'male',
             'block_lot_id' => 4,
-            'age' => rand(1,100),     
+            'age' => rand(1, 100),
             'verified' => 1,
             'has_voted' => 0,
-            'contact_num' => rand(639111111111,63999999999),
+            'contact_num' => '639484807961',
             'email' => 'reynard.dahunan@gmail.com',
-            'password'=> Hash::make("12345678"),
+            'password' => Hash::make("12345678"),
             'tag_as' => 'owner',
         ]);
         User::create([
@@ -94,13 +94,13 @@ class UserSeeder extends Seeder
             'position_id' => 1,
             'status' => 'active',
             'block_lot_id' => 2,
-            'gender' =>'male',
-            'age' => rand(1,100),     
+            'gender' => 'male',
+            'age' => rand(1, 100),
             'verified' => 1,
             'has_voted' => 0,
-            'contact_num' => rand(639111111111,63999999999),
+            'contact_num' => rand(639111111111, 63999999999),
             'email' => 'jh.officer@gmail.com',
-            'password'=> Hash::make("12345678"),
+            'password' => Hash::make("12345678"),
             'tag_as' => 'owner',
         ]);
         User::create([
@@ -109,14 +109,14 @@ class UserSeeder extends Seeder
             'role' => 'officer',
             'position_id' => 2,
             'status' => 'active',
-            'gender' =>'male',
+            'gender' => 'male',
             'block_lot_id' => 6,
-            'age' => rand(1,100),     
+            'age' => rand(1, 100),
             'verified' => 1,
             'has_voted' => 0,
-            'contact_num' => rand(639111111111,63999999999),
+            'contact_num' => rand(639111111111, 63999999999),
             'email' => 'stevenmitch.espina@gmail.com',
-            'password'=> Hash::make("12345678"),
+            'password' => Hash::make("12345678"),
             'tag_as' => 'owner',
         ]);
 
@@ -126,14 +126,14 @@ class UserSeeder extends Seeder
             'role' => 'officer',
             'position_id' => 3,
             'status' => 'active',
-            'gender' =>'male',
+            'gender' => 'male',
             'block_lot_id' => 7,
-            'age' => rand(1,100),     
+            'age' => rand(1, 100),
             'verified' => 1,
             'has_voted' => 0,
-            'contact_num' => rand(639111111111,63999999999),
+            'contact_num' => rand(639111111111, 63999999999),
             'email' => 'rodrigo.natad@gmail.com',
-            'password'=> Hash::make("12345678"),
+            'password' => Hash::make("12345678"),
             'tag_as' => 'owner',
         ]);
 
@@ -143,14 +143,14 @@ class UserSeeder extends Seeder
             'role' => 'officer',
             'position_id' => 4,
             'status' => 'active',
-            'gender' =>'male',
+            'gender' => 'male',
             'block_lot_id' => 8,
-            'age' => rand(1,100),     
+            'age' => rand(1, 100),
             'verified' => 1,
             'has_voted' => 0,
-            'contact_num' => rand(639111111111,63999999999),
+            'contact_num' => rand(639111111111, 63999999999),
             'email' => 'warren.ngujo@gmail.com',
-            'password'=> Hash::make("12345678"),
+            'password' => Hash::make("12345678"),
             'tag_as' => 'owner',
         ]);
 
@@ -160,14 +160,14 @@ class UserSeeder extends Seeder
             'role' => 'officer',
             'position_id' => 5,
             'status' => 'active',
-            'gender' =>'female',
+            'gender' => 'female',
             'block_lot_id' => 9,
-            'age' => rand(1,100),     
+            'age' => rand(1, 100),
             'verified' => 1,
             'has_voted' => 0,
-            'contact_num' => rand(639111111111,63999999999),
+            'contact_num' => rand(639111111111, 63999999999),
             'email' => 'guilamae.bagolor@gmail.com',
-            'password'=> Hash::make("12345678"),
+            'password' => Hash::make("12345678"),
             'tag_as' => 'owner',
         ]);
 
@@ -177,18 +177,18 @@ class UserSeeder extends Seeder
             'role' => 'officer',
             'position_id' => 6,
             'status' => 'active',
-            'gender' =>'male',
+            'gender' => 'male',
             'block_lot_id' => 10,
-            'age' => rand(1,100),     
+            'age' => rand(1, 100),
             'verified' => 1,
             'has_voted' => 0,
-            'contact_num' => rand(639111111111,63999999999),
+            'contact_num' => rand(639111111111, 63999999999),
             'email' => 'kentluke.pescadero@gmail.com',
-            'password'=> Hash::make("12345678"),
+            'password' => Hash::make("12345678"),
             'tag_as' => 'owner',
         ]);
 
-       
+
 
         User::create([
             'first_name' => "Rika Mae",
@@ -196,14 +196,14 @@ class UserSeeder extends Seeder
             'role' => 'officer',
             'position_id' => 7,
             'status' => 'active',
-            'gender' =>'male',
+            'gender' => 'male',
             'block_lot_id' => 12,
-            'age' => rand(1,100),     
+            'age' => rand(1, 100),
             'verified' => 1,
             'has_voted' => 0,
-            'contact_num' => rand(639111111111,63999999999),
+            'contact_num' => rand(639111111111, 63999999999),
             'email' => 'rikamae.diamos@gmail.com',
-            'password'=> Hash::make("12345678"),
+            'password' => Hash::make("12345678"),
             'tag_as' => 'owner',
         ]);
     }

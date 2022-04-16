@@ -136,13 +136,19 @@
 
                 <div class="field col-12 md:col-6">
                     <label>Contact Number</label>
-                    <InputText
-                        :class="{
-                            'p-invalid': error_contact_num,
-                        }"
-                        oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*?)\..*/g, '$1');"
-                        v-model="contact_num"
-                    />
+                    <div class="p-inputgroup">
+                        <span class="p-inputgroup-addon"> +63 </span>
+                        <InputMask
+                            mask="(999) 99-999-9999"
+                            placeholder="(639) 99-999-9999"
+                            :class="{
+                                'p-invalid': error_contact_num,
+                            }"
+                            oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*?)\..*/g, '$1');"
+                            v-model="contact_num"
+                        />
+                    </div>
+
                     <label style="color: red" v-if="error_contact_num">{{
                         error_contact_num
                     }}</label>
@@ -311,13 +317,19 @@
 
                 <div class="field col-12 md:col-12">
                     <label>Contact Number</label>
-                    <InputText
-                        :class="{
-                            'p-invalid': error_contact_num,
-                        }"
-                        oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*?)\..*/g, '$1');"
-                        v-model="contact_num"
-                    />
+                    <div class="p-inputgroup">
+                        <span class="p-inputgroup-addon"> +63 </span>
+                        <InputMask
+                            mask="(999) 99-999-9999"
+                            placeholder="(639) 99-999-9999"
+                            :class="{
+                                'p-invalid': error_contact_num,
+                            }"
+                            oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*?)\..*/g, '$1');"
+                            v-model="contact_num"
+                        />
+                    </div>
+
                     <label style="color: red" v-if="error_contact_num">{{
                         error_contact_num
                     }}</label>
