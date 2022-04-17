@@ -79,7 +79,7 @@ export default {
                         },
                         {
                             label: "Announcement",
-                            icon: "pi pi-info",
+                            icon: "pi pi-volume-down",
                             to: "/admin/view-announcement",
                         },
                     ],
