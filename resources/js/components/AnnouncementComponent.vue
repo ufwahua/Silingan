@@ -1,10 +1,10 @@
+
 <template>
     <div class="grid">
         <div
             class="col-12 sm:col-12 md:col-10 md:col-offset-1 lg:col-6 lg:col-offset-1 xl:col-6 xl:col-offset-1"
         >
             <div class="col justify-content-center pt-0">
-                <p class="p-2 m-">{{ post.content }}</p>
                 <h1 class="text-center">Announcement</h1>
                 <div v-if="announcements">
                     <div
@@ -30,7 +30,6 @@
                 </div>
 
                 <div v-else class="text-center">No announcement</div>
->>>>>>> 93a0b687bdbe533ab8541a140dc2888ec33e514a
             </div>
         </div>
         <div

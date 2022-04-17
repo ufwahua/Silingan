@@ -137,7 +137,7 @@ const router = createRouter({
             },
             children: [
                 {
-                    path: "/admin/timeline",
+                    path: "timeline",
                     beforeEnter: checkRole,
                     meta: {
                         role: "admin",
