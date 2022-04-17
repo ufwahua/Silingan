@@ -195,12 +195,11 @@ export default {
     },
     created() {
         this.$store.dispatch("news/getAll");
-
         this.$store.dispatch(
             "getUsersNotBlocked",
             this.$store.state.userLogged.id
         );
-
+        this.$store.dispatch("getAllUsers");
         this.$store.dispatch("getBlockUsers", this.$store.state.userLogged.id);
         this.$store.dispatch(
             "userVehicles/getAll",

@@ -4236,39 +4236,52 @@ export default {
         async verifyUser() {
             this.process = true;
             await axios({
-                method: "put",
-                url: "/api/user/" + this.id,
+                method: "post",
+                url: "/api/sms/",
                 data: {
-                    first_name: this.form.first_name,
-                    last_name: this.form.last_name,
-                    gender: this.form.gender,
-                    block_lot_id: this.form.selected_block_lot,
-                    email: this.form.email,
-                    verified: 1,
-                    has_voted: this.form.has_voted,
-                    age: this.form.age,
                     contact_num: this.form.contact_num,
-                    role: this.form.selected_role,
-                    status: this.form.status,
-                    tag_as: this.form.selected_tag,
                 },
             })
-                .then(() => {
-                    this.$toast.add({
-                        severity: "success",
-                        summary: "Successful",
-                        detail: "Resident Verified",
-                        life: 3000,
-                    });
-                    this.$store.dispatch("getAllUsers");
-                    this.resetFields();
-                    this.viewVerifytDialog = false;
-                    this.process = false;
+                .then(async () => {
+                    await axios({
+                        method: "put",
+                        url: "/api/user/" + this.id,
+                        data: {
+                            first_name: this.form.first_name,
+                            last_name: this.form.last_name,
+                            gender: this.form.gender,
+                            block_lot_id: this.form.selected_block_lot,
+                            email: this.form.email,
+                            verified: 1,
+                            has_voted: this.form.has_voted,
+                            age: this.form.age,
+                            contact_num: this.form.contact_num,
+                            role: this.form.selected_role,
+                            status: this.form.status,
+                            tag_as: this.form.selected_tag,
+                        },
+                    })
+                        .then(() => {
+                            this.$toast.add({
+                                severity: "success",
+                                summary: "Successful",
+                                detail: "Resident Verified",
+                                life: 3000,
+                            });
+                            this.$store.dispatch("getAllUsers");
+                            this.resetFields();
+                            this.viewVerifytDialog = false;
+                            this.process = false;
+                        })
+                        .catch((err) => {
+                            console.log(err.response);
+                            this.resetErrors();
+                            this.validate(err);
+                            this.process = false;
+                        });
                 })
-                .catch((err) => {
+                .catch(async (err) => {
                     console.log(err.response);
-                    this.resetErrors();
-                    this.validate(err);
                     this.process = false;
                 });
         },
