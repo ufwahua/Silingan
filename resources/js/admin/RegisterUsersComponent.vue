@@ -487,6 +487,9 @@
                                         :class="{
                                             'p-invalid': error_selected_lot,
                                         }"
+                                        :disabled="
+                                            form.selected_block ? false : true
+                                        "
                                     />
                                     <label
                                         style="color: red"
@@ -728,6 +731,9 @@
                                         :class="{
                                             'p-invalid': error_selected_lot,
                                         }"
+                                        :disabled="
+                                            form.selected_block ? false : true
+                                        "
                                     />
                                     <label
                                         style="color: red"
@@ -1187,6 +1193,9 @@
                                         :class="{
                                             'p-invalid': error_selected_lot,
                                         }"
+                                        :disabled="
+                                            form.selected_block ? false : true
+                                        "
                                     />
                                     <label
                                         style="color: red"
@@ -1473,6 +1482,9 @@
                                         :class="{
                                             'p-invalid': error_selected_lot,
                                         }"
+                                        :disabled="
+                                            form.selected_block ? false : true
+                                        "
                                     />
                                     <label
                                         style="color: red"
@@ -2025,6 +2037,9 @@
                                         :class="{
                                             'p-invalid': error_selected_lot,
                                         }"
+                                        :disabled="
+                                            form.selected_block ? false : true
+                                        "
                                     />
                                     <label
                                         style="color: red"
@@ -2312,6 +2327,9 @@
                                         :class="{
                                             'p-invalid': error_selected_lot,
                                         }"
+                                        :disabled="
+                                            form.selected_block ? false : true
+                                        "
                                     />
                                     <label
                                         style="color: red"
@@ -3887,8 +3905,8 @@ export default {
                 { tag: "family member" },
             ],
             verification: [
-                { status: "verified", value: 1 },
-                { status: "not verified", value: 0 },
+                { status: "verified", value: true },
+                { status: "not verified", value: false },
             ],
             emergencyContactDialog: false,
             emergency_contacts: null,
