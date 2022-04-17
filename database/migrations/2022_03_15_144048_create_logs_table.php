@@ -20,6 +20,7 @@ class CreateLogsTable extends Migration
             $table->enum('log_type',['visitor','vehicle']);
             $table->string('name')->nullable();
             $table->string('plate_number')->nullable();
+            $table->string('status');
             $table->timestamps();
         });
     }

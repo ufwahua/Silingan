@@ -29,7 +29,8 @@ class LogRequest extends FormRequest
             'card_id' => ['required',Rule::exists('cards', 'id')],
             'log_type' => ['required'],
             'name' => ['sometimes'],  
-            'plate_number' => ['sometimes'],  
+            'plate_number' => ['sometimes'],
+            'status'=> ['required'],
         ];
     }
 }

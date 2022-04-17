@@ -117,6 +117,11 @@ export default {
                                     ],
                                 },
                                 {
+                                    label: "Announcement",
+                                    icon: "pi pi-info-circle",
+                                    to: "/admin/announcement",
+                                },
+                                {
                                     label: "Block and Lots",
                                     icon: "pi pi-info-circle",
                                     to: "/admin/block-lot",
@@ -142,11 +147,6 @@ export default {
                 },
                 {
                     items: [
-                        {
-                            label: "Announcement",
-                            icon: "pi pi-info-circle",
-                            to: "/admin/announcement",
-                        },
                         {
                             label: "Verify Marketplace Post",
                             icon: "pi pi-info-circle",
@@ -287,6 +287,7 @@ export default {
         this.$store.dispatch("candidates/getAll");
         this.$store.dispatch("getAllUsers");
         this.$store.dispatch("cards/getAllCards");
+
         this.$store.dispatch("getBlockUsers", this.$store.state.userLogged.id);
         this.$store.dispatch("adminVehicles/getAll");
         this.$store.dispatch(

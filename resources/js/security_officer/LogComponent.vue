@@ -2,85 +2,67 @@
     <div>
         <Toast />
         <div class="card">
-            <h5>Log</h5>
+            <h5>Logs</h5>
             <TabView class="tabview-custom" ref="tabview4">
                 <TabPanel>
                     <template #header>
                         <i class="pi pi-user mr-2"></i>
                         <span>Visitor</span>
                     </template>
-                    <div class="card">
-                        <div class="grid mb-4">
-                            <div class="col-12">
-                                <Toolbar>
-                                    <template #start>
-                                        <span
-                                            class="p-input-icon-left inline-block"
-                                        >
-                                            <i class="pi pi-search" />
-                                            <InputText
-                                                v-model="
-                                                    filters['global'].value
-                                                "
-                                                placeholder="Keyword Search"
-                                            />
-                                        </span>
-                                    </template>
 
-                                    <template #end>
-                                        <div class="mr-2">
-                                            <Button
-                                                label="Log in"
-                                                icon="pi pi-user-plus"
-                                                class="p-button-success p-mr-2"
-                                                @click="LogVisitor"
-                                            />
-                                        </div>
-                                    </template>
-                                </Toolbar>
-                            </div>
-                        </div>
-                        <div class="grid">
-                            <div class="col-12">
-                                <DataTable
-                                    :value="visitors"
-                                    :filters="filters"
-                                    breakpoint="1230px"
-                                >
-                                    <template #empty>
-                                        No Visitors found
-                                    </template>
-                                    <template #loading>
-                                        Loading Visitors
-                                    </template>
-                                    <Column header="ID" field="id"> </Column>
-                                    <Column header="Name" field="name">
-                                    </Column>
-                                    <Column header="Card" field="card.number">
-                                    </Column>
-                                    <Column
-                                        header="Visitor Log"
-                                        field="created_at"
+                    <div class="grid mb-4">
+                        <div class="col-12">
+                            <Toolbar>
+                                <template #start>
+                                    <span
+                                        class="p-input-icon-left inline-block"
                                     >
-                                    </Column>
-                                    <Column header="Actions" field="actions">
-                                        <template #body="{ data }">
-                                            <Button
-                                                icon="pi pi-pencil"
-                                                class="p-button-rounded p-button-primary mr-2"
-                                                v-tooltip="'Edit Log'"
-                                                @click="updateLog(data)"
-                                            />
-                                            <Button
-                                                icon="pi pi-user-minus"
-                                                class="p-button-rounded p-button-danger"
-                                                v-tooltip="'Logout'"
-                                                @click="logout(data)"
-                                            />
-                                        </template>
-                                    </Column>
-                                </DataTable>
-                            </div>
+                                        <i class="pi pi-search" />
+                                        <InputText
+                                            v-model="filters['global'].value"
+                                            placeholder="Keyword Search"
+                                        />
+                                    </span>
+                                </template>
+                            </Toolbar>
+                        </div>
+                    </div>
+                    <div class="grid">
+                        <div class="col-12">
+                            <DataTable
+                                :value="visitor_logs"
+                                :filters="filters"
+                                breakpoint="1230px"
+                                :paginator="true"
+                                :rows="15"
+                            >
+                                <template #empty> No Visitors found </template>
+                                <template #loading> Loading Visitors </template>
+
+                                <Column header="Name" field="name"> </Column>
+                                <Column header="Card" field="card.number">
+                                </Column>
+                                <Column header="Login" field="created_at">
+                                </Column>
+                                <Column header="Logout" field="updated_at">
+                                </Column>
+                                <Column header="Actions" field="actions">
+                                    <template #body="{ data }">
+                                        <Button
+                                            icon="pi pi-pencil"
+                                            class="p-button-rounded p-button-primary mr-2"
+                                            v-tooltip="'Edit Log'"
+                                            @click="updateLog(data)"
+                                        />
+                                        <Button
+                                            icon="pi pi-user-minus"
+                                            class="p-button-rounded p-button-danger"
+                                            v-tooltip="'Logout'"
+                                            @click="logout(data)"
+                                        />
+                                    </template>
+                                </Column>
+                            </DataTable>
                         </div>
                     </div>
                 </TabPanel>
@@ -89,81 +71,227 @@
                         <i class="pi pi-car mr-2"></i>
                         <span>Vehicles</span>
                     </template>
-                    <div class="card">
-                        <div class="grid mb-4">
-                            <div class="col-12">
-                                <Toolbar>
-                                    <template #start>
-                                        <span
-                                            class="p-input-icon-left inline-block"
-                                        >
-                                            <i class="pi pi-search" />
-                                            <InputText
-                                                v-model="
-                                                    filters['global'].value
-                                                "
-                                                placeholder="Keyword Search"
-                                            />
-                                        </span>
-                                    </template>
 
-                                    <template #end>
-                                        <div class="mr-2">
-                                            <Button
-                                                label="Log in"
-                                                icon="pi pi-user-plus"
-                                                class="p-button-success p-mr-2"
-                                                @click="LogVehicle"
-                                            />
-                                        </div>
-                                    </template>
-                                </Toolbar>
-                            </div>
+                    <div class="grid mb-4">
+                        <div class="col-12">
+                            <Toolbar>
+                                <template #start>
+                                    <span
+                                        class="p-input-icon-left inline-block"
+                                    >
+                                        <i class="pi pi-search" />
+                                        <InputText
+                                            v-model="filters['global'].value"
+                                            placeholder="Keyword Search"
+                                        />
+                                    </span>
+                                </template>
+
+                                <template #end>
+                                    <div class="mr-2">
+                                        <Button
+                                            label="Log in"
+                                            icon="pi pi-user-plus"
+                                            class="p-button-success p-mr-2"
+                                            @click="LogVehicle"
+                                        />
+                                    </div>
+                                </template>
+                            </Toolbar>
                         </div>
-                        <div class="grid">
-                            <div class="col-12">
-                                <DataTable
-                                    :value="vehicles"
-                                    :filters="filters"
-                                    breakpoint="1230px"
+                    </div>
+                    <div class="grid">
+                        <div class="col-12">
+                            <DataTable
+                                :value="vehicle_logs"
+                                :filters="filters"
+                                breakpoint="1230px"
+                                :paginator="true"
+                                :rows="15"
+                            >
+                                <template #empty> No Vehicles found </template>
+                                <template #loading> Loading Visitors </template>
+
+                                <Column
+                                    header="Plate Number"
+                                    field="plate_number"
                                 >
-                                    <template #empty>
-                                        No Vehicles found
+                                </Column>
+                                <Column header="Card" field="card.number">
+                                </Column>
+                                <Column header="Login" field="created_at">
+                                </Column>
+                                <Column header="Logout" field="updated_at">
+                                </Column>
+                                <Column header="Actions" field="actions">
+                                    <template #body="{ data }">
+                                        <Button
+                                            icon="pi pi-pencil"
+                                            class="p-button-rounded p-button-primary mr-2"
+                                            v-tooltip="'Edit Log'"
+                                            @click="updateLog(data)"
+                                        />
+                                        <Button
+                                            icon="pi pi-user-minus"
+                                            class="p-button-rounded p-button-danger"
+                                            v-tooltip="'Logout'"
+                                            @click="logout(data)"
+                                        />
                                     </template>
-                                    <template #loading>
-                                        Loading Visitors
+                                </Column>
+                            </DataTable>
+                        </div>
+                    </div>
+                </TabPanel>
+            </TabView>
+        </div>
+        <div class="card">
+            <h5>Log</h5>
+            <TabView class="tabview-custom" ref="tabview4">
+                <TabPanel>
+                    <template #header>
+                        <i class="pi pi-user mr-2"></i>
+                        <span>Visitor</span>
+                    </template>
+
+                    <div class="grid mb-4">
+                        <div class="col-12">
+                            <Toolbar>
+                                <template #start>
+                                    <span
+                                        class="p-input-icon-left inline-block"
+                                    >
+                                        <i class="pi pi-search" />
+                                        <InputText
+                                            v-model="filters['global'].value"
+                                            placeholder="Keyword Search"
+                                        />
+                                    </span>
+                                </template>
+
+                                <template #end>
+                                    <div class="mr-2">
+                                        <Button
+                                            label="Log in"
+                                            icon="pi pi-user-plus"
+                                            class="p-button-success p-mr-2"
+                                            @click="LogVisitor"
+                                        />
+                                    </div>
+                                </template>
+                            </Toolbar>
+                        </div>
+                    </div>
+                    <div class="grid">
+                        <div class="col-12">
+                            <DataTable
+                                :value="visitors"
+                                :filters="filters"
+                                breakpoint="1230px"
+                                :paginator="true"
+                                :rows="15"
+                            >
+                                <template #empty> No Visitors found </template>
+                                <template #loading> Loading Visitors </template>
+
+                                <Column header="Name" field="name"> </Column>
+                                <Column header="Card" field="card.number">
+                                </Column>
+                                <Column header="Login" field="created_at">
+                                </Column>
+
+                                <Column header="Actions" field="actions">
+                                    <template #body="{ data }">
+                                        <Button
+                                            icon="pi pi-pencil"
+                                            class="p-button-rounded p-button-primary mr-2"
+                                            v-tooltip="'Edit Log'"
+                                            @click="updateLog(data)"
+                                        />
+                                        <Button
+                                            icon="pi pi-user-minus"
+                                            class="p-button-rounded p-button-danger"
+                                            v-tooltip="'Logout'"
+                                            @click="logout(data)"
+                                        />
                                     </template>
-                                    <Column header="ID" field="id"> </Column>
-                                    <Column
-                                        header="Plate Number"
-                                        field="plate_number"
+                                </Column>
+                            </DataTable>
+                        </div>
+                    </div>
+                </TabPanel>
+                <TabPanel>
+                    <template #header>
+                        <i class="pi pi-car mr-2"></i>
+                        <span>Vehicles</span>
+                    </template>
+
+                    <div class="grid mb-4">
+                        <div class="col-12">
+                            <Toolbar>
+                                <template #start>
+                                    <span
+                                        class="p-input-icon-left inline-block"
                                     >
-                                    </Column>
-                                    <Column header="Card" field="card.number">
-                                    </Column>
-                                    <Column
-                                        header="Vehicle Log"
-                                        field="created_at"
-                                    >
-                                    </Column>
-                                    <Column header="Actions" field="actions">
-                                        <template #body="{ data }">
-                                            <Button
-                                                icon="pi pi-pencil"
-                                                class="p-button-rounded p-button-primary mr-2"
-                                                v-tooltip="'Edit Log'"
-                                                @click="updateLog(data)"
-                                            />
-                                            <Button
-                                                icon="pi pi-user-minus"
-                                                class="p-button-rounded p-button-danger"
-                                                v-tooltip="'Logout'"
-                                                @click="logout(data)"
-                                            />
-                                        </template>
-                                    </Column>
-                                </DataTable>
-                            </div>
+                                        <i class="pi pi-search" />
+                                        <InputText
+                                            v-model="filters['global'].value"
+                                            placeholder="Keyword Search"
+                                        />
+                                    </span>
+                                </template>
+
+                                <template #end>
+                                    <div class="mr-2">
+                                        <Button
+                                            label="Log in"
+                                            icon="pi pi-user-plus"
+                                            class="p-button-success p-mr-2"
+                                            @click="LogVehicle"
+                                        />
+                                    </div>
+                                </template>
+                            </Toolbar>
+                        </div>
+                    </div>
+                    <div class="grid">
+                        <div class="col-12">
+                            <DataTable
+                                :value="vehicles"
+                                :filters="filters"
+                                breakpoint="1230px"
+                                :paginator="true"
+                                :rows="15"
+                            >
+                                <template #empty> No Vehicles found </template>
+                                <template #loading> Loading Visitors </template>
+
+                                <Column
+                                    header="Plate Number"
+                                    field="plate_number"
+                                >
+                                </Column>
+                                <Column header="Card" field="card.number">
+                                </Column>
+                                <Column header="Login" field="created_at">
+                                </Column>
+                                <Column header="Actions" field="actions">
+                                    <template #body="{ data }">
+                                        <Button
+                                            icon="pi pi-pencil"
+                                            class="p-button-rounded p-button-primary mr-2"
+                                            v-tooltip="'Edit Log'"
+                                            @click="updateLog(data)"
+                                        />
+                                        <Button
+                                            icon="pi pi-user-minus"
+                                            class="p-button-rounded p-button-danger"
+                                            v-tooltip="'Logout'"
+                                            @click="logout(data)"
+                                        />
+                                    </template>
+                                </Column>
+                            </DataTable>
                         </div>
                     </div>
                 </TabPanel>
@@ -412,11 +540,41 @@ export default {
 
         return {
             cards: computed(() => store.state.cards.cards),
+            visitor_logs: computed(() => {
+                let temp = [];
+                store.state.logs.logs.forEach((elem) => {
+                    if (
+                        elem.plate_number === null &&
+                        elem.name !== null &&
+                        elem.status == "logout"
+                    ) {
+                        temp.push(elem);
+                    }
+                });
+                return temp;
+            }),
+            vehicle_logs: computed(() => {
+                let temp = [];
+                store.state.logs.logs.forEach((elem) => {
+                    if (
+                        elem.name === null &&
+                        elem.plate_number !== null &&
+                        elem.status == "logout"
+                    ) {
+                        temp.push(elem);
+                    }
+                });
+                return temp;
+            }),
             visitors: computed(() => {
                 // return store.state.logs.logs;
                 let temp = [];
                 store.state.logs.logs.forEach((elem) => {
-                    if (elem.plate_number === null && elem.name !== null) {
+                    if (
+                        elem.plate_number === null &&
+                        elem.name !== null &&
+                        elem.status == "login"
+                    ) {
                         temp.push(elem);
                     }
                 });
@@ -425,7 +583,11 @@ export default {
             vehicles: computed(() => {
                 let temp = [];
                 store.state.logs.logs.forEach((elem) => {
-                    if (elem.name === null && elem.plate_number !== null) {
+                    if (
+                        elem.name === null &&
+                        elem.plate_number !== null &&
+                        elem.status == "login"
+                    ) {
                         temp.push(elem);
                     }
                 });
@@ -471,6 +633,7 @@ export default {
         logout(data) {
             this.id = data.id;
             this.name = data.name;
+            this.log_type = data.log_type;
             this.selected_card = data.card_id;
             this.plate_number = data.plate_number;
             this.logOutDialog = true;
@@ -486,10 +649,15 @@ export default {
         async logOut() {
             this.loading = true;
             await axios({
-                method: "delete",
+                method: "put",
                 url: "/api/log/" + this.id,
                 data: {
+                    user_id: this.$store.state.userLogged.id,
                     card_id: this.selected_card,
+                    log_type: this.log_type,
+                    name: this.name,
+                    plate_number: this.plate_number,
+                    status: "logout",
                 },
             })
                 .then(() => {
@@ -536,6 +704,7 @@ export default {
                     log_type: "visitor",
                     name: this.name,
                     plate_number: this.plate_number,
+                    status: "logout",
                 },
             })
                 .then(() => {
@@ -582,6 +751,7 @@ export default {
                     log_type: type,
                     name: this.name,
                     plate_number: this.plate_number,
+                    status: "login",
                 },
             })
                 .then(() => {

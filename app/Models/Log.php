@@ -15,6 +15,7 @@ class Log extends Model
         'log_type',
         'name',
         'plate_number',
+        'status',
     ];
     public function user(){
         return $this->hasOne(User::class,'id','user_id');

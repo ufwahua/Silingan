@@ -133,7 +133,9 @@ export default {
             groud_id: null,
         };
     },
-    methods: {},
+    mounted() {
+        this.$store.dispatch("announcements/getAll");
+    },
 };
 </script>
 
