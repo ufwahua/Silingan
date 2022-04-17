@@ -15,7 +15,7 @@ class BlockUserFactory extends Factory
      */
     public function definition()
     {
-        $varbie = User::where('email','varbie.sumido@gmail.com')->first();
+        $varbie = User::where('email','varbiesumido@gmail.com')->first();
         return [
             'user_id' =>  $varbie['id'],
             'block_user_id' => User::all()->random()->id,

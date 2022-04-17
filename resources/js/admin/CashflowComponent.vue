@@ -51,14 +51,23 @@
                         </div>
                     </template>
                 </Column>
-                <Column field="amount" header="Credit/Debit">
+                <Column field="amount" header="Debit">
+                    <template #body="{ data }">
+                        <div
+                            v-if="data.collection_type"
+                            class="text-green-700"
+                        ></div>
+                        <div v-else class="text-pink-700">
+                            ₱{{ data.amount.toLocaleString() }}
+                        </div>
+                    </template>
+                </Column>
+                <Column field="amount" header="Credit">
                     <template #body="{ data }">
                         <div v-if="data.collection_type" class="text-green-700">
                             ₱{{ data.amount.toLocaleString() }}
                         </div>
-                        <div v-else class="text-pink-700">
-                            ₱{{ data.amount.toLocaleString() }}
-                        </div>
+                        <div v-else class="text-pink-700"></div>
                     </template>
                 </Column>
                 <Column field="running_balance" header="Running Balance">
@@ -345,6 +354,7 @@
                         mode="currency"
                         currency="PHP"
                         :useGrouping="false"
+                        :placeholder="amount_placeholder"
                         :class="{ 'p-invalid': expense_valid.state.amount }"
                     />
                     <small v-if="expense_valid.state.amount" class="p-error">{{
@@ -453,7 +463,6 @@ export default {
             //Modal Control
             addRevenueModal: false,
             addExpenseModal: false,
-
             //Revenue
             lot_dropdown: null,
             lot_bool: true,
@@ -464,14 +473,12 @@ export default {
                 lot: null,
                 notes: null,
             },
-
             //Expense
             expense_form: {
                 amount: null,
                 ornumber: null,
                 notes: null,
             },
-
             //Expense Validation
             expense_valid: {
                 state: {
@@ -485,7 +492,6 @@ export default {
                     notes: null,
                 },
             },
-
             //Revenue Validation
             revenue_valid: {
                 state: {
@@ -503,7 +509,6 @@ export default {
                     notes: null,
                 },
             },
-
             filters: {},
             // cashflow: [
             //   {
@@ -524,11 +529,9 @@ export default {
             temp = this.lots.filter((elem) => {
                 return elem.block_id === this.revenue_form.block;
             });
-
             temp.forEach((elem) => {
                 list.push({ name: elem.number, code: elem.id });
             });
-
             this.lot_dropdown = list;
         },
         setAmount() {
@@ -587,15 +590,13 @@ export default {
                 }
                 let { data } = await axios({
                     url: "/api/expense",
-
                     method: "post",
-
                     data: {
                         user_id: this.userLogged.id,
                         amount: this.expense_form.amount,
                         notes: this.expense_form.notes,
                         running_balance:
-                            this.total_funds - this.expense_form.amount,
+                            +this.total_funds - +this.expense_form.amount,
                     },
                 });
                 this.process = !this.process;
@@ -606,7 +607,8 @@ export default {
                         url: "/api/fund/1",
                         method: "put",
                         data: {
-                            amount: this.total_funds - this.expense_form.amount,
+                            amount:
+                                +this.total_funds - +this.expense_form.amount,
                         },
                     });
                     this.$store.dispatch("fund/getAll");
@@ -652,7 +654,6 @@ export default {
                 let { data } = await axios({
                     url: "/api/collection",
                     method: "post",
-
                     data: {
                         collection_type_id: this.revenue_form.collection_type,
                         user_id: this.userLogged.id,
@@ -660,7 +661,7 @@ export default {
                         amount: this.revenue_form.amount,
                         notes: this.revenue_form.notes,
                         running_balance:
-                            this.total_funds + this.revenue_form.amount,
+                            +this.total_funds + +this.revenue_form.amount,
                     },
                 });
                 this.process = !this.process;
@@ -671,7 +672,8 @@ export default {
                         url: "/api/fund/1",
                         method: "put",
                         data: {
-                            amount: this.total_funds + this.revenue_form.amount,
+                            amount:
+                                +this.total_funds + +this.revenue_form.amount,
                         },
                     });
                     this.$store.dispatch("fund/getAll");

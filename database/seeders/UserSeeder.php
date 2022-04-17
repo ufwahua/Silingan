@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 
-use App\Models\Post;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
@@ -50,8 +49,8 @@ class UserSeeder extends Seeder
             'age' => rand(1, 100),
             'verified' => 1,
             'has_voted' => 0,
-            'contact_num' => rand(639111111111, 63999999999),
-            'email' => 'jh.security@gmail.com',
+            'contact_num' => rand(639000000001, 639999999999),
+            'email' => 'joshua.diamos@gmail.com',
             'password' => Hash::make("12345678"),
 
         ]);
@@ -67,7 +66,7 @@ class UserSeeder extends Seeder
             'verified' => 1,
             'has_voted' => 0,
             'contact_num' => '639083024328',
-            'email' => 'varbie.sumido@gmail.com',
+            'email' => 'varbiesumido@gmail.com',
             'password' => Hash::make("12345678"),
             'tag_as' => 'owner',
         ]);
@@ -98,7 +97,7 @@ class UserSeeder extends Seeder
             'age' => rand(1, 100),
             'verified' => 1,
             'has_voted' => 0,
-            'contact_num' => rand(639111111111, 63999999999),
+            'contact_num' => rand(639000000001, 639999999999),
             'email' => 'jh.officer@gmail.com',
             'password' => Hash::make("12345678"),
             'tag_as' => 'owner',
@@ -114,7 +113,7 @@ class UserSeeder extends Seeder
             'age' => rand(1, 100),
             'verified' => 1,
             'has_voted' => 0,
-            'contact_num' => rand(639111111111, 63999999999),
+            'contact_num' => rand(639000000001, 639999999999),
             'email' => 'stevenmitch.espina@gmail.com',
             'password' => Hash::make("12345678"),
             'tag_as' => 'owner',
@@ -131,7 +130,7 @@ class UserSeeder extends Seeder
             'age' => rand(1, 100),
             'verified' => 1,
             'has_voted' => 0,
-            'contact_num' => rand(639111111111, 63999999999),
+            'contact_num' => rand(639000000001, 639999999999),
             'email' => 'rodrigo.natad@gmail.com',
             'password' => Hash::make("12345678"),
             'tag_as' => 'owner',
@@ -148,7 +147,7 @@ class UserSeeder extends Seeder
             'age' => rand(1, 100),
             'verified' => 1,
             'has_voted' => 0,
-            'contact_num' => rand(639111111111, 63999999999),
+            'contact_num' => rand(639000000001, 639999999999),
             'email' => 'warren.ngujo@gmail.com',
             'password' => Hash::make("12345678"),
             'tag_as' => 'owner',
@@ -165,7 +164,7 @@ class UserSeeder extends Seeder
             'age' => rand(1, 100),
             'verified' => 1,
             'has_voted' => 0,
-            'contact_num' => rand(639111111111, 63999999999),
+            'contact_num' => rand(639000000001, 639999999999),
             'email' => 'guilamae.bagolor@gmail.com',
             'password' => Hash::make("12345678"),
             'tag_as' => 'owner',
@@ -182,7 +181,7 @@ class UserSeeder extends Seeder
             'age' => rand(1, 100),
             'verified' => 1,
             'has_voted' => 0,
-            'contact_num' => rand(639111111111, 63999999999),
+            'contact_num' => rand(639000000001, 639999999999),
             'email' => 'kentluke.pescadero@gmail.com',
             'password' => Hash::make("12345678"),
             'tag_as' => 'owner',
@@ -201,7 +200,7 @@ class UserSeeder extends Seeder
             'age' => rand(1, 100),
             'verified' => 1,
             'has_voted' => 0,
-            'contact_num' => rand(639111111111, 63999999999),
+            'contact_num' => rand(639000000001, 639999999999),
             'email' => 'rikamae.diamos@gmail.com',
             'password' => Hash::make("12345678"),
             'tag_as' => 'owner',
