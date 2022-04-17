@@ -496,16 +496,25 @@
                                 </div>
                                 <div class="field col-12 md:col-12">
                                     <label>Contact Number</label>
-                                    <InputText
-                                        id="contact_num"
-                                        type="text"
-                                        oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*?)\..*/g, '$1');"
-                                        v-model="form.contact_num"
-                                        @keydown.enter="onRegisterClick"
-                                        :class="{
-                                            'p-invalid': error_contact_num,
-                                        }"
-                                    />
+                                    <div class="p-inputgroup">
+                                        <span class="p-inputgroup-addon">
+                                            +63
+                                        </span>
+                                        <InputMask
+                                            mask="(999) 99-999-9999"
+                                            placeholder="(639) 99-999-9999"
+                                            :unmask="true"
+                                            id="contact_num"
+                                            type="text"
+                                            oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*?)\..*/g, '$1');"
+                                            v-model="form.contact_num"
+                                            @keydown.enter="onRegisterClick"
+                                            :class="{
+                                                'p-invalid': error_contact_num,
+                                            }"
+                                        />
+                                    </div>
+
                                     <label
                                         style="color: red"
                                         v-if="error_contact_num"
@@ -749,16 +758,25 @@
                                 </div>
                                 <div class="field col-12 md:col-12">
                                     <label>Contact Number</label>
-                                    <InputText
-                                        id="contact_num"
-                                        type="text"
-                                        oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*?)\..*/g, '$1');"
-                                        v-model="form.contact_num"
-                                        @keydown.enter="onRegisterClick"
-                                        :class="{
-                                            'p-invalid': error_contact_num,
-                                        }"
-                                    />
+                                    <div class="p-inputgroup">
+                                        <span class="p-inputgroup-addon">
+                                            +63
+                                        </span>
+                                        <InputMask
+                                            mask="(999) 99-999-9999"
+                                            placeholder="(639) 99-999-9999"
+                                            :unmask="true"
+                                            id="contact_num"
+                                            type="text"
+                                            oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*?)\..*/g, '$1');"
+                                            v-model="form.contact_num"
+                                            @keydown.enter="onRegisterClick"
+                                            :class="{
+                                                'p-invalid': error_contact_num,
+                                            }"
+                                        />
+                                    </div>
+
                                     <label
                                         style="color: red"
                                         v-if="error_contact_num"
@@ -1056,17 +1074,25 @@
                                 </div>
                                 <div class="field col-12 md:col-12">
                                     <label>Contact Number</label>
-                                    <InputText
-                                        id="contact_num"
-                                        type="text"
-                                        oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*?)\..*/g, '$1');"
-                                        v-model="form.contact_num"
-                                        @keydown.enter="onRegisterClick"
-                                        :class="{
-                                            'p-invalid': error_contact_num,
-                                        }"
-                                        disabled
-                                    />
+                                    <div class="p-inputgroup">
+                                        <span class="p-inputgroup-addon">
+                                            +63 </span
+                                        ><InputMask
+                                            mask="(999) 99-999-9999"
+                                            placeholder="(639) 99-999-9999"
+                                            :unmask="true"
+                                            id="contact_num"
+                                            type="text"
+                                            oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*?)\..*/g, '$1');"
+                                            v-model="form.contact_num"
+                                            @keydown.enter="onRegisterClick"
+                                            :class="{
+                                                'p-invalid': error_contact_num,
+                                            }"
+                                            disabled
+                                        />
+                                    </div>
+
                                     <label
                                         style="color: red"
                                         v-if="error_contact_num"
@@ -1304,17 +1330,25 @@
                                 </div>
                                 <div class="field col-12 md:col-12">
                                     <label>Contact Number</label>
-                                    <InputText
-                                        id="contact_num"
-                                        type="text"
-                                        oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*?)\..*/g, '$1');"
-                                        v-model="form.contact_num"
-                                        @keydown.enter="onRegisterClick"
-                                        :class="{
-                                            'p-invalid': error_contact_num,
-                                        }"
-                                        disabled
-                                    />
+                                    <div class="p-inputgroup">
+                                        <span class="p-inputgroup-addon">
+                                            +63 </span
+                                        ><InputMask
+                                            mask="(999) 99-999-9999"
+                                            placeholder="(639) 99-999-9999"
+                                            :unmask="true"
+                                            id="contact_num"
+                                            type="text"
+                                            oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*?)\..*/g, '$1');"
+                                            v-model="form.contact_num"
+                                            @keydown.enter="onRegisterClick"
+                                            :class="{
+                                                'p-invalid': error_contact_num,
+                                            }"
+                                            disabled
+                                        />
+                                    </div>
+
                                     <label
                                         style="color: red"
                                         v-if="error_contact_num"
@@ -1358,6 +1392,36 @@
                         </template>
                     </Dialog>
                     <Dialog
+                        v-model:visible="emergencyContactDialog"
+                        :style="{ width: '500px' }"
+                        header="Emergency Contacts"
+                        :modal="true"
+                    >
+                        <DataTable
+                            :value="emergency_contacts"
+                            :paginator="true"
+                            :rows="10"
+                        >
+                            <template #empty>
+                                No emergency contacts found
+                            </template>
+
+                            <Column header="Contact Name" field="name">
+                                <template #body="{ data }">
+                                    {{ data.name }}
+                                </template>
+                            </Column>
+                            <Column
+                                header="Contact Number"
+                                field="contact_number"
+                            >
+                                <template #body="{ data }">
+                                    {{ data.contact_number }}
+                                </template>
+                            </Column>
+                        </DataTable>
+                    </Dialog>
+                    <Dialog
                         v-model:visible="process"
                         :style="{ width: '450px' }"
                         :modal="true"
@@ -1389,6 +1453,7 @@ import { computed } from "vue";
 import { useStore } from "vuex";
 export default {
     name: "RegisterUsersComponent",
+
     setup() {
         const store = useStore();
         return {
@@ -1396,6 +1461,7 @@ export default {
             filteredLots: computed(() => store.state.lots.filteredLots),
             lots: computed(() => store.state.lots.lots),
             users: computed(() => store.state.users),
+
             active: computed(() => {
                 let active = [];
                 let temp = [];
@@ -1481,6 +1547,7 @@ export default {
             updateUserDialog: false,
             viewResidentDialog: false,
             viewVerifytDialog: false,
+
             form: {
                 first_name: "",
                 last_name: "",
@@ -1534,12 +1601,31 @@ export default {
                 { tag: "family member" },
             ],
             verification: [
-                { status: "verified", value: true },
-                { status: "not verified", value: false },
+                { status: "verified", value: 1 },
+                { status: "not verified", value: 0 },
             ],
+
+            emergencyContactDialog: false,
+            emergency_contacts: null,
         };
     },
     methods: {
+        async viewEmergencyContacts() {
+            this.loading = true;
+            await axios({
+                method: "get",
+                url: "/api/emergency-contact-detail/" + this.id,
+            })
+                .then((res) => {
+                    console.log("emergency", res.data);
+                    this.emergency_contacts = res.data;
+                    this.emergencyContactDialog = true;
+                    this.loading = false;
+                })
+                .catch((err) => {
+                    console.log(err.response.data);
+                });
+        },
         viewResident() {
             this.viewResidentDialog = true;
         },
@@ -1558,6 +1644,13 @@ export default {
                         icon: "pi pi-pencil",
                         command: () => {
                             this.updateUser();
+                        },
+                    },
+                    {
+                        label: "Emergency Contacts",
+                        icon: "pi pi-id-card",
+                        command: () => {
+                            this.viewEmergencyContacts();
                         },
                     },
                     {
@@ -1591,7 +1684,13 @@ export default {
                             this.updateUser();
                         },
                     },
-
+                    {
+                        label: "Emergency Contacts",
+                        icon: "pi pi-id-card",
+                        command: () => {
+                            this.viewEmergencyContacts();
+                        },
+                    },
                     {
                         label: "Deactivate Resident",
                         icon: "pi pi-unlock",
@@ -1616,7 +1715,13 @@ export default {
                             this.updateUser();
                         },
                     },
-
+                    {
+                        label: "Emergency Contacts",
+                        icon: "pi pi-id-card",
+                        command: () => {
+                            this.viewEmergencyContacts();
+                        },
+                    },
                     {
                         label: "Activate Resident",
                         icon: "pi pi-unlock",
@@ -1648,7 +1753,13 @@ export default {
                             this.updateUser();
                         },
                     },
-
+                    {
+                        label: "Emergency Contacts",
+                        icon: "pi pi-id-card",
+                        command: () => {
+                            this.viewEmergencyContacts();
+                        },
+                    },
                     {
                         label: "Activate Resident",
                         icon: "pi pi-unlock",
@@ -1847,7 +1958,14 @@ export default {
                     tag_as: this.form.selected_tag,
                 },
             })
-                .then(() => {
+                .then(async () => {
+                    await axios({
+                        method: "post",
+                        url: "/api/sms/",
+                        data: {
+                            contact_num: this.form.contact_num,
+                        },
+                    });
                     this.$toast.add({
                         severity: "success",
                         summary: "Successful",

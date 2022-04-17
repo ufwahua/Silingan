@@ -6,7 +6,7 @@ use App\Models\EmergencyContactDetail;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use App\Http\Requests\EmergencyContactDetailRequest;
-use Illuminate\Validation\Rule;
+
 
 class EmergencyContactDetailController extends Controller
 {
@@ -27,7 +27,7 @@ class EmergencyContactDetailController extends Controller
      */
     public function show(Request $request) : JsonResponse
     {
-        $EmergencyContactDetail = EmergencyContactDetail::where('id',$request->route('EmergencyContactDetail'))->with(['user'])->get();
+        $EmergencyContactDetail = EmergencyContactDetail::where('user_id',$request->route('emergency_contact_detail'))->with(['user'])->get();
         return response()->json($EmergencyContactDetail);
     }
 
@@ -50,20 +50,7 @@ class EmergencyContactDetailController extends Controller
     public function update(EmergencyContactDetail $EmergencyContactDetail, EmergencyContactDetailRequest $request) : JsonResponse
     {
         $EmergencyContactDetail->update($request->validated());
-        //validation
-    //     EmergencyContactDetail::query()->where('id',$request->route('EmergencyContactDetail'))->update($request->validate([
-    //         'user_id' =>['required',  Rule::exists('users', 'id')],
-    //         'title' => ['required', 'max:255'],
-    //         'content' => ['required'],
-    //     ]));
-        //no validation
-    //     EmergencyContactDetail::query()->where('id',$request->route('EmergencyContactDetail'))->update([
-    //         'user_id' =>$request['user_id'],
-    //         'title' => $request['title'],
-    //         'content' => $request['content'],
-    //     ]);
-            //get
-    //    $EmergencyContactDetail = EmergencyContactDetail::query()->where('id',$request->route('EmergencyContactDetail'))->with(['user'])->get();
+
         return response()->json($EmergencyContactDetail);
     }
 

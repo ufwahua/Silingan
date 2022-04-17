@@ -50,7 +50,7 @@ class UserController extends Controller
                 'last_name'             => ['required', 'string', 'max:255'],
                 'gender'                => ['required'],
                 'age'                   => ['required', 'integer', 'numeric', 'gt:0', 'max:130'],
-                'contact_num'           => ['required', 'string', 'min:11'],
+                'contact_num'           => ['required','string','min:10'],
                 'profile_pic'           => ['sometimes'],
                 'has_voted'             => ['required'],
                 'verified'              => ['required'],
@@ -69,7 +69,7 @@ class UserController extends Controller
                 'last_name'             => ['required', 'string', 'max:255'],
                 'gender'                => ['required'],
                 'age'                   => ['required', 'integer', 'numeric', 'gt:0', 'max:130'],
-                'contact_num'           => ['required', 'string', 'min:11'],
+                'contact_num'           => ['required','string','min:10'],
                 'profile_pic'           => ['sometimes'],
                 'has_voted'             => ['required'],
                 'verified'              => ['required'],
@@ -99,7 +99,7 @@ class UserController extends Controller
     public function index(Request $request): JsonResponse
     {
         return response()->json(
-            User::with(['lot.block','position'])->orderBy('role', 'asc')->orderBy('id', 'asc')->get()
+            User::with(['lot.block','position','emergency_contact'])->latest()->get()
         );
     }
 
@@ -107,7 +107,7 @@ class UserController extends Controller
     {
 
         $block_user_ids = DB::table('block_users')->where('user_id', $request->route('user'))->pluck('block_user_id')->toArray();
-        $block_users = User::whereNotIn('id', $block_user_ids)->get();
+        $block_users = User::whereNotIn('id', $block_user_ids)->latest()->get();
 
         return response()->json(
             $block_users
@@ -140,7 +140,7 @@ class UserController extends Controller
                 'gender' => ['required'],
 
                 'age' => ['required', 'integer', 'numeric', 'gt:0', 'max:130'],
-                'contact_num' => ['required', 'string', 'min:11'],
+                'contact_num' => ['required','string','min:10'],
                 'role' => ['required'],
                 'status' => ['required'],
                 'verified' => ['required'],
@@ -155,7 +155,7 @@ class UserController extends Controller
                 'last_name' => ['required', 'string', 'max:255'],
                 'gender' => ['required'],
                 'age' => ['required', 'integer', 'numeric', 'gt:0', 'max:130'],
-                'contact_num' => ['required', 'string', 'min:11'],
+                'contact_num' => ['required','string','min:10'],
                 'role' => ['required'],
                 'status' => ['required'],
                 'verified' => ['required'],

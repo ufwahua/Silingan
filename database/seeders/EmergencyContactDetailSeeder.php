@@ -17,7 +17,7 @@ class EmergencyContactDetailSeeder extends Seeder
         //EmergencyContactDetail
 
         EmergencyContactDetail::factory()
-            ->count(5)
+            ->count(200)
             ->create();
     }
 }

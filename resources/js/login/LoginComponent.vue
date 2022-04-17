@@ -37,7 +37,6 @@
                         v-model="form.email"
                         type="text"
                         class="w-full mb-3"
-                        placeholder="Email"
                         style="padding: 1rem"
                     />
 
@@ -47,11 +46,13 @@
                     <Password
                         :class="{ 'p-invalid': error }"
                         v-model="form.password"
-                        placeholder="Password"
                         :toggleMask="true"
+                        :feedback="false"
                         class="w-full mb-3"
                         inputClass="w-full"
                         inputStyle="padding:1rem"
+                    >
+                        <template #content> <span></span> </template
                     ></Password>
                     <label style="color: red" v-if="error">{{
                         this.error

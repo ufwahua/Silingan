@@ -171,7 +171,7 @@ export default {
                                     this.userLogged.role === "security officer"
                                 ) {
                                     this.$router.push(
-                                        "/security_officer/profile"
+                                        "/security-officer/profile"
                                     );
                                 } else {
                                     this.$router.push(
@@ -188,7 +188,7 @@ export default {
                                     this.userLogged.role === "security officer"
                                 ) {
                                     this.$router.push(
-                                        "/security_officer/setting"
+                                        "/security-officer/setting"
                                     );
                                 } else {
                                     this.$router.push(
@@ -237,7 +237,7 @@ export default {
                                     this.userLogged.role === "security officer"
                                 ) {
                                     this.$router.push(
-                                        "/security_officer/profile"
+                                        "/security-officer/profile"
                                     );
                                 } else {
                                     this.$router.push(
@@ -255,7 +255,7 @@ export default {
                                     this.userLogged.role === "security officer"
                                 ) {
                                     this.$router.push(
-                                        "/security_officer/setting"
+                                        "/security-officer/setting"
                                     );
                                 } else {
                                     this.$router.push(

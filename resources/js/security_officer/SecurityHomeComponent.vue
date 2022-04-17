@@ -69,24 +69,23 @@ export default {
                         {
                             label: "Marketplace",
                             icon: "pi pi-fw pi-shopping-cart",
+<<<<<<< HEAD
                             to: "/security/marketplace",
                             to: "/security_officer/marketplace",
+=======
+
+>>>>>>> d67a3e340866e13f36803bf35d2ae7bee1495a7c
                             to: "/security-officer/marketplace",
                         },
                         {
                             label: "Log",
                             icon: "pi pi-fw pi-calendar",
-                            to: "/security_officer/log",
+                            to: "/security-officer/log",
                         },
                         {
                             label: "Announcement",
                             icon: "pi pi-fw pi-calendar",
-                            to: "/security_officer/view-announcement",
-                        },
-                        {
-                            label: "Emergency Contact",
-                            icon: "pi pi-fw pi-calendar",
-                            to: "/security_officer/emergency",
+                            to: "/security-officer/view-announcement",
                         },
                     ],
                 },
@@ -220,7 +219,3 @@ export default {
     },
 };
 </script>
-
-<style>
-/* @import "./App.scss"; */
-</style>

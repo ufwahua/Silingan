@@ -21,6 +21,11 @@ use App\Http\Controllers\CardController;
 use App\Http\Controllers\EmergencyContactDetailController;
 use App\Http\Controllers\LogController;
 use App\Http\Controllers\VehicleController;
+use App\Http\Controllers\CollectionTypeController;
+use App\Http\Controllers\CollectionController;
+use App\Http\Controllers\ExpenseController;
+use App\Http\Controllers\FundController;
+use App\Http\Controllers\SmsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -48,7 +53,7 @@ Route::get('/user/not-blocked/{user}', [UserController::class, 'notBlockedUsers'
 Route::delete('/candidate/election/{candidate}', [CandidateController::class, 'deleteAllCandidate']);
 Route::get('/post/marketplace/verified/{post}', [PostController::class, 'getMarketPlaceVerified']);
 Route::get('/post/marketplace/not-verified/{post}', [PostController::class, 'getMarketPlaceNotVerified']);
-
+Route::post('/sms',[SmsController::class, 'sendSmsNotification']);
 
 
 Route::apiResources([
@@ -63,11 +68,15 @@ Route::apiResources([
     'chat_room'             => ChatRoomController::class,
     'chat'             => ChatController::class,
     'position'             => PositionController::class,
-    'emergency_contact_detail' => EmergencyContactDetailController::class,
+    'emergency-contact-detail' => EmergencyContactDetailController::class,
     'candidate'             => CandidateController::class,
     'election'             => ElectionController::class,
     'card'             => CardController::class,
     'log'             => LogController::class,
     'block_user'             => BlockUserController::class,
     'vehicle'             => VehicleController::class,
+    'collection_type' => CollectionTypeController::class,
+    'collection' => CollectionController::class,
+    'expense' => ExpenseController::class,
+    'fund' => FundController::class
 ]);

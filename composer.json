@@ -9,9 +9,16 @@
         "fruitcake/laravel-cors": "^2.0",
         "guzzlehttp/guzzle": "^7.0.1",
         "laravel/framework": "^8.54",
+        "laravel/nexmo-notification-channel": "^3.0",
         "laravel/sanctum": "^2.12",
         "laravel/tinker": "^2.5",
+<<<<<<< HEAD
         "pusher/pusher-php-server": "*"
+=======
+        "nexmo/laravel": "^3.0",
+        "pusher/pusher-php-server": "^7.0",
+        "vonage/client": "^3.0"
+>>>>>>> d67a3e340866e13f36803bf35d2ae7bee1495a7c
     },
     "require-dev": {
         "facade/ignition": "^2.5",

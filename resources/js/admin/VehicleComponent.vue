@@ -992,7 +992,7 @@ export default {
             this.process = true;
             await axios({
                 method: "put",
-                url: "/api/user/" + this.id,
+                url: "/api/vehicle/" + this.id,
                 data: {
                     user_id: this.user_id,
                     image: this.image,

@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\Vehicle;
 use Illuminate\Database\Seeder;
 use App\Models\User;
+use App\Models\Fund;
 
 
 class VehicleSeeder extends Seeder

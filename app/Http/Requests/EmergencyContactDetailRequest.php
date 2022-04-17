@@ -27,7 +27,7 @@ class EmergencyContactDetailRequest extends FormRequest
         return [
             'user_id' =>['required',  Rule::exists('users', 'id')],
             'name' => ['required', 'max:255'],
-            'number' => ['required'],
+            'contact_number' => ['required','min:11'],
         ];
     }
 }

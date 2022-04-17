@@ -1,3 +1,4 @@
+div
 <template>
     <!-- post and comment -->
     <div>
@@ -97,27 +98,25 @@
                 v-if="approved == true"
                 class="flex justify-content-between p-0 m-0"
             >
-                <div>
-                    <Button
-                        label="Comment"
-                        icon="pi pi-comment"
-                        style="width: 150px"
-                        class="p-button-outlined p-button-primary ml-5"
-                        @click="commentShow"
-                    />
-                    <Button
-                        v-if="comment_count === 1"
-                        :label="`${comment_count.toString()} comment`"
-                        class="p-button-primary p-button-text"
-                        @click="commentShow"
-                    />
-                    <Button
-                        v-if="comment_count > 1"
-                        :label="`${comment_count.toString()} comments`"
-                        class="p-button-primary p-button-text"
-                        @click="commentShow"
-                    />
-                </div>
+                <Button
+                    label="Comment"
+                    icon="pi pi-comment"
+                    style="width: 150px"
+                    class="p-button-outlined p-button-primary ml-5"
+                    @click="commentShow"
+                />
+                <Button
+                    v-if="comment_count === 1"
+                    :label="`${comment_count.toString()} comment`"
+                    class="p-button-primary p-button-text"
+                    @click="commentShow"
+                />
+                <Button
+                    v-if="comment_count > 1"
+                    :label="`${comment_count.toString()} comments`"
+                    class="p-button-primary p-button-text mr-4"
+                    @click="commentShow"
+                />
             </div>
 
             <div v-else class="flex justify-content-end">
@@ -430,7 +429,7 @@ export default {
             type: Object,
         },
         group_id: { type: Number },
-        approved: { type: Boolean },
+        approved: { type: Number },
     },
     components: {
         CommentComponent,
