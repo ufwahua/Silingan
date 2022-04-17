@@ -21,11 +21,7 @@
                         />
                     </router-link>
                 </div>
-                <form
-                    @submit.prevent="onLoginSubmit"
-                    class="w-full md:w-10 mx-auto"
-                    autocomplete="on"
-                >
+                <div class="w-full md:w-10 mx-auto" autocomplete="on">
                     <label
                         for="email1"
                         class="block text-900 text-xl font-medium mb-2"
@@ -34,7 +30,7 @@
                     <InputText
                         id="email1"
                         :class="{ 'p-invalid': error }"
-                        v-model="form.email"
+                        v-model="email"
                         type="text"
                         class="w-full mb-3"
                         style="padding: 1rem"
@@ -45,15 +41,14 @@
                     >
                     <Password
                         :class="{ 'p-invalid': error }"
-                        v-model="form.password"
+                        v-model="password"
                         :toggleMask="true"
                         :feedback="false"
                         class="w-full mb-3"
                         inputClass="w-full"
                         inputStyle="padding:1rem"
                     >
-                        <template #content> <span></span> </template
-                    ></Password>
+                    </Password>
                     <label style="color: red" v-if="error">{{
                         this.error
                     }}</label>
@@ -63,7 +58,7 @@
                         <div class="flex align-items-center">
                             <Checkbox
                                 id="rememberme1"
-                                v-model="form.remember"
+                                v-model="remember"
                                 :binary="true"
                                 class="mr-2"
                             ></Checkbox>
@@ -86,8 +81,9 @@
                         label="Sign In"
                         type="submit"
                         class="w-full p-3 text-xl"
+                        @click="onLoginSubmit"
                     ></Button>
-                </form>
+                </div>
 
                 <div class="col-12 mb-2 lg:col-12 lg:mb-0">
                     <p class="custom-text">
@@ -133,11 +129,10 @@ export default {
     data() {
         return {
             loading: false,
-            form: {
-                email: null,
-                password: null,
-                remember: false,
-            },
+
+            email: null,
+            password: null,
+            remember: false,
 
             token: null,
             error: null,
@@ -146,36 +141,53 @@ export default {
     methods: {
         async onLoginSubmit() {
             this.loading = true;
-            await axios
-                .post("/api/login", this.form)
-                .then((response) => {
-                    this.error = "";
-                    this.$store.commit("getUserLogged", response.data);
-                    if (response.data.status == "inactive") {
-                        this.$router.push(
-                            "/" + response.data.role + "/activate-account"
-                        );
-                    } else if (response.data.role === "resident") {
-                        this.loading = false;
-                        this.$router.push("/resident/timeline");
-                    } else if (response.data.role === "security officer") {
-                        this.loading = false;
-                        this.$router.push("/security-officer/timeline");
-                    } else {
-                        this.loading = false;
-                        this.$router.push("/admin/timeline");
-                    }
+            if (this.password && this.email) {
+                await axios({
+                    method: "post",
+                    url: "/api/login",
+                    data: {
+                        email: this.email,
+                        password: this.password,
+                        remember: this.remember,
+                    },
                 })
-                .catch((err) => {
-                    this.error = "";
-                    console.log(err.response);
-                    if (err.response.data.error) {
-                        this.error = err.response.data.error;
-                    } else {
-                        this.error = "Please enter password";
-                    }
-                    this.loading = false;
-                });
+                    .then((response) => {
+                        this.error = "";
+                        this.$store.commit("getUserLogged", response.data);
+                        if (response.data.status == "inactive") {
+                            this.$router.push(
+                                "/" + response.data.role + "/activate-account"
+                            );
+                        } else if (response.data.role === "resident") {
+                            this.loading = false;
+                            this.$router.push("/resident/timeline");
+                        } else if (response.data.role === "security officer") {
+                            this.loading = false;
+                            this.$router.push("/security-officer/timeline");
+                        } else {
+                            this.loading = false;
+                            this.$router.push("/admin/timeline");
+                        }
+                    })
+                    .catch((err) => {
+                        this.error = "";
+                        console.log(err.response);
+                        if (err.response.data.errors) {
+                            this.error = err.response.data.errors;
+                        }
+                        this.loading = false;
+                    });
+            } else {
+                this.error = "";
+                if (!this.email && !this.password) {
+                    this.error = "please enter email and password";
+                } else if (!this.email && this.password) {
+                    this.error = "please enter email";
+                } else {
+                    this.error = "please enter password";
+                }
+                this.loading = false;
+            }
         },
     },
 };
