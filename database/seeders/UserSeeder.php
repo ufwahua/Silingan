@@ -35,7 +35,7 @@ class UserSeeder extends Seeder
             'has_voted' => 0,
             'contact_num' => '639083024328',
             'email' => 'jh.diamos@gmail.com',
-            'password' => Hash::make(12345678),
+            'password' => Hash::make("12345678"),
             'tag_as' => 'owner',
         ]);
 
