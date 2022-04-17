@@ -35,21 +35,23 @@ class LogController extends Controller
     }
 
    
-    public function update(Log $log, LogRequest $request) : JsonResponse
+    public function update(Log $log,LogRequest $request) : JsonResponse
     {
         $log->update($request->validated());
+        Card::query()->where('id',$log['card_id'])->update([
+            'availability' => 1,
+        ]);
         return response()->json($log);
     }
 
 
     public function destroy(Log $log) : JsonResponse
     {
+        $log->delete();
        
-        if( $log->delete()){
-            Card::query()->where('id',$log['card_id'])->update([
-                'availability' => 1,
-            ]);
-        };
+      
+           
+      
         return response()->json(['ok']);
     }
 }
