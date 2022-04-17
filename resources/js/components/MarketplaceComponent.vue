@@ -3,7 +3,6 @@
         <div
             class="col-12 sm:col-12 md:col-8 md:col-offset-2 lg:col-6 lg:col-offset-1 xl:col-6 xl:col-offset-1"
         >
-        <h3>Timeline</h3>
             <h2>Marketplace</h2>
             <div class="col justify-content-center pt-0">
                 <div class="card p-3">
