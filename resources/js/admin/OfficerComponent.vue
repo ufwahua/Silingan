@@ -399,6 +399,9 @@
                                         :class="{
                                             'p-invalid': error_selected_lot,
                                         }"
+                                        :disabled="
+                                            form.selected_block ? false : true
+                                        "
                                     />
                                     <label
                                         style="color: red"
@@ -959,6 +962,9 @@
                                         :class="{
                                             'p-invalid': error_selected_lot,
                                         }"
+                                        :disabled="
+                                            form.selected_block ? false : true
+                                        "
                                     />
                                     <label
                                         style="color: red"
