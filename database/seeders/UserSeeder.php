@@ -64,7 +64,7 @@ class UserSeeder extends Seeder
             'block_lot_id' => 3,
             'gender' => 'female',
             'age' => rand(1, 100),
-            'verified' => 0,
+            'verified' => 1,
             'has_voted' => 0,
             'contact_num' => '639083024328',
             'email' => 'varbie.sumido@gmail.com',
