@@ -1303,6 +1303,11 @@
                                         v-if="error_password"
                                         >{{ error_password }}</label
                                     >
+                                    <label
+                                        style="color: red"
+                                        v-if="error_confirm_password"
+                                        >{{ error_confirm_password }}</label
+                                    >
                                 </div>
                                 <div class="field col-12 md:col-12">
                                     <label>Confirm Password</label>
@@ -2109,7 +2114,7 @@
                                     <label><h6>Security Information</h6></label>
                                 </div>
 
-                                <div class="field col-12 md:col-4">
+                                <div class="field col-12 md:col-12">
                                     <label>Email</label>
                                     <InputText
                                         type="text"
@@ -2126,7 +2131,7 @@
                                         >{{ error_email }}</label
                                     >
                                 </div>
-                                <div class="field col-12 md:col-4">
+                                <div class="field col-12 md:col-12">
                                     <label>Password</label>
                                     <InputText
                                         type="password"
@@ -2143,7 +2148,7 @@
                                         >{{ error_password }}</label
                                     >
                                 </div>
-                                <div class="field col-12 md:col-4">
+                                <div class="field col-12 md:col-12">
                                     <label>Confirm Password</label>
 
                                     <InputText
@@ -3953,7 +3958,7 @@ export default {
                         },
                     },
                     {
-                        label: "Emergency Contacts",
+                        label: "Contact person",
                         icon: "pi pi-id-card",
                         command: () => {
                             this.viewEmergencyContacts();
