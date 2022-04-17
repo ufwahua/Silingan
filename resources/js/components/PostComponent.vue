@@ -429,7 +429,7 @@ export default {
             type: Object,
         },
         group_id: { type: Number },
-        approved: { type: Number },
+        approved: { type: Boolean },
     },
     components: {
         CommentComponent,
