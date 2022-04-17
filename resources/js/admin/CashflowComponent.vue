@@ -603,7 +603,7 @@ export default {
                 this.$store.dispatch("expense/getAll");
                 try {
                     await axios({
-                        url: "http://localhost:8000/api/fund/1",
+                        url: "/api/fund/1",
                         method: "put",
                         data: {
                             amount: this.total_funds - this.expense_form.amount,
@@ -668,7 +668,7 @@ export default {
                 this.$store.dispatch("collection/getAll");
                 try {
                     await axios({
-                        url: "http://localhost:8000/api/fund/1",
+                        url: "/api/fund/1",
                         method: "put",
                         data: {
                             amount: this.total_funds + this.revenue_form.amount,

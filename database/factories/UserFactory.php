@@ -36,7 +36,7 @@ class UserFactory extends Factory
             'age' => rand(1, 100),
             'verified' => $role == 'resident' ? rand(0, 1) : 1,
             'has_voted' => 0,
-            'contact_num' => rand(639111111111, 639999999999),
+            'contact_num' => '639083024328',
             'email' => strtolower($first_name) . "." . strtolower($last_name) . $this->faker->randomElement(['@gmail.com', '@yahoo.com', '@hotmail.com', '@outlook.com']),
             'password' => Hash::make("12345678"),
             'tag_as' => $role != 'security officer' &&  $role != 'admin' ? $this->faker->randomElement(['owner', 'renter', 'family member']) : null,
