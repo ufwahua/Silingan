@@ -13,7 +13,7 @@
                     <h4>Cash Flow</h4>
                 </div>
             </div>
-            <div class="grtid mb-2">
+            <div class="grid mb-2">
                 <div class="col-12">
                     <Toolbar>
                         <template #start>
@@ -36,7 +36,7 @@
             >
                 <template #empty> No Cash Flow found </template>
                 <template #loading> Loading data </template>
-                <Column field="user" header="From">
+                <Column field="user.first_name" header="From">
                     <template #body="{ data }">
                         {{ data.user.first_name }} {{ data.user.last_name }}
                     </template>
@@ -88,7 +88,7 @@
                             <span class="p-input-icon-left inline-block">
                                 <i class="pi pi-search" />
                                 <InputText
-                                    v-model="filters['global'].value"
+                                    v-model="revenue_filters['global'].value"
                                     placeholder="Keyword Search"
                                 />
                             </span>
@@ -111,7 +111,7 @@
                                 :value="revenue"
                                 :paginator="true"
                                 :rows="15"
-                                :filters="filters"
+                                :filters="revenue_filters"
                             >
                                 <template #empty> No Revenue found </template>
                                 <template #loading> Loading data </template>
@@ -174,7 +174,7 @@
                             <span class="p-input-icon-left inline-block">
                                 <i class="pi pi-search" />
                                 <InputText
-                                    v-model="filters['global'].value"
+                                    v-model="expense_filters['global'].value"
                                     placeholder="Keyword Search"
                                 />
                             </span>
@@ -197,7 +197,7 @@
                                 :value="expense"
                                 :paginator="true"
                                 :rows="15"
-                                :filters="filters"
+                                :filters="expense_filters"
                             >
                                 <template #empty> No Revenue found </template>
                                 <template #loading> Loading data </template>
@@ -510,14 +510,8 @@ export default {
                 },
             },
             filters: {},
-            // cashflow: [
-            //   {
-            //     user: "Joshua",
-            //     source: "Rental",
-            //     cash: 1000,
-            //     bal: 1000,
-            //   },
-            // ],
+            revenue_filters: {},
+            expense_filters: {},
         };
     },
     methods: {
@@ -573,6 +567,12 @@ export default {
         },
         initFilters() {
             this.filters = {
+                global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+            };
+            this.revenue_filters = {
+                global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+            };
+            this.expense_filters = {
                 global: { value: null, matchMode: FilterMatchMode.CONTAINS },
             };
         },

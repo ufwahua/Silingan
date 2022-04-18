@@ -141,6 +141,11 @@ export default {
                                     icon: "pi pi-info-circle",
                                     to: "/admin/position",
                                 },
+                                {
+                                    label: "Collection Types",
+                                    icon: "pi pi-info-circle",
+                                    to: "/admin/collection_type",
+                                }
                             ],
                         },
                     ],
