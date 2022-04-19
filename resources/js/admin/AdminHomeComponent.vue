@@ -93,11 +93,6 @@ export default {
                             icon: "pi pi-info-circle",
                             to: "/admin/verify-marketplace",
                         },
-                        {
-                            label: "Security Shift",
-                            icon: "pi pi-calendar",
-                            to: "/admin/security-shift",
-                        },
                     ],
                 },
 
