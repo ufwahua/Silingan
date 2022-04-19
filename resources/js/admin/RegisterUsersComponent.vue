@@ -3,7 +3,7 @@
         <Toast />
         <div class="grid">
             <div class="col-12">
-                <h1>Registered Users</h1>
+                <h1 class="layout-text">All Users</h1>
             </div>
         </div>
         <div class="grid mb-2 flex justify-content-flex-start">
@@ -1030,7 +1030,7 @@
                             <Button
                                 label="Update"
                                 icon="pi pi-check"
-                                class="p-button-text p-button-warning"
+                                class="p-button-text p-button-success"
                                 @click="confirmUpdateUser"
                             />
                         </template>
@@ -1869,7 +1869,7 @@
                             />
                             <Button
                                 label="Register"
-                                class="p-button-primary"
+                                class="p-button-primary p-button-success"
                                 autofocus
                                 @click="onRegisterClick"
                             />
@@ -3958,7 +3958,7 @@ export default {
                         },
                     },
                     {
-                        label: "Contact person",
+                        label: "Emergency Contacts",
                         icon: "pi pi-id-card",
                         command: () => {
                             this.viewEmergencyContacts();

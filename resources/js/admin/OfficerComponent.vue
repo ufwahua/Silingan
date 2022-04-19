@@ -3,7 +3,7 @@
         <Toast />
         <div class="grid">
             <div class="col-12">
-                <h1>Officers</h1>
+                <h1 class="layout-text">Officers</h1>
             </div>
         </div>
         <div class="grid mb-2 flex justify-content-flex-start">
@@ -612,7 +612,7 @@
                             <Button
                                 label="Update"
                                 icon="pi pi-check"
-                                class="p-button-text p-button-warning"
+                                class="p-button-text p-button-success"
                                 @click="confirmUpdateUser"
                             />
                         </template>

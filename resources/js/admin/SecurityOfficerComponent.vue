@@ -3,10 +3,10 @@
         <Toast />
         <div class="grid">
             <div class="col-12">
-                <h1 class="text-center">Security Officers</h1>
+                <h1 class="layout-text">Security Officers</h1>
             </div>
         </div>
-        <div class="grid mb-2 flex justify-content-center">
+        <div class="grid mb-2 flex justify-flex-start">
             <div class="col-12 lg:col-6 xl:col-3">
                 <div class="card mb-0 bg-green-100">
                     <div class="flex justify-content-between mb-3">
@@ -60,7 +60,7 @@
                 </div>
             </div>
         </div>
-        <div class="card">
+        <!-- <div class="card">
             <div class="grid">
                 <div class="col-12">
                     <DataTable
@@ -69,8 +69,59 @@
                         breakpoint="1350px"
                         :paginator="true"
                         :rows="10"
+                    > -->
+        <div class="grid p-fluid">
+            <div class="col-12">
+                <div class="card">
+                    <DataTable
+                        :value="users"
+                        :filters="filters"
+                        breakpoint="1350px"
+                        :paginator="true"
+                        :rows="10"
                     >
-                        <template #header>
+                        <div>
+                            <div class="grid formgrid">
+                                <div class="col-12 mb-2 lg:col-4 lg:mb-0">
+                                    <span class="p-input-icon-left">
+                                        <i class="pi pi-search" />
+                                        <InputText
+                                            v-model="filters['global'].value"
+                                            placeholder="Keyword Search"
+                                        />
+                                    </span>
+                                </div>
+                                <div class="col-12 mb-2 lg:col-4 lg:mb-0">
+                                    <Dropdown
+                                        v-model="filters['status'].value"
+                                        :showClear="true"
+                                        :options="status"
+                                        optionLabel="status"
+                                        optionValue="status"
+                                        placeholder="Filter by status"
+                                    ></Dropdown>
+                                </div>
+                                <div
+                                    class="col-12 mb-2 lg:col-4 lg:mb-0 flex justify-content-end"
+                                >
+                                    <Button
+                                        icon="pi pi-filter-slash"
+                                        class="my-2 p-button-outlined p-button-secondary"
+                                        @click="clearFilter"
+                                        v-tooltip="'Clear'"
+                                    />
+
+                                    <Button
+                                        label="Add"
+                                        icon="pi pi-plus"
+                                        class="ml-2 my-2 p-button-primary"
+                                        style="width: auto"
+                                        @click="registerUser"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                        <!-- <template #header>
                             <div class="flex flex-wrap justify-content-between">
                                 <span class="p-input-icon-left inline-block">
                                     <i class="pi pi-search" />
@@ -103,7 +154,7 @@
                                     @click="registerUser"
                                 />
                             </div>
-                        </template>
+                        </template> -->
                         <template #empty> No registered users found </template>
                         <template #loading> Loading Users </template>
                         <Column header="Profile Pic">
@@ -117,7 +168,7 @@
                                 </div>
                                 <div v-else>
                                     <Avatar
-                                        image="http://127.0.0.1:8000/storage/images/default-prof-pic.png"
+                                        image="http://127.0.0.1:8000/storage/images/avatar.png"
                                         style="width: 100px; height: 100px"
                                         shape="circle"
                                     />
@@ -393,7 +444,7 @@
                             <Button
                                 label="Update"
                                 icon="pi pi-check"
-                                class="p-button-text p-button-warning"
+                                class="p-button-text p-button-success"
                                 @click="confirmUpdateUser"
                             />
                         </template>
@@ -1396,4 +1447,6 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+
+</style>
