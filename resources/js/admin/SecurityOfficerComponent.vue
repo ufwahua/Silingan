@@ -871,6 +871,42 @@
                                     >
                                 </div>
                                 <div class="field col-12 md:col-12">
+                                    <label class="">Shift</label>
+                                </div>
+                                <div class="field col-12 md:col-6">
+                                    <Calendar
+                                        v-model="form.from"
+                                        :timeOnly="true"
+                                        :showTime="true"
+                                        hourFormat="12"
+                                        placeholder="From"
+                                        :class="{
+                                            'p-invalid': error_security_shift,
+                                        }"
+                                        disabled
+                                    />
+                                </div>
+                                <div class="field col-12 md:col-6">
+                                    <Calendar
+                                        v-model="form.to"
+                                        :timeOnly="true"
+                                        :showTime="true"
+                                        hourFormat="12"
+                                        placeholder="To"
+                                        :class="{
+                                            'p-invalid': error_security_shift,
+                                        }"
+                                        disabled
+                                    />
+                                </div>
+                                <div class="field col-12 md:col-12">
+                                    <label
+                                        style="color: red"
+                                        v-if="error_security_shift"
+                                        >{{ error_security_shift }}</label
+                                    >
+                                </div>
+                                <div class="field col-12 md:col-12">
                                     <label>Email</label>
                                     <InputText
                                         type="text"
