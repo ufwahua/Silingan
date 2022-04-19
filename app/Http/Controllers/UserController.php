@@ -131,7 +131,7 @@ class UserController extends Controller
                 'block_lot_id'          => $request['block_lot_id'],
                 'email'                 => $request['email'],
                 'password'              => Hash::make($request['password']),
-                'first_name'            => $request['password'],
+                'first_name'            => $request['first_name'],
                 'last_name'             => $request['last_name'],
                 'gender'                => $request['gender'],
                 'age'                   => $request['age'],
