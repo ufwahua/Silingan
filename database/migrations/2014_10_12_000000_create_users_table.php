@@ -30,6 +30,7 @@ class CreateUsersTable extends Migration
             $table->enum('role', ['admin', 'officer', 'resident', 'security officer']);
             $table->foreignId('position_id')->nullable();
             $table->enum('tag_as', ['owner', 'renter', 'family member'])->nullable();
+            $table->string('security_shift')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

@@ -42,37 +42,72 @@ class UserController extends Controller
     {
        $request = request();
         if ($request['role'] == 'security officer' || $request['role'] == 'admin') {
-            $request->validate([
-                'email'                 => ['required', 'string', 'email', 'max:255', Rule::unique('users')->ignore($request->route('user'))],
-                'password'              => ['required', 'min:8'],
-                'confirm_password'     => ['required', 'same:password', 'min:8'],
-                'first_name'            => ['required', 'string', 'max:255'],
-                'last_name'             => ['required', 'string', 'max:255'],
-                'gender'                => ['required'],
-                'age'                   => ['required', 'integer', 'numeric', 'gt:0', 'max:130'],
-                'contact_num'           => ['required','string','min:10'],
-                'profile_pic'           => ['sometimes'],
-                'has_voted'             => ['required'],
-                'verified'              => ['required'],
-                'status'                => ['required'],
-                'role'                  => ['required'],
-                'position_id'           => ['sometimes'],
-                'tag_as'                => ['sometimes'],
-            ]);
-             $user = User::query()->create([
-                 'email'                 => $request['email'],
-                'password'              => Hash::make($request['password']),
-                'first_name'            => $request['first_name'],
-                'last_name'             => $request['last_name'],
-                'gender'                => $request['gender'],
-                'age'                   => $request['age'],
-                'contact_num'           => $request['contact_num'],
-                'has_voted'             => $request['has_voted'],
-                'verified'              => $request['verified'],
-                'status'                => $request['status'],
-                'role'                  => $request['role'],        
-              
-            ]);   
+            if($request['role'] == 'security officer'){
+                 $request->validate([
+                    'email'                 => ['required', 'string', 'email', 'max:255', Rule::unique('users')->ignore($request->route('user'))],
+                    'password'              => ['required', 'min:8'],
+                    'confirm_password'     => ['required', 'same:password', 'min:8'],
+                    'first_name'            => ['required', 'string', 'max:255'],
+                    'last_name'             => ['required', 'string', 'max:255'],
+                    'gender'                => ['required'],
+                    'age'                   => ['required', 'integer', 'numeric', 'gt:0', 'max:130'],
+                    'contact_num'           => ['required','string','min:10'],
+                    'profile_pic'           => ['sometimes'],
+                    'has_voted'             => ['required'],
+                    'verified'              => ['required'],
+                    'status'                => ['required'],
+                    'role'                  => ['required'],
+                    'position_id'           => ['sometimes'],
+                    'tag_as'                => ['sometimes'],
+                    'security_shift'        => ['required'],
+                ]);
+                 $user = User::query()->create([
+                    'email'                 => $request['email'],
+                    'password'              => Hash::make($request['password']),
+                    'first_name'            => $request['first_name'],
+                    'last_name'             => $request['last_name'],
+                    'gender'                => $request['gender'],
+                    'age'                   => $request['age'],
+                    'contact_num'           => $request['contact_num'],
+                    'has_voted'             => $request['has_voted'],
+                    'verified'              => $request['verified'],
+                    'status'                => $request['status'],
+                    'role'                  => $request['role'],        
+                    'security_shift'        => $request['security_shift'],        
+                ]);   
+            }else{
+                 $request->validate([
+                    'email'                 => ['required', 'string', 'email', 'max:255', Rule::unique('users')->ignore($request->route('user'))],
+                    'password'              => ['required', 'min:8'],
+                    'confirm_password'     => ['required', 'same:password', 'min:8'],
+                    'first_name'            => ['required', 'string', 'max:255'],
+                    'last_name'             => ['required', 'string', 'max:255'],
+                    'gender'                => ['required'],
+                    'age'                   => ['required', 'integer', 'numeric', 'gt:0', 'max:130'],
+                    'contact_num'           => ['required','string','min:10'],
+                    'profile_pic'           => ['sometimes'],
+                    'has_voted'             => ['required'],
+                    'verified'              => ['required'],
+                    'status'                => ['required'],
+                    'role'                  => ['required'],
+                    'position_id'           => ['sometimes'],
+                    'tag_as'                => ['sometimes'],
+                ]);
+                $user = User::query()->create([
+                    'email'                 => $request['email'],
+                    'password'              => Hash::make($request['password']),
+                    'first_name'            => $request['first_name'],
+                    'last_name'             => $request['last_name'],
+                    'gender'                => $request['gender'],
+                    'age'                   => $request['age'],
+                    'contact_num'           => $request['contact_num'],
+                    'has_voted'             => $request['has_voted'],
+                    'verified'              => $request['verified'],
+                    'status'                => $request['status'],
+                    'role'                  => $request['role'],        
+                ]); 
+            }
+            
         } else {
              $request->validate([
                 'block_lot_id'          => ['required',Rule::exists('lots', 'id')],
@@ -162,21 +197,41 @@ class UserController extends Controller
     public function update(Request $request): JsonResponse
     {
         if ($request['role'] == 'security officer' || $request['role'] == 'admin' ) {
-            User::query()->where('id', $request->route('user'))->update($request->validate([
-                'block_lot_id' => ['sometimes'],
-                'first_name' => ['required', 'string', 'max:255'],
-                'last_name' => ['required', 'string', 'max:255'],
-                'gender' => ['required'],
+            if($request['role'] == 'security officer'){
+                User::query()->where('id', $request->route('user'))->update($request->validate([
+                    'block_lot_id' => ['sometimes'],
+                    'first_name' => ['required', 'string', 'max:255'],
+                    'last_name' => ['required', 'string', 'max:255'],
+                    'gender' => ['required'],
 
-                'age' => ['required', 'integer', 'numeric', 'gt:0', 'max:130'],
-                'contact_num' => ['required','string','min:10'],
-                'role' => ['required'],
-                'status' => ['required'],
-                'verified' => ['required'],
-                'has_voted' => ['required'],
-                'tag_as' => ['sometimes'],
-                'profile_pic'=> ['sometimes'],
-            ]));
+                    'age' => ['required', 'integer', 'numeric', 'gt:0', 'max:130'],
+                    'contact_num' => ['required','string','min:10'],
+                    'role' => ['required'],
+                    'status' => ['required'],
+                    'verified' => ['required'],
+                    'has_voted' => ['required'],
+                    'tag_as' => ['sometimes'],
+                    'profile_pic'=> ['sometimes'],
+                    'security_shift'=> ['required'],
+                ]));
+            }else{
+                 User::query()->where('id', $request->route('user'))->update($request->validate([
+                    'block_lot_id' => ['sometimes'],
+                    'first_name' => ['required', 'string', 'max:255'],
+                    'last_name' => ['required', 'string', 'max:255'],
+                    'gender' => ['required'],
+                    'age' => ['required', 'integer', 'numeric', 'gt:0', 'max:130'],
+                    'contact_num' => ['required','string','min:10'],
+                    'role' => ['required'],
+                    'status' => ['required'],
+                    'verified' => ['required'],
+                    'has_voted' => ['required'],
+                    'tag_as' => ['sometimes'],
+                    'profile_pic'=> ['sometimes'],
+                    'security_shift'=> ['sometimes'],
+                ]));
+            }
+         
         } else {
             User::query()->where('id', $request->route('user'))->update($request->validate([
                 'block_lot_id' => ['required', Rule::exists('lots', 'id')],

@@ -50,6 +50,7 @@ class UserSeeder extends Seeder
             'verified' => 1,
             'has_voted' => 0,
             'contact_num' => rand(639000000001, 639999999999),
+            'security_shift' => "6:00 AM - 6:00 PM",
             'email' => 'joshua.diamos@gmail.com',
             'password' => Hash::make("12345678"),
 
