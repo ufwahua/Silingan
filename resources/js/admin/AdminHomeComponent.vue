@@ -73,17 +73,29 @@ export default {
                             to: "/admin/timeline",
                         },
                         {
+                            label: "Announcement",
+                            icon: "pi pi-info",
+                            to: "/admin/view-announcement",
+                        },
+
+                        {
                             label: "Marketplace",
                             icon: "pi pi-shopping-cart",
                             to: "/admin/marketplace",
                         },
                         {
-                            label: "Announcement",
-                            icon: "pi pi-info",
-                            to: "/admin/view-announcement",
+                            label: "Cash Flow",
+                            icon: "pi pi-dollar",
+                            to: "/admin/cashflow",
+                        },
+                        {
+                            label: "Verify Marketplace Post",
+                            icon: "pi pi-info-circle",
+                            to: "/admin/verify-marketplace",
                         },
                     ],
                 },
+
                 {
                     items: [
                         {
@@ -141,6 +153,11 @@ export default {
                                     icon: "pi pi-info-circle",
                                     to: "/admin/position",
                                 },
+                                {
+                                    label: "Collection Types",
+                                    icon: "pi pi-info-circle",
+                                    to: "/admin/collection_type",
+                                },
                             ],
                         },
                     ],
@@ -148,20 +165,9 @@ export default {
                 {
                     items: [
                         {
-                            label: "Verify Marketplace Post",
-                            icon: "pi pi-info-circle",
-                            to: "/admin/verify-marketplace",
-                        },
-
-                        {
                             label: "Election",
-                            icon: "pi pi-fw pi-calendar",
+                            icon: "pi pi-user-plus",
                             to: "/admin/election",
-                        },
-                        {
-                            label: "Cash Flow",
-                            icon: "pi pi-dollar",
-                            to: "/admin/cashflow",
                         },
                     ],
                 },
