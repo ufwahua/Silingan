@@ -29,7 +29,8 @@ class ExpenseRequest extends FormRequest
             'amount'=> ['required'],
             'notes'=> ['required'],
             'official_receipt' => ['sometimes'],
-            'running_balance' => ['required']
+            'running_balance' => ['required'],
+            'fund_id' => ['required']
         ];
     }
 }
