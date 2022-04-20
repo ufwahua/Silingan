@@ -4,7 +4,7 @@
             class="col-12 sm:col-12 md:col-10 md:col-offset-1 lg:col-6 lg:col-offset-1 xl:col-6 xl:col-offset-1"
         >
             <div class="col justify-content-center pt-0">
-                <h1 class="text-center">Announcement</h1>
+                <h1 class="layout-text">Announcement</h1>
                 <div v-if="announcements">
                     <div
                         v-for="announcement in announcements"

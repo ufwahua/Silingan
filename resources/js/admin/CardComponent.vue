@@ -3,10 +3,10 @@
         <Toast />
         <div class="grid">
             <div class="col-12">
-                <h1>Cards</h1>
+                <h1 class="layout-text">Cards</h1>
             </div>
         </div>
-        <div class="grid mb-2 flex justify-content-center">
+        <div class="grid mb-2 flex justify-flex-start">
             <div class="col-12 lg:col-6 xl:col-3">
                 <div class="card mb-0 bg-green-100">
                     <div class="flex justify-content-between mb-3">
@@ -61,9 +61,9 @@
                 </div>
             </div>
         </div>
-        <div class="card">
-            <div class="grid">
-                <div class="col-12">
+        <div class="grid p-fluid">
+            <div class="col-12">
+                <div class="card">
                     <DataTable
                         :value="cards"
                         :filters="filters"
@@ -71,17 +71,17 @@
                         :paginator="true"
                         :rows="15"
                     >
-                        <template #empty> No cards found </template>
-                        <template #header>
-                            <div class="flex flex-wrap justify-content-between">
-                                <span class="p-input-icon-left inline-block">
+                        <div class="grid formgrid">
+                            <div class="col-12 mb-2 lg:col-4 lg:mb-0">
+                                <span class="p-input-icon-left">
                                     <i class="pi pi-search" />
                                     <InputText
                                         v-model="filters['global'].value"
                                         placeholder="Keyword Search"
-                                        class="my-2"
                                     />
                                 </span>
+                            </div>
+                            <div class="col-12 mb-2 lg:col-4 lg:mb-0">
                                 <Dropdown
                                     v-model="filters['availability'].value"
                                     :showClear="true"
@@ -89,25 +89,29 @@
                                     optionLabel="availability"
                                     optionValue="value"
                                     placeholder="Filter by availability"
-                                    class="my-2"
-                                    style="width: 200px"
                                     @change="getFilterBlockLot"
                                 ></Dropdown>
-
+                            </div>
+                            <div
+                                class="col-12 mb-2 lg:col-4 lg:mb-0 flex justify-content-end"
+                            >
                                 <Button
-                                    label="Clear"
                                     icon="pi pi-filter-slash"
                                     class="my-2 p-button-outlined p-button-secondary"
                                     @click="clearFilter"
+                                    v-tooltip="'Clear'"
                                 />
                                 <Button
                                     label="Add"
                                     icon="pi pi-plus"
-                                    class="p-button-primary my-2"
+                                    class="ml-2 my-2 p-button-primary"
+                                    style="width: auto"
                                     @click="createPosition"
                                 />
                             </div>
-                        </template>
+                        </div>
+                        <template #empty> No cards found </template>
+
                         <Column header="Number" field="card_number">
                             <template #body="{ data }">
                                 {{
@@ -245,7 +249,7 @@
                             <Button
                                 label="Update"
                                 icon="pi pi-check"
-                                class="p-button-text p-button-warning"
+                                class="p-button-text p-button-success"
                                 @click="confirmUpdateCard"
                             />
                         </template>
