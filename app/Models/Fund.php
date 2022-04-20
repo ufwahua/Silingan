@@ -10,6 +10,7 @@ class Fund extends Model
     use HasFactory;
 
     protected $fillable = [
-        'amount'
+        'amount',
+        'fund_type'
     ];
 }
