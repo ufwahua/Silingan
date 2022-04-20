@@ -89,9 +89,14 @@ export default {
                             to: "/admin/cashflow",
                         },
                         {
-                            label: "Verify Marketplace Post",
+                            label: "Verify Marketplace",
                             icon: "pi pi-info-circle",
                             to: "/admin/verify-marketplace",
+                        },
+                        {
+                            label: "Logs",
+                            icon: "pi pi-info-circle",
+                            to: "/admin/log",
                         },
                     ],
                 },
@@ -129,7 +134,7 @@ export default {
                                     ],
                                 },
                                 {
-                                    label: "Announcement",
+                                    label: "Manage Announcement",
                                     icon: "pi pi-info-circle",
                                     to: "/admin/announcement",
                                 },
@@ -284,7 +289,7 @@ export default {
     },
 
     mounted() {
-        this.$store.dispatch("news/getAll");
+        // this.$store.dispatch("news/getAll");
         this.$store.dispatch("blocks/getAll");
         this.$store.dispatch("lots/getAll");
         this.$store.dispatch("announcements/getAll");
@@ -293,7 +298,7 @@ export default {
         this.$store.dispatch("candidates/getAll");
         this.$store.dispatch("getAllUsers");
         this.$store.dispatch("cards/getAllCards");
-
+        this.$store.dispatch("logs/getAll");
         this.$store.dispatch("getBlockUsers", this.$store.state.userLogged.id);
         this.$store.dispatch("adminVehicles/getAll");
         this.$store.dispatch(

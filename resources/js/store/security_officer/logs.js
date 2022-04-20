@@ -4,9 +4,17 @@ const logs = {
     namespaced: true,
     state: {
         logs: null,
+        logs_masterlist: null,
     },
     mutations: {
         getAll(state, payload) {
+            state.logs = payload;
+            state.logs_masterlist = payload;
+        },
+        getLogMasterList(state, payload) {
+            state.logs_masterlist = payload;
+        },
+        getLogs(state, payload) {
             state.logs = payload;
         },
     },

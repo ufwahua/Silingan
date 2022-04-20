@@ -74,14 +74,14 @@ export default {
                             to: "/security-officer/marketplace",
                         },
                         {
-                            label: "Log",
-                            icon: "pi pi-fw pi-calendar",
-                            to: "/security-officer/log",
-                        },
-                        {
                             label: "Announcement",
                             icon: "pi pi-fw pi-calendar",
                             to: "/security-officer/view-announcement",
+                        },
+                        {
+                            label: "Logs",
+                            icon: "pi pi-fw pi-calendar",
+                            to: "/security-officer/log",
                         },
                     ],
                 },

@@ -70,19 +70,45 @@
                     </Textarea>
                     <FileUpload
                         name="demo[]"
+                        mode="basic"
                         accept="image/*"
                         :multiple="true"
-                        :customUpload="true"
                         @uploader="onUpload"
                         :auto="true"
+                        :customUpload="true"
                         :maxFileSize="2000000"
-                        :showUploadButton="false"
-                        :showCancelButton="false"
+                        :hidden="images ? true : false"
                     >
                         <template #empty>
                             <p>Drag and drop files to here to upload.</p>
                         </template>
                     </FileUpload>
+                    <Galleria
+                        :value="images"
+                        :responsiveOptions="responsiveOptions"
+                        :numVisible="3"
+                        class="w-full mx-0"
+                        :showItemNavigators="true"
+                        :showItemNavigatorsOnHover="true"
+                    >
+                        <template #item="slotProps">
+                            <img
+                                :src="slotProps.item"
+                                alt="image"
+                                preview
+                                style="object-fit: fit; height: 300px"
+                                class="w-full"
+                            />
+                        </template>
+                        <template #thumbnail="slotProps">
+                            <Image
+                                :src="slotProps.item"
+                                alt="image"
+                                width="100"
+                                preview
+                            />
+                        </template>
+                    </Galleria>
                 </div>
             </div>
 
@@ -169,6 +195,7 @@ export default {
             });
         },
         async onUpload(event) {
+            this.loading = true;
             let formData = new FormData();
             this.images = event.files;
             for (let file of this.images) {
@@ -185,9 +212,11 @@ export default {
                     })
                     .then((res) => {
                         this.images = res.data;
+                        this.loading = false;
                     })
                     .catch((e) => {
                         console.log(e.response);
+                        this.loading = false;
                     });
             }
         },
