@@ -13,8 +13,8 @@ class UploadController extends Controller
             $images = $request->file('images');
 
                 foreach($images as $image ){
-
-                    $imagename = $image->getClientOriginalName();
+                    $time = date("d-m-Y")."-".time();
+                    $imagename = $time.'-'.$image->getClientOriginalName();
                     $folderpath =$image->storeAs('public/images',$request['user_id']."/".$imagename);
                     
                     array_push($response,Storage::url($folderpath));

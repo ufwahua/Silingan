@@ -202,6 +202,7 @@
                         optionLabel="number"
                         optionValue="id"
                         placeholder="Select Lot"
+                        :disabled="selected_block ? false : true"
                     />
                     <label style="color: red" v-if="error_selected_lot">{{
                         error_selected_lot

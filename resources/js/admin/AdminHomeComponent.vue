@@ -73,17 +73,40 @@ export default {
                             to: "/admin/timeline",
                         },
                         {
+                            label: "Announcement",
+                            icon: "pi pi-info",
+                            to: "/admin/view-announcement",
+                        },
+
+                        {
                             label: "Marketplace",
                             icon: "pi pi-shopping-cart",
                             to: "/admin/marketplace",
                         },
                         {
+<<<<<<< HEAD
                             label: "Announcement",
                             icon: "pi pi-volume-down",
                             to: "/admin/view-announcement",
+=======
+                            label: "Cash Flow",
+                            icon: "pi pi-dollar",
+                            to: "/admin/cashflow",
+                        },
+                        {
+                            label: "Verify Marketplace",
+                            icon: "pi pi-info-circle",
+                            to: "/admin/verify-marketplace",
+                        },
+                        {
+                            label: "Logs",
+                            icon: "pi pi-info-circle",
+                            to: "/admin/log",
+>>>>>>> 28034bef4e6ef34bcf8eb24ae9cd55d7ed1dc622
                         },
                     ],
                 },
+
                 {
                     items: [
                         {
@@ -117,6 +140,11 @@ export default {
                                     ],
                                 },
                                 {
+                                    label: "Manage Announcement",
+                                    icon: "pi pi-info-circle",
+                                    to: "/admin/announcement",
+                                },
+                                {
                                     label: "Block and Lots",
                                     icon: "pi pi-info-circle",
                                     to: "/admin/block-lot",
@@ -136,6 +164,11 @@ export default {
                                     icon: "pi pi-info-circle",
                                     to: "/admin/position",
                                 },
+                                {
+                                    label: "Collection Types",
+                                    icon: "pi pi-info-circle",
+                                    to: "/admin/collection_type",
+                                },
                             ],
                         },
                     ],
@@ -143,25 +176,9 @@ export default {
                 {
                     items: [
                         {
-                            label: "Announcement",
-                            icon: "pi pi-info-circle",
-                            to: "/admin/announcement",
-                        },
-                        {
-                            label: "Verify Marketplace Post",
-                            icon: "pi pi-info-circle",
-                            to: "/admin/verify-marketplace",
-                        },
-
-                        {
                             label: "Election",
-                            icon: "pi pi-fw pi-calendar",
+                            icon: "pi pi-user-plus",
                             to: "/admin/election",
-                        },
-                        {
-                            label: "Cash Flow",
-                            icon: "pi pi-dollar",
-                            to: "/admin/cashflow",
                         },
                     ],
                 },
@@ -278,7 +295,7 @@ export default {
     },
 
     mounted() {
-        this.$store.dispatch("news/getAll");
+        // this.$store.dispatch("news/getAll");
         this.$store.dispatch("blocks/getAll");
         this.$store.dispatch("lots/getAll");
         this.$store.dispatch("announcements/getAll");
@@ -287,6 +304,7 @@ export default {
         this.$store.dispatch("candidates/getAll");
         this.$store.dispatch("getAllUsers");
         this.$store.dispatch("cards/getAllCards");
+        this.$store.dispatch("logs/getAll");
         this.$store.dispatch("getBlockUsers", this.$store.state.userLogged.id);
         this.$store.dispatch("adminVehicles/getAll");
         this.$store.dispatch(

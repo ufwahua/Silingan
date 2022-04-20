@@ -57,7 +57,7 @@ div
                         <Menu
                             id="overlay_menu"
                             ref="menu"
-                            :model="items"
+                            :model="menus"
                             :popup="true"
                         />
                     </div>
@@ -429,7 +429,7 @@ export default {
             type: Object,
         },
         group_id: { type: Number },
-        approved: { type: Number },
+        approved: { type: Boolean },
     },
     components: {
         CommentComponent,
@@ -459,7 +459,7 @@ export default {
                 },
             ],
             images: JSON.parse(this.post.images),
-            items: null,
+            menus: null,
         };
     },
 
@@ -709,7 +709,7 @@ export default {
         },
         populateMenu() {
             if (this.post.user.id === this.userLogged.id) {
-                this.items = [
+                this.menus = [
                     {
                         label: "Edit post",
                         icon: "pi pi-pencil",
@@ -726,8 +726,29 @@ export default {
                         },
                     },
                 ];
+            } else if (
+                this.userLogged.role == "admin" ||
+                this.userLogged.role == "officer"
+            ) {
+                this.menus = [
+                    {
+                        label: "Block " + this.post.user.first_name,
+                        icon: "pi pi-user-edit",
+                        command: () => {
+                            this.selectedUser = this.post.user.id;
+                            this.openBlockDialog();
+                        },
+                    },
+                    {
+                        label: "Delete post",
+                        icon: "pi pi-trash",
+                        command: () => {
+                            this.deleteModal = true;
+                        },
+                    },
+                ];
             } else {
-                this.items = [
+                this.menus = [
                     {
                         label: "Block " + this.post.user.first_name,
                         icon: "pi pi-user-edit",

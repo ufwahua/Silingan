@@ -193,6 +193,7 @@
                                 optionLabel="number"
                                 optionValue="id"
                                 placeholder="Select Lot"
+                                :disabled="selected_block ? false : true"
                             />
                             <label
                                 style="color: red"
@@ -230,7 +231,6 @@
                             <Password
                                 :class="{ 'p-invalid': error_password }"
                                 v-model="password"
-                                autocomplete="off"
                                 toggleMask
                             ></Password>
                             <label style="color: red" v-if="error_password">{{
@@ -241,7 +241,6 @@
                             <label>Confirm Password</label>
                             <Password
                                 :class="{ 'p-invalid': error_confirm_password }"
-                                autocomplete="off"
                                 v-model="confirm_password"
                                 toggleMask
                             ></Password>

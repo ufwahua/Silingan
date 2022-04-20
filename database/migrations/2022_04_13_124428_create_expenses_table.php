@@ -16,6 +16,7 @@ class CreateExpensesTable extends Migration
         Schema::create('expenses', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id');
+            $table->foreignId('fund_id');
             $table->double('amount', 8, 2);
             $table->text('notes');
             $table->string('official_receipt')->nullable();

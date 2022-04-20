@@ -10,25 +10,30 @@ class Log extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'user_id',
+        'user_login_id',
+        'user_logout_id',
         'card_id',
+        'block_lot_id',
         'log_type',
+        'vehicle_type',
+        'vehicle_tag',
+        'purpose_visit',
         'name',
         'plate_number',
+       
     ];
-    public function user(){
-        return $this->hasOne(User::class,'id','user_id');
+    public function user_login(){
+        return $this->hasOne(User::class,'id','user_login_id');
+    }
+     public function user_logout(){
+        return $this->hasOne(User::class,'id','user_logout_id');
     }
     public function card(){
         return $this->hasOne(Card::class,'id','card_id');
     }
-
-    public function getCreatedAtAttribute(){
-        
-        return Carbon::createFromTimeStamp(strtotime($this->attributes['created_at']) )->diffForHumans();
+    public function lot(){
+        return $this->hasOne(Lot::class, 'id','block_lot_id');
     }
-    public function getUpdatedAtAttribute(){
-        
-        return Carbon::createFromTimeStamp(strtotime($this->attributes['updated_at']) )->diffForHumans();
-    }
+   
+    
 }

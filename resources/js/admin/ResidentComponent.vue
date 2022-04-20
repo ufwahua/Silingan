@@ -536,6 +536,9 @@
                                         :class="{
                                             'p-invalid': error_selected_lot,
                                         }"
+                                        :disabled="
+                                            form.selected_block ? false : true
+                                        "
                                     />
                                     <label
                                         style="color: red"
@@ -798,6 +801,9 @@
                                         :class="{
                                             'p-invalid': error_selected_lot,
                                         }"
+                                        :disabled="
+                                            form.selected_block ? false : true
+                                        "
                                     />
                                     <label
                                         style="color: red"
@@ -1688,8 +1694,8 @@ export default {
                 { tag: "family member" },
             ],
             verification: [
-                { status: "verified", value: 1 },
-                { status: "not verified", value: 0 },
+                { status: "verified", value: true },
+                { status: "not verified", value: false },
             ],
 
             emergencyContactDialog: false,
@@ -1960,6 +1966,29 @@ export default {
         },
         updateUser() {
             this.updateUserDialog = true;
+            this.first_name = data.first_name;
+            this.last_name = data.last_name;
+            this.gender = data.gender;
+            this.email = data.email;
+            this.age = data.age;
+            this.contact_num = data.contact_num;
+            this.selected_role = data.role;
+            this.selected_block = data.block_lot.block.id;
+            this.getBlockLot();
+            this.selected_block_lot = data.block_lot.id;
+            this.form.first_name = data.first_name;
+            this.form.last_name = data.last_name;
+            this.form.gender = data.gender;
+            this.form.selected_block = data.lot.block.number;
+            this.getBlockLot();
+            this.form.selected_block_lot = data.block_lot_id;
+            this.form.email = data.email;
+            this.form.age = data.age;
+            this.form.contact_num = data.contact_num;
+            this.form.selected_role = data.role;
+            this.form.verified = data.verified;
+            this.form.has_voted = data.has_voted;
+            this.form.status = data.status;
         },
         async confirmUpdateUser() {
             this.process = true;
@@ -2005,46 +2034,52 @@ export default {
         async verifyUser() {
             this.process = true;
             await axios({
-                method: "put",
-                url: "/api/user/" + this.id,
+                method: "post",
+                url: "/api/sms/",
                 data: {
-                    first_name: this.form.first_name,
-                    last_name: this.form.last_name,
-                    gender: this.form.gender,
-                    block_lot_id: this.form.selected_block_lot,
-                    email: this.form.email,
-                    verified: 1,
-                    has_voted: this.form.has_voted,
-                    age: this.form.age,
                     contact_num: this.form.contact_num,
-                    role: this.form.selected_role,
-                    status: this.form.status,
-                    tag_as: this.form.selected_tag,
                 },
             })
                 .then(async () => {
                     await axios({
-                        method: "post",
-                        url: "/api/sms/",
+                        method: "put",
+                        url: "/api/user/" + this.id,
                         data: {
+                            first_name: this.form.first_name,
+                            last_name: this.form.last_name,
+                            gender: this.form.gender,
+                            block_lot_id: this.form.selected_block_lot,
+                            email: this.form.email,
+                            verified: 1,
+                            has_voted: this.form.has_voted,
+                            age: this.form.age,
                             contact_num: this.form.contact_num,
+                            role: this.form.selected_role,
+                            status: this.form.status,
+                            tag_as: this.form.selected_tag,
                         },
-                    });
-                    this.$toast.add({
-                        severity: "success",
-                        summary: "Successful",
-                        detail: "Resident Verified",
-                        life: 3000,
-                    });
-                    this.$store.dispatch("getAllUsers");
-                    this.resetFields();
-                    this.viewVerifytDialog = false;
-                    this.process = false;
+                    })
+                        .then(() => {
+                            this.$toast.add({
+                                severity: "success",
+                                summary: "Successful",
+                                detail: "Resident Verified",
+                                life: 3000,
+                            });
+                            this.$store.dispatch("getAllUsers");
+                            this.resetFields();
+                            this.viewVerifytDialog = false;
+                            this.process = false;
+                        })
+                        .catch((err) => {
+                            console.log(err.response);
+                            this.resetErrors();
+                            this.validate(err);
+                            this.process = false;
+                        });
                 })
                 .catch((err) => {
                     console.log(err.response);
-                    this.resetErrors();
-                    this.validate(err);
                     this.process = false;
                 });
         },

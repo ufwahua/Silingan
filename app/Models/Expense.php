@@ -11,6 +11,7 @@ class Expense extends Model
 
     protected $fillable = [
         'user_id',
+        'fund_id',
         'amount',
         'notes',
         'official_receipt',
@@ -19,5 +20,8 @@ class Expense extends Model
 
     public function user(){
         return $this->hasOne(User::class,'id','user_id');
+    }
+    public function fund(){
+        return $this->hasOne(Fund::class,'id','fund_id');
     }
 }

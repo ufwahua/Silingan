@@ -3,8 +3,23 @@
     <Toast />
     <h1>Total Funds</h1>
     <div class="grid">
-      <div class="col-6">
-        <h1 class="ml-4">₱ {{ total_funds }}</h1>
+      <div v-for="fund in funds" class="col-12 lg:col-4">
+        <div class="card mb-0">
+          <div class="flex justify-content-between mb-3">
+            <div>
+              <span class="block font-medium text-4xl font-bold mb-3"
+                >₱{{ fund.amount.toLocaleString() }}</span
+              >
+              <div class="text-900">{{ fund.fund_type }}</div>
+            </div>
+            <div
+              class="flex align-items-center justify-content-center"
+              style="width: 2.5rem; height: 2.5rem"
+            >
+              <i class="pi pi-dollar text-blue-500 text-xl"></i>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
     <div class="card">
@@ -13,7 +28,7 @@
           <h4>Cash Flow</h4>
         </div>
       </div>
-      <div class="grtid mb-2">
+      <div class="grid mb-2">
         <div class="col-12">
           <Toolbar>
             <template #start>
@@ -36,12 +51,13 @@
       >
         <template #empty> No Cash Flow found </template>
         <template #loading> Loading data </template>
-        <Column field="user" header="From">
+        <Column field="user.first_name" header="From">
           <template #body="{ data }">
             {{ data.user.first_name }} {{ data.user.last_name }}
           </template>
         </Column>
-        <Column header="Source">
+        <Column field="fund.fund_type" header="Fund Source"> </Column>
+        <Column header="Usage">
           <template #body="{ data }">
             <div v-if="data.collection_type">
               {{ data.collection_type.name }}
@@ -51,14 +67,20 @@
             </div>
           </template>
         </Column>
-        <Column field="amount" header="Credit/Debit">
+        <Column field="amount" header="Debit">
+          <template #body="{ data }">
+            <div v-if="data.collection_type" class="text-green-700"></div>
+            <div v-else class="text-pink-700">
+              ₱{{ data.amount.toLocaleString() }}
+            </div>
+          </template>
+        </Column>
+        <Column field="amount" header="Credit">
           <template #body="{ data }">
             <div v-if="data.collection_type" class="text-green-700">
               ₱{{ data.amount.toLocaleString() }}
             </div>
-            <div v-else class="text-pink-700">
-              ₱{{ data.amount.toLocaleString() }}
-            </div>
+            <div v-else class="text-pink-700"></div>
           </template>
         </Column>
         <Column field="running_balance" header="Running Balance">
@@ -79,7 +101,7 @@
               <span class="p-input-icon-left inline-block">
                 <i class="pi pi-search" />
                 <InputText
-                  v-model="filters['global'].value"
+                  v-model="revenue_filters['global'].value"
                   placeholder="Keyword Search"
                 />
               </span>
@@ -102,7 +124,7 @@
                 :value="revenue"
                 :paginator="true"
                 :rows="15"
-                :filters="filters"
+                :filters="revenue_filters"
               >
                 <template #empty> No Revenue found </template>
                 <template #loading> Loading data </template>
@@ -141,7 +163,7 @@
               <span class="p-input-icon-left inline-block">
                 <i class="pi pi-search" />
                 <InputText
-                  v-model="filters['global'].value"
+                  v-model="expense_filters['global'].value"
                   placeholder="Keyword Search"
                 />
               </span>
@@ -164,14 +186,15 @@
                 :value="expense"
                 :paginator="true"
                 :rows="15"
-                :filters="filters"
+                :filters="expense_filters"
               >
                 <template #empty> No Revenue found </template>
                 <template #loading> Loading data </template>
                 <Column field="id" header="ID"></Column>
                 <Column field="user" header="From">
                   <template #body="{ data }">
-                    {{ data.user.first_name }} {{ data.user.last_name }}
+                    {{ data.user.first_name }}
+                    {{ data.user.last_name }}
                   </template>
                 </Column>
                 <Column field="notes" header="Expense"></Column>
@@ -217,7 +240,9 @@
             optionValue="code"
             placeholder="Select Collection Type"
             @change="setAmount()"
-            :class="{ 'p-invalid': revenue_valid.state.collection_type }"
+            :class="{
+              'p-invalid': revenue_valid.state.collection_type,
+            }"
           />
           <small v-if="revenue_valid.state.collection_type" class="p-error">{{
             revenue_valid.msg.collection_type
@@ -267,6 +292,22 @@
             revenue_valid.msg.lot
           }}</small>
         </div>
+        <div class="col-12 lg:col-6">
+          <h5>Add Credit to</h5>
+          <Dropdown
+            v-model="revenue_form.source"
+            :options="funds"
+            optionLabel="fund_type"
+            optionValue="id"
+            placeholder="Select Fund Source"
+            :class="{
+              'p-invalid': revenue_valid.state.source,
+            }"
+          />
+          <small v-if="revenue_valid.state.source" class="p-error">{{
+            revenue_valid.msg.source
+          }}</small>
+        </div>
         <div class="col-12">
           <h5>Notes</h5>
           <Textarea type="text" v-model="revenue_form.notes" />
@@ -290,6 +331,22 @@
       :modal="true"
     >
       <div class="grid p-fluid">
+        <div class="col-12 lg:col-6">
+          <h5>Get Funds From</h5>
+          <Dropdown
+            v-model="expense_form.source"
+            :options="funds"
+            optionLabel="fund_type"
+            optionValue="id"
+            placeholder="Select Fund Source"
+            :class="{
+              'p-invalid': expense_valid.state.source,
+            }"
+          />
+          <small v-if="expense_valid.state.source" class="p-error">{{
+            expense_valid.msg.source
+          }}</small>
+        </div>
         <div class="col-12 lg:col-6">
           <h5>Amount</h5>
           <InputNumber
@@ -361,11 +418,15 @@ export default {
     const store = useStore();
     return {
       userLogged: computed(() => store.state.userLogged),
-      total_funds: computed(() => store.state.fund.Fund[0].amount),
+      funds: computed(() => store.state.fund.Fund),
       dropdown_collection_type: computed(() => {
         let temp = [];
         store.state.collectionType.CollectionType.forEach((elem) => {
-          temp.push({ name: elem.name, code: elem.id, amount: elem.amount });
+          temp.push({
+            name: elem.name,
+            code: elem.id,
+            amount: elem.amount,
+          });
         });
         return temp;
       }),
@@ -374,7 +435,11 @@ export default {
       blocks: computed(() => {
         let temp = [];
         store.state.blocks.blocks.forEach((elem) => {
-          temp.push({ name: elem.number, code: elem.id, number: elem.number });
+          temp.push({
+            name: elem.number,
+            code: elem.id,
+            number: elem.number,
+          });
         });
         return temp;
       }),
@@ -397,7 +462,6 @@ export default {
       //Modal Control
       addRevenueModal: false,
       addExpenseModal: false,
-
       //Revenue
       lot_dropdown: null,
       lot_bool: true,
@@ -407,29 +471,30 @@ export default {
         block: null,
         lot: null,
         notes: null,
+        source: null,
       },
-
       //Expense
       expense_form: {
         amount: null,
         ornumber: null,
         notes: null,
+        source: null,
       },
-
       //Expense Validation
       expense_valid: {
         state: {
           amount: false,
           ornumber: false,
           notes: false,
+          source: false,
         },
         msg: {
           amount: null,
           ornumber: null,
           notes: null,
+          source: null,
         },
       },
-
       //Revenue Validation
       revenue_valid: {
         state: {
@@ -447,16 +512,9 @@ export default {
           notes: null,
         },
       },
-
       filters: {},
-      // cashflow: [
-      //   {
-      //     user: "Joshua",
-      //     source: "Rental",
-      //     cash: 1000,
-      //     bal: 1000,
-      //   },
-      // ],
+      revenue_filters: {},
+      expense_filters: {},
     };
   },
   methods: {
@@ -468,11 +526,9 @@ export default {
       temp = this.lots.filter((elem) => {
         return elem.block_id === this.revenue_form.block;
       });
-
       temp.forEach((elem) => {
         list.push({ name: elem.number, code: elem.id });
       });
-
       this.lot_dropdown = list;
     },
     setAmount() {
@@ -497,6 +553,7 @@ export default {
         amount: null,
         ornumber: null,
         notes: null,
+        source: null,
       };
     },
     addRevenue() {
@@ -508,6 +565,7 @@ export default {
         block: null,
         lot: null,
         notes: null,
+        source: null,
       };
       this.amount_placeholder = null;
       this.lot_bool = true;
@@ -516,25 +574,53 @@ export default {
       this.filters = {
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
       };
+      this.revenue_filters = {
+        global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+      };
+      this.expense_filters = {
+        global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+      };
     },
     async confirmAddExpense() {
       this.resetExpenseFormError();
       this.process = !this.process;
       try {
-        if (this.total_funds - this.expense_form.amount < 0) {
-          this.process = false;
+        if (this.expense_form.source != null) {
+          if (
+            this.funds[this.expense_form.source - 1].amount -
+              this.expense_form.amount <
+            0
+          ) {
+            this.process = false;
+            throw {
+              response: {
+                data: { errors: { amount: ["Not enough funds."] } },
+              },
+            };
+          }
+        } else {
           throw {
-            response: { data: { errors: { amount: ["Not enough funds."] } } },
+            response: {
+              data: {
+                errors: { source: ["Please select source of funds first."] },
+              },
+            },
           };
         }
+
         let { data } = await axios({
-          url: "http://localhost:8000/api/expense",
+          url: "/api/expense",
           method: "post",
           data: {
             user_id: this.userLogged.id,
             amount: this.expense_form.amount,
             notes: this.expense_form.notes,
-            running_balance: this.total_funds - this.expense_form.amount,
+            running_balance:
+              this.expense_form.source == null
+                ? null
+                : this.funds[this.expense_form.source - 1].amount -
+                  this.expense_form.amount,
+            fund_id: this.expense_form.source,
           },
         });
         this.process = !this.process;
@@ -542,10 +628,13 @@ export default {
         this.$store.dispatch("expense/getAll");
         try {
           await axios({
-            url: "http://localhost:8000/api/fund/1",
+            url: "/api/fund/" + this.expense_form.source,
             method: "put",
             data: {
-              amount: this.total_funds - this.expense_form.amount,
+              amount:
+                this.funds[this.expense_form.source - 1].amount -
+                +this.expense_form.amount,
+              fund_type: this.funds[this.expense_form.source - 1].fund_type,
             },
           });
           this.$store.dispatch("fund/getAll");
@@ -568,6 +657,10 @@ export default {
         this.expense_valid.state.notes = true;
         this.expense_valid.msg.notes = e.errors.notes[0];
       }
+      if (e.errors.source) {
+        this.expense_valid.state.source = true;
+        this.expense_valid.msg.source = e.errors.source[0];
+      }
     },
     resetExpenseFormError() {
       this.expense_valid = {
@@ -575,11 +668,13 @@ export default {
           amount: false,
           ornumber: false,
           notes: false,
+          source: false,
         },
         msg: {
           amount: null,
           ornumber: null,
           notes: null,
+          source: null,
         },
       };
     },
@@ -589,7 +684,7 @@ export default {
       console.log(this.revenue_form);
       try {
         let { data } = await axios({
-          url: "http://localhost:8000/api/collection",
+          url: "/api/collection",
           method: "post",
           data: {
             collection_type_id: this.revenue_form.collection_type,
@@ -597,7 +692,12 @@ export default {
             block_lot_id: this.revenue_form.lot,
             amount: this.revenue_form.amount,
             notes: this.revenue_form.notes,
-            running_balance: this.total_funds + this.revenue_form.amount,
+            running_balance:
+              this.revenue_form.source == null
+                ? null
+                : this.funds[this.revenue_form.source - 1].amount +
+                  this.revenue_form.amount,
+            fund_id: this.revenue_form.source,
           },
         });
         this.process = !this.process;
@@ -605,10 +705,13 @@ export default {
         this.$store.dispatch("collection/getAll");
         try {
           await axios({
-            url: "http://localhost:8000/api/fund/1",
+            url: "/api/fund/" + this.revenue_form.source,
             method: "put",
             data: {
-              amount: this.total_funds + this.revenue_form.amount,
+              amount:
+                this.funds[this.revenue_form.source - 1].amount +
+                this.revenue_form.amount,
+              fund_type: this.funds[this.revenue_form.source - 1].fund_type,
             },
           });
           this.$store.dispatch("fund/getAll");
@@ -618,6 +721,7 @@ export default {
         }
       } catch (error) {
         this.process = false;
+        console.error(error);
         this.revenueFormError(error.response.data);
         console.log(error.response.data);
       }
@@ -631,6 +735,10 @@ export default {
         this.revenue_valid.state.collection_type = true;
         this.revenue_valid.msg.collection_type =
           "The collection type field is required.";
+      }
+      if (e.errors.fund_id) {
+        this.revenue_valid.state.source = true;
+        this.revenue_valid.msg.source = "The source of fund field is required.";
       }
       if (this.revenue_form.block == null) {
         this.revenue_valid.state.block = true;
@@ -649,6 +757,7 @@ export default {
           block: false,
           lot: false,
           notes: false,
+          source: false,
         },
         msg: {
           amount: null,
@@ -656,6 +765,7 @@ export default {
           block: null,
           lot: null,
           notes: null,
+          source: null,
         },
       };
     },
@@ -667,5 +777,4 @@ export default {
 };
 </script>
 
-<style>
-</style>
+<style></style>

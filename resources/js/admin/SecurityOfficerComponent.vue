@@ -182,7 +182,11 @@
                                 }}
                             </template>
                         </Column>
-
+                        <Column header="Shift" field="shift">
+                            <template #body="{ data }"
+                                >{{ (data["shift"] = getShift(data)) }}
+                            </template></Column
+                        >
                         <Column header="Status" field="status">
                             <template #body="{ data }">
                                 <Badge :class="badgecolor(data.status)">{{
@@ -276,7 +280,6 @@
                                         :class="{
                                             'p-invalid': error_first_name,
                                         }"
-                                        @keydown.enter="onRegisterClick"
                                     />
                                     <label
                                         style="color: red"
@@ -295,7 +298,6 @@
                                         :class="{
                                             'p-invalid': error_last_name,
                                         }"
-                                        @keydown.enter="onRegisterClick"
                                     />
                                     <label
                                         style="color: red"
@@ -318,7 +320,6 @@
                                                 :class="{
                                                     'p-invalid': error_gender,
                                                 }"
-                                                @keydown.enter="onRegisterClick"
                                             />
                                             <label class="mb-0 ml-1 mr-5"
                                                 >Male</label
@@ -330,7 +331,6 @@
                                                     'p-invalid': error_gender,
                                                 }"
                                                 v-model="form.gender"
-                                                @keydown.enter="onRegisterClick"
                                             />
                                             <label class="mb-0 ml-1"
                                                 >Female</label
@@ -388,6 +388,40 @@
                                     >
                                 </div>
                                 <div class="field col-12 md:col-12">
+                                    <label class="">Shift</label>
+                                </div>
+                                <div class="field col-12 md:col-6">
+                                    <Calendar
+                                        v-model="form.from"
+                                        :timeOnly="true"
+                                        :showTime="true"
+                                        hourFormat="12"
+                                        placeholder="From"
+                                        :class="{
+                                            'p-invalid': error_security_shift,
+                                        }"
+                                    />
+                                </div>
+                                <div class="field col-12 md:col-6">
+                                    <Calendar
+                                        v-model="form.to"
+                                        :timeOnly="true"
+                                        :showTime="true"
+                                        hourFormat="12"
+                                        placeholder="To"
+                                        :class="{
+                                            'p-invalid': error_security_shift,
+                                        }"
+                                    />
+                                </div>
+                                <div class="field col-12 md:col-12">
+                                    <label
+                                        style="color: red"
+                                        v-if="error_security_shift"
+                                        >{{ error_security_shift }}</label
+                                    >
+                                </div>
+                                <div class="field col-12 md:col-12">
                                     <label>Contact Number</label>
                                     <div class="p-inputgroup">
                                         <span class="p-inputgroup-addon">
@@ -401,7 +435,6 @@
                                             type="text"
                                             oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*?)\..*/g, '$1');"
                                             v-model="form.contact_num"
-                                            @keydown.enter="onRegisterClick"
                                             :class="{
                                                 'p-invalid': error_contact_num,
                                             }"
@@ -420,7 +453,6 @@
                                         type="text"
                                         name="email"
                                         v-model="form.email"
-                                        @keydown.enter="onRegisterClick"
                                         :class="{
                                             'p-invalid': error_email,
                                         }"
@@ -478,7 +510,6 @@
                                         :class="{
                                             'p-invalid': error_first_name,
                                         }"
-                                        @keydown.enter="onRegisterClick"
                                     />
                                     <label
                                         style="color: red"
@@ -497,7 +528,6 @@
                                         :class="{
                                             'p-invalid': error_last_name,
                                         }"
-                                        @keydown.enter="onRegisterClick"
                                     />
                                     <label
                                         style="color: red"
@@ -520,7 +550,6 @@
                                                 :class="{
                                                     'p-invalid': error_gender,
                                                 }"
-                                                @keydown.enter="onRegisterClick"
                                             />
                                             <label class="mb-0 ml-1 mr-5"
                                                 >Male</label
@@ -532,7 +561,6 @@
                                                     'p-invalid': error_gender,
                                                 }"
                                                 v-model="form.gender"
-                                                @keydown.enter="onRegisterClick"
                                             />
                                             <label class="mb-0 ml-1"
                                                 >Female</label
@@ -602,7 +630,6 @@
                                             type="text"
                                             oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*?)\..*/g, '$1');"
                                             v-model="form.contact_num"
-                                            @keydown.enter="onRegisterClick"
                                             :class="{
                                                 'p-invalid': error_contact_num,
                                             }"
@@ -613,6 +640,40 @@
                                         style="color: red"
                                         v-if="error_contact_num"
                                         >{{ error_contact_num }}</label
+                                    >
+                                </div>
+                                <div class="field col-12 md:col-12">
+                                    <label class="">Shift</label>
+                                </div>
+                                <div class="field col-12 md:col-6">
+                                    <Calendar
+                                        v-model="form.from"
+                                        :timeOnly="true"
+                                        :showTime="true"
+                                        hourFormat="12"
+                                        placeholder="From"
+                                        :class="{
+                                            'p-invalid': error_security_shift,
+                                        }"
+                                    />
+                                </div>
+                                <div class="field col-12 md:col-6">
+                                    <Calendar
+                                        v-model="form.to"
+                                        :timeOnly="true"
+                                        :showTime="true"
+                                        hourFormat="12"
+                                        placeholder="To"
+                                        :class="{
+                                            'p-invalid': error_security_shift,
+                                        }"
+                                    />
+                                </div>
+                                <div class="field col-12 md:col-12">
+                                    <label
+                                        style="color: red"
+                                        v-if="error_security_shift"
+                                        >{{ error_security_shift }}</label
                                     >
                                 </div>
 
@@ -632,7 +693,6 @@
                                         type="text"
                                         name="email"
                                         v-model="form.email"
-                                        @keydown.enter="onRegisterClick"
                                         :class="{
                                             'p-invalid': error_email,
                                         }"
@@ -649,7 +709,6 @@
                                         type="password"
                                         name="password"
                                         v-model="form.password"
-                                        @keydown.enter="onRegisterClick"
                                         :class="{
                                             'p-invalid': error_password,
                                         }"
@@ -667,7 +726,6 @@
                                         type="password"
                                         name="confirmpassword"
                                         v-model="form.confirm_password"
-                                        @keydown.enter="onRegisterClick"
                                         :class="{
                                             'p-invalid': error_confirm_password,
                                         }"
@@ -724,7 +782,6 @@
                                         :class="{
                                             'p-invalid': error_first_name,
                                         }"
-                                        @keydown.enter="onRegisterClick"
                                         disabled
                                     />
                                     <label
@@ -744,7 +801,6 @@
                                         :class="{
                                             'p-invalid': error_last_name,
                                         }"
-                                        @keydown.enter="onRegisterClick"
                                         disabled
                                     />
                                     <label
@@ -769,7 +825,6 @@
                                                 :class="{
                                                     'p-invalid': error_gender,
                                                 }"
-                                                @keydown.enter="onRegisterClick"
                                             />
                                             <label class="mb-0 ml-1 mr-5"
                                                 >Male</label
@@ -782,7 +837,6 @@
                                                     'p-invalid': error_gender,
                                                 }"
                                                 v-model="form.gender"
-                                                @keydown.enter="onRegisterClick"
                                             />
                                             <label class="mb-0 ml-1"
                                                 >Female</label
@@ -854,7 +908,6 @@
                                             type="text"
                                             oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*?)\..*/g, '$1');"
                                             v-model="form.contact_num"
-                                            @keydown.enter="onRegisterClick"
                                             :class="{
                                                 'p-invalid': error_contact_num,
                                             }"
@@ -869,12 +922,47 @@
                                     >
                                 </div>
                                 <div class="field col-12 md:col-12">
+                                    <label class="">Shift</label>
+                                </div>
+                                <div class="field col-12 md:col-6">
+                                    <Calendar
+                                        v-model="form.from"
+                                        :timeOnly="true"
+                                        :showTime="true"
+                                        hourFormat="12"
+                                        placeholder="From"
+                                        :class="{
+                                            'p-invalid': error_security_shift,
+                                        }"
+                                        disabled
+                                    />
+                                </div>
+                                <div class="field col-12 md:col-6">
+                                    <Calendar
+                                        v-model="form.to"
+                                        :timeOnly="true"
+                                        :showTime="true"
+                                        hourFormat="12"
+                                        placeholder="To"
+                                        :class="{
+                                            'p-invalid': error_security_shift,
+                                        }"
+                                        disabled
+                                    />
+                                </div>
+                                <div class="field col-12 md:col-12">
+                                    <label
+                                        style="color: red"
+                                        v-if="error_security_shift"
+                                        >{{ error_security_shift }}</label
+                                    >
+                                </div>
+                                <div class="field col-12 md:col-12">
                                     <label>Email</label>
                                     <InputText
                                         type="text"
                                         name="email"
                                         v-model="form.email"
-                                        @keydown.enter="onRegisterClick"
                                         :class="{
                                             'p-invalid': error_email,
                                         }"
@@ -951,6 +1039,7 @@ import axios from "axios";
 import { FilterMatchMode } from "primevue/api";
 import { computed } from "vue";
 import { useStore } from "vuex";
+
 export default {
     name: "RegisterUsersComponent",
     setup() {
@@ -1027,7 +1116,10 @@ export default {
                 verified: "",
                 has_voted: "",
                 status: "",
+                to: "",
+                from: "",
             },
+            security_shift: "",
 
             user: null,
             role: [{ type: "security officer", value: "security officer" }],
@@ -1042,6 +1134,7 @@ export default {
             error_age: "",
             error_contact_num: "",
             error_role: "",
+            error_security_shift: "",
 
             status: [{ status: "active" }, { status: "inactive" }],
             verification: [
@@ -1054,6 +1147,22 @@ export default {
         };
     },
     methods: {
+        getShift(data) {
+            const shift = data.security_shift.split(" - ");
+
+            const from = new Date(shift[0]).toLocaleTimeString("en-US", {
+                hour12: true,
+                hour: "numeric",
+                minute: "numeric",
+            });
+            const to = new Date(shift[1]).toLocaleTimeString("en-US", {
+                hour12: true,
+                hour: "numeric",
+                minute: "numeric",
+            });
+
+            return from + " - " + to;
+        },
         async viewEmergencyContacts() {
             this.loading = true;
             await axios({
@@ -1160,6 +1269,24 @@ export default {
             this.form.verified = data.verified;
             this.form.has_voted = data.has_voted;
             this.form.status = data.status;
+
+            if (data.security_shift) {
+                let shift = data.security_shift.split(" - ");
+
+                this.form.from = new Date(shift[0]).toLocaleTimeString(
+                    "en-US",
+                    {
+                        hour12: true,
+                        hour: "numeric",
+                        minute: "numeric",
+                    }
+                );
+                this.form.to = new Date(shift[1]).toLocaleTimeString("en-US", {
+                    hour12: true,
+                    hour: "numeric",
+                    minute: "numeric",
+                });
+            }
         },
 
         showSuccess() {
@@ -1225,6 +1352,11 @@ export default {
         },
         async confirmUpdateUser() {
             this.process = true;
+
+            this.security_shift = this.form.from + " - " + this.form.to;
+            if (!this.form.from || !this.form.to) {
+                this.security_shift = null;
+            }
             await axios({
                 method: "put",
                 url: "/api/user/" + this.id,
@@ -1242,6 +1374,7 @@ export default {
                     contact_num: this.form.contact_num,
                     role: this.form.selected_role,
                     status: this.form.status,
+                    security_shift: this.security_shift,
                 },
             })
                 .then(() => {
@@ -1319,6 +1452,7 @@ export default {
                     age: data.age,
                     contact_num: data.contact_num,
                     role: data.role,
+                    security_shift: data.security_shift,
                 },
             })
                 .then(() => {
@@ -1351,6 +1485,19 @@ export default {
         },
         async onRegisterClick() {
             this.process = true;
+            const from = new Date(this.form.from).toLocaleTimeString("en-US", {
+                hour: "numeric",
+                minute: "numeric",
+            });
+            const to = new Date(this.form.to).toLocaleTimeString("en-US", {
+                hour: "numeric",
+                minute: "numeric",
+            });
+            this.security_shift = from + " - " + to;
+            if (!this.form.from || !this.form.to) {
+                this.security_shift = null;
+            }
+
             await axios({
                 method: "post",
                 url: "/api/user",
@@ -1368,6 +1515,7 @@ export default {
                     contact_num: this.form.contact_num,
                     role: this.form.selected_role,
                     status: "active",
+                    security_shift: this.security_shift,
                 },
             })
                 .then(() => {
@@ -1401,6 +1549,8 @@ export default {
                 age: "",
                 contact_num: "",
                 selected_role: "security officer",
+                from: "",
+                to: "",
             };
         },
         resetErrors() {
@@ -1414,6 +1564,7 @@ export default {
             this.error_age = "";
             this.error_contact_num = "";
             this.error_role = "";
+            this.error_security_shift = "";
         },
         validate(error) {
             if (error.response.data.errors.first_name)
@@ -1438,6 +1589,9 @@ export default {
                     error.response.data.errors.contact_num[0];
             if (error.response.data.errors.role)
                 this.error_role = error.response.data.errors.role[0];
+            if (error.response.data.errors.security_shift)
+                this.error_security_shift =
+                    error.response.data.errors.security_shift[0];
         },
     },
 

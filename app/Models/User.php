@@ -34,6 +34,7 @@ class User extends Authenticatable
         'role',
         'position_id',
         'tag_as',
+        'security_shift',
     ];
     //relationships
     public function post(){
@@ -48,7 +49,7 @@ class User extends Authenticatable
     public function emergency_contact(){
         return $this->hasMany(EmergencyContactDetail::class,'user_id','id');
     }
-
+  
     
     /**
      * The attributes that should be hidden for serialization.

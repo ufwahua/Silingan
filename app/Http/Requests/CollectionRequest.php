@@ -30,7 +30,8 @@ class CollectionRequest extends FormRequest
             'block_lot_id' => ['required', Rule::exists('lots','id')],
             'amount' => ['required'],
             'notes' => ['sometimes'],
-            'running_balance' => ['required']
+            'running_balance' => ['required'],
+            'fund_id' => ['required']
         ];
     }
 }

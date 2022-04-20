@@ -17,13 +17,13 @@ import CardComponent from "../admin/CardComponent.vue";
 import VehicleComponent from "../admin/VehicleComponent.vue";
 import VerifyMarketPlaceComponent from "../admin/VerifyMarketPlaceComponent.vue";
 import CashflowComponent from "../admin/CashflowComponent.vue";
+import CollectionTypeComponent from "../admin/CollectionTypeComponent.vue";
 
 //resident
 import ResidentHomeComponent from "../resident/ResidentHomeComponent.vue";
 
 //security officer
 import SecurityHome from "../security_officer/SecurityHomeComponent.vue";
-import LogComponent from "../security_officer/LogComponent.vue";
 
 //all
 import TimelineComponent from "../components/TimelineComponent.vue";
@@ -34,6 +34,8 @@ import NotFound from "../components/NotFoundComponent.vue";
 import AppProfile from "../components/AppProfile.vue";
 import SettingComponent from "../components/SettingComponent.vue";
 import ActivateAccountComponent from "../components/ActivateAccountComponent.vue";
+import LogComponent from "../components/LogComponent.vue";
+
 import { createRouter, createWebHistory } from "vue-router";
 import store from "../store/store";
 
@@ -137,7 +139,7 @@ const router = createRouter({
             },
             children: [
                 {
-                    path: "/admin/timeline",
+                    path: "timeline",
                     beforeEnter: checkRole,
                     meta: {
                         role: "admin",
@@ -347,6 +349,29 @@ const router = createRouter({
                         default: NotFound,
 
                         contents: CashflowComponent,
+                    },
+                },
+                {
+                    path: "collection_type",
+                    meta: {
+                        role: "admin",
+                    },
+                    beforeEnter: checkRole,
+                    components: {
+                        default: NotFound,
+
+                        contents: CollectionTypeComponent,
+                    },
+                },
+                {
+                    path: "log",
+                    meta: {
+                        role: "admin",
+                    },
+                    beforeEnter: checkRole,
+                    components: {
+                        default: NotFound,
+                        contents: LogComponent,
                     },
                 },
             ],

@@ -69,18 +69,19 @@ export default {
                         {
                             label: "Marketplace",
                             icon: "pi pi-fw pi-shopping-cart",
-
+                            to: "/security/marketplace",
+                            to: "/security_officer/marketplace",
                             to: "/security-officer/marketplace",
-                        },
-                        {
-                            label: "Log",
-                            icon: "pi pi-fw pi-calendar",
-                            to: "/security-officer/log",
                         },
                         {
                             label: "Announcement",
                             icon: "pi pi-fw pi-calendar",
                             to: "/security-officer/view-announcement",
+                        },
+                        {
+                            label: "Logs",
+                            icon: "pi pi-fw pi-calendar",
+                            to: "/security-officer/log",
                         },
                     ],
                 },

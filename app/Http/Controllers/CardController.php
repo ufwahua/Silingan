@@ -20,7 +20,7 @@ class CardController extends Controller
     public function getAllCards(Request $request): JsonResponse
     {
         return response()->json(
-            Card::with(['log.user'])->orderBy('number', 'asc')->get()
+            Card::with(['log.user_login'])->orderBy('number', 'asc')->get()
         );
     }
 

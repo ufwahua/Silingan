@@ -25,14 +25,14 @@
                             <div v-if="userVehicle.image">
                                 <Avatar
                                     :image="`http://127.0.0.1:8000${userVehicle.image}`"
-                                    style="width: 300px; height: 300px"
+                                    style="width: 150px; height: 150px"
                                     shape="circle"
                                 />
                             </div>
                             <div v-else>
                                 <Avatar
                                     image="http://127.0.0.1:8000/storage/images/default-prof-pic.png"
-                                    style="width: 300px; height: 300px"
+                                    style="width: 150px; height: 150px"
                                     shape="circle"
                                 />
                             </div>
@@ -40,7 +40,7 @@
                     </template>
                     <template #title>
                         <div class="flex justify-content-center">
-                            <span class="text-center m-4">
+                            <span class="text-center m-2">
                                 <p>
                                     <b>Type: </b>
                                     {{ userVehicle.type }}
