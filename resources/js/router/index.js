@@ -4,7 +4,7 @@ import ForgotPassword from "../login/ForgotPasswordComponent.vue";
 import ResetPasswordComponent from "../login/ResetPasswordComponent.vue";
 //admin
 import AdminHomeComponent from "../admin/AdminHomeComponent.vue";
-import Block_Lot from "../admin/Block_LotComponent.vue";
+import BlockLot from "../admin/BlockLotComponent.vue";
 import RegisteredUsersComponent from "../admin/RegisterUsersComponent.vue";
 import Announcement from "../admin/Announcement.vue";
 import ResidentComponent from "../admin/ResidentComponent.vue";
@@ -168,7 +168,7 @@ const router = createRouter({
                     },
                     components: {
                         default: NotFound,
-                        contents: Block_Lot,
+                        contents: BlockLot,
                     },
                 },
                 {
