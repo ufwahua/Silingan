@@ -37,9 +37,15 @@ class ChatRoomController extends Controller
                 "name" => $request->route('chat_room')." ".Auth::id(),
             ]); 
         }
-          return response()->json(ChatRoom::with(['chats' => function ($query){
+          return response()->json(ChatRoom::with(['chats' => function ( $query){
+            
             $query->orderBy('created_at','desc');
-        },'chats.user'])
+        },'chats.user'])->withCount([
+    'chats', 
+    'chats as chat_read_count' => function ( $query) {
+        $query->where('read', 0);
+    }
+])
         ->where('id',$chat_room->id) 
         ->get());
     }

@@ -289,7 +289,7 @@ export default {
     },
 
     mounted() {
-        // this.$store.dispatch("news/getAll");
+        this.$store.dispatch("news/getAll");
         this.$store.dispatch("blocks/getAll");
         this.$store.dispatch("lots/getAll");
         this.$store.dispatch("announcements/getAll");
