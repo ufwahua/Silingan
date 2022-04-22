@@ -201,7 +201,7 @@ export default {
         AppFooter: AppFooter,
     },
     created() {
-        // this.$store.dispatch("news/getAll");
+        this.$store.dispatch("news/getAll");
         this.$store.dispatch("cards/getAll");
         this.$store.dispatch("getAllUsers");
         this.$store.dispatch("getBlockUsers", this.$store.state.userLogged.id);

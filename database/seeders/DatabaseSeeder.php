@@ -27,10 +27,10 @@ class DatabaseSeeder extends Seeder
             AnnouncementSeeder::class,
             // ChatRoomSeeder::class,
             // ChatSeeder::class,
-            EmergencyContactDetailSeeder::class,
+            // EmergencyContactDetailSeeder::class,
             CandidateSeeder::class,
             CardSeeder::class,
-            BlockUserSeeder::class,
+            // BlockUserSeeder::class,
             // VehicleSeeder::class,
             CollectionTypeSeeder::class,
             FundSeeder::class
