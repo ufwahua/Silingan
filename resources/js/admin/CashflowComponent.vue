@@ -35,6 +35,7 @@
               <span class="p-input-icon-left inline-block">
                 <i class="pi pi-search" />
                 <InputText
+                  class="mr-2"
                   v-model="filters['global'].value"
                   placeholder="Keyword Search"
                 />
@@ -48,6 +49,7 @@
         :paginator="true"
         :rows="15"
         :filters="filters"
+        filterDisplay="menu"
       >
         <template #empty> No Cash Flow found </template>
         <template #loading> Loading data </template>
@@ -56,36 +58,44 @@
             {{ data.user.first_name }} {{ data.user.last_name }}
           </template>
         </Column>
-        <Column field="fund.fund_type" header="Fund Source"> </Column>
-        <Column header="Usage">
+        <Column field="collection_type.name" header="Usage">
           <template #body="{ data }">
-            <div v-if="data.collection_type">
               {{ data.collection_type.name }}
-            </div>
-            <div v-else>
-              {{ data.notes }}
-            </div>
           </template>
         </Column>
-        <Column field="amount" header="Debit">
+        <Column field="amount" header="Charges">
           <template #body="{ data }">
-            <div v-if="data.collection_type" class="text-green-700"></div>
+            <div v-if="data.collection_type_id" class="text-green-700">
+              ₱{{ data.amount.toLocaleString() }}
+            </div>
             <div v-else class="text-pink-700">
               ₱{{ data.amount.toLocaleString() }}
             </div>
           </template>
         </Column>
-        <Column field="amount" header="Credit">
+        <Column field="fund.fund_type" header="Running Balance" :showFilterMatchModes="false" filterField="fund.fund_type">
           <template #body="{ data }">
-            <div v-if="data.collection_type" class="text-green-700">
-              ₱{{ data.amount.toLocaleString() }}
-            </div>
-            <div v-else class="text-pink-700"></div>
+            ₱{{ data.running_balance.toLocaleString() }} -
+            {{ data.fund.fund_type }}
           </template>
-        </Column>
-        <Column field="running_balance" header="Running Balance">
-          <template #body="{ data }">
-            ₱{{ data.running_balance.toLocaleString() }}
+          <template #filter="{ filterModel, filterCallback }">
+            <Dropdown
+              v-model="this.filters['fund.fund_type'].value"
+              @change="filterCallback()"
+              :options="funds"
+              placeholder="Any"
+              class="p-column-filter"
+              :showClear="true"
+              optionLabel="fund_type"
+              optionValue="fund_type"
+            >
+            </Dropdown>
+          </template>
+          <template #filterclear="{filterCallback}">
+              
+          </template>
+          <template #filterapply="{filterCallback}">
+              
           </template>
         </Column>
       </DataTable>
@@ -411,7 +421,7 @@
 <script>
 import { computed } from "vue";
 import { useStore } from "vuex";
-import { FilterMatchMode } from "primevue/api";
+import { FilterMatchMode, FilterOperator } from "primevue/api";
 import axios from "axios";
 export default {
   setup() {
@@ -447,6 +457,9 @@ export default {
       cashflow: computed(() => {
         let revenue = store.state.collection.Collection;
         let expense = store.state.expense.Expense;
+        expense.forEach((elem)=>{
+          elem['collection_type']={name:elem.notes}
+        })
         let cashflow = revenue.concat(expense);
         cashflow.sort((a, b) => {
           return new Date(b.created_at) - new Date(a.created_at);
@@ -573,6 +586,7 @@ export default {
     initFilters() {
       this.filters = {
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+        'fund.fund_type': { value: null, matchMode: FilterMatchMode.EQUALS }
       };
       this.revenue_filters = {
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
