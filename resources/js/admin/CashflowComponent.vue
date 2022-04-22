@@ -446,8 +446,8 @@
       </div>
       <template #footer>
         <Button
-          label="Yes"
-          icon="pi pi-check"
+          label="Generate File"
+          icon="pi pi-download"
           autofocus
           @click="verifyDate()"
         />
@@ -640,7 +640,6 @@ export default {
           this.report_valid.state.start = true;
           this.report_valid.msg.start = "Start Date is bigger than End Date";
         } else {
-          console.log("downloadPdf");
           let month = [
             "January",
             "February",
