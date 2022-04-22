@@ -123,19 +123,19 @@
 
                         <Column header="Logged by" field="name">
                             <template #body="{ data }">
-                                <div v-if="data.log">
+                                <div v-if="!data.availability">
                                     {{
                                         (data["name"] =
-                                            data.log.user.first_name +
+                                            data.log.user_login.first_name +
                                             " " +
-                                            data.log.user.last_name)
+                                            data.log.user_login.last_name)
                                     }}
                                 </div>
                             </template>
                         </Column>
                         <Column header="Holder" field="logged_named">
                             <template #body="{ data }">
-                                <div v-if="data.log">
+                                <div v-if="!data.availability">
                                     {{ (data["logged_named"] = data.log.name) }}
                                 </div>
                             </template>
@@ -154,7 +154,12 @@
                                 >
                             </template>
                         </Column>
-                        <Column header="Date Logged" field="log.created_at">
+                        <Column header="Date Logged" field="log.updated_at">
+                            <template #body="{ data }">
+                                <div v-if="!data.availability">
+                                    {{ dateFormat(data.log.updated_at) }}
+                                </div>
+                            </template>
                         </Column>
                         <Column header="Actions" field="actions">
                             <template #body="{ data }">
@@ -402,6 +407,18 @@ export default {
         };
     },
     methods: {
+        dateFormat(date) {
+            var options = {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+                hour12: true,
+                hour: "numeric",
+                minute: "numeric",
+            };
+
+            return new Date(date).toLocaleDateString("en-US", options);
+        },
         clearFilter() {
             this.filters["availability"].value = null;
         },
@@ -565,6 +582,9 @@ export default {
         getBlockLot() {
             this.$store.dispatch("users/getAll", this.selected_user);
         },
+    },
+    mounted() {
+        console.log(this.allCards);
     },
     created() {
         this.initFilters();

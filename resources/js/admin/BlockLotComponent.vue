@@ -566,7 +566,7 @@ export default {
             //action menu overlay
             menus: [
                 {
-                    label: "Add Lots",
+                    label: "View Lots",
                     icon: "pi pi-plus",
                     command: () => {
                         this.openLotModal();

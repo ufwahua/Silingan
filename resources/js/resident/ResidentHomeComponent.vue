@@ -194,7 +194,7 @@ export default {
         AppFooter: AppFooter,
     },
     created() {
-        this.$store.dispatch("news/getAll");
+        // this.$store.dispatch("news/getAll");
         this.$store.dispatch(
             "getUsersNotBlocked",
             this.$store.state.userLogged.id

@@ -229,6 +229,7 @@ export default {
         chat_room_id(val, oldVal) {
             if (oldVal) {
                 this.disconnect(oldVal);
+                this.connect();
             } else {
                 this.connect();
             }

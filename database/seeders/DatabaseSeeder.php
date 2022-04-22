@@ -31,7 +31,7 @@ class DatabaseSeeder extends Seeder
             CandidateSeeder::class,
             CardSeeder::class,
             BlockUserSeeder::class,
-            VehicleSeeder::class,
+            // VehicleSeeder::class,
             CollectionTypeSeeder::class,
             FundSeeder::class
         ]);

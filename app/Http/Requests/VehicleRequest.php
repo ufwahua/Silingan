@@ -28,6 +28,7 @@ class VehicleRequest extends FormRequest
             'image' => ['sometimes'],
             'user_id' => ['required',Rule::exists('users', 'id')],
             'type' => ['required'],
+            'tag' => ['required'],
             'make' => ['required'],
             'model' => ['required'],
             'color' => ['required'],

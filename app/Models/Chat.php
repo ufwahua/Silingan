@@ -26,8 +26,5 @@ class Chat extends Model
         
         return Carbon::createFromTimeStamp(strtotime($this->attributes['created_at']) )->diffForHumans();
     }
-    public function getUpdatedAtAttribute(){
-        
-        return Carbon::createFromTimeStamp(strtotime($this->attributes['updated_at']) )->diffForHumans();
-    } 
+    
 }
