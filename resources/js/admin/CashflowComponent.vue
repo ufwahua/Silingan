@@ -60,7 +60,7 @@
         </Column>
         <Column field="collection_type.name" header="Usage">
           <template #body="{ data }">
-              {{ data.collection_type.name }}
+            {{ data.collection_type.name }}
           </template>
         </Column>
         <Column field="amount" header="Charges">
@@ -73,7 +73,12 @@
             </div>
           </template>
         </Column>
-        <Column field="fund.fund_type" header="Running Balance" :showFilterMatchModes="false" filterField="fund.fund_type">
+        <Column
+          field="fund.fund_type"
+          header="Running Balance"
+          :showFilterMatchModes="false"
+          filterField="fund.fund_type"
+        >
           <template #body="{ data }">
             ₱{{ data.running_balance.toLocaleString() }} -
             {{ data.fund.fund_type }}
@@ -91,12 +96,8 @@
             >
             </Dropdown>
           </template>
-          <template #filterclear="{filterCallback}">
-              
-          </template>
-          <template #filterapply="{filterCallback}">
-              
-          </template>
+          <template #filterclear="{ filterCallback }"> </template>
+          <template #filterapply="{ filterCallback }"> </template>
         </Column>
       </DataTable>
     </div>
@@ -457,9 +458,9 @@ export default {
       cashflow: computed(() => {
         let revenue = store.state.collection.Collection;
         let expense = store.state.expense.Expense;
-        expense.forEach((elem)=>{
-          elem['collection_type']={name:elem.notes}
-        })
+        expense.forEach((elem) => {
+          elem["collection_type"] = { name: elem.notes };
+        });
         let cashflow = revenue.concat(expense);
         cashflow.sort((a, b) => {
           return new Date(b.created_at) - new Date(a.created_at);
@@ -586,7 +587,7 @@ export default {
     initFilters() {
       this.filters = {
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
-        'fund.fund_type': { value: null, matchMode: FilterMatchMode.EQUALS }
+        "fund.fund_type": { value: null, matchMode: FilterMatchMode.EQUALS },
       };
       this.revenue_filters = {
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
