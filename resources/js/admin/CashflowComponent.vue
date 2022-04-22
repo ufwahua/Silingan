@@ -41,6 +41,16 @@
                 />
               </span>
             </template>
+            <template #end>
+              <div class="mr-2">
+                <Button
+                  label="Download PDF Report"
+                  icon="pi pi-file-pdf"
+                  class="p-button-primary p-mr-2"
+                  @click="generatePDF()"
+                />
+              </div>
+            </template>
           </Toolbar>
         </div>
       </div>
@@ -397,6 +407,52 @@
         />
       </template>
     </Dialog>
+    <!-- 
+      Generate Report Modal
+     -->
+    <Dialog
+      header="Generate Report"
+      v-model:visible="generateReportModal"
+      :style="{ width: '40vw' }"
+      :modal="true"
+    >
+      <div class="grid p-fluid">
+        <div class="col-12 lg:col-6">
+          <h5>Start</h5>
+          <Calendar
+            v-model="report.start"
+            autocomplete="off"
+            :class="{ 'p-invalid': report_valid.state.start }"
+            :maxDate="new Date()"
+            :manualInput="false"
+          ></Calendar>
+          <small v-if="report_valid.state.start" class="p-error">{{
+            report_valid.msg.start
+          }}</small>
+        </div>
+        <div class="col-12 lg:col-6">
+          <h5>End</h5>
+          <Calendar
+            v-model="report.end"
+            autocomplete="off"
+            :class="{ 'p-invalid': report_valid.state.end }"
+            :maxDate="new Date()"
+            :manualInput="false"
+          />
+          <small v-if="report_valid.state.end" class="p-error">{{
+            report_valid.msg.end
+          }}</small>
+        </div>
+      </div>
+      <template #footer>
+        <Button
+          label="Yes"
+          icon="pi pi-check"
+          autofocus
+          @click="verifyDate()"
+        />
+      </template>
+    </Dialog>
     <Dialog
       v-model:visible="process"
       :style="{ width: '450px' }"
@@ -424,6 +480,9 @@ import { computed } from "vue";
 import { useStore } from "vuex";
 import { FilterMatchMode, FilterOperator } from "primevue/api";
 import axios from "axios";
+import { jsPDF } from "jspdf";
+import { applyPlugin } from "jspdf-autotable";
+applyPlugin(jsPDF);
 export default {
   setup() {
     const store = useStore();
@@ -476,6 +535,7 @@ export default {
       //Modal Control
       addRevenueModal: false,
       addExpenseModal: false,
+      generateReportModal: false,
       //Revenue
       lot_dropdown: null,
       lot_bool: true,
@@ -526,12 +586,182 @@ export default {
           notes: null,
         },
       },
+      // Report Form
+      report: {
+        start: null,
+        end: null,
+      },
+      //Report Validation
+      report_valid: {
+        state: {
+          start: false,
+          end: false,
+        },
+        msg: {
+          start: null,
+          end: null,
+        },
+      },
       filters: {},
       revenue_filters: {},
       expense_filters: {},
     };
   },
   methods: {
+    resetGeneratePDF() {
+      this.report = {
+        start: null,
+        end: null,
+      };
+    },
+    resetErrorGeneratePDF() {
+      this.report_valid = {
+        state: {
+          start: false,
+          end: false,
+        },
+        msg: {
+          start: null,
+          end: null,
+        },
+      };
+    },
+    generatePDF() {
+      this.generateReportModal = true;
+      this.resetErrorGeneratePDF();
+      this.resetGeneratePDF();
+    },
+    verifyDate() {
+      this.resetErrorGeneratePDF();
+      let start = this.report.start;
+      let end = this.report.end;
+      if (start != null && end != null) {
+        if (start > end) {
+          this.report_valid.state.start = true;
+          this.report_valid.msg.start = "Start Date is bigger than End Date";
+        } else {
+          console.log("downloadPdf");
+          let month = [
+            "January",
+            "February",
+            "March",
+            "April",
+            "May",
+            "June",
+            "July",
+            "August",
+            "September",
+            "October",
+            "November",
+            "December",
+          ];
+          const doc = new jsPDF();
+          let finalY = 1;
+          doc.text(
+            "Financial Statement Report " +
+              month[this.report.start.getMonth()] +
+              "/" +
+              this.report.start.getDate() +
+              "/" +
+              this.report.start.getFullYear() +
+              " to " +
+              month[this.report.end.getMonth()] +
+              "/" +
+              this.report.end.getDate() +
+              "/" +
+              this.report.end.getFullYear(),
+            15,
+            finalY + 15
+          );
+          doc.autoTable({
+            startY: finalY + 20,
+            theme: "plain",
+            head: [["Revenue", "", ""]],
+            body: this.revenueReport,
+            foot: [
+              [
+                { content: "", colSpan: 1, rowSpan: 1 },
+                {
+                  content: "Total",
+                  colSpan: 1,
+                  rowSpan: 1,
+                  styles: { halign: "right" },
+                },
+                {
+                  content: this.revenueTotal+" PHP",
+                  colSpan: 1,
+                  rowSpan: 1,
+                },
+              ],
+            ],
+          });
+          doc.addPage();
+          doc.text(
+            "Financial Statement Report " +
+              month[this.report.start.getMonth()] +
+              "/" +
+              this.report.start.getDate() +
+              "/" +
+              this.report.start.getFullYear() +
+              " to " +
+              month[this.report.end.getMonth()] +
+              "/" +
+              this.report.end.getDate() +
+              "/" +
+              this.report.end.getFullYear(),
+            15,
+            finalY + 15
+          );
+          doc.autoTable({
+            startY: finalY + 20,
+            theme: "plain",
+            head: [["Expenses", "", ""]],
+            body: this.expenseReport,
+            foot: [
+              [
+                { content: "", colSpan: 1, rowSpan: 1 },
+                {
+                  content: "Total",
+                  colSpan: 1,
+                  rowSpan: 1,
+                  styles: { halign: "right" },
+                },
+                {
+                  content: this.expenseTotal+" PHP",
+                  colSpan: 1,
+                  rowSpan: 1,
+                },
+              ],
+            ],
+          });
+          doc.save(
+            this.report.start.getMonth() +
+              1 +
+              "_" +
+              this.report.start.getDate() +
+              "_" +
+              this.report.start.getFullYear() +
+              "to" +
+              this.report.end.getMonth() +
+              1 +
+              "_" +
+              this.report.end.getDate() +
+              "_" +
+              this.report.end.getFullYear() +
+              ".pdf"
+          );
+        }
+      } else {
+        if (start == null) {
+          this.report_valid.state.start = true;
+          this.report_valid.msg.start = "Select Start Date";
+        }
+        if (end == null) {
+          this.report_valid.state.end = true;
+          this.report_valid.msg.end = "Select End Date";
+        }
+      }
+    },
     setLots() {
       this.lot_bool = false;
       let temp = null;
@@ -783,6 +1013,162 @@ export default {
           source: null,
         },
       };
+    },
+  },
+  computed: {
+    revenueReport() {
+      let temp = [];
+      let list = this.cashflow;
+      let month = [
+        "January",
+        "February",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July",
+        "August",
+        "September",
+        "October",
+        "November",
+        "December",
+      ];
+      list.sort((a, b) => {
+        return new Date(a.created_at) - new Date(b.created_at);
+      });
+      list.forEach((elem) => {
+        let item_date = new Date(elem.created_at);
+        if (
+          elem.collection_type_id &&
+          item_date >= this.report.start &&
+          item_date <= this.report.end
+        ) {
+          temp.push([
+            {
+              content:
+                month[new Date(elem.created_at).getMonth()] +
+                "/" +
+                new Date(elem.created_at).getDate() +
+                "/" +
+                new Date(elem.created_at).getFullYear(),
+              colSpan: 1,
+              rowSpan: 1,
+            },
+            { content: elem.collection_type.name, colSpan: 1, rowSpan: 1 },
+            { content: elem.amount+" PHP", colSpan: 1, rowSpan: 1 },
+          ]);
+        }
+      });
+      return temp;
+    },
+    revenueTotal() {
+      let total = 0;
+      let list = this.cashflow;
+      let month = [
+        "January",
+        "February",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July",
+        "August",
+        "September",
+        "October",
+        "November",
+        "December",
+      ];
+      list.sort((a, b) => {
+        return new Date(a.created_at) - new Date(b.created_at);
+      });
+      list.forEach((elem) => {
+        let item_date = new Date(elem.created_at);
+        if (
+          elem.collection_type_id &&
+          item_date >= this.report.start &&
+          item_date <= this.report.end
+        ) {
+          total+=elem.amount
+        }
+      });
+      return total.toLocaleString()
+    },
+    expenseReport() {
+      let temp = [];
+      let list = this.cashflow;
+      let month = [
+        "January",
+        "February",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July",
+        "August",
+        "September",
+        "October",
+        "November",
+        "December",
+      ];
+      list.sort((a, b) => {
+        return new Date(a.created_at) - new Date(b.created_at);
+      });
+      list.forEach((elem) => {
+        let item_date = new Date(elem.created_at);
+        if (
+          !elem.collection_type_id &&
+          item_date >= this.report.start &&
+          item_date <= this.report.end
+        ) {
+          temp.push([
+            {
+              content:
+                month[new Date(elem.created_at).getMonth()] +
+                "/" +
+                new Date(elem.created_at).getDate() +
+                "/" +
+                new Date(elem.created_at).getFullYear(),
+              colSpan: 1,
+              rowSpan: 1,
+            },
+            { content: elem.collection_type.name, colSpan: 1, rowSpan: 1 },
+            { content: elem.amount+" PHP", colSpan: 1, rowSpan: 1 },
+          ]);
+        }
+      });
+      return temp;
+    },
+    expenseTotal() {
+      let total = 0;
+      let list = this.cashflow;
+      let month = [
+        "January",
+        "February",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July",
+        "August",
+        "September",
+        "October",
+        "November",
+        "December",
+      ];
+      list.sort((a, b) => {
+        return new Date(a.created_at) - new Date(b.created_at);
+      });
+      list.forEach((elem) => {
+        let item_date = new Date(elem.created_at);
+        if (
+          !elem.collection_type_id &&
+          item_date >= this.report.start &&
+          item_date <= this.report.end
+        ) {
+          total+=elem.amount
+        }
+      });
+      return total.toLocaleString()
     },
   },
   mounted() {},
