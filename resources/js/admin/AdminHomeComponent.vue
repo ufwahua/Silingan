@@ -72,11 +72,11 @@ export default {
                             icon: "pi pi-fw pi-home",
                             to: "/admin/timeline",
                         },
-                        {
-                            label: "Announcement",
-                            icon: "pi pi-info",
-                            to: "/admin/view-announcement",
-                        },
+                        // {
+                        //     label: "Announcement",
+                        //     icon: "pi pi-info",
+                        //     to: "/admin/view-announcement",
+                        // },
 
                         {
                             label: "Marketplace",
@@ -84,11 +84,12 @@ export default {
                             to: "/admin/marketplace",
                         },
                         {
-<<<<<<< HEAD
+
                             label: "Announcement",
                             icon: "pi pi-volume-down",
                             to: "/admin/view-announcement",
-=======
+                        },
+                         {   
                             label: "Cash Flow",
                             icon: "pi pi-dollar",
                             to: "/admin/cashflow",
@@ -102,7 +103,6 @@ export default {
                             label: "Logs",
                             icon: "pi pi-info-circle",
                             to: "/admin/log",
->>>>>>> 28034bef4e6ef34bcf8eb24ae9cd55d7ed1dc622
                         },
                     ],
                 },
