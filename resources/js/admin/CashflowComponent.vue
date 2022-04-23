@@ -1016,6 +1016,8 @@ export default {
   },
   computed: {
     revenueReport() {
+      let start = new Date(this.report.start)
+      let end = new Date(this.report.end)
       let temp = [];
       let list = this.cashflow;
       let month = [
@@ -1036,11 +1038,10 @@ export default {
         return new Date(a.created_at) - new Date(b.created_at);
       });
       list.forEach((elem) => {
-        let item_date = new Date(elem.created_at);
+        let item_date = new Date(elem.created_at)
         if (
           elem.collection_type_id &&
-          item_date >= this.report.start &&
-          item_date <= this.report.end
+          item_date >= start
         ) {
           temp.push([
             {
@@ -1061,6 +1062,8 @@ export default {
       return temp;
     },
     revenueTotal() {
+      let start = new Date(this.report.start)
+      let end = new Date(this.report.end)
       let total = 0;
       let list = this.cashflow;
       let month = [
@@ -1084,8 +1087,7 @@ export default {
         let item_date = new Date(elem.created_at);
         if (
           elem.collection_type_id &&
-          item_date >= this.report.start &&
-          item_date <= this.report.end
+          item_date >= start
         ) {
           total += elem.amount;
         }
@@ -1093,6 +1095,8 @@ export default {
       return total.toLocaleString();
     },
     expenseReport() {
+      let start = new Date(this.report.start)
+      let end = new Date(this.report.end)
       let temp = [];
       let list = this.cashflow;
       let month = [
@@ -1116,8 +1120,7 @@ export default {
         let item_date = new Date(elem.created_at);
         if (
           !elem.collection_type_id &&
-          item_date >= this.report.start &&
-          item_date <= this.report.end
+          item_date >= start
         ) {
           temp.push([
             {
@@ -1138,6 +1141,8 @@ export default {
       return temp;
     },
     expenseTotal() {
+      let start = new Date(this.report.start)
+      let end = new Date(this.report.end)
       let total = 0;
       let list = this.cashflow;
       let month = [
@@ -1161,8 +1166,7 @@ export default {
         let item_date = new Date(elem.created_at);
         if (
           !elem.collection_type_id &&
-          item_date >= this.report.start &&
-          item_date <= this.report.end
+          item_date >= start
         ) {
           total += elem.amount;
         }
