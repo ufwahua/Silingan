@@ -21,6 +21,7 @@ import CollectionTypeComponent from "../admin/CollectionTypeComponent.vue";
 
 //resident
 import ResidentHomeComponent from "../resident/ResidentHomeComponent.vue";
+import BillingComponent from "../resident/BillingComponent.vue";
 
 //security officer
 import SecurityHome from "../security_officer/SecurityHomeComponent.vue";
@@ -454,6 +455,17 @@ const router = createRouter({
                     components: {
                         default: NotFound,
                         contents: ActivateAccountComponent,
+                    },
+                },
+                {
+                    path: "view-billing",
+                    meta: {
+                        role: "resident",
+                    },
+
+                    components: {
+                        default: NotFound,
+                        contents: BillingComponent,
                     },
                 },
             ],
