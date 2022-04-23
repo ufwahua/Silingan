@@ -1694,8 +1694,8 @@ export default {
                 { tag: "family member" },
             ],
             verification: [
-                { status: "verified", value: true },
-                { status: "not verified", value: false },
+                { status: "verified", value: 1 },
+                { status: "not verified", value: 0 },
             ],
 
             emergencyContactDialog: false,

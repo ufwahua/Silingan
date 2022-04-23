@@ -76,6 +76,16 @@ export default {
                             icon: "pi pi-fw pi-calendar",
                             to: "/resident/view-announcement",
                         },
+                        {
+                            label: "View Billing",
+                            icon: "pi pi-fw pi-calendar",
+                            to: "/resident/view-billing",
+                        },
+                        {
+                            label: "Election",
+                            icon: "pi pi-fw pi-calendar",
+                            to: "/resident/election",
+                        },
                     ],
                 },
             ],
@@ -194,7 +204,7 @@ export default {
         AppFooter: AppFooter,
     },
     created() {
-        // this.$store.dispatch("news/getAll");
+        this.$store.dispatch("news/getAll");
         this.$store.dispatch(
             "getUsersNotBlocked",
             this.$store.state.userLogged.id

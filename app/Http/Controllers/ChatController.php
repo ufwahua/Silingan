@@ -49,6 +49,7 @@ class ChatController extends Controller
                 "chat_room_id" => $chat_room->id,
                 "user_id" => Auth::id(),
                 "message" => $request['message'],
+                "read" => $request['read'],
             ]);
         } else {
             $chat_room = ChatRoom::query()->create([
@@ -58,6 +59,7 @@ class ChatController extends Controller
                 "chat_room_id" => $chat_room->id,
                 "user_id" => Auth::id(),
                 "message" => $request['message'],
+                 "read" => $request['read'],
             ]);
         }
 
