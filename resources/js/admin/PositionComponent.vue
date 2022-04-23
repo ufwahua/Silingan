@@ -3,7 +3,7 @@
         <Toast />
         <div class="grid">
             <div class="col-12">
-                <h1>Positions</h1>
+                <h1 class="layout-text">Positions</h1>
             </div>
         </div>
         <div class="card">

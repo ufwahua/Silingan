@@ -72,11 +72,11 @@ export default {
                             icon: "pi pi-fw pi-home",
                             to: "/admin/timeline",
                         },
-                        {
-                            label: "Announcement",
-                            icon: "pi pi-info",
-                            to: "/admin/view-announcement",
-                        },
+                        // {
+                        //     label: "Announcement",
+                        //     icon: "pi pi-info",
+                        //     to: "/admin/view-announcement",
+                        // },
 
                         {
                             label: "Marketplace",
@@ -84,6 +84,12 @@ export default {
                             to: "/admin/marketplace",
                         },
                         {
+
+                            label: "Announcement",
+                            icon: "pi pi-volume-down",
+                            to: "/admin/view-announcement",
+                        },
+                         {   
                             label: "Cash Flow",
                             icon: "pi pi-dollar",
                             to: "/admin/cashflow",
