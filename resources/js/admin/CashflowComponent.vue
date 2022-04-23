@@ -687,7 +687,7 @@ export default {
                   styles: { halign: "right" },
                 },
                 {
-                  content: this.revenueTotal+" PHP",
+                  content: this.revenueTotal + " PHP",
                   colSpan: 1,
                   rowSpan: 1,
                 },
@@ -726,7 +726,7 @@ export default {
                   styles: { halign: "right" },
                 },
                 {
-                  content: this.expenseTotal+" PHP",
+                  content: this.expenseTotal + " PHP",
                   colSpan: 1,
                   rowSpan: 1,
                 },
@@ -877,7 +877,7 @@ export default {
             data: {
               amount:
                 this.funds[this.expense_form.source - 1].amount -
-                +this.expense_form.amount,
+                this.expense_form.amount,
               fund_type: this.funds[this.expense_form.source - 1].fund_type,
             },
           });
@@ -1054,7 +1054,7 @@ export default {
               rowSpan: 1,
             },
             { content: elem.collection_type.name, colSpan: 1, rowSpan: 1 },
-            { content: elem.amount+" PHP", colSpan: 1, rowSpan: 1 },
+            { content: elem.amount + " PHP", colSpan: 1, rowSpan: 1 },
           ]);
         }
       });
@@ -1087,10 +1087,10 @@ export default {
           item_date >= this.report.start &&
           item_date <= this.report.end
         ) {
-          total+=elem.amount
+          total += elem.amount;
         }
       });
-      return total.toLocaleString()
+      return total.toLocaleString();
     },
     expenseReport() {
       let temp = [];
@@ -1131,7 +1131,7 @@ export default {
               rowSpan: 1,
             },
             { content: elem.collection_type.name, colSpan: 1, rowSpan: 1 },
-            { content: elem.amount+" PHP", colSpan: 1, rowSpan: 1 },
+            { content: elem.amount + " PHP", colSpan: 1, rowSpan: 1 },
           ]);
         }
       });
@@ -1164,10 +1164,10 @@ export default {
           item_date >= this.report.start &&
           item_date <= this.report.end
         ) {
-          total+=elem.amount
+          total += elem.amount;
         }
       });
-      return total.toLocaleString()
+      return total.toLocaleString();
     },
   },
   mounted() {},
