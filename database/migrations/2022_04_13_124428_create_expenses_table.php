@@ -18,7 +18,8 @@ class CreateExpensesTable extends Migration
             $table->foreignId('user_id');
             $table->foreignId('fund_id');
             $table->double('amount', 8, 2);
-            $table->text('notes');
+            $table->string('expense_source');
+            $table->text('notes')->nullable();
             $table->string('official_receipt')->nullable();
             $table->double('running_balance',8,2);
             $table->timestamps();

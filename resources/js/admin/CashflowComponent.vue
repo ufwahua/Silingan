@@ -218,12 +218,13 @@
                     {{ data.user.last_name }}
                   </template>
                 </Column>
-                <Column field="notes" header="Expense"></Column>
+                <Column field="expense_source" header="Expense Type"></Column>
                 <Column field="credit" header="Debit">
                   <template #body="{ data }">
                     ₱{{ data.amount.toLocaleString() }}
                   </template>
                 </Column>
+                <Column field="notes" header="Note"></Column>
                 <Column field="created_at" header="Date and Time">
                   <template #body="{ data }">
                     {{ new Date(data.created_at.toString()).getMonth() + 1 }}-{{
@@ -385,6 +386,17 @@
           <h5>Official Receipt Number</h5>
           <InputText type="text" v-model="expense_form.ornumber" />
         </div>
+        <div class="col-12 lg:col-6">
+          <h5>Expense Type</h5>
+          <InputText
+            type="text"
+            v-model="expense_form.type"
+            :class="{ 'p-invalid': expense_valid.state.type }"
+          />
+          <small v-if="expense_valid.state.type" class="p-error">{{
+            expense_valid.msg.type
+          }}</small>
+        </div>
         <div class="col-12">
           <h5>Notes</h5>
           <Textarea
@@ -518,7 +530,7 @@ export default {
         let revenue = store.state.collection.Collection;
         let expense = store.state.expense.Expense;
         expense.forEach((elem) => {
-          elem["collection_type"] = { name: elem.notes };
+          elem["collection_type"] = { name: elem.expense_source };
         });
         let cashflow = revenue.concat(expense);
         cashflow.sort((a, b) => {
@@ -553,6 +565,7 @@ export default {
         ornumber: null,
         notes: null,
         source: null,
+        type: null,
       },
       //Expense Validation
       expense_valid: {
@@ -561,12 +574,14 @@ export default {
           ornumber: false,
           notes: false,
           source: false,
+          type: false,
         },
         msg: {
           amount: null,
           ornumber: null,
           notes: null,
           source: null,
+          type: null,
         },
       },
       //Revenue Validation
@@ -687,7 +702,7 @@ export default {
                   styles: { halign: "right" },
                 },
                 {
-                  content: this.revenueTotal + " PHP",
+                  content: this.revenueTotal.toLocaleString() + " PHP",
                   colSpan: 1,
                   rowSpan: 1,
                 },
@@ -726,7 +741,49 @@ export default {
                   styles: { halign: "right" },
                 },
                 {
-                  content: this.expenseTotal + " PHP",
+                  content: this.expenseTotal.toLocaleString() + " PHP",
+                  colSpan: 1,
+                  rowSpan: 1,
+                },
+              ],
+            ],
+          });
+          doc.addPage();
+          doc.text(
+            "Financial Statement Report " +
+              month[this.report.start.getMonth()] +
+              "/" +
+              this.report.start.getDate() +
+              "/" +
+              this.report.start.getFullYear() +
+              " to " +
+              month[this.report.end.getMonth()] +
+              "/" +
+              this.report.end.getDate() +
+              "/" +
+              this.report.end.getFullYear(),
+            15,
+            finalY + 15
+          );
+          doc.autoTable({
+            startY: finalY + 20,
+            theme: "plain",
+            head: [["Net Income", "", ""]],
+            body: [
+              ["", "Revenue", this.revenueTotal +" PHP"],
+              ["", "Expense", this.expenseTotal +" PHP"],
+            ],
+            foot: [
+              [
+                { content: "", colSpan: 1, rowSpan: 1 },
+                {
+                  content: "Total",
+                  colSpan: 1,
+                  rowSpan: 1,
+                  styles: { halign: "right" },
+                },
+                {
+                  content: (this.revenueTotal-this.expenseTotal).toLocaleString() + " PHP",
                   colSpan: 1,
                   rowSpan: 1,
                 },
@@ -797,6 +854,7 @@ export default {
         ornumber: null,
         notes: null,
         source: null,
+        type: null,
       };
     },
     addRevenue() {
@@ -865,6 +923,7 @@ export default {
                 : this.funds[this.expense_form.source - 1].amount -
                   this.expense_form.amount,
             fund_id: this.expense_form.source,
+            expense_source: this.expense_form.type,
           },
         });
         this.process = !this.process;
@@ -905,6 +964,10 @@ export default {
         this.expense_valid.state.source = true;
         this.expense_valid.msg.source = e.errors.source[0];
       }
+      if (e.errors.expense_source) {
+        this.expense_valid.state.type = true;
+        this.expense_valid.msg.type = e.errors.expense_source[0];
+      }
     },
     resetExpenseFormError() {
       this.expense_valid = {
@@ -913,12 +976,14 @@ export default {
           ornumber: false,
           notes: false,
           source: false,
+          type: false,
         },
         msg: {
           amount: null,
           ornumber: null,
           notes: null,
           source: null,
+          type: null,
         },
       };
     },
@@ -1016,8 +1081,8 @@ export default {
   },
   computed: {
     revenueReport() {
-      let start = new Date(this.report.start)
-      let end = new Date(this.report.end)
+      let start = new Date(this.report.start);
+      let end = new Date(this.report.end);
       let temp = [];
       let list = this.cashflow;
       let month = [
@@ -1038,11 +1103,8 @@ export default {
         return new Date(a.created_at) - new Date(b.created_at);
       });
       list.forEach((elem) => {
-        let item_date = new Date(elem.created_at)
-        if (
-          elem.collection_type_id &&
-          item_date >= start
-        ) {
+        let item_date = new Date(elem.created_at);
+        if (elem.collection_type_id && item_date >= start) {
           temp.push([
             {
               content:
@@ -1055,15 +1117,15 @@ export default {
               rowSpan: 1,
             },
             { content: elem.collection_type.name, colSpan: 1, rowSpan: 1 },
-            { content: elem.amount + " PHP", colSpan: 1, rowSpan: 1 },
+            { content: elem.amount.toLocaleString() + " PHP", colSpan: 1, rowSpan: 1 },
           ]);
         }
       });
       return temp;
     },
     revenueTotal() {
-      let start = new Date(this.report.start)
-      let end = new Date(this.report.end)
+      let start = new Date(this.report.start);
+      let end = new Date(this.report.end);
       let total = 0;
       let list = this.cashflow;
       let month = [
@@ -1085,18 +1147,15 @@ export default {
       });
       list.forEach((elem) => {
         let item_date = new Date(elem.created_at);
-        if (
-          elem.collection_type_id &&
-          item_date >= start
-        ) {
+        if (elem.collection_type_id && item_date >= start) {
           total += elem.amount;
         }
       });
-      return total.toLocaleString();
+      return total;
     },
     expenseReport() {
-      let start = new Date(this.report.start)
-      let end = new Date(this.report.end)
+      let start = new Date(this.report.start);
+      let end = new Date(this.report.end);
       let temp = [];
       let list = this.cashflow;
       let month = [
@@ -1118,10 +1177,7 @@ export default {
       });
       list.forEach((elem) => {
         let item_date = new Date(elem.created_at);
-        if (
-          !elem.collection_type_id &&
-          item_date >= start
-        ) {
+        if (!elem.collection_type_id && item_date >= start) {
           temp.push([
             {
               content:
@@ -1134,15 +1190,15 @@ export default {
               rowSpan: 1,
             },
             { content: elem.collection_type.name, colSpan: 1, rowSpan: 1 },
-            { content: elem.amount + " PHP", colSpan: 1, rowSpan: 1 },
+            { content: elem.amount.toLocaleString() + " PHP", colSpan: 1, rowSpan: 1 },
           ]);
         }
       });
       return temp;
     },
     expenseTotal() {
-      let start = new Date(this.report.start)
-      let end = new Date(this.report.end)
+      let start = new Date(this.report.start);
+      let end = new Date(this.report.end);
       let total = 0;
       let list = this.cashflow;
       let month = [
@@ -1164,14 +1220,11 @@ export default {
       });
       list.forEach((elem) => {
         let item_date = new Date(elem.created_at);
-        if (
-          !elem.collection_type_id &&
-          item_date >= start
-        ) {
+        if (!elem.collection_type_id && item_date >= start) {
           total += elem.amount;
         }
       });
-      return total.toLocaleString();
+      return total;
     },
   },
   mounted() {},
