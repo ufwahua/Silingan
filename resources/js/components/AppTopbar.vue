@@ -29,28 +29,169 @@
             <i class="pi pi-ellipsis-v"></i>
         </button>
         <ul class="layout-topbar-menu hidden lg:flex origin-top">
-            <li v-if="userLogged.status != 'inactive'">
-                <Button
-                    type="button"
-                    label="Toggle"
-                    @click="toggleNotification"
-                    aria-haspopup="true"
-                    aria-controls="overlay_menu"
-                    class="p-link layout-topbar-button"
+            <div v-if="notif_count > 0">
+                <li
+                    @click="updateNotif()"
+                    v-badge.danger="notif_count > 10 ? '10+' : notif_count"
+                    v-if="userLogged.status != 'inactive'"
                 >
-                    <i class="pi pi-bell"></i>
-                    <span>Notification</span>
-                </Button>
-                <Menu
-                    id="overlay_menu"
-                    ref="menu2"
-                    :model="items"
-                    :popup="true"
-                    class="overflow-auto"
-                    style="max-height: 300px"
-                />
-            </li>
-
+                    <Button
+                        type="button"
+                        label="Toggle"
+                        @click="toggleNotification"
+                        aria-haspopup="true"
+                        aria-controls="overlay_menu"
+                        class="p-link layout-topbar-button"
+                    >
+                        <i class="pi pi-bell"></i>
+                        <span>Notification</span>
+                    </Button>
+                    <OverlayPanel
+                        ref="op"
+                        :breakpoints="{ '960px': '75vw', '640px': '100vw' }"
+                        :style="{ width: '450px' }"
+                        :dismissable="false"
+                    >
+                        <ScrollPanel
+                            style="width: 100%; height: 200px"
+                            class="custombar1"
+                        >
+                            <div v-if="notifications.length == 0" class="grid">
+                                <div class="col-12">
+                                    <p>No Notifications</p>
+                                </div>
+                            </div>
+                            <div v-else>
+                                <div
+                                    v-for="notif in notifications"
+                                    class="grid"
+                                >
+                                    <div class="col-12">
+                                        <div
+                                            v-if="
+                                                notif.device_type ===
+                                                    'Laptop' ||
+                                                notif.device_type === 'Monitor'
+                                            "
+                                            class="inline"
+                                        >
+                                            <div class="inline mr-3">
+                                                <Button
+                                                    icon="pi pi-desktop"
+                                                    class="p-button-rounded p-button-outlined"
+                                                    disabled
+                                                />
+                                            </div>
+                                        </div>
+                                        <div v-else class="inline">
+                                            <div class="inline mr-3">
+                                                <Button
+                                                    icon="pi pi-inbox"
+                                                    class="p-button-rounded p-button-outlined"
+                                                    disabled
+                                                />
+                                            </div>
+                                        </div>
+                                        <p class="inline">
+                                            {{ notif.message }}
+                                        </p>
+                                        <Divider align="right" class="ml-4">
+                                            <div
+                                                class="inline-flex align-items-center"
+                                            >
+                                                <small>{{
+                                                    notif.created_at
+                                                }}</small>
+                                            </div>
+                                        </Divider>
+                                    </div>
+                                </div>
+                            </div>
+                        </ScrollPanel>
+                    </OverlayPanel>
+                </li>
+            </div>
+            <div v-else>
+                <li
+                    @click="updateNotif()"
+                    v-if="userLogged.status != 'inactive'"
+                >
+                    <Button
+                        type="button"
+                        label="Toggle"
+                        @click="toggleNotification"
+                        aria-haspopup="true"
+                        aria-controls="overlay_menu"
+                        class="p-link layout-topbar-button"
+                    >
+                        <i class="pi pi-bell"></i>
+                        <span>Notification</span>
+                    </Button>
+                    <OverlayPanel
+                        ref="op"
+                        :breakpoints="{ '960px': '75vw', '640px': '100vw' }"
+                        :style="{ width: '450px' }"
+                        :dismissable="false"
+                    >
+                        <ScrollPanel
+                            style="width: 100%; height: 200px"
+                            class="custombar1"
+                        >
+                            <div v-if="notifications.length == 0" class="grid">
+                                <div class="col-12">
+                                    <p>No Notifications</p>
+                                </div>
+                            </div>
+                            <div v-else>
+                                <div
+                                    v-for="notif in notifications"
+                                    class="grid"
+                                >
+                                    <div class="col-12">
+                                        <div
+                                            v-if="
+                                                notif.device_type ===
+                                                    'Laptop' ||
+                                                notif.device_type === 'Monitor'
+                                            "
+                                            class="inline"
+                                        >
+                                            <div class="inline mr-3">
+                                                <Button
+                                                    icon="pi pi-desktop"
+                                                    class="p-button-rounded p-button-outlined"
+                                                    disabled
+                                                />
+                                            </div>
+                                        </div>
+                                        <div v-else class="inline">
+                                            <div class="inline mr-3">
+                                                <Button
+                                                    icon="pi pi-inbox"
+                                                    class="p-button-rounded p-button-outlined"
+                                                    disabled
+                                                />
+                                            </div>
+                                        </div>
+                                        <p class="inline">
+                                            {{ notif.message }}
+                                        </p>
+                                        <Divider align="right" class="ml-4">
+                                            <div
+                                                class="inline-flex align-items-center"
+                                            >
+                                                <small>{{
+                                                    notif.created_at
+                                                }}</small>
+                                            </div>
+                                        </Divider>
+                                    </div>
+                                </div>
+                            </div>
+                        </ScrollPanel>
+                    </OverlayPanel>
+                </li>
+            </div>
             <li>
                 <button
                     class="p-link layout-topbar-button"
@@ -81,11 +222,32 @@ export default {
         const store = useStore();
         return {
             userLogged: computed(() => store.state.userLogged),
+            notifications: computed(() => {
+                let temp = [];
+                let user = store.state.userLogged;
+                store.state.notifications.notifications.forEach((elem) => {
+                    if (elem.user_id === user.id) {
+                        temp.push(elem);
+                    }
+                });
+                return temp;
+            }),
+            notif_count: computed(() => {
+                let temp = [];
+                let user = store.state.userLogged;
+                store.state.notifications.notifications.forEach((elem) => {
+                    if (elem.user_id === user.id) {
+                        temp.push(elem);
+                    }
+                });
+                return temp.filter((n) => n.viewed === 0).length;
+            }),
         };
     },
     data() {
         return {
             profile_pic: false,
+            notif_click: false,
             items: [
                 {
                     label: "Notification",
@@ -107,11 +269,27 @@ export default {
         };
     },
     methods: {
+        updateNotif() {
+            this.notif_click = !this.notif_click;
+            let temp = this.notifications.filter((n) => n.viewed === 0);
+            if (temp.length > 0) {
+                temp.forEach((elem) => {
+                    axios({
+                        method: "put",
+                        url: "/api/notification/" + elem.id,
+                    }).catch((e) => {
+                        console.log(e);
+                    });
+                });
+            }
+        },
+
         toggle(event) {
             this.$refs.menu.toggle(event);
         },
         toggleNotification(event) {
-            this.$refs.menu2.toggle(event);
+            this.$refs.op.toggle(event);
+            this.$store.dispatch("notifications/getAll");
         },
         onMenuToggle(event) {
             this.$emit("menu-toggle", event);
@@ -121,6 +299,14 @@ export default {
         },
     },
     mounted() {
+        window.addEventListener("scroll", (event) => {
+            if (this.notif_click == true) {
+                this.$store.dispatch("notifications/getAll");
+                this.notif_click = !this.notif_click;
+            }
+            this.$refs.op.hide(event);
+            this.$refs.menu.hide(event);
+        });
         if (this.$store.state.userLogged.status != "active") {
             this.profile_menu = [
                 {

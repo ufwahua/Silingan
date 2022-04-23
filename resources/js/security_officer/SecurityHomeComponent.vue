@@ -212,6 +212,7 @@ export default {
             "userVehicles/getAll",
             this.$store.state.userLogged.id
         );
+        this.$store.dispatch("notifications/getAll");
     },
 };
 </script>

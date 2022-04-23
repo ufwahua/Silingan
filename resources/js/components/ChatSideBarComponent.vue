@@ -1,6 +1,6 @@
 <template>
     <div>
-        <Button label="Primary" badge="8" class="p-button-text w-full">
+        <Button label="Primary" class="p-button-text w-full">
             <div
                 v-if="user.profile_pic"
                 class="col-fixed p-0 m-0"
@@ -12,6 +12,7 @@
                     size="large"
                     shape="circle"
                     alt="Image"
+                    v-badge="10"
                 />
             </div>
             <div
@@ -25,6 +26,7 @@
                     size="large"
                     shape="circle"
                     alt="Image"
+                    v-badge="10"
                 />
             </div>
             <div class="col p-0 m-0">

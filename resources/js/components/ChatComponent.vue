@@ -254,6 +254,22 @@ export default {
                         this.message = null;
                         console.log("post chat", res.data[0].chats);
                         this.$store.commit("getChats", res.data[0].chats);
+                        axios({
+                            method: "post",
+                            url: "/api/notification",
+                            data: {
+                                user_id: this.userLogged.id,
+                                user_type: "admin",
+                                device_type: this.device_type,
+                                message:
+                                    this.userLogged.employee.first_name +
+                                    " " +
+                                    this.userLogged.employee.last_name +
+                                    " has requested for a device repair",
+                            },
+                        }).catch((e) => {
+                            console.log(e.response);
+                        });
                     })
                     .catch((error) => {
                         this.$store.commit("getChats", null);

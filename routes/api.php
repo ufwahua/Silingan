@@ -25,6 +25,7 @@ use App\Http\Controllers\CollectionTypeController;
 use App\Http\Controllers\CollectionController;
 use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\FundController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\SmsController;
 
 /*
@@ -55,6 +56,7 @@ Route::get('/post/marketplace/verified/{post}', [PostController::class, 'getMark
 Route::get('/post/marketplace/not-verified/{post}', [PostController::class, 'getMarketPlaceNotVerified']);
 Route::post('/sms',[SmsController::class, 'sendSmsNotification']);
 Route::post('/log/filter',[LogController::class, 'filterFromTo']);
+Route::post('/notification/chat',[LogController::class, 'filterFromTo']);
 
 
 
@@ -80,5 +82,6 @@ Route::apiResources([
     'collection_type' => CollectionTypeController::class,
     'collection' => CollectionController::class,
     'expense' => ExpenseController::class,
-    'fund' => FundController::class
+    'fund' => FundController::class,
+     'notification'     => NotificationController::class
 ]);
