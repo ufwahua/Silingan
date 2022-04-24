@@ -84,12 +84,11 @@ export default {
                             to: "/admin/marketplace",
                         },
                         {
-
                             label: "Announcement",
                             icon: "pi pi-volume-down",
                             to: "/admin/view-announcement",
                         },
-                         {   
+                        {
                             label: "Cash Flow",
                             icon: "pi pi-dollar",
                             to: "/admin/cashflow",
@@ -315,7 +314,11 @@ export default {
         this.$store.dispatch("collection/getAll");
         this.$store.dispatch("fund/getAll");
         this.$store.dispatch("expense/getAll");
-        this.$store.dispatch("notifications/getAll");
+
+        this.$store.dispatch(
+            "notifications/getSpecific",
+            this.$store.state.userLogged.id
+        );
     },
 };
 </script>

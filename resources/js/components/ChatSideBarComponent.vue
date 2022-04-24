@@ -12,7 +12,6 @@
                     size="large"
                     shape="circle"
                     alt="Image"
-                    v-badge="10"
                 />
             </div>
             <div
@@ -26,7 +25,6 @@
                     size="large"
                     shape="circle"
                     alt="Image"
-                    v-badge="10"
                 />
             </div>
             <div class="col p-0 m-0">

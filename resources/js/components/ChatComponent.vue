@@ -23,10 +23,15 @@
                     }}</b>
                 </div>
                 <div>
-                    <Button icon="pi pi-replay" @click="toggle" />
+                    <Button
+                        icon="pi pi-replay"
+                        @click="toggle"
+                        aria-haspopup="true"
+                        aria-controls="overlay_menu"
+                    />
                     <Menu
-                        id="chat_menu"
-                        ref="menu_chat"
+                        id="overlay_menu"
+                        ref="menu"
                         :model="items"
                         :popup="true"
                         v-tooltip="'Chat'"
@@ -115,7 +120,7 @@
                 </div>
             </div>
 
-            <template v-if="!loading" #footer>
+            <template #footer>
                 <div class="col-12">
                     <Textarea
                         v-model="message"
@@ -127,6 +132,25 @@
                     </Textarea>
                 </div>
             </template>
+        </Dialog>
+        <Dialog
+            v-model:visible="loading"
+            :style="{ width: '450px' }"
+            :modal="true"
+            :closable="false"
+            :closeOnEscape="true"
+        >
+            <div class="grid">
+                <div class="col-12 text-center">
+                    <ProgressSpinner
+                        class="block mb-4"
+                        style="width: 100px; height: 100px"
+                        strokeWidth="4"
+                        fill="#EEEEEE"
+                        animationDuration="1s"
+                    />
+                </div>
+            </div>
         </Dialog>
     </div>
 </template>
@@ -143,6 +167,14 @@ export default {
         return {
             users: computed(() => store.state.users),
             chats: computed(() => store.state.chats),
+            notifications: computed(
+                () => store.state.notifications.specific_notifications
+            ),
+            notif_count: computed(() => {
+                return store.state.notifications.specific_notifications.filter(
+                    (n) => n.viewed == 0
+                ).length;
+            }),
         };
     },
 
@@ -162,7 +194,6 @@ export default {
     },
     data() {
         return {
-            chat_room_id: null,
             chatRoomModal: false,
             chats: null,
             user: null,
@@ -223,10 +254,7 @@ export default {
                 this.unbindOutsideClickListener();
             }
         },
-    },
-    outsideClickListener: null,
-    watch: {
-        chat_room_id(val, oldVal) {
+        "$store.state.chat_room_id"(val, oldVal) {
             if (oldVal) {
                 this.disconnect(oldVal);
                 this.connect();
@@ -235,12 +263,14 @@ export default {
             }
         },
     },
+    outsideClickListener: null,
     methods: {
         toggle() {
-            this.$refs.menu_chat.toggle(event);
+            this.$refs.menu.toggle(event);
         },
         async sendMessage() {
             if (this.message) {
+                this.loading = true;
                 await axios({
                     method: "post",
                     url: "/api/chat/",
@@ -250,42 +280,48 @@ export default {
                         read: 0,
                     },
                 })
-                    .then((res) => {
+                    .then(async (res) => {
                         this.message = null;
-                        console.log("post chat", res.data[0].chats);
+                        console.log("post chats", res.data);
                         this.$store.commit("getChats", res.data[0].chats);
-                        axios({
-                            method: "post",
-                            url: "/api/notification",
-                            data: {
-                                user_id: this.userLogged.id,
-                                user_type: "admin",
-                                device_type: this.device_type,
-                                message:
-                                    this.userLogged.employee.first_name +
-                                    " " +
-                                    this.userLogged.employee.last_name +
-                                    " has requested for a device repair",
-                            },
-                        }).catch((e) => {
-                            console.log(e.response);
-                        });
+                        if (this.notif_count == 0) {
+                            await axios({
+                                method: "post",
+                                url: "/api/notification",
+                                data: {
+                                    from_user_id:
+                                        this.$store.state.userLogged.id,
+                                    to_user_id: this.user.id,
+                                    chat_room_id:
+                                        res.data[0].chats[0].chat_room_id,
+                                    message: "sent you a message",
+                                },
+                            })
+                                .then(() => {
+                                    console.log("notify success ");
+                                })
+                                .catch((e) => {
+                                    console.log(e.response);
+                                });
+                        }
+
+                        this.loading = false;
                     })
                     .catch((error) => {
                         this.$store.commit("getChats", null);
                         console.log(error.response);
+                        this.loading = false;
                     });
             }
         },
         connect() {
-            if (this.chat_room_id) {
+            if (this.$store.state.chat_room_id) {
                 let vm = this;
-                window.Echo.private("chat." + this.chat_room_id).listen(
-                    ".message.new",
-                    (e) => {
-                        vm.openChatRoom(this.user);
-                    }
-                );
+                window.Echo.private(
+                    "chat." + this.$store.state.chat_room_id
+                ).listen(".message.new", (e) => {
+                    vm.openChatRoom(this.user);
+                });
             }
         },
         disconnect(chat_room_id) {
@@ -300,7 +336,7 @@ export default {
                 url: "/api/chat_room/" + this.user.id,
             })
                 .then((res) => {
-                    this.chat_room_id = res.data[0].id;
+                    this.$store.commit("getChatRoomId", res.data[0].id);
                     console.log("chats", res.data);
                     this.$store.commit("getChats", res.data[0].chats);
                 })
@@ -347,6 +383,15 @@ export default {
         containerClass() {
             return ["layout-config", { "layout-config-active": this.active }];
         },
+    },
+    mounted() {
+        console.log("specific", this.notifications);
+    },
+    created() {
+        this.$store.dispatch(
+            "notifications/getSpecific",
+            this.$store.state.userLogged.id
+        );
     },
 };
 </script>

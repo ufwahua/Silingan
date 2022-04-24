@@ -14,7 +14,7 @@ class NotificationRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -25,7 +25,10 @@ class NotificationRequest extends FormRequest
     public function rules()
     {
         return [
-            'user_id'   => ['required', Rule::exists('users', 'id')],    
+            'from_user_id'   => ['required', Rule::exists('users', 'id')], 
+            'to_user_id'   => ['required', Rule::exists('users', 'id')], 
+               
+            'chat_room_id'   => ['sometimes'],
             'message'   => ['required', 'max:255'],
         ];
     }

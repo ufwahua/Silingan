@@ -3,7 +3,7 @@
         <Toast />
         <h1>Total Funds</h1>
         <div class="grid">
-            <div v-for="fund in funds" class="col-12 lg:col-4">
+            <div v-for="fund in funds" :key="fund.id" class="col-12 lg:col-4">
                 <div class="card mb-0">
                     <div class="flex justify-content-between mb-3">
                         <div>
@@ -97,7 +97,7 @@
                         ₱{{ data.running_balance.toLocaleString() }} -
                         {{ data.fund.fund_type }}
                     </template>
-                    <template #filter="{ filterModel, filterCallback }">
+                    <template #filter="{ filterCallback }">
                         <Dropdown
                             v-model="this.filters['fund.fund_type'].value"
                             @change="filterCallback()"
@@ -110,8 +110,6 @@
                         >
                         </Dropdown>
                     </template>
-                    <template #filterclear="{ filterCallback }"> </template>
-                    <template #filterapply="{ filterCallback }"> </template>
                 </Column>
             </DataTable>
         </div>

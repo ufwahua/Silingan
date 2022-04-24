@@ -9,16 +9,16 @@
             >
                 <div class="col-12 mt-5 xl:mt-0 text-center">
                     <router-link to="/" :key="$route.fullPath">
-                        <!-- <img
-                            class="Silingan-logo"
-                            alt="Silingan-Logo"
-                            src="http://127.0.0.1:8000/storage/images/silingan-icon.png"
-                    />-->
                         <img
                             class="Silingan-logo"
                             alt="Silingan-Logo"
-                            src="https://i.ibb.co/V3B8NBM/silingan-icon.png"
+                            src="http://127.0.0.1:8000/storage/images/silingan-icon.png"
                         />
+                        <!-- <img
+                            class="Silingan-logo"
+                            alt="Silingan-Logo"
+                            src="https://i.ibb.co/V3B8NBM/silingan-icon.png"
+                        /> -->
                     </router-link>
                 </div>
                 <div class="w-full md:w-10 mx-auto" autocomplete="on">

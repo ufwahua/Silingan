@@ -1259,7 +1259,7 @@
                         </DataTable>
                     </Dialog>
                     <Dialog
-                        v-model:visible="process"
+                        v-model:visible="loading"
                         :style="{ width: '450px' }"
                         :modal="true"
                         :closable="false"
@@ -1392,7 +1392,7 @@ export default {
             filters: {},
             id: null,
             name: null,
-            process: false,
+            loading: false,
             registerUserDialog: false,
             deleteUserDialog: false,
             updateUserDialog: false,
@@ -1477,7 +1477,33 @@ export default {
                 });
         },
         toggle(data) {
-            if (
+            this.$refs.menu.toggle(event);
+            this.populateFields(data);
+            if (this.$store.state.userLogged.id == data.id) {
+                this.menus = [
+                    {
+                        label: "View",
+                        icon: "pi pi-user",
+                        command: () => {
+                            this.viewOfficer();
+                        },
+                    },
+                    {
+                        label: "Update",
+                        icon: "pi pi-pencil",
+                        command: () => {
+                            this.updateUser();
+                        },
+                    },
+                    {
+                        label: "Emergency Contacts",
+                        icon: "pi pi-id-card",
+                        command: () => {
+                            this.viewEmergencyContacts();
+                        },
+                    },
+                ];
+            } else if (
                 this.$store.state.userLogged.role == "admin" &&
                 data.status == "active"
             ) {
@@ -1545,30 +1571,6 @@ export default {
                         },
                     },
                 ];
-            } else if (this.$store.state.userLogged.id == data.id) {
-                this.menus = [
-                    {
-                        label: "View",
-                        icon: "pi pi-user",
-                        command: () => {
-                            this.viewOfficer();
-                        },
-                    },
-                    {
-                        label: "Update",
-                        icon: "pi pi-pencil",
-                        command: () => {
-                            this.updateUser();
-                        },
-                    },
-                    {
-                        label: "Emergency Contacts",
-                        icon: "pi pi-id-card",
-                        command: () => {
-                            this.viewEmergencyContacts();
-                        },
-                    },
-                ];
             } else {
                 this.menus = [
                     {
@@ -1587,21 +1589,25 @@ export default {
                     },
                 ];
             }
-            this.$refs.menu.toggle(event);
-            this.populateFields(data);
         },
         populateFields(data) {
             this.resetFields();
             this.resetErrors();
             this.id = data.id;
+
             this.name = data.name;
-            this.position = data.position;
+
             this.form.first_name = data.first_name;
             this.form.last_name = data.last_name;
             this.form.gender = data.gender;
-            this.form.selected_block = data.lot.block.number;
-            this.getBlockLot();
-            this.form.selected_block_lot = data.block_lot_id;
+            if (data.role != "security officer" && data.role != "admin") {
+                this.form.selected_block = data.lot.block.number;
+                this.getBlockLot();
+                this.form.selected_block_lot = data.block_lot_id;
+            }
+            if (data.role == "officer") {
+                this.form.selected_position = data.position_id;
+            }
             this.form.email = data.email;
             this.form.age = data.age;
             this.form.contact_num = data.contact_num;
@@ -1609,7 +1615,6 @@ export default {
             this.form.verified = data.verified;
             this.form.has_voted = data.has_voted;
             this.form.status = data.status;
-            this.form.selected_position = data.position_id;
             this.form.selected_tag = data.tag_as;
         },
         clearFilter() {
@@ -1676,13 +1681,13 @@ export default {
         async confirmDeleteItem() {
             try {
                 this.deleteUserDialog = false;
-                this.process = true;
+                this.loading = true;
                 await axios({
                     method: "delete",
                     url: "/api/user/" + this.id,
                 });
                 this.$store.dispatch("getAllUsers");
-                this.process = false;
+                this.loading = false;
                 this.$toast.add({
                     severity: "success",
                     summary: "Successful Request",
@@ -1690,7 +1695,7 @@ export default {
                     life: 3000,
                 });
             } catch (err) {
-                this.process = false;
+                this.loading = false;
                 console.log(err.response);
             }
         },
@@ -1711,7 +1716,7 @@ export default {
             this.selected_block_lot = data.block_lot.id;
         },
         async confirmUpdateUser() {
-            this.process = true;
+            this.loading = true;
             await axios({
                 method: "put",
                 url: "/api/user/" + this.id,
@@ -1743,17 +1748,17 @@ export default {
                     this.$store.dispatch("getAllUsers");
                     this.resetFields();
                     this.updateUserDialog = false;
-                    this.process = false;
+                    this.loading = false;
                 })
                 .catch((err) => {
                     console.log(err.response);
                     this.resetErrors();
                     this.validate(err);
-                    this.process = false;
+                    this.loading = false;
                 });
         },
         async verifyUser(data) {
-            this.process = true;
+            this.loading = true;
             console.log("verify", data);
             await axios({
                 method: "put",
@@ -1781,17 +1786,17 @@ export default {
                     });
                     this.$store.dispatch("getAllUsers");
                     this.resetFields();
-                    this.process = false;
+                    this.loading = false;
                 })
                 .catch((err) => {
                     console.log(err.response);
                     this.resetErrors();
                     this.validate(err);
-                    this.process = false;
+                    this.loading = false;
                 });
         },
         async changeStatus() {
-            this.process = true;
+            this.loading = true;
 
             await axios({
                 method: "put",
@@ -1825,13 +1830,13 @@ export default {
                     });
                     this.$store.dispatch("getAllUsers");
                     this.resetFields();
-                    this.process = false;
+                    this.loading = false;
                 })
                 .catch((err) => {
                     console.log(err.response);
                     this.resetErrors();
                     this.validate(err);
-                    this.process = false;
+                    this.loading = false;
                 });
         },
         //REGISTER USER
@@ -1842,7 +1847,7 @@ export default {
             this.resetErrors();
         },
         async onRegisterClick() {
-            this.process = true;
+            this.loading = true;
             await axios({
                 method: "post",
                 url: "/api/user",
@@ -1874,13 +1879,13 @@ export default {
                         detail: "Registered Officer",
                         life: 3000,
                     });
-                    this.process = false;
+                    this.loading = false;
                 })
                 .catch((err) => {
                     console.log(err.response);
                     this.resetErrors();
                     this.validate(err);
-                    this.process = false;
+                    this.loading = false;
                 });
         },
         resetFields() {

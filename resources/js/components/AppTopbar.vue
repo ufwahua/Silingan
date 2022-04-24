@@ -28,12 +28,14 @@
         >
             <i class="pi pi-ellipsis-v"></i>
         </button>
-        <ul class="layout-topbar-menu hidden lg:flex origin-top">
+        <ul
+            v-if="userLogged.status != 'inactive'"
+            class="layout-topbar-menu hidden lg:flex origin-top"
+        >
             <div v-if="notif_count > 0">
                 <li
-                    @click="updateNotif()"
                     v-badge.danger="notif_count > 10 ? '10+' : notif_count"
-                    v-if="userLogged.status != 'inactive'"
+                    @click="updateNotif"
                 >
                     <Button
                         type="button"
@@ -47,14 +49,17 @@
                         <span>Notification</span>
                     </Button>
                     <OverlayPanel
-                        ref="op"
+                        ref="menu2"
                         :breakpoints="{ '960px': '75vw', '640px': '100vw' }"
                         :style="{ width: '450px' }"
-                        :dismissable="false"
+                        :dismissable="true"
+                        aria-haspopup="true"
+                        aria-controls="overlay_menu"
                     >
                         <ScrollPanel
                             style="width: 100%; height: 200px"
                             class="custombar1"
+                            :popup="true"
                         >
                             <div v-if="notifications.length == 0" class="grid">
                                 <div class="col-12">
@@ -64,45 +69,79 @@
                             <div v-else>
                                 <div
                                     v-for="notif in notifications"
-                                    class="grid"
+                                    class="grid grid-nogutter"
+                                    :key="notif.id"
                                 >
-                                    <div class="col-12">
-                                        <div
-                                            v-if="
-                                                notif.device_type ===
-                                                    'Laptop' ||
-                                                notif.device_type === 'Monitor'
+                                    <div
+                                        v-if="notif.chat_room_id"
+                                        class="col-12 m-1"
+                                    >
+                                        <Button
+                                            class="p-button-text p-button-secondary w-full"
+                                            @click="
+                                                openChatRoom(notif.from_user)
                                             "
-                                            class="inline"
                                         >
-                                            <div class="inline mr-3">
-                                                <Button
-                                                    icon="pi pi-desktop"
-                                                    class="p-button-rounded p-button-outlined"
-                                                    disabled
-                                                />
+                                            <div class="p-inputgroup">
+                                                <div
+                                                    v-if="
+                                                        notif.from_user
+                                                            .profile_pic
+                                                    "
+                                                >
+                                                    <Avatar
+                                                        :image="`http://127.0.0.1:8000${notif.from_user.profile_pic}`"
+                                                        class="mr-2"
+                                                        size="large"
+                                                        shape="circle"
+                                                        alt="Image"
+                                                    />
+                                                </div>
+                                                <div v-else>
+                                                    <Avatar
+                                                        image="http://127.0.0.1:8000/storage/images/avatar.png"
+                                                        class="mr-2"
+                                                        size="large"
+                                                        shape="circle"
+                                                        alt="Image"
+                                                    />
+                                                </div>
+
+                                                <div class="grid grid-nogutter">
+                                                    <div class="col-12">
+                                                        <b class="p-0 m-0">
+                                                            {{
+                                                                notif.from_user
+                                                                    .first_name
+                                                            }}
+                                                            {{
+                                                                notif.from_user
+                                                                    .last_name
+                                                            }}</b
+                                                        >
+                                                        <b class="p-0 m-0">
+                                                            [{{
+                                                                notif.from_user
+                                                                    .role
+                                                            }}]
+                                                        </b>
+                                                    </div>
+                                                    <div class="col-12">
+                                                        <p>
+                                                            {{ notif.message }}
+                                                        </p>
+                                                        <p class="text-right">
+                                                            {{
+                                                                notif.created_at
+                                                            }}
+                                                        </p>
+                                                    </div>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div v-else class="inline">
-                                            <div class="inline mr-3">
-                                                <Button
-                                                    icon="pi pi-inbox"
-                                                    class="p-button-rounded p-button-outlined"
-                                                    disabled
-                                                />
-                                            </div>
-                                        </div>
-                                        <p class="inline">
-                                            {{ notif.message }}
-                                        </p>
+                                        </Button>
+                                    </div>
+                                    <div class="col-12">
                                         <Divider align="right" class="ml-4">
-                                            <div
-                                                class="inline-flex align-items-center"
-                                            >
-                                                <small>{{
-                                                    notif.created_at
-                                                }}</small>
-                                            </div>
                                         </Divider>
                                     </div>
                                 </div>
@@ -112,10 +151,7 @@
                 </li>
             </div>
             <div v-else>
-                <li
-                    @click="updateNotif()"
-                    v-if="userLogged.status != 'inactive'"
-                >
+                <li>
                     <Button
                         type="button"
                         label="Toggle"
@@ -128,14 +164,15 @@
                         <span>Notification</span>
                     </Button>
                     <OverlayPanel
-                        ref="op"
+                        ref="menu2"
                         :breakpoints="{ '960px': '75vw', '640px': '100vw' }"
                         :style="{ width: '450px' }"
-                        :dismissable="false"
+                        :dismissable="true"
                     >
                         <ScrollPanel
                             style="width: 100%; height: 200px"
                             class="custombar1"
+                            :popup="true"
                         >
                             <div v-if="notifications.length == 0" class="grid">
                                 <div class="col-12">
@@ -145,46 +182,80 @@
                             <div v-else>
                                 <div
                                     v-for="notif in notifications"
-                                    class="grid"
+                                    class="grid grid-nogutter"
+                                    :key="notif.id"
                                 >
-                                    <div class="col-12">
-                                        <div
-                                            v-if="
-                                                notif.device_type ===
-                                                    'Laptop' ||
-                                                notif.device_type === 'Monitor'
+                                    <div
+                                        v-if="notif.chat_room_id"
+                                        class="col-12 m-1"
+                                    >
+                                        <Button
+                                            class="p-button-text p-button-secondary w-full"
+                                            @click="
+                                                openChatRoom(notif.from_user)
                                             "
-                                            class="inline"
                                         >
-                                            <div class="inline mr-3">
-                                                <Button
-                                                    icon="pi pi-desktop"
-                                                    class="p-button-rounded p-button-outlined"
-                                                    disabled
-                                                />
+                                            <div class="p-inputgroup">
+                                                <div
+                                                    v-if="
+                                                        notif.from_user
+                                                            .profile_pic
+                                                    "
+                                                >
+                                                    <Avatar
+                                                        :image="`http://127.0.0.1:8000${notif.from_user.profile_pic}`"
+                                                        class="mr-2"
+                                                        size="large"
+                                                        shape="circle"
+                                                        alt="Image"
+                                                    />
+                                                </div>
+                                                <div v-else>
+                                                    <Avatar
+                                                        image="http://127.0.0.1:8000/storage/images/avatar.png"
+                                                        class="mr-2"
+                                                        size="large"
+                                                        shape="circle"
+                                                        alt="Image"
+                                                    />
+                                                </div>
+
+                                                <div class="grid grid-nogutter">
+                                                    <div class="col-12">
+                                                        <b class="p-0 m-0">
+                                                            {{
+                                                                notif.from_user
+                                                                    .first_name
+                                                            }}
+                                                            {{
+                                                                notif.from_user
+                                                                    .last_name
+                                                            }}</b
+                                                        >
+                                                        <b class="p-0 m-0">
+                                                            [{{
+                                                                notif.from_user
+                                                                    .role
+                                                            }}]
+                                                        </b>
+                                                    </div>
+                                                    <div class="col-12">
+                                                        <p>
+                                                            {{ notif.message }}
+                                                        </p>
+                                                        <p class="text-right">
+                                                            {{
+                                                                notif.created_at
+                                                            }}
+                                                        </p>
+                                                    </div>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div v-else class="inline">
-                                            <div class="inline mr-3">
-                                                <Button
-                                                    icon="pi pi-inbox"
-                                                    class="p-button-rounded p-button-outlined"
-                                                    disabled
-                                                />
-                                            </div>
-                                        </div>
-                                        <p class="inline">
-                                            {{ notif.message }}
-                                        </p>
-                                        <Divider align="right" class="ml-4">
-                                            <div
-                                                class="inline-flex align-items-center"
-                                            >
-                                                <small>{{
-                                                    notif.created_at
-                                                }}</small>
-                                            </div>
-                                        </Divider>
+                                        </Button>
+                                    </div>
+
+                                    <div class="col-12">
+                                        <Divider> </Divider>
                                     </div>
                                 </div>
                             </div>
@@ -192,11 +263,12 @@
                     </OverlayPanel>
                 </li>
             </div>
+
             <li>
                 <button
                     class="p-link layout-topbar-button"
                     label="Toggle"
-                    @click="toggle"
+                    @click="toggleProfile"
                     aria-haspopup="true"
                     aria-controls="overlay_menu"
                 >
@@ -211,85 +283,243 @@
                 />
             </li>
         </ul>
+        <Dialog
+            v-model:visible="chatRoomModal"
+            style="height: 600px; width: 400px"
+            position="bottom"
+        >
+            <template #header>
+                <div class="col-11 p-0 m-0">
+                    <Button
+                        label="Primary"
+                        class="p-button-text p-0 m-0 w-full"
+                    >
+                        <div
+                            class="col-fixed p-0 m-0"
+                            style="width: 48px; height: 48px"
+                        >
+                            <Avatar
+                                image="http://127.0.0.1:8000/storage/images/default-prof-pic.png"
+                                class="mr-2 w-full h-full"
+                                shape="circle"
+                            />
+                        </div>
+                        <div class="col p-0 m-0">
+                            {{ user.first_name }} {{ user.last_name }}
+                        </div>
+                    </Button>
+                </div>
+            </template>
+            <div class="flex flex-column-reverse" style="min-height: 370px">
+                <p v-if="!this.chats" class="text-right">Say Hi</p>
+                <div
+                    v-else
+                    v-for="chat in this.chats"
+                    :key="chat.id"
+                    class="grid"
+                >
+                    <ChatMessagesComponent v-if="chat.id" :chat="chat" />
+                </div>
+            </div>
+
+            <template #footer>
+                <div class="col-12">
+                    <Textarea
+                        v-model="message"
+                        :autoResize="true"
+                        rows="1"
+                        class="w-full"
+                        @keypress.enter="sendMessage"
+                    >
+                    </Textarea>
+                </div>
+            </template>
+        </Dialog>
     </div>
 </template>
 
 <script>
 import { computed } from "vue";
 import { useStore } from "vuex";
+import ChatMessagesComponent from "./ChatMessagesComponent.vue";
+
 export default {
+    components: {
+        ChatMessagesComponent,
+    },
     setup() {
         const store = useStore();
         return {
             userLogged: computed(() => store.state.userLogged),
-            notifications: computed(() => {
-                let temp = [];
-                let user = store.state.userLogged;
-                store.state.notifications.notifications.forEach((elem) => {
-                    if (elem.user_id === user.id) {
-                        temp.push(elem);
-                    }
-                });
-                return temp;
-            }),
+            chats: computed(() => store.state.chats),
+            notifications: computed(
+                () => store.state.notifications.specific_notifications
+            ),
             notif_count: computed(() => {
-                let temp = [];
-                let user = store.state.userLogged;
-                store.state.notifications.notifications.forEach((elem) => {
-                    if (elem.user_id === user.id) {
-                        temp.push(elem);
-                    }
-                });
-                return temp.filter((n) => n.viewed === 0).length;
+                return store.state.notifications.specific_notifications.filter(
+                    (n) => n.viewed == 0
+                ).length;
             }),
         };
     },
     data() {
         return {
             profile_pic: false,
-            notif_click: false,
-            items: [
-                {
-                    label: "Notification",
-                    items: [
-                        {
-                            label: "",
-                            icon: "",
-                            command: () => {},
-                        },
-                        {
-                            label: "",
-                            icon: "s",
-                            command: () => {},
-                        },
-                    ],
-                },
-            ],
+            items: [],
             profile_menu: null,
+
+            chatRoomModal: false,
+            message: null,
+            user: null,
         };
     },
+    watch: {
+        "$store.state.chat_room_id"(val, oldVal) {
+            if (oldVal) {
+                this.disconnect(oldVal);
+                this.connect();
+            } else {
+                this.connect();
+            }
+        },
+    },
     methods: {
-        updateNotif() {
-            this.notif_click = !this.notif_click;
-            let temp = this.notifications.filter((n) => n.viewed === 0);
-            if (temp.length > 0) {
-                temp.forEach((elem) => {
-                    axios({
-                        method: "put",
-                        url: "/api/notification/" + elem.id,
-                    }).catch((e) => {
-                        console.log(e);
+        async sendMessage() {
+            if (this.message) {
+                this.loading = true;
+                await axios({
+                    method: "post",
+                    url: "/api/chat/",
+                    data: {
+                        user_id: this.user.id,
+                        message: this.message,
+                        read: 0,
+                    },
+                })
+                    .then(async (res) => {
+                        this.message = null;
+                        console.log("post chats", res.data);
+                        this.$store.commit("getChats", res.data[0].chats);
+                        if (this.notif_count == 0) {
+                            await axios({
+                                method: "post",
+                                url: "/api/notification",
+                                data: {
+                                    from_user_id:
+                                        this.$store.state.userLogged.id,
+                                    to_user_id: this.user.id,
+                                    chat_room_id:
+                                        res.data[0].chats[0].chat_room_id,
+                                    message: "sent you a message",
+                                },
+                            })
+                                .then(() => {
+                                    console.log("notify success ");
+                                })
+                                .catch((e) => {
+                                    console.log(e.response);
+                                });
+                        }
+
+                        this.loading = false;
+                    })
+                    .catch((error) => {
+                        this.$store.commit("getChats", null);
+                        console.log(error.response);
+                        this.loading = false;
                     });
+            }
+        },
+        connect() {
+            if (this.$store.state.chat_room_id) {
+                let vm = this;
+                window.Echo.private(
+                    "chat." + this.$store.state.chat_room_id
+                ).listen(".message.new", (e) => {
+                    vm.openChatRoom(this.user);
                 });
             }
         },
-
-        toggle(event) {
+        disconnect(chat_room_id) {
+            window.Echo.leave("chat." + chat_room_id);
+        },
+        openChatRoom(user) {
+            this.chatRoomModal = true;
+            this.message = null;
+            this.user = user;
+            axios({
+                method: "get",
+                url: "/api/chat_room/" + this.user.id,
+            })
+                .then((res) => {
+                    this.$store.commit("getChatRoomId", res.data[0].id);
+                    console.log("chats", res.data);
+                    this.$store.commit("getChats", res.data[0].chats);
+                })
+                .catch((error) => {
+                    this.$store.commit("getChats", null);
+                    this.loading = false;
+                });
+        },
+        async updateNotif() {
+            await axios({
+                method: "put",
+                url: "/api/notification/" + this.$store.state.userLogged.id,
+            })
+                .then(() => {
+                    console.log("success");
+                    this.$store.dispatch(
+                        "notifications/getSpecific",
+                        this.$store.state.userLogged.id
+                    );
+                })
+                .catch((e) => {
+                    console.log(e.response);
+                });
+        },
+        toggleProfile(event) {
             this.$refs.menu.toggle(event);
         },
         toggleNotification(event) {
-            this.$refs.op.toggle(event);
-            this.$store.dispatch("notifications/getAll");
+            this.$store.dispatch(
+                "notifications/getSpecific",
+                this.$store.state.userLogged.id
+            );
+            this.items = [];
+            if (this.notifications) {
+                this.notifications.forEach((elem) => {
+                    if (elem.chat_room_id) {
+                        this.items.push({
+                            label: "",
+                            items: [
+                                {
+                                    label: elem.message,
+
+                                    icon: "pi pi-comment",
+                                    command: () => {},
+                                },
+                            ],
+                        });
+                    } else {
+                        this.items.push({
+                            label: elem.message,
+                            icon: "pi pi-",
+                            items: [
+                                {
+                                    label: elem.created_at,
+                                    command: () => {},
+                                },
+                            ],
+                        });
+                    }
+                });
+            } else {
+                this.items.push({
+                    label: "no notifcation",
+                });
+            }
+
+            this.$refs.menu2.toggle(event);
         },
         onMenuToggle(event) {
             this.$emit("menu-toggle", event);
@@ -299,14 +529,11 @@ export default {
         },
     },
     mounted() {
-        window.addEventListener("scroll", (event) => {
-            if (this.notif_click == true) {
-                this.$store.dispatch("notifications/getAll");
-                this.notif_click = !this.notif_click;
-            }
-            this.$refs.op.hide(event);
-            this.$refs.menu.hide(event);
-        });
+        this.$store.dispatch(
+            "notifications/getSpecific",
+            this.$store.state.userLogged.id
+        );
+
         if (this.$store.state.userLogged.status != "active") {
             this.profile_menu = [
                 {

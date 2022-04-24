@@ -56,7 +56,7 @@ Route::get('/post/marketplace/verified/{post}', [PostController::class, 'getMark
 Route::get('/post/marketplace/not-verified/{post}', [PostController::class, 'getMarketPlaceNotVerified']);
 Route::post('/sms',[SmsController::class, 'sendSmsNotification']);
 Route::post('/log/filter',[LogController::class, 'filterFromTo']);
-Route::post('/notification/chat',[LogController::class, 'filterFromTo']);
+Route::post('/notification/chat',[NotificationController::class, 'notificationChat']);
 
 
 

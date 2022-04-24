@@ -33,6 +33,7 @@ export default createStore({
         not_blocked_users: null,
         block_users: null,
         chats: null,
+        chat_room_id: null,
     },
 
     //synchronous
@@ -58,6 +59,9 @@ export default createStore({
         },
         logout(state, payload) {
             state.userLogged = payload;
+        },
+        getChatRoomId(state, payload) {
+            state.chat_room_id = payload;
         },
     },
 

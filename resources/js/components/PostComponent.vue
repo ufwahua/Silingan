@@ -96,25 +96,22 @@ div
             <hr />
             <div
                 v-if="approved == true"
-                class="flex justify-content-between p-0 m-0"
+                class="flex justify-content-end p-0 m-0 mr-4"
             >
                 <Button
-                    label="Comment"
+                    v-if="comment_count <= 1"
+                    :label="`${comment_count.toString()} comment`"
                     icon="pi pi-comment"
-                    style="width: 150px"
+                    style="width: 200px"
                     class="p-button-outlined p-button-primary ml-5"
                     @click="commentShow"
                 />
                 <Button
-                    v-if="comment_count === 1"
-                    :label="`${comment_count.toString()} comment`"
-                    class="p-button-primary p-button-text"
-                    @click="commentShow"
-                />
-                <Button
-                    v-if="comment_count > 1"
+                    v-else
                     :label="`${comment_count.toString()} comments`"
-                    class="p-button-primary p-button-text mr-4"
+                    icon="pi pi-comments"
+                    style="width: 200px"
+                    class="p-button-outlined p-button-primary ml-5"
                     @click="commentShow"
                 />
             </div>

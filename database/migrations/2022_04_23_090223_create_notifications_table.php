@@ -15,7 +15,10 @@ class CreateNotificationsTable extends Migration
     {
         Schema::create('notifications', function (Blueprint $table) {
             $table->id();
-            $table->foreignID('user_id');
+            $table->foreignID('from_user_id');
+            $table->foreignID('to_user_id');
+            
+            $table->foreignID('chat_room_id')->nullable();
             $table->text('message');
             $table->boolean('viewed')->default(false);
             $table->timestamps();

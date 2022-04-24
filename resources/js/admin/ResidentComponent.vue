@@ -1515,7 +1515,7 @@
                         </DataTable>
                     </Dialog>
                     <Dialog
-                        v-model:visible="process"
+                        v-model:visible="loading"
                         :style="{ width: '450px' }"
                         :modal="true"
                         :closable="false"
@@ -1634,7 +1634,7 @@ export default {
             filters: {},
             id: null,
             name: null,
-            process: false,
+            loading: false,
             registerUserDialog: false,
             deleteUserDialog: false,
             updateUserDialog: false,
@@ -1723,6 +1723,8 @@ export default {
             this.viewResidentDialog = true;
         },
         toggle(data) {
+            this.$refs.menu.toggle(event);
+            this.populateFields(data);
             if (data.status == "active" && data.verified == 1) {
                 this.menus = [
                     {
@@ -1862,14 +1864,12 @@ export default {
                     },
                 ];
             }
-            this.$refs.menu.toggle(event);
-            this.populateFields(data);
         },
         populateFields(data) {
             this.resetFields();
             this.resetErrors();
             this.name = data.name;
-            this.position = data.position;
+
             this.id = data.id;
             this.form.first_name = data.first_name;
             this.form.last_name = data.last_name;
@@ -1946,13 +1946,13 @@ export default {
         async confirmDeleteItem() {
             try {
                 this.deleteUserDialog = false;
-                this.process = true;
+                this.loading = true;
                 await axios({
                     method: "delete",
                     url: "/api/user/" + this.id,
                 });
                 this.$store.dispatch("getAllUsers");
-                this.process = false;
+                this.loading = false;
                 this.$toast.add({
                     severity: "success",
                     summary: "Successful Request",
@@ -1960,7 +1960,7 @@ export default {
                     life: 3000,
                 });
             } catch (err) {
-                this.process = false;
+                this.loading = false;
                 console.log(err.response);
             }
         },
@@ -1991,7 +1991,7 @@ export default {
             this.form.status = data.status;
         },
         async confirmUpdateUser() {
-            this.process = true;
+            this.loading = true;
             await axios({
                 method: "put",
                 url: "/api/user/" + this.id,
@@ -2022,17 +2022,17 @@ export default {
                     this.$store.dispatch("getAllUsers");
                     this.resetFields();
                     this.updateUserDialog = false;
-                    this.process = false;
+                    this.loading = false;
                 })
                 .catch((err) => {
                     console.log(err.response);
                     this.resetErrors();
                     this.validate(err);
-                    this.process = false;
+                    this.loading = false;
                 });
         },
         async verifyUser() {
-            this.process = true;
+            this.loading = true;
             await axios({
                 method: "post",
                 url: "/api/sms/",
@@ -2069,22 +2069,22 @@ export default {
                             this.$store.dispatch("getAllUsers");
                             this.resetFields();
                             this.viewVerifytDialog = false;
-                            this.process = false;
+                            this.loading = false;
                         })
                         .catch((err) => {
                             console.log(err.response);
                             this.resetErrors();
                             this.validate(err);
-                            this.process = false;
+                            this.loading = false;
                         });
                 })
                 .catch((err) => {
                     console.log(err.response);
-                    this.process = false;
+                    this.loading = false;
                 });
         },
         async changeStatus() {
-            this.process = true;
+            this.loading = true;
 
             await axios({
                 method: "put",
@@ -2117,13 +2117,13 @@ export default {
                     });
                     this.$store.dispatch("getAllUsers");
                     this.resetFields();
-                    this.process = false;
+                    this.loading = false;
                 })
                 .catch((err) => {
                     console.log(err.response);
                     this.resetErrors();
                     this.validate(err);
-                    this.process = false;
+                    this.loading = false;
                 });
         },
         //REGISTER USER
@@ -2134,7 +2134,7 @@ export default {
             this.resetErrors();
         },
         async onRegisterClick() {
-            this.process = true;
+            this.loading = true;
             await axios({
                 method: "post",
                 url: "/api/user",
@@ -2165,13 +2165,13 @@ export default {
                         detail: "Registered User",
                         life: 3000,
                     });
-                    this.process = false;
+                    this.loading = false;
                 })
                 .catch((err) => {
                     console.log(err.response);
                     this.resetErrors();
                     this.validate(err);
-                    this.process = false;
+                    this.loading = false;
                 });
         },
         resetFields() {

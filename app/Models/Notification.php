@@ -11,16 +11,22 @@ class Notification extends Model
 {
     use HasFactory;
     protected $fillable= [
-        'user_id',
+        'from_user_id',
+        'to_user_id',
+        'chat_room_id',
         'message',
         'viewed'
     ];
  /**
      * @return BelongsTo
      */
-    public function user() 
+    public function from_user() 
     {
-        return $this->hasOne(User::class,'id','user_id');
+        return $this->hasOne(User::class,'id','from_user_id');
+    }
+    public function to_user() 
+    {
+        return $this->hasOne(User::class,'id','to_user_id');
     }
 
     public function getCreatedAtAttribute(){
