@@ -15,7 +15,8 @@ class VehicleFactory extends Factory
     public function definition()
     {
         $user = User::all()->random()->id;
-        $type =  $this->faker->randomElement(['Motorcycle','Car']);
+        $type =  $this->faker->randomElement(['motorcycle','car','van','truck','tricycle']);
+        $tag = $this->faker->randomElement(['private','public']);
         $car = $this->faker->randomElement(['Toyota', 'Mitsubishi','Nissan','Ford','Suzuki']);
         $motorcycle = $this->faker->randomElement(['Honda', 'Yamaha','Suzuki','Kawasaki']);
         return [

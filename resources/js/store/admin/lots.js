@@ -21,6 +21,7 @@ const lots = {
                 url: "/api/lot/",
             })
                 .then((res) => {
+                    console.log("block and lots", res.data);
                     commit("getAll", res.data);
                 })
                 .catch((err) => {

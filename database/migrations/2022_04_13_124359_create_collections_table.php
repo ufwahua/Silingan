@@ -16,6 +16,7 @@ class CreateCollectionsTable extends Migration
         Schema::create('collections', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id');
+            $table->foreignId('fund_id');
             $table->foreignId('collection_type_id');
             $table->foreignId('block_lot_id');
             $table->double('amount', 8, 2);

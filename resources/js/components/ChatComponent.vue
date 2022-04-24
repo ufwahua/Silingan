@@ -40,7 +40,7 @@
                         <ChatSideBarComponent
                             v-if="resident.role === 'resident'"
                             @click="openChatRoom(resident)"
-                            v-bind:user="resident"
+                            :user="resident"
                         />
                     </div>
                 </div>
@@ -229,6 +229,7 @@ export default {
         chat_room_id(val, oldVal) {
             if (oldVal) {
                 this.disconnect(oldVal);
+                this.connect();
             } else {
                 this.connect();
             }
@@ -246,6 +247,7 @@ export default {
                     data: {
                         user_id: this.user.id,
                         message: this.message,
+                        read: 0,
                     },
                 })
                     .then((res) => {

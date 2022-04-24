@@ -1,4 +1,3 @@
-
 <template>
     <div class="grid">
         <div
@@ -39,51 +38,7 @@
                 <NewsComponent />
             </Fieldset>
         </div>
-        <Dialog
-            v-model:visible="openPostModal"
-            :style="{ width: '500px' }"
-            header="Create Post"
-            :modal="true"
-            :closeOnEscape="true"
-        >
-            <div class="grid">
-                <div class="col-12">
-                    <Textarea
-                        v-model="content"
-                        :autoResize="true"
-                        class="w-full"
-                        placeholder="What's on you mind?"
-                    >
-                    </Textarea>
-                    <FileUpload
-                        name="demo[]"
-                        accept="image/*"
-                        :multiple="true"
-                        :customUpload="true"
-                        @uploader="onUpload"
-                        :auto="true"
-                        :maxFileSize="2000000"
-                        :showUploadButton="false"
-                        :showCancelButton="false"
-                    >
-                        <template #empty>
-                            <p>Drag and drop files to here to upload.</p>
-                        </template>
-                    </FileUpload>
-                </div>
-            </div>
 
-            <template #footer>
-                <div v-if="content || images">
-                    <Button
-                        label="Post"
-                        icon="pi pi-check"
-                        class="p-button-text p-button-post"
-                        @click="enterPost"
-                    />
-                </div>
-            </template>
-        </Dialog>
         <Dialog
             v-model:visible="loading"
             :style="{ width: '450px' }"

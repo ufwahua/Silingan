@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Post;
 use App\Models\Group;
+use App\Models\Reply;
 use App\Models\Comment;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
@@ -85,9 +86,12 @@ class PostController extends Controller
      * @param Post $post
      * @return JsonResponse
      */
-    public function destroy(Post $post) : JsonResponse
-    {
-        $post->delete();
+    public function destroy(Request $request) : JsonResponse
+    {    
+        $comments = DB::table('comments')->where('post_id', $request->route('post'))->pluck('id')->toArray();
+        Reply::whereIn('comment_id', $comments)->delete();
+        Post::where('id',$request->route('post'))->delete();
+        Comment::where('post_id',$request->route('post'))->delete();
 
         return response()->json(['ok']);
     }

@@ -25,12 +25,17 @@ class LogRequest extends FormRequest
     public function rules()
     {
         return [
-            'user_id' => ['required',Rule::exists('users', 'id')],
+            'user_login_id' => ['required',Rule::exists('users', 'id')],
+            'user_logout_id' => ['sometimes',Rule::exists('users', 'id')],
             'card_id' => ['required',Rule::exists('cards', 'id')],
+            'block_lot_id' => ['required',Rule::exists('lots', 'id')],
             'log_type' => ['required'],
+            'vehicle_type' => ['sometimes'],
+            'vehicle_tag' => ['sometimes'],
+            'purpose_visit' => ['required'],
             'name' => ['sometimes'],  
             'plate_number' => ['sometimes'],
-            'status'=> ['required'],
+
         ];
     }
 }

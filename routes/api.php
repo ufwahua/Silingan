@@ -54,6 +54,8 @@ Route::delete('/candidate/election/{candidate}', [CandidateController::class, 'd
 Route::get('/post/marketplace/verified/{post}', [PostController::class, 'getMarketPlaceVerified']);
 Route::get('/post/marketplace/not-verified/{post}', [PostController::class, 'getMarketPlaceNotVerified']);
 Route::post('/sms',[SmsController::class, 'sendSmsNotification']);
+Route::post('/log/filter',[LogController::class, 'filterFromTo']);
+
 
 
 Route::apiResources([

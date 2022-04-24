@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 
 use App\Models\User;
+use Carbon\Traits\Date;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 
@@ -19,6 +20,7 @@ class UserSeeder extends Seeder
 
     public function run()
     {
+        
         User::factory()
             ->count(100)
             ->create();
@@ -50,9 +52,10 @@ class UserSeeder extends Seeder
             'verified' => 1,
             'has_voted' => 0,
             'contact_num' => rand(639000000001, 639999999999),
-            'security_shift' => "6:00 AM - 6:00 PM",
+            'security_shift' => "Tue Apr 19 2022 12:00:02 GMT+0800" ." - ". "Tue Apr 19 2022 18:00:02 GMT+0800",
             'email' => 'joshua.diamos@gmail.com',
             'password' => Hash::make("12345678"),
+
 
         ]);
 

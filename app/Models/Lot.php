@@ -21,4 +21,7 @@ class Lot extends Model
     public function block(){
         return $this->hasOne(Block::class,'id','block_id');
     }
+    public function user(){
+        return $this->hasMany(User::class,'block_lot_id','id');
+    }
 }

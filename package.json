@@ -28,6 +28,8 @@
         "webpack-cli": "^4.9.1"
     },
     "dependencies": {
+        "jspdf": "^2.5.1",
+        "jspdf-autotable": "^3.5.23",
         "laravel-echo": "^1.11.4",
         "primeflex": "^3.1.2",
         "primeicons": "^5.0.0",

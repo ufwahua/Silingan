@@ -3,8 +3,24 @@
         <Toast />
         <h1>Total Funds</h1>
         <div class="grid">
-            <div class="col-6">
-                <h1 class="ml-4">₱ {{ total_funds }}</h1>
+            <div v-for="fund in funds" class="col-12 lg:col-4">
+                <div class="card mb-0">
+                    <div class="flex justify-content-between mb-3">
+                        <div>
+                            <span
+                                class="block font-medium text-4xl font-bold mb-3"
+                                >₱{{ fund.amount.toLocaleString() }}</span
+                            >
+                            <div class="text-900">{{ fund.fund_type }}</div>
+                        </div>
+                        <div
+                            class="flex align-items-center justify-content-center"
+                            style="width: 2.5rem; height: 2.5rem"
+                        >
+                            <i class="pi pi-dollar text-blue-500 text-xl"></i>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="card">
@@ -20,10 +36,21 @@
                             <span class="p-input-icon-left inline-block">
                                 <i class="pi pi-search" />
                                 <InputText
+                                    class="mr-2"
                                     v-model="filters['global'].value"
                                     placeholder="Keyword Search"
                                 />
                             </span>
+                        </template>
+                        <template #end>
+                            <div class="mr-2">
+                                <Button
+                                    label="Download PDF Report"
+                                    icon="pi pi-file-pdf"
+                                    class="p-button-primary p-mr-2"
+                                    @click="generatePDF()"
+                                />
+                            </div>
                         </template>
                     </Toolbar>
                 </div>
@@ -33,6 +60,7 @@
                 :paginator="true"
                 :rows="15"
                 :filters="filters"
+                filterDisplay="menu"
             >
                 <template #empty> No Cash Flow found </template>
                 <template #loading> Loading data </template>
@@ -41,39 +69,49 @@
                         {{ data.user.first_name }} {{ data.user.last_name }}
                     </template>
                 </Column>
-                <Column header="Source">
+                <Column field="collection_type.name" header="Usage">
                     <template #body="{ data }">
-                        <div v-if="data.collection_type">
-                            {{ data.collection_type.name }}
-                        </div>
-                        <div v-else>
-                            {{ data.notes }}
-                        </div>
+                        {{ data.collection_type.name }}
                     </template>
                 </Column>
-                <Column field="amount" header="Debit">
+                <Column field="amount" header="Charges">
                     <template #body="{ data }">
                         <div
-                            v-if="data.collection_type"
+                            v-if="data.collection_type_id"
                             class="text-green-700"
-                        ></div>
+                        >
+                            ₱{{ data.amount.toLocaleString() }}
+                        </div>
                         <div v-else class="text-pink-700">
                             ₱{{ data.amount.toLocaleString() }}
                         </div>
                     </template>
                 </Column>
-                <Column field="amount" header="Credit">
+                <Column
+                    field="fund.fund_type"
+                    header="Running Balance"
+                    :showFilterMatchModes="false"
+                    filterField="fund.fund_type"
+                >
                     <template #body="{ data }">
-                        <div v-if="data.collection_type" class="text-green-700">
-                            ₱{{ data.amount.toLocaleString() }}
-                        </div>
-                        <div v-else class="text-pink-700"></div>
+                        ₱{{ data.running_balance.toLocaleString() }} -
+                        {{ data.fund.fund_type }}
                     </template>
-                </Column>
-                <Column field="running_balance" header="Running Balance">
-                    <template #body="{ data }">
-                        ₱{{ data.running_balance.toLocaleString() }}
+                    <template #filter="{ filterModel, filterCallback }">
+                        <Dropdown
+                            v-model="this.filters['fund.fund_type'].value"
+                            @change="filterCallback()"
+                            :options="funds"
+                            placeholder="Any"
+                            class="p-column-filter"
+                            :showClear="true"
+                            optionLabel="fund_type"
+                            optionValue="fund_type"
+                        >
+                        </Dropdown>
                     </template>
+                    <template #filterclear="{ filterCallback }"> </template>
+                    <template #filterapply="{ filterCallback }"> </template>
                 </Column>
             </DataTable>
         </div>
@@ -208,12 +246,16 @@
                                         {{ data.user.last_name }}
                                     </template>
                                 </Column>
-                                <Column field="notes" header="Expense"></Column>
+                                <Column
+                                    field="expense_source"
+                                    header="Expense Type"
+                                ></Column>
                                 <Column field="credit" header="Debit">
                                     <template #body="{ data }">
                                         ₱{{ data.amount.toLocaleString() }}
                                     </template>
                                 </Column>
+                                <Column field="notes" header="Note"></Column>
                                 <Column
                                     field="created_at"
                                     header="Date and Time"
@@ -324,6 +366,22 @@
                         revenue_valid.msg.lot
                     }}</small>
                 </div>
+                <div class="col-12 lg:col-6">
+                    <h5>Add Credit to</h5>
+                    <Dropdown
+                        v-model="revenue_form.source"
+                        :options="funds"
+                        optionLabel="fund_type"
+                        optionValue="id"
+                        placeholder="Select Fund Source"
+                        :class="{
+                            'p-invalid': revenue_valid.state.source,
+                        }"
+                    />
+                    <small v-if="revenue_valid.state.source" class="p-error">{{
+                        revenue_valid.msg.source
+                    }}</small>
+                </div>
                 <div class="col-12">
                     <h5>Notes</h5>
                     <Textarea type="text" v-model="revenue_form.notes" />
@@ -348,13 +406,28 @@
         >
             <div class="grid p-fluid">
                 <div class="col-12 lg:col-6">
+                    <h5>Get Funds From</h5>
+                    <Dropdown
+                        v-model="expense_form.source"
+                        :options="funds"
+                        optionLabel="fund_type"
+                        optionValue="id"
+                        placeholder="Select Fund Source"
+                        :class="{
+                            'p-invalid': expense_valid.state.source,
+                        }"
+                    />
+                    <small v-if="expense_valid.state.source" class="p-error">{{
+                        expense_valid.msg.source
+                    }}</small>
+                </div>
+                <div class="col-12 lg:col-6">
                     <h5>Amount</h5>
                     <InputNumber
                         v-model="expense_form.amount"
                         mode="currency"
                         currency="PHP"
                         :useGrouping="false"
-                        :placeholder="amount_placeholder"
                         :class="{ 'p-invalid': expense_valid.state.amount }"
                     />
                     <small v-if="expense_valid.state.amount" class="p-error">{{
@@ -364,6 +437,17 @@
                 <div class="col-12 lg:col-6">
                     <h5>Official Receipt Number</h5>
                     <InputText type="text" v-model="expense_form.ornumber" />
+                </div>
+                <div class="col-12 lg:col-6">
+                    <h5>Expense Type</h5>
+                    <InputText
+                        type="text"
+                        v-model="expense_form.type"
+                        :class="{ 'p-invalid': expense_valid.state.type }"
+                    />
+                    <small v-if="expense_valid.state.type" class="p-error">{{
+                        expense_valid.msg.type
+                    }}</small>
                 </div>
                 <div class="col-12">
                     <h5>Notes</h5>
@@ -384,6 +468,52 @@
                     icon="pi pi-check"
                     @click="confirmAddExpense()"
                     autofocus
+                />
+            </template>
+        </Dialog>
+        <!-- 
+      Generate Report Modal
+     -->
+        <Dialog
+            header="Generate Report"
+            v-model:visible="generateReportModal"
+            :style="{ width: '40vw' }"
+            :modal="true"
+        >
+            <div class="grid p-fluid">
+                <div class="col-12 lg:col-6">
+                    <h5>Start</h5>
+                    <Calendar
+                        v-model="report.start"
+                        autocomplete="off"
+                        :class="{ 'p-invalid': report_valid.state.start }"
+                        :maxDate="new Date()"
+                        :manualInput="false"
+                    ></Calendar>
+                    <small v-if="report_valid.state.start" class="p-error">{{
+                        report_valid.msg.start
+                    }}</small>
+                </div>
+                <div class="col-12 lg:col-6">
+                    <h5>End</h5>
+                    <Calendar
+                        v-model="report.end"
+                        autocomplete="off"
+                        :class="{ 'p-invalid': report_valid.state.end }"
+                        :maxDate="new Date()"
+                        :manualInput="false"
+                    />
+                    <small v-if="report_valid.state.end" class="p-error">{{
+                        report_valid.msg.end
+                    }}</small>
+                </div>
+            </div>
+            <template #footer>
+                <Button
+                    label="Generate File"
+                    icon="pi pi-download"
+                    autofocus
+                    @click="verifyDate()"
                 />
             </template>
         </Dialog>
@@ -412,14 +542,17 @@
 <script>
 import { computed } from "vue";
 import { useStore } from "vuex";
-import { FilterMatchMode } from "primevue/api";
+import { FilterMatchMode, FilterOperator } from "primevue/api";
 import axios from "axios";
+import { jsPDF } from "jspdf";
+import { applyPlugin } from "jspdf-autotable";
+applyPlugin(jsPDF);
 export default {
     setup() {
         const store = useStore();
         return {
             userLogged: computed(() => store.state.userLogged),
-            total_funds: computed(() => store.state.fund.Fund[0].amount),
+            funds: computed(() => store.state.fund.Fund),
             dropdown_collection_type: computed(() => {
                 let temp = [];
                 store.state.collectionType.CollectionType.forEach((elem) => {
@@ -448,6 +581,9 @@ export default {
             cashflow: computed(() => {
                 let revenue = store.state.collection.Collection;
                 let expense = store.state.expense.Expense;
+                expense.forEach((elem) => {
+                    elem["collection_type"] = { name: elem.expense_source };
+                });
                 let cashflow = revenue.concat(expense);
                 cashflow.sort((a, b) => {
                     return new Date(b.created_at) - new Date(a.created_at);
@@ -463,6 +599,7 @@ export default {
             //Modal Control
             addRevenueModal: false,
             addExpenseModal: false,
+            generateReportModal: false,
             //Revenue
             lot_dropdown: null,
             lot_bool: true,
@@ -472,12 +609,15 @@ export default {
                 block: null,
                 lot: null,
                 notes: null,
+                source: null,
             },
             //Expense
             expense_form: {
                 amount: null,
                 ornumber: null,
                 notes: null,
+                source: null,
+                type: null,
             },
             //Expense Validation
             expense_valid: {
@@ -485,11 +625,15 @@ export default {
                     amount: false,
                     ornumber: false,
                     notes: false,
+                    source: false,
+                    type: false,
                 },
                 msg: {
                     amount: null,
                     ornumber: null,
                     notes: null,
+                    source: null,
+                    type: null,
                 },
             },
             //Revenue Validation
@@ -509,12 +653,232 @@ export default {
                     notes: null,
                 },
             },
+            // Report Form
+            report: {
+                start: null,
+                end: null,
+            },
+            //Report Validation
+            report_valid: {
+                state: {
+                    start: false,
+                    end: false,
+                },
+                msg: {
+                    start: null,
+                    end: null,
+                },
+            },
             filters: {},
             revenue_filters: {},
             expense_filters: {},
         };
     },
     methods: {
+        resetGeneratePDF() {
+            this.report = {
+                start: null,
+                end: null,
+            };
+        },
+        resetErrorGeneratePDF() {
+            this.report_valid = {
+                state: {
+                    start: false,
+                    end: false,
+                },
+                msg: {
+                    start: null,
+                    end: null,
+                },
+            };
+        },
+        generatePDF() {
+            this.generateReportModal = true;
+            this.resetErrorGeneratePDF();
+            this.resetGeneratePDF();
+        },
+        verifyDate() {
+            this.resetErrorGeneratePDF();
+            let start = this.report.start;
+            let end = this.report.end;
+            if (start != null && end != null) {
+                if (start > end) {
+                    this.report_valid.state.start = true;
+                    this.report_valid.msg.start =
+                        "Start Date is bigger than End Date";
+                } else {
+                    let month = [
+                        "January",
+                        "February",
+                        "March",
+                        "April",
+                        "May",
+                        "June",
+                        "July",
+                        "August",
+                        "September",
+                        "October",
+                        "November",
+                        "December",
+                    ];
+                    const doc = new jsPDF();
+                    let finalY = 1;
+                    doc.text(
+                        "Financial Statement Report " +
+                            month[this.report.start.getMonth()] +
+                            "/" +
+                            this.report.start.getDate() +
+                            "/" +
+                            this.report.start.getFullYear() +
+                            " to " +
+                            month[this.report.end.getMonth()] +
+                            "/" +
+                            this.report.end.getDate() +
+                            "/" +
+                            this.report.end.getFullYear(),
+                        15,
+                        finalY + 15
+                    );
+                    doc.autoTable({
+                        startY: finalY + 20,
+                        theme: "plain",
+                        head: [["Revenue", "", ""]],
+                        body: this.revenueReport,
+                        foot: [
+                            [
+                                { content: "", colSpan: 1, rowSpan: 1 },
+                                {
+                                    content: "Total",
+                                    colSpan: 1,
+                                    rowSpan: 1,
+                                    styles: { halign: "right" },
+                                },
+                                {
+                                    content:
+                                        this.revenueTotal.toLocaleString() +
+                                        " PHP",
+                                    colSpan: 1,
+                                    rowSpan: 1,
+                                },
+                            ],
+                        ],
+                    });
+                    doc.addPage();
+                    doc.text(
+                        "Financial Statement Report " +
+                            month[this.report.start.getMonth()] +
+                            "/" +
+                            this.report.start.getDate() +
+                            "/" +
+                            this.report.start.getFullYear() +
+                            " to " +
+                            month[this.report.end.getMonth()] +
+                            "/" +
+                            this.report.end.getDate() +
+                            "/" +
+                            this.report.end.getFullYear(),
+                        15,
+                        finalY + 15
+                    );
+                    doc.autoTable({
+                        startY: finalY + 20,
+                        theme: "plain",
+                        head: [["Expenses", "", ""]],
+                        body: this.expenseReport,
+                        foot: [
+                            [
+                                { content: "", colSpan: 1, rowSpan: 1 },
+                                {
+                                    content: "Total",
+                                    colSpan: 1,
+                                    rowSpan: 1,
+                                    styles: { halign: "right" },
+                                },
+                                {
+                                    content:
+                                        this.expenseTotal.toLocaleString() +
+                                        " PHP",
+                                    colSpan: 1,
+                                    rowSpan: 1,
+                                },
+                            ],
+                        ],
+                    });
+                    doc.addPage();
+                    doc.text(
+                        "Financial Statement Report " +
+                            month[this.report.start.getMonth()] +
+                            "/" +
+                            this.report.start.getDate() +
+                            "/" +
+                            this.report.start.getFullYear() +
+                            " to " +
+                            month[this.report.end.getMonth()] +
+                            "/" +
+                            this.report.end.getDate() +
+                            "/" +
+                            this.report.end.getFullYear(),
+                        15,
+                        finalY + 15
+                    );
+                    doc.autoTable({
+                        startY: finalY + 20,
+                        theme: "plain",
+                        head: [["Net Income", "", ""]],
+                        body: [
+                            ["", "Revenue", this.revenueTotal + " PHP"],
+                            ["", "Expense", this.expenseTotal + " PHP"],
+                        ],
+                        foot: [
+                            [
+                                { content: "", colSpan: 1, rowSpan: 1 },
+                                {
+                                    content: "Total",
+                                    colSpan: 1,
+                                    rowSpan: 1,
+                                    styles: { halign: "right" },
+                                },
+                                {
+                                    content:
+                                        (
+                                            this.revenueTotal -
+                                            this.expenseTotal
+                                        ).toLocaleString() + " PHP",
+                                    colSpan: 1,
+                                    rowSpan: 1,
+                                },
+                            ],
+                        ],
+                    });
+                    doc.save(
+                        this.report.start.getMonth() +
+                            1 +
+                            "_" +
+                            this.report.start.getDate() +
+                            "_" +
+                            this.report.start.getFullYear() +
+                            "to" +
+                            this.report.end.getMonth() +
+                            1 +
+                            "_" +
+                            this.report.end.getDate() +
+                            "_" +
+                            this.report.end.getFullYear() +
+                            ".pdf"
+                    );
+                }
+            } else {
+                if (start == null) {
+                    this.report_valid.state.start = true;
+                    this.report_valid.msg.start = "Select Start Date";
+                }
+                if (end == null) {
+                    this.report_valid.state.end = true;
+                    this.report_valid.msg.end = "Select End Date";
+                }
+            }
+        },
         setLots() {
             this.lot_bool = false;
             let temp = null;
@@ -550,6 +914,8 @@ export default {
                 amount: null,
                 ornumber: null,
                 notes: null,
+                source: null,
+                type: null,
             };
         },
         addRevenue() {
@@ -561,6 +927,7 @@ export default {
                 block: null,
                 lot: null,
                 notes: null,
+                source: null,
             };
             this.amount_placeholder = null;
             this.lot_bool = true;
@@ -568,6 +935,10 @@ export default {
         initFilters() {
             this.filters = {
                 global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+                "fund.fund_type": {
+                    value: null,
+                    matchMode: FilterMatchMode.EQUALS,
+                },
             };
             this.revenue_filters = {
                 global: { value: null, matchMode: FilterMatchMode.CONTAINS },
@@ -580,14 +951,35 @@ export default {
             this.resetExpenseFormError();
             this.process = !this.process;
             try {
-                if (this.total_funds - this.expense_form.amount < 0) {
-                    this.process = false;
+                if (this.expense_form.source != null) {
+                    if (
+                        this.funds[this.expense_form.source - 1].amount -
+                            this.expense_form.amount <
+                        0
+                    ) {
+                        this.process = false;
+                        throw {
+                            response: {
+                                data: {
+                                    errors: { amount: ["Not enough funds."] },
+                                },
+                            },
+                        };
+                    }
+                } else {
                     throw {
                         response: {
-                            data: { errors: { amount: ["Not enough funds."] } },
+                            data: {
+                                errors: {
+                                    source: [
+                                        "Please select source of funds first.",
+                                    ],
+                                },
+                            },
                         },
                     };
                 }
+
                 let { data } = await axios({
                     url: "/api/expense",
                     method: "post",
@@ -596,7 +988,12 @@ export default {
                         amount: this.expense_form.amount,
                         notes: this.expense_form.notes,
                         running_balance:
-                            +this.total_funds - +this.expense_form.amount,
+                            this.expense_form.source == null
+                                ? null
+                                : +this.funds[this.expense_form.source - 1]
+                                      .amount - +this.expense_form.amount,
+                        fund_id: this.expense_form.source,
+                        expense_source: this.expense_form.type,
                     },
                 });
                 this.process = !this.process;
@@ -604,11 +1001,15 @@ export default {
                 this.$store.dispatch("expense/getAll");
                 try {
                     await axios({
-                        url: "/api/fund/1",
+                        url: "/api/fund/" + this.expense_form.source,
                         method: "put",
                         data: {
                             amount:
-                                +this.total_funds - +this.expense_form.amount,
+                                +this.funds[this.expense_form.source - 1]
+                                    .amount - +this.expense_form.amount,
+                            fund_type:
+                                this.funds[this.expense_form.source - 1]
+                                    .fund_type,
                         },
                     });
                     this.$store.dispatch("fund/getAll");
@@ -631,6 +1032,14 @@ export default {
                 this.expense_valid.state.notes = true;
                 this.expense_valid.msg.notes = e.errors.notes[0];
             }
+            if (e.errors.source) {
+                this.expense_valid.state.source = true;
+                this.expense_valid.msg.source = e.errors.source[0];
+            }
+            if (e.errors.expense_source) {
+                this.expense_valid.state.type = true;
+                this.expense_valid.msg.type = e.errors.expense_source[0];
+            }
         },
         resetExpenseFormError() {
             this.expense_valid = {
@@ -638,11 +1047,15 @@ export default {
                     amount: false,
                     ornumber: false,
                     notes: false,
+                    source: false,
+                    type: false,
                 },
                 msg: {
                     amount: null,
                     ornumber: null,
                     notes: null,
+                    source: null,
+                    type: null,
                 },
             };
         },
@@ -661,7 +1074,11 @@ export default {
                         amount: this.revenue_form.amount,
                         notes: this.revenue_form.notes,
                         running_balance:
-                            +this.total_funds + +this.revenue_form.amount,
+                            this.revenue_form.source == null
+                                ? null
+                                : +this.funds[this.revenue_form.source - 1]
+                                      .amount + +this.revenue_form.amount,
+                        fund_id: this.revenue_form.source,
                     },
                 });
                 this.process = !this.process;
@@ -669,11 +1086,15 @@ export default {
                 this.$store.dispatch("collection/getAll");
                 try {
                     await axios({
-                        url: "/api/fund/1",
+                        url: "/api/fund/" + this.revenue_form.source,
                         method: "put",
                         data: {
                             amount:
-                                +this.total_funds + +this.revenue_form.amount,
+                                +this.funds[this.revenue_form.source - 1]
+                                    .amount + +this.revenue_form.amount,
+                            fund_type:
+                                this.funds[this.revenue_form.source - 1]
+                                    .fund_type,
                         },
                     });
                     this.$store.dispatch("fund/getAll");
@@ -683,6 +1104,7 @@ export default {
                 }
             } catch (error) {
                 this.process = false;
+                console.error(error);
                 this.revenueFormError(error.response.data);
                 console.log(error.response.data);
             }
@@ -696,6 +1118,11 @@ export default {
                 this.revenue_valid.state.collection_type = true;
                 this.revenue_valid.msg.collection_type =
                     "The collection type field is required.";
+            }
+            if (e.errors.fund_id) {
+                this.revenue_valid.state.source = true;
+                this.revenue_valid.msg.source =
+                    "The source of fund field is required.";
             }
             if (this.revenue_form.block == null) {
                 this.revenue_valid.state.block = true;
@@ -714,6 +1141,7 @@ export default {
                     block: false,
                     lot: false,
                     notes: false,
+                    source: false,
                 },
                 msg: {
                     amount: null,
@@ -721,8 +1149,173 @@ export default {
                     block: null,
                     lot: null,
                     notes: null,
+                    source: null,
                 },
             };
+        },
+    },
+    computed: {
+        revenueReport() {
+            let start = new Date(this.report.start);
+            let end = new Date(this.report.end);
+            let temp = [];
+            let list = this.cashflow;
+            let month = [
+                "January",
+                "February",
+                "March",
+                "April",
+                "May",
+                "June",
+                "July",
+                "August",
+                "September",
+                "October",
+                "November",
+                "December",
+            ];
+            list.sort((a, b) => {
+                return new Date(a.created_at) - new Date(b.created_at);
+            });
+            list.forEach((elem) => {
+                let item_date = new Date(elem.created_at);
+                if (elem.collection_type_id && item_date >= start) {
+                    temp.push([
+                        {
+                            content:
+                                month[new Date(elem.created_at).getMonth()] +
+                                "/" +
+                                new Date(elem.created_at).getDate() +
+                                "/" +
+                                new Date(elem.created_at).getFullYear(),
+                            colSpan: 1,
+                            rowSpan: 1,
+                        },
+                        {
+                            content: elem.collection_type.name,
+                            colSpan: 1,
+                            rowSpan: 1,
+                        },
+                        {
+                            content: elem.amount.toLocaleString() + " PHP",
+                            colSpan: 1,
+                            rowSpan: 1,
+                        },
+                    ]);
+                }
+            });
+            return temp;
+        },
+        revenueTotal() {
+            let start = new Date(this.report.start);
+            let end = new Date(this.report.end);
+            let total = 0;
+            let list = this.cashflow;
+            let month = [
+                "January",
+                "February",
+                "March",
+                "April",
+                "May",
+                "June",
+                "July",
+                "August",
+                "September",
+                "October",
+                "November",
+                "December",
+            ];
+            list.sort((a, b) => {
+                return new Date(a.created_at) - new Date(b.created_at);
+            });
+            list.forEach((elem) => {
+                let item_date = new Date(elem.created_at);
+                if (elem.collection_type_id && item_date >= start) {
+                    total += elem.amount;
+                }
+            });
+            return total;
+        },
+        expenseReport() {
+            let start = new Date(this.report.start);
+            let end = new Date(this.report.end);
+            let temp = [];
+            let list = this.cashflow;
+            let month = [
+                "January",
+                "February",
+                "March",
+                "April",
+                "May",
+                "June",
+                "July",
+                "August",
+                "September",
+                "October",
+                "November",
+                "December",
+            ];
+            list.sort((a, b) => {
+                return new Date(a.created_at) - new Date(b.created_at);
+            });
+            list.forEach((elem) => {
+                let item_date = new Date(elem.created_at);
+                if (!elem.collection_type_id && item_date >= start) {
+                    temp.push([
+                        {
+                            content:
+                                month[new Date(elem.created_at).getMonth()] +
+                                "/" +
+                                new Date(elem.created_at).getDate() +
+                                "/" +
+                                new Date(elem.created_at).getFullYear(),
+                            colSpan: 1,
+                            rowSpan: 1,
+                        },
+                        {
+                            content: elem.collection_type.name,
+                            colSpan: 1,
+                            rowSpan: 1,
+                        },
+                        {
+                            content: elem.amount.toLocaleString() + " PHP",
+                            colSpan: 1,
+                            rowSpan: 1,
+                        },
+                    ]);
+                }
+            });
+            return temp;
+        },
+        expenseTotal() {
+            let start = new Date(this.report.start);
+            let end = new Date(this.report.end);
+            let total = 0;
+            let list = this.cashflow;
+            let month = [
+                "January",
+                "February",
+                "March",
+                "April",
+                "May",
+                "June",
+                "July",
+                "August",
+                "September",
+                "October",
+                "November",
+                "December",
+            ];
+            list.sort((a, b) => {
+                return new Date(a.created_at) - new Date(b.created_at);
+            });
+            list.forEach((elem) => {
+                let item_date = new Date(elem.created_at);
+                if (!elem.collection_type_id && item_date >= start) {
+                    total += elem.amount;
+                }
+            });
+            return total;
         },
     },
     mounted() {},

@@ -19,7 +19,7 @@ class LotController extends Controller
     public function index(Request $request) : JsonResponse
     {
         return response()->json(
-            Lot::with(['block'])->orderBy('number','asc')->get()
+            Lot::with(['block','user'])->orderBy('number','asc')->get()
         );
     }
 

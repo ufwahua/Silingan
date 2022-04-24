@@ -15,7 +15,16 @@ class FundSeeder extends Seeder
     public function run()
     {
         Fund::create([
-            'amount' => 0
+            'amount' => 0,
+            'fund_type' => 'Association Funds'
+        ]);
+        Fund::create([
+            'amount' => 0,
+            'fund_type' => 'Savings'
+        ]);
+        Fund::create([
+            'amount' => 0,
+            'fund_type' => 'Maintenance Funds'
         ]);
     }
 }

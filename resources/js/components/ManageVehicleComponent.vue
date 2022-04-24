@@ -25,14 +25,14 @@
                             <div v-if="userVehicle.image">
                                 <Avatar
                                     :image="`http://127.0.0.1:8000${userVehicle.image}`"
-                                    style="width: 300px; height: 300px"
+                                    style="width: 150px; height: 150px"
                                     shape="circle"
                                 />
                             </div>
                             <div v-else>
                                 <Avatar
                                     image="http://127.0.0.1:8000/storage/images/default-prof-pic.png"
-                                    style="width: 300px; height: 300px"
+                                    style="width: 150px; height: 150px"
                                     shape="circle"
                                 />
                             </div>
@@ -40,10 +40,14 @@
                     </template>
                     <template #title>
                         <div class="flex justify-content-center">
-                            <span class="text-center m-4">
+                            <span class="text-center m-2">
                                 <p>
                                     <b>Type: </b>
                                     {{ userVehicle.type }}
+                                </p>
+                                <p>
+                                    <b>Tag: </b>
+                                    {{ userVehicle.tag }}
                                 </p>
 
                                 <p>
@@ -147,7 +151,7 @@
                         v-tooltip="'Add Vehicle Image'"
                     />
                 </div>
-                <div class="col-12">
+                <div class="col-6">
                     <div class="p-fluid mb-2">
                         <h6>Type</h6>
                         <Dropdown
@@ -162,6 +166,24 @@
                         />
                         <small v-if="error_selected_type" class="p-error">{{
                             error_selected_type
+                        }}</small>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="p-fluid mb-2">
+                        <h6>Tag</h6>
+                        <Dropdown
+                            :class="{
+                                'p-invalid': error_selected_tag,
+                            }"
+                            v-model="selected_tag"
+                            :options="tag"
+                            optionLabel="tag"
+                            optionValue="tag"
+                            placeholder="Select tag"
+                        />
+                        <small v-if="error_selected_tag" class="p-error">{{
+                            error_selected_tag
                         }}</small>
                     </div>
                 </div>
@@ -282,7 +304,7 @@
 
             <div>
                 <div class="grid">
-                    <div class="col-12">
+                    <div class="col-6">
                         <div class="p-fluid mb-2">
                             <h6>Type</h6>
                             <Dropdown
@@ -297,6 +319,24 @@
                             />
                             <small v-if="error_selected_type" class="p-error">{{
                                 error_selected_type
+                            }}</small>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="p-fluid mb-2">
+                            <h6>Tag</h6>
+                            <Dropdown
+                                :class="{
+                                    'p-invalid': error_selected_tag,
+                                }"
+                                v-model="selected_tag"
+                                :options="tag"
+                                optionLabel="tag"
+                                optionValue="tag"
+                                placeholder="Select tag"
+                            />
+                            <small v-if="error_selected_tag" class="p-error">{{
+                                error_selected_tag
                             }}</small>
                         </div>
                     </div>
@@ -410,6 +450,10 @@
                                 <b>Type: </b>
                                 {{ selected_type }}
                             </p>
+                            <p>
+                                <b>Tag: </b>
+                                {{ selected_tag }}
+                            </p>
 
                             <p>
                                 <b>Make: </b>
@@ -470,13 +514,22 @@ export default {
             //vehicle dialog
             image: null,
             selected_type: null,
+            selected_tag: null,
             make: null,
             model: null,
             color: null,
             plate_number: null,
-            type: [{ type: "Car" }, { type: "Motorcycle" }],
+            type: [
+                { type: "motorcycle" },
+                { type: "car" },
+                { type: "van" },
+                { type: "truck" },
+                { type: "tricycle" },
+            ],
+            tag: [{ tag: "private" }, { tag: "public" }],
 
             error_selected_type: null,
+            error_selected_tag: null,
             error_make: null,
             error_model: null,
             error_color: null,
@@ -489,6 +542,7 @@ export default {
             this.id = data.id;
             this.image = data.image;
             this.selected_type = data.type;
+            this.selected_tag = data.tag;
             this.make = data.make;
             this.model = data.model;
             this.color = data.color;
@@ -521,6 +575,7 @@ export default {
                     image: this.image,
                     user_id: this.$store.state.userLogged.id,
                     type: this.selected_type,
+                    tag: this.selected_tag,
                     make: this.make,
                     model: this.model,
                     color: this.color,
@@ -584,6 +639,7 @@ export default {
                     image: this.image,
                     user_id: this.$store.state.userLogged.id,
                     type: this.selected_type,
+                    tag: this.selected_tag,
                     make: this.make,
                     model: this.model,
                     color: this.color,
@@ -613,6 +669,8 @@ export default {
         validate(error) {
             if (error.response.data.errors.type)
                 this.error_selected_type = error.response.data.errors.type[0];
+            if (error.response.data.errors.tag)
+                this.error_selected_tag = error.response.data.errors.tag[0];
             if (error.response.data.errors.make)
                 this.error_make = error.response.data.errors.make[0];
             if (error.response.data.errors.model)
@@ -634,6 +692,7 @@ export default {
         },
         resetErrors() {
             this.error_selected_type = null;
+            this.error_selected_tag = null;
             this.error_make = null;
             this.error_model = null;
             this.error_color = null;

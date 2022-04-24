@@ -28,6 +28,8 @@ class ChatRequest extends FormRequest
             'chat_room_id' => ['required',Rule::exists('chat_rooms', 'id')],
             'user_id' => ['required',Rule::exists('users', 'id')],
             'message' => ['required'],  
+            'read' => ['required'],  
+            
         ];
     }
 }

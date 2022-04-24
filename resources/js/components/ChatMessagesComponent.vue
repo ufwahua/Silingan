@@ -20,7 +20,7 @@
                 <div
                     class="h-auto card pb-0 pt-1 px-2 mb-0 mt-1"
                     style="background-color: var(--blue-50); max-width: 200px"
-                    v-tooltip="`${chat.created_at}`"
+                    v-tooltip="`${dateFormat(chat.updated_at)}`"
                 >
                     <p class="p-1">{{ chat.message }}</p>
                 </div>
@@ -34,7 +34,7 @@
                 <div
                     class="h-auto card pb-0 pt-1 px-2 mb-0 mt-1"
                     style="background-color: var(--blue-100); max-width: 200px"
-                    v-tooltip="`${chat.created_at}`"
+                    v-tooltip="`${dateFormat(chat.updated_at)}`"
                 >
                     <p class="p-1">{{ chat.message }}</p>
                 </div>
@@ -127,6 +127,25 @@ export default {
         };
     },
     methods: {
+        dateFormat(date) {
+            var options = {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+                hour12: true,
+                hour: "numeric",
+                minute: "numeric",
+            };
+
+            var chat_date = new Date(date);
+            var date_now = new Date();
+            chat_date.setDate(chat_date.getDate() + 1);
+            if (chat_date < date_now) {
+                return new Date(date).toLocaleDateString("en-US", options);
+            } else {
+                return this.chat.created_at;
+            }
+        },
         toggle(event) {
             this.$refs.menu.toggle(event);
         },
@@ -135,20 +154,19 @@ export default {
             await axios({
                 method: "delete",
                 url: "/api/chat/" + this.chat.id,
-                data:{
+                data: {
                     chat_room_id: this.chat.chat_room_id,
-                }
+                },
             })
                 .then((res) => {
                     this.removeModal = false;
-                    console.log('delete chat',res.data[0].chats);
+                    console.log("delete chat", res.data[0].chats);
                     this.$store.commit("getChats", res.data[0].chats);
                     this.loading = false;
                 })
                 .catch((error) => {
                     console.log(error.response);
                     this.loading = false;
-
                 });
         },
     },

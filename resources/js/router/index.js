@@ -4,7 +4,7 @@ import ForgotPassword from "../login/ForgotPasswordComponent.vue";
 import ResetPasswordComponent from "../login/ResetPasswordComponent.vue";
 //admin
 import AdminHomeComponent from "../admin/AdminHomeComponent.vue";
-import Block_Lot from "../admin/Block_LotComponent.vue";
+import BlockLot from "../admin/BlockLotComponent.vue";
 import RegisteredUsersComponent from "../admin/RegisterUsersComponent.vue";
 import Announcement from "../admin/Announcement.vue";
 import ResidentComponent from "../admin/ResidentComponent.vue";
@@ -21,10 +21,10 @@ import CollectionTypeComponent from "../admin/CollectionTypeComponent.vue";
 
 //resident
 import ResidentHomeComponent from "../resident/ResidentHomeComponent.vue";
+import BillingComponent from "../resident/BillingComponent.vue";
 
 //security officer
 import SecurityHome from "../security_officer/SecurityHomeComponent.vue";
-import LogComponent from "../security_officer/LogComponent.vue";
 
 //all
 import TimelineComponent from "../components/TimelineComponent.vue";
@@ -35,6 +35,8 @@ import NotFound from "../components/NotFoundComponent.vue";
 import AppProfile from "../components/AppProfile.vue";
 import SettingComponent from "../components/SettingComponent.vue";
 import ActivateAccountComponent from "../components/ActivateAccountComponent.vue";
+import LogComponent from "../components/LogComponent.vue";
+
 import { createRouter, createWebHistory } from "vue-router";
 import store from "../store/store";
 
@@ -136,7 +138,8 @@ const router = createRouter({
             meta: {
                 role: "admin",
             },
-            children: [{
+            children: [
+                {
                     path: "timeline",
                     beforeEnter: checkRole,
                     meta: {
@@ -166,7 +169,7 @@ const router = createRouter({
                     },
                     components: {
                         default: NotFound,
-                        contents: Block_Lot,
+                        contents: BlockLot,
                     },
                 },
                 {
@@ -360,7 +363,18 @@ const router = createRouter({
 
                         contents: CollectionTypeComponent,
                     },
-                }
+                },
+                {
+                    path: "log",
+                    meta: {
+                        role: "admin",
+                    },
+                    beforeEnter: checkRole,
+                    components: {
+                        default: NotFound,
+                        contents: LogComponent,
+                    },
+                },
             ],
         },
         {
@@ -371,7 +385,8 @@ const router = createRouter({
             },
             beforeEnter: checkRole,
             name: "userhome",
-            children: [{
+            children: [
+                {
                     path: "/resident/timeline",
                     meta: {
                         role: "resident",
@@ -442,6 +457,17 @@ const router = createRouter({
                         contents: ActivateAccountComponent,
                     },
                 },
+                {
+                    path: "view-billing",
+                    meta: {
+                        role: "resident",
+                    },
+
+                    components: {
+                        default: NotFound,
+                        contents: BillingComponent,
+                    },
+                },
             ],
         },
         {
@@ -453,7 +479,8 @@ const router = createRouter({
             beforeEnter: checkRole,
             name: "securityhome",
 
-            children: [{
+            children: [
+                {
                     path: "/security-officer/timeline",
 
                     meta: {

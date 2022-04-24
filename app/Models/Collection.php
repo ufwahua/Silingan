@@ -11,6 +11,7 @@ class Collection extends Model
 
     protected $fillable = [
        'collection_type_id',
+       'fund_id',
        'user_id',
        'block_lot_id',
        'amount',
@@ -26,5 +27,8 @@ class Collection extends Model
     }
     public function lot(){
         return $this->hasMany(Lot::class,'id','block_lot_id');
+    }
+    public function fund(){
+        return $this->hasOne(Fund::class,'id','fund_id');
     }
 }
