@@ -14,6 +14,7 @@ class Notification extends Model
         'from_user_id',
         'to_user_id',
         'chat_room_id',
+        'post_id',
         'message',
         'viewed'
     ];

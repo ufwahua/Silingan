@@ -73,13 +73,21 @@
                                     :key="notif.id"
                                 >
                                     <div
-                                        v-if="notif.chat_room_id"
+                                        @click="toggleNotification"
                                         class="col-12 m-1"
                                     >
                                         <Button
                                             class="p-button-text p-button-secondary w-full"
                                             @click="
-                                                openChatRoom(notif.from_user)
+                                                notif.chat_room_id
+                                                    ? openChatRoom(
+                                                          notif.from_user
+                                                      )
+                                                    : notif.post_id
+                                                    ? getSpecificPost(
+                                                          notif.post_id
+                                                      )
+                                                    : getAnnouncementPage()
                                             "
                                         >
                                             <div class="p-inputgroup">
@@ -186,13 +194,21 @@
                                     :key="notif.id"
                                 >
                                     <div
-                                        v-if="notif.chat_room_id"
+                                        @click="toggleNotification"
                                         class="col-12 m-1"
                                     >
                                         <Button
                                             class="p-button-text p-button-secondary w-full"
                                             @click="
-                                                openChatRoom(notif.from_user)
+                                                notif.chat_room_id
+                                                    ? openChatRoom(
+                                                          notif.from_user
+                                                      )
+                                                    : notif.post_id
+                                                    ? getSpecificPost(
+                                                          notif.post_id
+                                                      )
+                                                    : getAnnouncementPage()
                                             "
                                         >
                                             <div class="p-inputgroup">
@@ -330,6 +346,7 @@
                         rows="1"
                         class="w-full"
                         @keypress.enter="sendMessage"
+                        autofocus
                     >
                     </Textarea>
                 </div>
@@ -526,6 +543,25 @@ export default {
         },
         onTopbarMenuToggle(event) {
             this.$emit("topbar-menu-toggle", event);
+        },
+        getAnnouncementPage() {
+            if (this.userLogged.role == "security officer") {
+                return this.$router.push("/security-officer/view-announcement");
+            } else {
+                return this.$router.push(
+                    `/${this.userLogged.role}` + "/view-announcement"
+                );
+            }
+        },
+        getSpecificPost(post_id) {
+            this.$store.dispatch("posts/getSpecificPost", post_id);
+            if (this.userLogged.role == "security officer") {
+                return this.$router.push("/security-officer/post/" + post_id);
+            } else {
+                return this.$router.push(
+                    `/${this.userLogged.role}` + "/post/" + post_id
+                );
+            }
         },
     },
     mounted() {

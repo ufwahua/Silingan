@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Chat;
+use App\Models\User;
 use App\Models\ChatRoom;
 use App\Models\Notification;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -33,16 +35,36 @@ class NotificationController extends Controller
         return response()->json($notification);
     }
 
-    /**
-     * @param NotificationRequest $request
-     * @return JsonResponse
-     */
-    public function store(NotificationRequest $request) : JsonResponse
+   
+    public function notificationChat(NotificationRequest $request) : JsonResponse
     {
         $notification = Notification::query()->create($request->validated());
 
         return response()->json($notification);
     }
+    public function notificationComment(NotificationRequest $request) : JsonResponse
+    {
+        $notification = Notification::query()->create($request->validated());
+
+        return response()->json($notification);
+    }
+    public function notificationAnnouncement(Request $request) : JsonResponse
+    {
+        $request->validate([
+            'from_user_id'   => ['required', Rule::exists('users', 'id')], 
+            'message'   => ['required', 'max:255'],    
+        ]);
+        $users = User::whereNotIn('id',[Auth::id()])->get();
+        foreach($users as $user){
+            $notification = Notification::query()->create([
+                'from_user_id'           => $request['from_user_id'],
+                'to_user_id'             => $user['id'],
+                'message'                => $request['message'],
+            ]);
+        }
+        return response()->json($notification);
+    }
+   
 
     /**
      * @param Notification        $notif
@@ -51,9 +73,9 @@ class NotificationController extends Controller
      */
     public function update(Request $request) : JsonResponse
     {
-        $notification = DB::table('notifications')->where('to_user_id', $request->route('notification'))->pluck('chat_room_id')->toArray();
-        if($notification){
-             Chat::query()->whereIn("chat_room_id",$notification)->update([
+        $notification_chat = DB::table('notifications')->where('to_user_id', $request->route('notification'))->pluck('chat_room_id')->toArray();
+        if($notification_chat){
+             Chat::query()->whereIn("chat_room_id",$notification_chat)->update([
             'read' => 1,
          ]);
         }
@@ -61,7 +83,7 @@ class NotificationController extends Controller
             'viewed' => 1,
          ]);
 
-        return response()->json($notification);
+        return response()->json(['ok']);
     }
    
 }

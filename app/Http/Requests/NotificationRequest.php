@@ -29,6 +29,7 @@ class NotificationRequest extends FormRequest
             'to_user_id'   => ['required', Rule::exists('users', 'id')], 
                
             'chat_room_id'   => ['sometimes'],
+            'post_id'   => ['sometimes'],
             'message'   => ['required', 'max:255'],
         ];
     }

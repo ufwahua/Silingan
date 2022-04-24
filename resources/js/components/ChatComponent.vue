@@ -108,7 +108,11 @@
                     </Button>
                 </div>
             </template>
-            <div class="flex flex-column-reverse" style="min-height: 370px">
+            <div
+                ref="chat_container"
+                class="flex flex-column-reverse"
+                style="min-height: 370px"
+            >
                 <p v-if="!this.chats" class="text-right">Say Hi</p>
                 <div
                     v-else
@@ -127,6 +131,7 @@
                         :autoResize="true"
                         rows="1"
                         class="w-full"
+                        autofocus
                         @keypress.enter="sendMessage"
                     >
                     </Textarea>
@@ -287,7 +292,7 @@ export default {
                         if (this.notif_count == 0) {
                             await axios({
                                 method: "post",
-                                url: "/api/notification",
+                                url: "/api/notification/chat",
                                 data: {
                                     from_user_id:
                                         this.$store.state.userLogged.id,
@@ -378,6 +383,16 @@ export default {
                 this.$el.contains(event.target)
             );
         },
+        scrollToEnd() {
+            // var content = this.$refs.chat_container;
+            // content.scrollTop = content.scrollHeight;
+            // alert(
+            //     "scroll height is " +
+            //         content.scrollHeight +
+            //         " scroll Top is " +
+            //         content.scrollTop
+            // );
+        },
     },
     computed: {
         containerClass() {
@@ -385,7 +400,7 @@ export default {
         },
     },
     mounted() {
-        console.log("specific", this.notifications);
+        // this.$nextTick(() => this.scrollToEnd());
     },
     created() {
         this.$store.dispatch(

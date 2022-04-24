@@ -110,6 +110,7 @@ export default {
         comment: {
             type: Object,
         },
+        post_id: { type: Number },
         group_id: { type: Number },
     },
     components: {
@@ -133,7 +134,7 @@ export default {
                     message: this.message,
                 },
             })
-                .then((res) => {
+                .then(async (res) => {
                     if (this.group_id == 1) {
                         this.$store.dispatch(
                             "posts/getTimeLine",
@@ -145,6 +146,27 @@ export default {
                             this.$store.state.userLogged.id
                         );
                     }
+                    if (
+                        this.comment.user.id != this.$store.state.userLogged.id
+                    ) {
+                        await axios({
+                            method: "post",
+                            url: "/api/notification/comment",
+                            data: {
+                                from_user_id: this.$store.state.userLogged.id,
+                                to_user_id: this.comment.user.id,
+                                post_id: this.post_id,
+                                message: "has replied on your comment",
+                            },
+                        })
+                            .then(() => {
+                                console.log("notify success");
+                            })
+                            .catch((e) => {
+                                console.log(e.response);
+                            });
+                    }
+                    this.$store.dispatch("posts/getSpecificPost", this.post_id);
                     this.message = null;
                 })
                 .catch((error) => {

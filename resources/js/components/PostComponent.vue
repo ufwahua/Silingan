@@ -166,6 +166,7 @@ div
                         v-if="comment.id"
                         :comment="comment"
                         :group_id="group_id"
+                        :post_id="comment.post_id"
                     />
                 </div>
             </div>
@@ -546,7 +547,7 @@ export default {
                     message: this.message,
                 },
             })
-                .then((res) => {
+                .then(async (res) => {
                     if (this.group_id == 1) {
                         this.$store.dispatch(
                             "posts/getTimeLine",
@@ -558,6 +559,25 @@ export default {
                             this.$store.state.userLogged.id
                         );
                     }
+                    if (this.post.user.id != this.$store.state.userLogged.id) {
+                        await axios({
+                            method: "post",
+                            url: "/api/notification/comment",
+                            data: {
+                                from_user_id: this.$store.state.userLogged.id,
+                                to_user_id: this.post.user.id,
+                                post_id: this.post.id,
+                                message: "has commented on your post",
+                            },
+                        })
+                            .then(() => {
+                                console.log("notify success");
+                            })
+                            .catch((e) => {
+                                console.log(e.response);
+                            });
+                    }
+                    this.$store.dispatch("posts/getSpecificPost", this.post.id);
                     this.message = null;
                 })
                 .catch((error) => {

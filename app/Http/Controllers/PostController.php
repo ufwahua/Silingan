@@ -27,7 +27,14 @@ class PostController extends Controller
         
     }
 
-   
+   public function getSpecificPost(Request $request) : JsonResponse
+    {   
+         
+        return response()->json(
+           Post::where('id',$request->route('post'))->with(['user','group','comment','comment.user','comment.reply.user'])->withCount(['comment','reply'])->get()
+        );
+    }
+
     public function show(Request $request) : JsonResponse
     {   
          

@@ -431,10 +431,24 @@ export default {
                     content: this.content,
                 },
             })
-                .then(() => {
+                .then(async () => {
                     this.createAnnouncementDialog = false;
                     this.$store.dispatch("announcements/getAll");
                     this.showCreateAnnouncementToast();
+                    await axios({
+                        method: "post",
+                        url: "/api/notification/announcement",
+                        data: {
+                            from_user_id: this.$store.state.userLogged.id,
+                            message: "has an announcement",
+                        },
+                    })
+                        .then(() => {
+                            console.log("notify announcement success ");
+                        })
+                        .catch((e) => {
+                            console.log(e.response);
+                        });
                     this.loading = false;
                 })
                 .catch((err) => {

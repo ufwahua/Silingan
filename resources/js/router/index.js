@@ -36,6 +36,7 @@ import AppProfile from "../components/AppProfile.vue";
 import SettingComponent from "../components/SettingComponent.vue";
 import ActivateAccountComponent from "../components/ActivateAccountComponent.vue";
 import LogComponent from "../components/LogComponent.vue";
+import SpecificPostComponent from "../components/SpecificPostComponent.vue";
 
 import { createRouter, createWebHistory } from "vue-router";
 import store from "../store/store";
@@ -375,6 +376,17 @@ const router = createRouter({
                         contents: LogComponent,
                     },
                 },
+                {
+                    path: "post/:post",
+                    meta: {
+                        role: "admin",
+                    },
+                    beforeEnter: checkRole,
+                    components: {
+                        default: NotFound,
+                        contents: SpecificPostComponent,
+                    },
+                },
             ],
         },
         {
@@ -466,6 +478,17 @@ const router = createRouter({
                     components: {
                         default: NotFound,
                         contents: BillingComponent,
+                    },
+                },
+                {
+                    path: "post/:post",
+                    meta: {
+                        role: "resident",
+                    },
+                    beforeEnter: checkRole,
+                    components: {
+                        default: NotFound,
+                        contents: SpecificPostComponent,
                     },
                 },
             ],
@@ -571,6 +594,17 @@ const router = createRouter({
                     components: {
                         default: NotFound,
                         contents: MarketplaceComponent,
+                    },
+                },
+                {
+                    path: "post/:post",
+                    meta: {
+                        role: "security_officer",
+                    },
+                    beforeEnter: checkRole,
+                    components: {
+                        default: NotFound,
+                        contents: SpecificPostComponent,
                     },
                 },
             ],
