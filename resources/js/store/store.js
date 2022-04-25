@@ -28,6 +28,7 @@ import notifications from "./notification";
 export default createStore({
     state: {
         users: null,
+
         userLogged: null,
         chat_room: null,
         not_blocked_users: null,
@@ -39,9 +40,11 @@ export default createStore({
     //synchronous
     mutations: {
         getAllUsers(state, payload) {
+            state.user_search = payload;
+        },
+        getSearchUser(state, payload) {
             state.users = payload;
         },
-
         getUsersNotBlocked(state, payload) {
             state.not_blocked_users = payload;
         },

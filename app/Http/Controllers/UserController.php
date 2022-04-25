@@ -327,6 +327,16 @@ class UserController extends Controller
         else
             return null;
     }
+    public function getSearchUser(Request $request): JsonResponse
+    {
+       
+        $users = User::orWhere(DB::raw("concat(first_name, ' ', last_name)"), 'LIKE', "%".$request->input('query')."%")
+                       ->with(['lot.block','position','emergency_contact'])
+                       ->latest()
+                       ->get();
+        return response()->json($users);
+        
+    }
 
     public function destroy(User $user): JsonResponse
     {

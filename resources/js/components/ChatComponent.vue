@@ -10,7 +10,7 @@
             <i class="pi pi-user"></i>
         </a>
         <div class="grid">
-            <div class="col flex align-content-center m-3">
+            <div class="col flex align-content-center mt-3 mx-3">
                 <div class="col">
                     <b class="flex align-items-center text-xl">{{
                         resident
@@ -38,7 +38,13 @@
                     />
                 </div>
             </div>
-
+            <div class="col-12 flex justify-content-center">
+                <InputText
+                    v-model="search"
+                    placeholder="search"
+                    style="width: 300px"
+                />
+            </div>
             <div class="col-12 layout-config-content">
                 <div v-if="resident">
                     <div v-for="resident in users" :key="resident.id">
@@ -171,6 +177,7 @@ export default {
         const store = useStore();
         return {
             users: computed(() => store.state.users),
+
             chats: computed(() => store.state.chats),
             notifications: computed(
                 () => store.state.notifications.specific_notifications
@@ -202,7 +209,7 @@ export default {
             chatRoomModal: false,
             chats: null,
             user: null,
-
+            search: null,
             loading: false,
             message: null,
             position: null,
@@ -253,6 +260,9 @@ export default {
         };
     },
     watch: {
+        search(after, before) {
+            this.searchUser();
+        },
         $route() {
             if (this.active) {
                 this.active = false;
@@ -270,6 +280,19 @@ export default {
     },
     outsideClickListener: null,
     methods: {
+        searchUser() {
+            axios({
+                method: "get",
+                url: "/api/user/search/",
+                params: { query: this.search },
+            })
+                .then((res) => {
+                    this.$store.commit("getSearchUser", res.data);
+                })
+                .catch((e) => {
+                    console.log(e.response);
+                });
+        },
         toggle() {
             this.$refs.menu.toggle(event);
         },
