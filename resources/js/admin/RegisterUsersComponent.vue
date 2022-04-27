@@ -3,7 +3,7 @@
         <Toast />
         <div class="grid">
             <div class="col-12">
-                <h1>Registered Users</h1>
+                <h1 class="layout-text">All Users</h1>
             </div>
         </div>
         <div class="grid mb-2 flex justify-content-flex-start">
@@ -1036,7 +1036,7 @@
                             <Button
                                 label="Update"
                                 icon="pi pi-check"
-                                class="p-button-text p-button-warning"
+                                class="p-button-text p-button-success"
                                 @click="confirmUpdateUser"
                             />
                         </template>
@@ -1311,6 +1311,11 @@
                                         style="color: red"
                                         v-if="error_password"
                                         >{{ error_password }}</label
+                                    >
+                                    <label
+                                        style="color: red"
+                                        v-if="error_confirm_password"
+                                        >{{ error_confirm_password }}</label
                                     >
                                 </div>
                                 <div class="field col-12 md:col-12">
@@ -1876,7 +1881,7 @@
                             />
                             <Button
                                 label="Register"
-                                class="p-button-primary"
+                                class="p-button-primary p-button-success"
                                 autofocus
                                 @click="onRegisterClick"
                             />
@@ -2124,7 +2129,7 @@
                                     <label><h6>Security Information</h6></label>
                                 </div>
 
-                                <div class="field col-12 md:col-4">
+                                <div class="field col-12 md:col-12">
                                     <label>Email</label>
                                     <InputText
                                         type="text"
@@ -2141,7 +2146,7 @@
                                         >{{ error_email }}</label
                                     >
                                 </div>
-                                <div class="field col-12 md:col-4">
+                                <div class="field col-12 md:col-12">
                                     <label>Password</label>
                                     <InputText
                                         type="password"
@@ -2158,7 +2163,7 @@
                                         >{{ error_password }}</label
                                     >
                                 </div>
-                                <div class="field col-12 md:col-4">
+                                <div class="field col-12 md:col-12">
                                     <label>Confirm Password</label>
 
                                     <InputText

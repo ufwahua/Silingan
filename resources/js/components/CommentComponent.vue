@@ -13,7 +13,7 @@
                 </div>
                 <div v-else>
                     <Avatar
-                        image="http://127.0.0.1:8000/storage/images/default-prof-pic.png"
+                        image="http://127.0.0.1:8000/storage/images/avatar.png"
                         class="mr-2"
                         size="large"
                         shape="circle"
@@ -67,7 +67,7 @@
                 </div>
                 <div v-else>
                     <Avatar
-                        image="http://127.0.0.1:8000/storage/images/default-prof-pic.png"
+                        image="http://127.0.0.1:8000/storage/images/avatar.png"
                         class="mr-2"
                         size="large"
                         shape="circle"
