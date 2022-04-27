@@ -33,6 +33,7 @@ class DatabaseSeeder extends Seeder
             // BlockUserSeeder::class,
             // VehicleSeeder::class,
             CollectionTypeSeeder::class,
+            ExpenseTypeSeeder::class,
             FundSeeder::class
         ]);
     }

@@ -12,6 +12,7 @@ class Expense extends Model
     protected $fillable = [
         'user_id',
         'fund_id',
+        'expense_type_id',
         'amount',
         'notes',
         'official_receipt',
@@ -24,5 +25,8 @@ class Expense extends Model
     }
     public function fund(){
         return $this->hasOne(Fund::class,'id','fund_id');
+    }
+    public function expenseType(){
+        return $this->hasOne(ExpenseType::class,'id','expense_type_id');
     }
 }

@@ -309,6 +309,7 @@ export default {
         this.$store.dispatch("collection/getAll");
         this.$store.dispatch("fund/getAll");
         this.$store.dispatch("expense/getAll");
+        this.$store.dispatch("expenseType/getAll");
     },
 };
 </script>

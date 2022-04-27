@@ -5,7 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class ExpenseRequest extends FormRequest
+class ExpenseTypeRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,13 +25,7 @@ class ExpenseRequest extends FormRequest
     public function rules()
     {
         return [
-            'user_id' => ['required', Rule::exists('users', 'id')],
-            'amount'=> ['required'],
-            'notes'=> ['sometimes'],
-            'official_receipt' => ['sometimes'],
-            'running_balance' => ['required'],
-            'fund_id' => ['required'],
-            'expense_type_id' => ['required', Rule::exists('expense_types', 'id')]
+            'name' => ['required', Rule::unique('expense_types')->ignore($this->route('expense_types'))],
         ];
     }
 }
