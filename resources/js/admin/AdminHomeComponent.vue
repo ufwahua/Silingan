@@ -163,6 +163,11 @@ export default {
                                     icon: "pi pi-info-circle",
                                     to: "/admin/collection_type",
                                 },
+                                {
+                                    label: "Expense Types",
+                                    icon: "pi pi-info-circle",
+                                    to: "/admin/expense_type",
+                                }
                             ],
                         },
                     ],

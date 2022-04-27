@@ -18,6 +18,7 @@ import VehicleComponent from "../admin/VehicleComponent.vue";
 import VerifyMarketPlaceComponent from "../admin/VerifyMarketPlaceComponent.vue";
 import CashflowComponent from "../admin/CashflowComponent.vue";
 import CollectionTypeComponent from "../admin/CollectionTypeComponent.vue";
+import ExpenseTypeComponent from "../admin/ExpenseTypeComponent.vue";
 
 //resident
 import ResidentHomeComponent from "../resident/ResidentHomeComponent.vue";
@@ -138,8 +139,7 @@ const router = createRouter({
             meta: {
                 role: "admin",
             },
-            children: [
-                {
+            children: [{
                     path: "timeline",
                     beforeEnter: checkRole,
                     meta: {
@@ -365,6 +365,18 @@ const router = createRouter({
                     },
                 },
                 {
+                    path: "expense_type",
+                    meta: {
+                        role: "admin",
+                    },
+                    beforeEnter: checkRole,
+                    components: {
+                        default: NotFound,
+
+                        contents: ExpenseTypeComponent,
+                    },
+                },
+                {
                     path: "log",
                     meta: {
                         role: "admin",
@@ -385,8 +397,7 @@ const router = createRouter({
             },
             beforeEnter: checkRole,
             name: "userhome",
-            children: [
-                {
+            children: [{
                     path: "/resident/timeline",
                     meta: {
                         role: "resident",
@@ -479,8 +490,7 @@ const router = createRouter({
             beforeEnter: checkRole,
             name: "securityhome",
 
-            children: [
-                {
+            children: [{
                     path: "/security-officer/timeline",
 
                     meta: {
