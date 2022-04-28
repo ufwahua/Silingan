@@ -276,7 +276,7 @@
             mode="currency"
             currency="PHP"
             :useGrouping="false"
-            :placeholder="amount_placeholder"
+            disabled
             :class="{ 'p-invalid': revenue_valid.state.amount }"
           />
           <small v-if="revenue_valid.state.amount" class="p-error">{{
@@ -551,7 +551,6 @@ export default {
   data() {
     return {
       process: false,
-      amount_placeholder: null,
       //Modal Control
       addRevenueModal: false,
       addExpenseModal: false,
@@ -846,7 +845,7 @@ export default {
       let temp = this.dropdown_collection_type.filter((elem) => {
         return elem.code === this.revenue_form.collection_type;
       });
-      this.amount_placeholder = temp[0].amount;
+      this.revenue_form.amount = temp[0].amount;
     },
     showSuccess() {
       this.$toast.add({
@@ -878,7 +877,6 @@ export default {
         notes: null,
         source: null,
       };
-      this.amount_placeholder = null;
       this.lot_bool = true;
     },
     initFilters() {
