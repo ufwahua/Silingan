@@ -3,7 +3,7 @@
         <Toast />
         <h1>Total Funds</h1>
         <div class="grid">
-            <div v-for="fund in funds" :key="fund.id" class="col-12 lg:col-4">
+            <div v-for="fund in funds" class="col-12 lg:col-4">
                 <div class="card mb-0">
                     <div class="flex justify-content-between mb-3">
                         <div>
@@ -69,11 +69,7 @@
                         {{ data.user.first_name }} {{ data.user.last_name }}
                     </template>
                 </Column>
-                <Column field="collection_type.name" header="Usage">
-                    <template #body="{ data }">
-                        {{ data.collection_type.name }}
-                    </template>
-                </Column>
+                <Column field="usage" header="Usage"></Column>
                 <Column field="amount" header="Charges">
                     <template #body="{ data }">
                         <div
@@ -97,7 +93,7 @@
                         ₱{{ data.running_balance.toLocaleString() }} -
                         {{ data.fund.fund_type }}
                     </template>
-                    <template #filter="{ filterCallback }">
+                    <template #filter="{ filterModel, filterCallback }">
                         <Dropdown
                             v-model="this.filters['fund.fund_type'].value"
                             @change="filterCallback()"
@@ -110,6 +106,8 @@
                         >
                         </Dropdown>
                     </template>
+                    <template #filterclear="{ filterCallback }"> </template>
+                    <template #filterapply="{ filterCallback }"> </template>
                 </Column>
             </DataTable>
         </div>
@@ -235,7 +233,7 @@
                                 :rows="15"
                                 :filters="expense_filters"
                             >
-                                <template #empty> No Revenue found </template>
+                                <template #empty> No Expense found </template>
                                 <template #loading> Loading data </template>
                                 <Column field="id" header="ID"></Column>
                                 <Column field="user" header="From">
@@ -245,7 +243,7 @@
                                     </template>
                                 </Column>
                                 <Column
-                                    field="expense_source"
+                                    field="expense_type.name"
                                     header="Expense Type"
                                 ></Column>
                                 <Column field="credit" header="Debit">
@@ -327,7 +325,7 @@
                         mode="currency"
                         currency="PHP"
                         :useGrouping="false"
-                        :placeholder="amount_placeholder"
+                        disabled
                         :class="{ 'p-invalid': revenue_valid.state.amount }"
                     />
                     <small v-if="revenue_valid.state.amount" class="p-error">{{
@@ -420,6 +418,22 @@
                     }}</small>
                 </div>
                 <div class="col-12 lg:col-6">
+                    <h5>Expense Type</h5>
+                    <Dropdown
+                        v-model="expense_form.type"
+                        :options="dropdown_expense_type"
+                        optionLabel="name"
+                        optionValue="id"
+                        placeholder="Select Fund Source"
+                        :class="{
+                            'p-invalid': expense_valid.state.type,
+                        }"
+                    />
+                    <small v-if="expense_valid.state.type" class="p-error">{{
+                        expense_valid.msg.type
+                    }}</small>
+                </div>
+                <div class="col-12 lg:col-6">
                     <h5>Amount</h5>
                     <InputNumber
                         v-model="expense_form.amount"
@@ -435,17 +449,6 @@
                 <div class="col-12 lg:col-6">
                     <h5>Official Receipt Number</h5>
                     <InputText type="text" v-model="expense_form.ornumber" />
-                </div>
-                <div class="col-12 lg:col-6">
-                    <h5>Expense Type</h5>
-                    <InputText
-                        type="text"
-                        v-model="expense_form.type"
-                        :class="{ 'p-invalid': expense_valid.state.type }"
-                    />
-                    <small v-if="expense_valid.state.type" class="p-error">{{
-                        expense_valid.msg.type
-                    }}</small>
                 </div>
                 <div class="col-12">
                     <h5>Notes</h5>
@@ -551,6 +554,9 @@ export default {
         return {
             userLogged: computed(() => store.state.userLogged),
             funds: computed(() => store.state.fund.Fund),
+            dropdown_expense_type: computed(
+                () => store.state.expenseType.ExpenseType
+            ),
             dropdown_collection_type: computed(() => {
                 let temp = [];
                 store.state.collectionType.CollectionType.forEach((elem) => {
@@ -578,9 +584,12 @@ export default {
             lots: computed(() => store.state.lots.lots),
             cashflow: computed(() => {
                 let revenue = store.state.collection.Collection;
+                revenue.forEach((elem) => {
+                    elem["usage"] = elem.collection_type.name;
+                });
                 let expense = store.state.expense.Expense;
                 expense.forEach((elem) => {
-                    elem["collection_type"] = { name: elem.expense_source };
+                    elem["usage"] = elem.expense_type.name;
                 });
                 let cashflow = revenue.concat(expense);
                 cashflow.sort((a, b) => {
@@ -593,7 +602,6 @@ export default {
     data() {
         return {
             process: false,
-            amount_placeholder: null,
             //Modal Control
             addRevenueModal: false,
             addExpenseModal: false,
@@ -857,8 +865,7 @@ export default {
                             "_" +
                             this.report.start.getFullYear() +
                             "to" +
-                            this.report.end.getMonth() +
-                            1 +
+                            (this.report.end.getMonth() + 1) +
                             "_" +
                             this.report.end.getDate() +
                             "_" +
@@ -895,7 +902,7 @@ export default {
             let temp = this.dropdown_collection_type.filter((elem) => {
                 return elem.code === this.revenue_form.collection_type;
             });
-            this.amount_placeholder = temp[0].amount;
+            this.revenue_form.amount = temp[0].amount;
         },
         showSuccess() {
             this.$toast.add({
@@ -927,7 +934,6 @@ export default {
                 notes: null,
                 source: null,
             };
-            this.amount_placeholder = null;
             this.lot_bool = true;
         },
         initFilters() {
@@ -991,7 +997,7 @@ export default {
                                 : +this.funds[this.expense_form.source - 1]
                                       .amount - +this.expense_form.amount,
                         fund_id: this.expense_form.source,
-                        expense_source: this.expense_form.type,
+                        expense_type_id: this.expense_form.type,
                     },
                 });
                 this.process = !this.process;
@@ -1034,9 +1040,9 @@ export default {
                 this.expense_valid.state.source = true;
                 this.expense_valid.msg.source = e.errors.source[0];
             }
-            if (e.errors.expense_source) {
+            if (e.errors.expense_type_id) {
                 this.expense_valid.state.type = true;
-                this.expense_valid.msg.type = e.errors.expense_source[0];
+                this.expense_valid.msg.type = e.errors.expense_type_id[0];
             }
         },
         resetExpenseFormError() {
@@ -1258,7 +1264,7 @@ export default {
             });
             list.forEach((elem) => {
                 let item_date = new Date(elem.created_at);
-                if (!elem.collection_type_id && item_date >= start) {
+                if (elem.expense_type_id && item_date >= start) {
                     temp.push([
                         {
                             content:
@@ -1271,7 +1277,7 @@ export default {
                             rowSpan: 1,
                         },
                         {
-                            content: elem.collection_type.name,
+                            content: elem.expense_type.name,
                             colSpan: 1,
                             rowSpan: 1,
                         },

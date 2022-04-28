@@ -168,6 +168,11 @@ export default {
                                     icon: "pi pi-info-circle",
                                     to: "/admin/collection_type",
                                 },
+                                {
+                                    label: "Expense Types",
+                                    icon: "pi pi-info-circle",
+                                    to: "/admin/expense_type",
+                                },
                             ],
                         },
                     ],
@@ -314,11 +319,11 @@ export default {
         this.$store.dispatch("collection/getAll");
         this.$store.dispatch("fund/getAll");
         this.$store.dispatch("expense/getAll");
-
         this.$store.dispatch(
             "notifications/getSpecific",
             this.$store.state.userLogged.id
         );
+        this.$store.dispatch("expenseType/getAll");
     },
 };
 </script>

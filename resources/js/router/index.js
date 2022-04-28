@@ -11,7 +11,6 @@ import ResidentComponent from "../admin/ResidentComponent.vue";
 import OfficerComponent from "../admin/OfficerComponent.vue";
 import SecurityOfficerComponent from "../admin/SecurityOfficerComponent.vue";
 import Position from "../admin/PositionComponent.vue";
-import Candidate from "../admin/CandidateComponent.vue";
 import ElectionComponent from "../admin/ElectionComponent.vue";
 import CardComponent from "../admin/CardComponent.vue";
 import VehicleComponent from "../admin/VehicleComponent.vue";
@@ -207,17 +206,7 @@ const router = createRouter({
                         contents: Position,
                     },
                 },
-                {
-                    path: "candidate",
-                    meta: {
-                        role: "admin",
-                    },
-                    beforeEnter: checkRole,
-                    components: {
-                        default: NotFound,
-                        contents: Candidate,
-                    },
-                },
+
                 {
                     path: "announcement",
                     meta: {

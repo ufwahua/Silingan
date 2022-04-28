@@ -22,6 +22,7 @@ use App\Http\Controllers\EmergencyContactDetailController;
 use App\Http\Controllers\LogController;
 use App\Http\Controllers\VehicleController;
 use App\Http\Controllers\CollectionTypeController;
+use App\Http\Controllers\ExpenseTypeController;
 use App\Http\Controllers\CollectionController;
 use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\FundController;
@@ -93,5 +94,6 @@ Route::apiResources([
     'collection' => CollectionController::class,
     'expense' => ExpenseController::class,
     'fund' => FundController::class,
-     'notification'     => NotificationController::class
+     'notification'     => NotificationController::class,
+    'expense_type' => ExpenseTypeController::class
 ]);

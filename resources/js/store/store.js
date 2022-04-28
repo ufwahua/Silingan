@@ -14,6 +14,7 @@ import collectionType from "./admin/collection_type";
 import fund from "./admin/fund";
 import collection from "./admin/collection";
 import expense from "./admin/expense";
+import expenseType from "./admin/expense_type";
 //user
 import news from "./user/news";
 import posts from "./user/posts";
@@ -213,6 +214,7 @@ export default createStore({
         collection,
         expense,
         notifications,
+        expenseType,
     },
 
     plugins: [createPersistedState()],
