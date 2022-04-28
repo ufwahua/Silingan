@@ -1098,6 +1098,7 @@ export default {
     revenueReport() {
       let start = new Date(this.report.start);
       let end = new Date(this.report.end);
+      end.setDate(end.getDate()+1)
       let temp = [];
       let list = this.cashflow;
       let month = [
@@ -1119,7 +1120,8 @@ export default {
       });
       list.forEach((elem) => {
         let item_date = new Date(elem.created_at);
-        if (elem.collection_type_id && item_date >= start) {
+        console.log(item_date)
+        if (elem.collection_type_id && item_date >= start && item_date <= end){
           temp.push([
             {
               content:
@@ -1149,6 +1151,7 @@ export default {
     revenueTotal() {
       let start = new Date(this.report.start);
       let end = new Date(this.report.end);
+      end.setDate(end.getDate()+1)
       let total = 0;
       let list = this.cashflow;
       let month = [
@@ -1170,7 +1173,7 @@ export default {
       });
       list.forEach((elem) => {
         let item_date = new Date(elem.created_at);
-        if (elem.collection_type_id && item_date >= start) {
+        if (elem.collection_type_id && item_date >= start && item_date <= end) {
           total += elem.amount;
         }
       });
@@ -1179,6 +1182,7 @@ export default {
     expenseReport() {
       let start = new Date(this.report.start);
       let end = new Date(this.report.end);
+      end.setDate(end.getDate()+1)
       let temp = [];
       let list = this.cashflow;
       let month = [
@@ -1200,7 +1204,7 @@ export default {
       });
       list.forEach((elem) => {
         let item_date = new Date(elem.created_at);
-        if (elem.expense_type_id && item_date >= start) {
+        if (elem.expense_type_id && item_date >= start && item_date <= end) {
           temp.push([
             {
               content:
@@ -1230,6 +1234,7 @@ export default {
     expenseTotal() {
       let start = new Date(this.report.start);
       let end = new Date(this.report.end);
+      end.setDate(end.getDate()+1)
       let total = 0;
       let list = this.cashflow;
       let month = [
@@ -1251,7 +1256,7 @@ export default {
       });
       list.forEach((elem) => {
         let item_date = new Date(elem.created_at);
-        if (!elem.collection_type_id && item_date >= start) {
+        if (!elem.collection_type_id && item_date >= start && item_date <= end) {
           total += elem.amount;
         }
       });
