@@ -807,8 +807,8 @@ export default {
               "_" +
               this.report.start.getFullYear() +
               "to" +
-              this.report.end.getMonth() +
-              1 +
+             ( this.report.end.getMonth() +
+              1) +
               "_" +
               this.report.end.getDate() +
               "_" +
