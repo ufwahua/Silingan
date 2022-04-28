@@ -300,7 +300,7 @@ export default {
         this.$store.dispatch("announcements/getAll");
         this.$store.dispatch("positions/getAll");
         this.$store.dispatch("emergency_contact_details/getAll");
-        this.$store.dispatch("candidates/getAll");
+
         this.$store.dispatch("getAllUsers");
         this.$store.dispatch("cards/getAllCards");
         this.$store.dispatch("logs/getAll");

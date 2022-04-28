@@ -11,5 +11,6 @@ class Election extends Model
     protected $fillable = [
         'start_date',
         'end_date',
+        'result',
     ];
 }

@@ -3,18 +3,19 @@ import axios from "axios";
 const candidates = {
     namespaced: true,
     state: {
-        candidates: null,
+        current_candidates: null,
+        last_candidates: null,
     },
     mutations: {
         getAll(state, payload) {
-            state.candidates = payload;
+            state.current_candidates = payload;
         },
     },
     actions: {
-        async getAll({ commit }) {
+        async getAll({ commit }, payload) {
             await axios({
                 method: "get",
-                url: "/api/candidate/",
+                url: "/api/candidate/" + payload,
             })
                 .then((res) => {
                     commit("getAll", res.data);

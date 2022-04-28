@@ -17,6 +17,7 @@ class CreateElectionsTable extends Migration
             $table->id();
             $table->date('start_date');
             $table->date('end_date');
+            $table->boolean('result')->default(false);
             $table->timestamps();
         });
     }

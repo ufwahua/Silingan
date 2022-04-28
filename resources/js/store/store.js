@@ -28,7 +28,9 @@ import notifications from "./notification";
 export default createStore({
     state: {
         users: null,
-
+        users_verified: null,
+        filtered_resident: null,
+        officers: null,
         userLogged: null,
         chat_room: null,
         not_blocked_users: null,
@@ -41,6 +43,15 @@ export default createStore({
     mutations: {
         getAllUsers(state, payload) {
             state.user_search = payload;
+        },
+        getUsersVerified(state, payload) {
+            state.users_verified = payload;
+        },
+        filterResident(state, payload) {
+            state.filtered_resident = payload;
+        },
+        getOfficers(state, payload) {
+            state.officers = payload;
         },
         getSearchUser(state, payload) {
             state.users = payload;
@@ -77,6 +88,45 @@ export default createStore({
                 .then((res) => {
                     commit("getAllUsers", res.data);
                     console.log("users", res.data);
+                })
+                .catch((err) => {
+                    console.log(err.response.data);
+                });
+        },
+        async getOfficers({ commit }) {
+            await axios({
+                method: "get",
+                url: "/api/user/officers",
+            })
+                .then((res) => {
+                    commit("getOfficers", res.data);
+                    console.log("officers", res.data);
+                })
+                .catch((err) => {
+                    console.log(err.response.data);
+                });
+        },
+        async filterResident({ commit }) {
+            await axios({
+                method: "get",
+                url: "/api/user/filter-resident/",
+            })
+                .then((res) => {
+                    commit("filterResident", res.data);
+                    console.log("filter resident", res.data);
+                })
+                .catch((err) => {
+                    console.log(err.response.data);
+                });
+        },
+        async getUsersVerified({ commit }) {
+            await axios({
+                method: "get",
+                url: "/api/user/user-verified",
+            })
+                .then((res) => {
+                    commit("getUsersVerified", res.data);
+                    console.log("users verified", res.data);
                 })
                 .catch((err) => {
                     console.log(err.response.data);

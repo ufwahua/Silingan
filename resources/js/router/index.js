@@ -22,6 +22,7 @@ import CollectionTypeComponent from "../admin/CollectionTypeComponent.vue";
 //resident
 import ResidentHomeComponent from "../resident/ResidentHomeComponent.vue";
 import BillingComponent from "../resident/BillingComponent.vue";
+import VoteElectionComponent from "../resident/VoteElectionComponent.vue";
 
 //security officer
 import SecurityHome from "../security_officer/SecurityHomeComponent.vue";
@@ -489,6 +490,17 @@ const router = createRouter({
                     components: {
                         default: NotFound,
                         contents: SpecificPostComponent,
+                    },
+                },
+                {
+                    path: "election",
+                    meta: {
+                        role: "resident",
+                    },
+                    beforeEnter: checkRole,
+                    components: {
+                        default: NotFound,
+                        contents: VoteElectionComponent,
                     },
                 },
             ],

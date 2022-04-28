@@ -52,6 +52,11 @@ Route::post('/login', [UserController::class, 'login']);
 Route::get('/logout', [UserController::class, 'logout']);
 Route::get('/user/not-blocked/{user}', [UserController::class, 'notBlockedUsers']);
 Route::get('/user/search/', [UserController::class, 'getSearchUser']);
+Route::get('/user/officers/', [UserController::class, 'getOfficers']);
+Route::get('/user/user-verified/', [UserController::class, 'getUsersVerified']);
+Route::get('/user/filter-resident/', [UserController::class, 'filterResident']);
+Route::put('/user/vote/{user}', [UserController::class, 'updateHasVoted']);
+Route::put('/candidate/vote/{candidate}', [CandidateController::class, 'vote']);
 Route::delete('/candidate/election/{candidate}', [CandidateController::class, 'deleteAllCandidate']);
 Route::get('/post/marketplace/verified/{post}', [PostController::class, 'getMarketPlaceVerified']);
 Route::get('/post/marketplace/not-verified/{post}', [PostController::class, 'getMarketPlaceNotVerified']);
@@ -60,6 +65,7 @@ Route::post('/sms',[SmsController::class, 'sendSmsNotification']);
 Route::post('/log/filter',[LogController::class, 'filterFromTo']);
 Route::post('/notification/chat',[NotificationController::class, 'notificationChat']);
 Route::post('/notification/announcement',[NotificationController::class, 'notificationAnnouncement']);
+Route::post('/notification/election',[NotificationController::class, 'notificationElection']);
 Route::post('/notification/comment',[NotificationController::class, 'notificationComment']);
 
 

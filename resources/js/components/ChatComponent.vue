@@ -47,7 +47,7 @@
             </div>
             <div class="col-12 layout-config-content">
                 <div v-if="resident">
-                    <div v-for="resident in users" :key="resident.id">
+                    <div v-for="resident in users_verified" :key="resident.id">
                         <ChatSideBarComponent
                             v-if="resident.role === 'resident'"
                             @click="openChatRoom(resident)"
@@ -57,7 +57,7 @@
                 </div>
                 <div v-if="security_officer">
                     <div
-                        v-for="security_officer in users"
+                        v-for="security_officer in users_verified"
                         :key="security_officer.id"
                     >
                         <ChatSideBarComponent
@@ -68,7 +68,7 @@
                     </div>
                 </div>
                 <div v-if="officer">
-                    <div v-for="officer in users" :key="officer.id">
+                    <div v-for="officer in users_verified" :key="officer.id">
                         <ChatSideBarComponent
                             v-if="officer.role === 'officer'"
                             @click="openChatRoom(resident)"
@@ -77,7 +77,7 @@
                     </div>
                 </div>
                 <div v-if="admin">
-                    <div v-for="admin in users" :key="admin.id">
+                    <div v-for="admin in users_verified" :key="admin.id">
                         <ChatSideBarComponent
                             v-if="admin.role === 'admin'"
                             @click="openChatRoom(admin)"
@@ -176,7 +176,7 @@ export default {
     setup() {
         const store = useStore();
         return {
-            users: computed(() => store.state.users),
+            users_verified: computed(() => store.state.users_verified),
 
             chats: computed(() => store.state.chats),
             notifications: computed(
@@ -430,6 +430,7 @@ export default {
             "notifications/getSpecific",
             this.$store.state.userLogged.id
         );
+        this.$store.dispatch("getUsersVerified");
     },
 };
 </script>

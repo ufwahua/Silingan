@@ -64,6 +64,23 @@ class NotificationController extends Controller
         }
         return response()->json($notification);
     }
+     public function notificationElection(Request $request) : JsonResponse
+    {
+        $request->validate([
+            'from_user_id'   => ['required', Rule::exists('users', 'id')], 
+            'message'   => ['required', 'max:255'],    
+        ]);
+        $users = User::whereNotIn('id',[Auth::id()])->whereNotIn('role',['security officer'])->get();
+        foreach($users as $user){
+            $notification = Notification::query()->create([
+                'from_user_id'           => $request['from_user_id'],
+                'to_user_id'             => $user['id'],
+                'election_id'             => $request['election_id'],
+                'message'                => $request['message'],
+            ]);
+        }
+        return response()->json($notification);
+    }
    
 
     /**

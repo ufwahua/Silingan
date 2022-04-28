@@ -12,6 +12,7 @@ class Candidate extends Model
         'position_id',
         'user_id',
         'election_id',
+        'vote_count',
      
     ];
     public function position(){

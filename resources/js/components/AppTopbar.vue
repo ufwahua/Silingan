@@ -87,6 +87,8 @@
                                                     ? getSpecificPost(
                                                           notif.post_id
                                                       )
+                                                    : notif.election_id
+                                                    ? openElection()
                                                     : getAnnouncementPage()
                                             "
                                         >
@@ -208,6 +210,8 @@
                                                     ? getSpecificPost(
                                                           notif.post_id
                                                       )
+                                                    : notif.election_id
+                                                    ? openElection()
                                                     : getAnnouncementPage()
                                             "
                                         >
@@ -552,6 +556,9 @@ export default {
                     `/${this.userLogged.role}` + "/view-announcement"
                 );
             }
+        },
+        openElection() {
+            return this.$router.push(`/${this.userLogged.role}` + "/election");
         },
         getSpecificPost(post_id) {
             this.$store.dispatch("posts/getSpecificPost", post_id);
