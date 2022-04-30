@@ -55,7 +55,7 @@ Route::get('/user/not-blocked/{user}', [UserController::class, 'notBlockedUsers'
 Route::get('/user/search/', [UserController::class, 'getSearchUser']);
 Route::get('/user/officers/', [UserController::class, 'getOfficers']);
 Route::get('/user/user-verified/', [UserController::class, 'getUsersVerified']);
-Route::get('/user/filter-resident/', [UserController::class, 'filterResident']);
+Route::get('/user/filter-resident/{user}', [UserController::class, 'filterResident']);
 Route::put('/user/vote/{user}', [UserController::class, 'updateHasVoted']);
 Route::put('/candidate/vote/{candidate}', [CandidateController::class, 'vote']);
 Route::delete('/candidate/election/{candidate}', [CandidateController::class, 'deleteAllCandidate']);

@@ -25,10 +25,11 @@ class ElectionController extends Controller
 
         return response()->json($election);
     }
-    public function update(Election $election, ElectionRequest $request) : JsonResponse
+    public function update(Request $request, ) : JsonResponse
     {
-        $election->update($request->validated());
-
+        $election = Election::query()->where('id', $request->route('election'))->update($request->validate([
+            'result' => ['required'],
+        ]));
         return response()->json($election);
     }
     public function destroy(Election $election) : JsonResponse

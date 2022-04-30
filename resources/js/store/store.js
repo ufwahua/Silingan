@@ -43,7 +43,7 @@ export default createStore({
     //synchronous
     mutations: {
         getAllUsers(state, payload) {
-            state.user_search = payload;
+            state.users = payload;
         },
         getUsersVerified(state, payload) {
             state.users_verified = payload;
@@ -107,10 +107,10 @@ export default createStore({
                     console.log(err.response.data);
                 });
         },
-        async filterResident({ commit }) {
+        async filterResident({ commit }, payload) {
             await axios({
                 method: "get",
-                url: "/api/user/filter-resident/",
+                url: "/api/user/filter-resident/" + payload,
             })
                 .then((res) => {
                     commit("filterResident", res.data);

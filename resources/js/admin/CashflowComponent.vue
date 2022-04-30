@@ -1322,6 +1322,9 @@ export default {
             return total;
         },
     },
+    created() {
+        this.initFilters();
+    },
 };
 </script>
 
