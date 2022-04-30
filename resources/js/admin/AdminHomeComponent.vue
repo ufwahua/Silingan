@@ -166,12 +166,12 @@ export default {
                                 {
                                     label: "Collection Types",
                                     icon: "pi pi-info-circle",
-                                    to: "/admin/collection_type",
+                                    to: "/admin/collection-type",
                                 },
                                 {
                                     label: "Expense Types",
                                     icon: "pi pi-info-circle",
-                                    to: "/admin/expense_type",
+                                    to: "/admin/expense-type",
                                 },
                             ],
                         },

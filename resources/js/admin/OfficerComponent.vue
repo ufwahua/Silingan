@@ -464,7 +464,11 @@
                                         optionLabel="number"
                                         optionValue="number"
                                         placeholder="Select Block"
-                                        @change="getBlockLot"
+                                        @change="
+                                            getBlockLot(
+                                                this.form.selected_block
+                                            )
+                                        "
                                         :class="{
                                             'p-invalid': error_selected_block,
                                         }"
@@ -754,7 +758,11 @@
                                         optionLabel="number"
                                         optionValue="number"
                                         placeholder="Select Block"
-                                        @change="getBlockLot"
+                                        @change="
+                                            getBlockLot(
+                                                this.form.selected_block
+                                            )
+                                        "
                                         :class="{
                                             'p-invalid': error_selected_block,
                                         }"
@@ -1027,7 +1035,11 @@
                                         optionLabel="number"
                                         optionValue="number"
                                         placeholder="Select Block"
-                                        @change="getBlockLot"
+                                        @change="
+                                            getBlockLot(
+                                                this.form.selected_block
+                                            )
+                                        "
                                         :class="{
                                             'p-invalid': error_selected_block,
                                         }"
@@ -1485,6 +1497,7 @@ export default {
                         label: "View",
                         icon: "pi pi-user",
                         command: () => {
+                            this.getBlockLot(this.form.selected_block);
                             this.viewOfficer();
                         },
                     },
@@ -1492,6 +1505,7 @@ export default {
                         label: "Update",
                         icon: "pi pi-pencil",
                         command: () => {
+                            this.getBlockLot(this.form.selected_block);
                             this.updateUser();
                         },
                     },
@@ -1499,6 +1513,7 @@ export default {
                         label: "Emergency Contacts",
                         icon: "pi pi-id-card",
                         command: () => {
+                            this.getBlockLot(this.form.selected_block);
                             this.viewEmergencyContacts();
                         },
                     },
@@ -1512,6 +1527,7 @@ export default {
                         label: "View Officer",
                         icon: "pi pi-user",
                         command: () => {
+                            this.getBlockLot(this.form.selected_block);
                             this.viewOfficer();
                         },
                     },
@@ -1519,6 +1535,7 @@ export default {
                         label: "Update Officer",
                         icon: "pi pi-pencil",
                         command: () => {
+                            this.getBlockLot(this.form.selected_block);
                             this.updateUser();
                         },
                     },
@@ -1526,6 +1543,7 @@ export default {
                         label: "Emergency Contacts",
                         icon: "pi pi-id-card",
                         command: () => {
+                            this.getBlockLot(this.form.selected_block);
                             this.viewEmergencyContacts();
                         },
                     },
@@ -1533,6 +1551,7 @@ export default {
                         label: "Deactivate Officer",
                         icon: "pi pi-lock",
                         command: () => {
+                            this.getBlockLot(this.form.selected_block);
                             this.changeStatus();
                         },
                     },
@@ -1546,6 +1565,7 @@ export default {
                         label: "View Officer",
                         icon: "pi pi-user",
                         command: () => {
+                            this.getBlockLot(this.form.selected_block);
                             this.viewOfficer();
                         },
                     },
@@ -1553,6 +1573,7 @@ export default {
                         label: "Update Officer",
                         icon: "pi pi-pencil",
                         command: () => {
+                            this.getBlockLot(this.form.selected_block);
                             this.updateUser();
                         },
                     },
@@ -1560,6 +1581,7 @@ export default {
                         label: "Emergency Contacts",
                         icon: "pi pi-id-card",
                         command: () => {
+                            this.getBlockLot(this.form.selected_block);
                             this.viewEmergencyContacts();
                         },
                     },
@@ -1567,6 +1589,7 @@ export default {
                         label: "Activate Officer",
                         icon: "pi pi-lock",
                         command: () => {
+                            this.getBlockLot(this.form.selected_block);
                             this.changeStatus();
                         },
                     },
@@ -1577,6 +1600,7 @@ export default {
                         label: "View Officer",
                         icon: "pi pi-user",
                         command: () => {
+                            this.getBlockLot(this.form.selected_block);
                             this.viewOfficer();
                         },
                     },
@@ -1584,6 +1608,7 @@ export default {
                         label: "Emergency Contacts",
                         icon: "pi pi-id-card",
                         command: () => {
+                            this.getBlockLot(this.form.selected_block);
                             this.viewEmergencyContacts();
                         },
                     },
@@ -1602,7 +1627,7 @@ export default {
             this.form.gender = data.gender;
             if (data.role != "security officer" && data.role != "admin") {
                 this.form.selected_block = data.lot.block.number;
-                this.getBlockLot();
+
                 this.form.selected_block_lot = data.block_lot_id;
             }
             if (data.role == "officer") {
@@ -1704,16 +1729,6 @@ export default {
         },
         updateUser() {
             this.updateUserDialog = true;
-            this.first_name = data.first_name;
-            this.last_name = data.last_name;
-            this.gender = data.gender;
-            this.email = data.email;
-            this.age = data.age;
-            this.contact_num = data.contact_num;
-            this.selected_role = data.role;
-            this.selected_block = data.block_lot.block.id;
-            this.getBlockLot();
-            this.selected_block_lot = data.block_lot.id;
         },
         async confirmUpdateUser() {
             this.loading = true;
@@ -1952,9 +1967,9 @@ export default {
                 this.error_selected_tag = "The tag field is required";
         },
 
-        getBlockLot() {
-            this.form.selected_block_lot = null;
+        getBlockLot(lot) {
             this.$store.dispatch("lots/getBlockLots", this.form.selected_block);
+            this.form.selected_block = lot;
         },
         getFilterBlockLot() {
             this.$store.dispatch(
