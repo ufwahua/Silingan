@@ -1322,7 +1322,6 @@ export default {
             return total;
         },
     },
-    mounted() {},
     created() {
         this.initFilters();
     },

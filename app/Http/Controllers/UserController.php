@@ -247,6 +247,7 @@ class UserController extends Controller
                 'has_voted' => ['required'],
                 'profile_pic'=> ['sometimes'],
                 'tag_as' => ['required'],
+                'position_id' => ['sometimes'],
             ]));
         }
 
@@ -350,7 +351,7 @@ class UserController extends Controller
     }
     public function filterResident(Request $request): JsonResponse
     {
-        $candidates_user_id = DB::table('candidates')->pluck('user_id')->toArray();
+        $candidates_user_id = DB::table('candidates')->where('election_id', $request->route('user'))->pluck('user_id')->toArray();
         $users = User::whereNotIn('id', $candidates_user_id)
         ->where('verified',1)
         ->whereNested(function($query)  {

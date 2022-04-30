@@ -26,7 +26,7 @@ class CandidateRequest extends FormRequest
     {
         return [
             'position_id' => ['required',Rule::exists('positions', 'id')],
-            'user_id' => ['required',Rule::unique('candidates')->ignore($this->route('candidate'))],
+            'user_id' => ['required'],
             'election_id' => ['required'],
             'vote_count' => ['sometimes'],
 

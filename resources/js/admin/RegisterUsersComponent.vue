@@ -463,7 +463,9 @@
                                         optionLabel="number"
                                         optionValue="number"
                                         placeholder="Select Block"
-                                        @change="getBlockLot"
+                                        @change="
+                                            getBlockLot(form.selected_block)
+                                        "
                                         :class="{
                                             'p-invalid': error_selected_block,
                                         }"
@@ -708,7 +710,9 @@
                                         optionLabel="number"
                                         optionValue="number"
                                         placeholder="Select Block"
-                                        @change="getBlockLot"
+                                        @change="
+                                            getBlockLot(form.selected_block)
+                                        "
                                         :class="{
                                             'p-invalid': error_selected_block,
                                         }"
@@ -1173,7 +1177,9 @@
                                         optionLabel="number"
                                         optionValue="number"
                                         placeholder="Select Block"
-                                        @change="getBlockLot"
+                                        @change="
+                                            getBlockLot(form.selected_block)
+                                        "
                                         :class="{
                                             'p-invalid': error_selected_block,
                                         }"
@@ -1464,7 +1470,9 @@
                                         optionLabel="number"
                                         optionValue="number"
                                         placeholder="Select Block"
-                                        @change="getBlockLot"
+                                        @change="
+                                            getBlockLot(form.selected_block)
+                                        "
                                         :class="{
                                             'p-invalid': error_selected_block,
                                         }"
@@ -2023,7 +2031,9 @@
                                         optionLabel="number"
                                         optionValue="number"
                                         placeholder="Select Block"
-                                        @change="getBlockLot"
+                                        @change="
+                                            getBlockLot(form.selected_block)
+                                        "
                                         :class="{
                                             'p-invalid': error_selected_block,
                                         }"
@@ -2275,7 +2285,9 @@
                                         optionLabel="number"
                                         optionValue="number"
                                         placeholder="Select Block"
-                                        @change="getBlockLot"
+                                        @change="
+                                            getBlockLot(form.selected_block)
+                                        "
                                         :class="{
                                             'p-invalid': error_selected_block,
                                         }"
@@ -2736,7 +2748,9 @@
                                         optionLabel="number"
                                         optionValue="number"
                                         placeholder="Select Block"
-                                        @change="getBlockLot"
+                                        @change="
+                                            getBlockLot(form.selected_block)
+                                        "
                                         :class="{
                                             'p-invalid': error_selected_block,
                                         }"
@@ -3120,6 +3134,7 @@ export default {
                         label: `View ${data.role}`,
                         icon: "pi pi-user",
                         command: () => {
+                            this.getBlockLot(this.form.selected_block_lot);
                             this.viewUser();
                         },
                     },
@@ -3127,6 +3142,7 @@ export default {
                         label: `Update ${data.role}`,
                         icon: "pi pi-pencil",
                         command: () => {
+                            this.getBlockLot(this.form.selected_block_lot);
                             this.updateUser();
                         },
                     },
@@ -3134,6 +3150,7 @@ export default {
                         label: "Emergency Contacts",
                         icon: "pi pi-id-card",
                         command: () => {
+                            this.getBlockLot(this.form.selected_block_lot);
                             this.viewEmergencyContacts();
                         },
                     },
@@ -3141,6 +3158,7 @@ export default {
                         label: `Deactivate ${data.role}`,
                         icon: "pi pi-lock",
                         command: () => {
+                            this.getBlockLot(this.form.selected_block_lot);
                             this.changeStatus();
                         },
                     },
@@ -3151,6 +3169,7 @@ export default {
                         label: `View ${data.role}`,
                         icon: "pi pi-user",
                         command: () => {
+                            this.getBlockLot(this.form.selected_block_lot);
                             this.viewUser();
                         },
                     },
@@ -3158,6 +3177,7 @@ export default {
                         label: `Verify ${data.role}`,
                         icon: "pi pi-check",
                         command: () => {
+                            this.getBlockLot(this.form.selected_block_lot);
                             this.viewVerifytDialog = true;
                         },
                     },
@@ -3165,6 +3185,7 @@ export default {
                         label: `Update ${data.role}`,
                         icon: "pi pi-pencil",
                         command: () => {
+                            this.getBlockLot(this.form.selected_block_lot);
                             this.updateUser();
                         },
                     },
@@ -3172,6 +3193,7 @@ export default {
                         label: "Emergency Contacts",
                         icon: "pi pi-id-card",
                         command: () => {
+                            this.getBlockLot(this.form.selected_block_lot);
                             this.viewEmergencyContacts();
                         },
                     },
@@ -3179,6 +3201,7 @@ export default {
                         label: `Deactivate ${data.role}`,
                         icon: "pi pi-unlock",
                         command: () => {
+                            this.getBlockLot(this.form.selected_block_lot);
                             this.changeStatus();
                         },
                     },
@@ -3189,6 +3212,7 @@ export default {
                         label: `View ${data.role}`,
                         icon: "pi pi-user",
                         command: () => {
+                            this.getBlockLot(this.form.selected_block_lot);
                             this.viewUser();
                         },
                     },
@@ -3196,6 +3220,7 @@ export default {
                         label: `Update ${data.role}`,
                         icon: "pi pi-pencil",
                         command: () => {
+                            this.getBlockLot(this.form.selected_block_lot);
                             this.updateUser();
                         },
                     },
@@ -3203,6 +3228,7 @@ export default {
                         label: "Emergency Contacts",
                         icon: "pi pi-id-card",
                         command: () => {
+                            this.getBlockLot(this.form.selected_block_lot);
                             this.viewEmergencyContacts();
                         },
                     },
@@ -3210,6 +3236,7 @@ export default {
                         label: `Activate ${data.role}`,
                         icon: "pi pi-unlock",
                         command: () => {
+                            this.getBlockLot(this.form.selected_block_lot);
                             this.changeStatus();
                         },
                     },
@@ -3220,6 +3247,7 @@ export default {
                         label: `View ${data.role}`,
                         icon: "pi pi-user",
                         command: () => {
+                            this.getBlockLot(this.form.selected_block_lot);
                             this.viewUser();
                         },
                     },
@@ -3227,6 +3255,7 @@ export default {
                         label: `Verify ${data.role}`,
                         icon: "pi pi-check",
                         command: () => {
+                            this.getBlockLot(this.form.selected_block_lot);
                             this.viewVerifytDialog = true;
                         },
                     },
@@ -3234,6 +3263,7 @@ export default {
                         label: `Update ${data.role}`,
                         icon: "pi pi-pencil",
                         command: () => {
+                            this.getBlockLot(this.form.selected_block_lot);
                             this.updateUser();
                         },
                     },
@@ -3241,6 +3271,7 @@ export default {
                         label: "Emergency Contacts",
                         icon: "pi pi-id-card",
                         command: () => {
+                            this.getBlockLot(this.form.selected_block_lot);
                             this.viewEmergencyContacts();
                         },
                     },
@@ -3259,15 +3290,12 @@ export default {
             this.resetFields();
             this.resetErrors();
             this.id = data.id;
-
             this.name = data.name;
-
             this.form.first_name = data.first_name;
             this.form.last_name = data.last_name;
             this.form.gender = data.gender;
             if (data.role != "security officer" && data.role != "admin") {
                 this.form.selected_block = data.lot.block.number;
-                this.getBlockLot();
                 this.form.selected_block_lot = data.block_lot_id;
             }
             if (data.role == "officer") {
@@ -3357,32 +3385,6 @@ export default {
         },
         updateUser() {
             this.updateUserDialog = true;
-            this.first_name = data.first_name;
-            this.last_name = data.last_name;
-            this.gender = data.gender;
-            this.email = data.email;
-            this.age = data.age;
-            this.contact_num = data.contact_num;
-            this.selected_role = data.role;
-            this.selected_block = data.block_lot.block.id;
-            this.getBlockLot();
-            this.selected_block_lot = data.block_lot.id;
-            this.form.first_name = data.first_name;
-            this.form.last_name = data.last_name;
-            this.form.gender = data.gender;
-            if (data.role != "security_officer") {
-                this.form.selected_block = data.lot.block.number;
-                this.getBlockLot();
-                this.form.selected_block_lot = data.lot.id;
-            }
-
-            this.form.email = data.email;
-            this.form.age = data.age;
-            this.form.contact_num = data.contact_num;
-            this.form.selected_role = data.role;
-            this.form.verified = data.verified;
-            this.form.has_voted = data.has_voted;
-            this.form.status = data.status;
         },
         async confirmUpdateUser() {
             this.loading = true;
@@ -3626,9 +3628,10 @@ export default {
                 this.error_selected_position = "The position field is required";
         },
 
-        getBlockLot() {
-            this.form.selected_block_lot = null;
+        getBlockLot(lot) {
+          
             this.$store.dispatch("lots/getBlockLots", this.form.selected_block);
+            this.form.selected_block_lot = lot;
         },
         getFilterBlockLot() {
             this.$store.dispatch(

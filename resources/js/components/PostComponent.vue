@@ -777,9 +777,13 @@ export default {
                 ];
             }
         },
+        countComment() {
+            this.comment_count =
+                this.post.comment_count + this.post.reply_count;
+        },
     },
     mounted() {
-        this.comment_count = this.post.comment_count + this.post.reply_count;
+        this.countComment();
     },
     created() {
         this.populateMenu();

@@ -2,48 +2,167 @@
     <div class="mr-5">
         <div v-if="loading"></div>
         <div v-else>
-            <div v-if="checkElection && userLogged.has_voted == 0">
-                <h4 class="text-center">ELECTION IS ON GOING</h4>
-                <h3 class="text-center">Voted</h3>
-                <h2 class="text-center">
-                    {{ number_voted }} out of {{ total_voter }}
-                </h2>
-                <div v-for="position in positions" :key="position.id">
-                    <hr />
-                    <div class="grid flex">
-                        <div
-                            class="col-12 p-inputgroup flex justify-content-center"
-                        >
-                            <h4 class="text-center mr-2">
-                                {{ position.name }}
-                            </h4>
-                            <Button
-                                v-if="!checkElection"
-                                icon="pi pi-plus"
-                                class="p-button-rounded p-button-success"
-                                v-tooltip="`Add ${position.name}`"
-                                @click="addCandidate(position.id)"
-                            />
-                        </div>
-
-                        <div
-                            class="col-12 flex justify-content-center flex-wrap"
-                        >
+            <div v-if="!result">
+                <div v-if="userLogged.has_voted == 0">
+                    <h4 class="text-center">ELECTION IS ON GOING</h4>
+                    <h3 class="text-center">Voted</h3>
+                    <h2 class="text-center">
+                        {{ number_voted }} out of {{ total_voter }}
+                    </h2>
+                    <div v-for="position in positions" :key="position.id">
+                        <hr />
+                        <div class="grid flex">
                             <div
-                                v-for="candidate in candidates"
-                                :key="candidate.id"
-                                class="flex flex-column"
+                                class="col-12 p-inputgroup flex justify-content-center"
                             >
-                                <Button
-                                    v-if="candidate.position_id == position.id"
-                                    label="Primary"
-                                    class="p-button-text"
-                                    @click="viewUser(candidate)"
-                                    v-tooltip="'View Candidate'"
+                                <h4 class="text-center mr-2">
+                                    {{ position.name }}
+                                </h4>
+                            </div>
+
+                            <div
+                                class="col-12 flex justify-content-center flex-wrap"
+                            >
+                                <div
+                                    v-for="candidate in candidates"
+                                    :key="candidate.id"
+                                    class="flex flex-column"
+                                >
+                                    <Button
+                                        v-if="
+                                            candidate.position_id == position.id
+                                        "
+                                        label="Primary"
+                                        class="p-button-text"
+                                        @click="viewUser(candidate)"
+                                        v-tooltip="'View Candidate'"
+                                    >
+                                        <Card
+                                            class="mr-2 m-2"
+                                            style="
+                                                width: 200px;
+                                                min-height: 300px;
+                                            "
+                                        >
+                                            <template #header>
+                                                <img
+                                                    v-if="
+                                                        candidate.user
+                                                            .profile_pic !==
+                                                        null
+                                                    "
+                                                    src="https://www.primefaces.org/wp-content/uploads/2020/02/primefacesorg-primevue-2020.png"
+                                                    style="height: 7rem"
+                                                />
+                                                <img
+                                                    v-else
+                                                    src="http://127.0.0.1:8000/storage/images/default-prof-pic.png"
+                                                    style="height: 10rem"
+                                                />
+                                            </template>
+                                            <template #title>
+                                                <h5>
+                                                    {{
+                                                        candidate.user
+                                                            .first_name
+                                                    }}
+                                                    {{
+                                                        candidate.user.last_name
+                                                    }}
+                                                </h5>
+                                            </template>
+                                            <template #content>
+                                                <div
+                                                    v-if="!result"
+                                                    class="flex justify-content-center"
+                                                >
+                                                    <Button
+                                                        icon="pi pi-trash"
+                                                        class="p-button-rounded p-button-secondary mr-2"
+                                                        @click="
+                                                            deleteCandidate(
+                                                                candidate
+                                                            )
+                                                        "
+                                                        v-tooltip="
+                                                            'Delete Candidate'
+                                                        "
+                                                    />
+                                                    <Button
+                                                        icon="pi pi-pencil"
+                                                        class="p-button-rounded p-button-primary"
+                                                        @click="
+                                                            updateCandidate(
+                                                                candidate
+                                                            )
+                                                        "
+                                                        v-tooltip="
+                                                            'Edit Candidate'
+                                                        "
+                                                    />
+                                                </div>
+                                            </template>
+                                        </Card>
+                                    </Button>
+                                    <div class="flex justify-content-center">
+                                        <RadioButton
+                                            v-if="
+                                                candidate.position_id ==
+                                                position.id
+                                            "
+                                            :name="`${candidate.position.name}`"
+                                            :value="`${candidate.id}`"
+                                            v-model="
+                                                selected_candidate[
+                                                    `${candidate.position.name}`
+                                                ]
+                                            "
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="flex justify-content-center mb-3">
+                        <Button
+                            label="Submit Vote"
+                            class="p-button-rounded p-button-primary"
+                            @click="validateVote"
+                        />
+                    </div>
+                </div>
+                <div v-else>
+                    <h4 class="text-center">ELECTION IS ON GOING</h4>
+                    <h3 class="text-center">Voted</h3>
+                    <h2 class="text-center">
+                        {{ number_voted }} out of {{ total_voter }}
+                    </h2>
+                    <div v-for="position in positions" :key="position.id">
+                        <hr />
+                        <div class="grid flex">
+                            <div
+                                class="col-12 p-inputgroup flex justify-content-center"
+                            >
+                                <h4 class="text-center mr-2">
+                                    {{ position.name }}
+                                </h4>
+                            </div>
+
+                            <div
+                                class="col-12 flex justify-content-center flex-wrap"
+                            >
+                                <div
+                                    v-for="candidate in candidates"
+                                    :key="candidate.id"
                                 >
                                     <Card
+                                        v-if="
+                                            candidate.position_id ===
+                                            position.id
+                                        "
                                         class="mr-2 m-2"
-                                        style="width: 200px; min-height: 300px"
+                                        style="width: 200px; min-height: 350px"
                                     >
                                         <template #header>
                                             <img
@@ -61,71 +180,27 @@
                                             />
                                         </template>
                                         <template #title>
-                                            <h5>
+                                            <h5 class="text-center">
                                                 {{ candidate.user.first_name }}
                                                 {{ candidate.user.last_name }}
                                             </h5>
                                         </template>
                                         <template #content>
-                                            <div
-                                                v-if="!checkElection"
-                                                class="flex justify-content-center"
-                                            >
-                                                <Button
-                                                    icon="pi pi-trash"
-                                                    class="p-button-rounded p-button-secondary mr-2"
-                                                    @click="
-                                                        deleteCandidate(
-                                                            candidate
-                                                        )
-                                                    "
-                                                    v-tooltip="
-                                                        'Delete Candidate'
-                                                    "
-                                                />
-                                                <Button
-                                                    icon="pi pi-pencil"
-                                                    class="p-button-rounded p-button-primary"
-                                                    @click="
-                                                        updateCandidate(
-                                                            candidate
-                                                        )
-                                                    "
-                                                    v-tooltip="'Edit Candidate'"
-                                                />
+                                            <div class="text-center">
+                                                <p>Vote count:</p>
+                                                {{ candidate.vote_count }}
                                             </div>
                                         </template>
                                     </Card>
-                                </Button>
-                                <div class="flex justify-content-center">
-                                    <RadioButton
-                                        v-if="
-                                            candidate.position_id == position.id
-                                        "
-                                        :name="`${candidate.position.name}`"
-                                        :value="`${candidate.id}`"
-                                        v-model="
-                                            selected_candidate[
-                                                `${candidate.position.name}`
-                                            ]
-                                        "
-                                    />
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <hr />
-                <div class="flex justify-content-center mb-3">
-                    <Button
-                        label="Submit Vote"
-                        class="p-button-rounded p-button-primary"
-                        @click="validateVote"
-                    />
-                </div>
             </div>
-            <div v-else-if="checkElection && userLogged.has_voted == 1">
-                <h4 class="text-center">ELECTION IS ON GOING</h4>
+
+            <div v-else>
+                <h2 class="text-center">ELECTION RESULT</h2>
                 <h3 class="text-center">Voted</h3>
                 <h2 class="text-center">
                     {{ number_voted }} out of {{ total_voter }}
@@ -145,11 +220,11 @@
                             class="col-12 flex justify-content-center flex-wrap"
                         >
                             <div
-                                v-for="candidate in candidates"
+                                v-for="candidate in last_candidates"
                                 :key="candidate.id"
                             >
                                 <Card
-                                    v-if="candidate.position_id === position.id"
+                                    v-if="candidate.position_id == position.id"
                                     class="mr-2 m-2"
                                     style="width: 200px; min-height: 350px"
                                 >
@@ -185,8 +260,9 @@
                         </div>
                     </div>
                 </div>
-            </div>
-            <div v-else>
+
+                <hr />
+
                 <div>
                     <h4 class="text-center">Current Officers</h4>
                 </div>
@@ -740,11 +816,14 @@ export default {
     setup() {
         const store = useStore();
         return {
-            blocks: computed(() => store.state.blocks.blocks),
             userLogged: computed(() => store.state.userLogged),
+            blocks: computed(() => store.state.blocks.blocks),
             filteredLots: computed(() => store.state.lots.filteredLots),
             positions: computed(() => store.state.positions.positions),
             candidates: computed(() => store.state.candidates.candidates),
+            last_candidates: computed(
+                () => store.state.candidates.last_candidates
+            ),
             officers: computed(() => store.state.officers),
             number_voted: computed(() => {
                 let temp = [];
@@ -820,7 +899,7 @@ export default {
             error_selected_tag: "",
 
             election_id: null,
-            checkElection: null,
+            result: null,
         };
     },
     methods: {
@@ -857,16 +936,15 @@ export default {
                                         "changed has voted for ",
                                         this.$store.state.userLogged.id
                                     );
+                                    this.$store.dispatch("getUserLogged");
                                     this.$store.dispatch("getUsersVerified");
                                     this.$store.dispatch(
                                         "candidates/getAll",
                                         this.election_id
                                     );
-                                    this.loading = false;
                                 })
                                 .catch((err) => {
                                     console.log(err.response);
-                                    this.loading = false;
                                 });
                         }
                     })
@@ -877,6 +955,7 @@ export default {
 
             this.showVoteSucess();
             this.confirmVoteDialog = false;
+            this.loading = false;
         },
         showVoteSucess() {
             this.$toast.add({
@@ -981,7 +1060,8 @@ export default {
                 url: "/api/election",
             })
                 .then((res) => {
-                    var id = res.data.id;
+                    this.id = res.data.id;
+                    this.result = res.data.result;
                     var end_date = res.data.end_date;
                     // this.$store.state.timeNow.timeNow.datetime;
                     var date = new Date(
@@ -991,16 +1071,23 @@ export default {
                         day = ("0" + date.getDate()).slice(-2);
                     var date_now = [date.getFullYear(), mnth, day].join("-");
 
-                    if (!id) {
+                    if (!this.id) {
                         console.log("NO ELECTION");
                         this.election_id = 1;
-                    } else if (id && end_date > date_now) {
+                        this.result = false;
+                    } else if (this.id && !this.result) {
                         console.log("ELECTION ON GOING 2nd if ");
-
-                        this.checkElection = res.data.end_date;
+                        this.election_id = res.data.id;
                     } else {
+                        console.log("NO ELECTION 3rd");
+                        this.$store.dispatch(
+                            "candidates/getLastCandidates",
+                            this.id
+                        );
                         this.election_id = parseInt(res.data.id) + 1;
                     }
+                    this.$store.dispatch("candidates/getAll", this.election_id);
+                    this.$store.dispatch("filterResident", this.election_id);
                     this.loading = false;
                 })
                 .catch((err) => {
@@ -1013,7 +1100,6 @@ export default {
     mounted() {
         this.$store.dispatch("timeNow/getAll");
         this.checkElectionDate();
-        this.$store.dispatch("candidates/getAll", this.election_id);
         this.$store.dispatch("getOfficers");
 
         this.positions.forEach((elem) => {

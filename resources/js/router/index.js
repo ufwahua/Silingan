@@ -17,6 +17,7 @@ import VehicleComponent from "../admin/VehicleComponent.vue";
 import VerifyMarketPlaceComponent from "../admin/VerifyMarketPlaceComponent.vue";
 import CashflowComponent from "../admin/CashflowComponent.vue";
 import CollectionTypeComponent from "../admin/CollectionTypeComponent.vue";
+import ExpenseTypeComponent from "../admin/ExpenseTypeComponent";
 
 //resident
 import ResidentHomeComponent from "../resident/ResidentHomeComponent.vue";
@@ -344,7 +345,7 @@ const router = createRouter({
                     },
                 },
                 {
-                    path: "collection_type",
+                    path: "collection-type",
                     meta: {
                         role: "admin",
                     },
@@ -375,6 +376,17 @@ const router = createRouter({
                     components: {
                         default: NotFound,
                         contents: SpecificPostComponent,
+                    },
+                },
+                {
+                    path: "expense-type",
+                    meta: {
+                        role: "admin",
+                    },
+                    beforeEnter: checkRole,
+                    components: {
+                        default: NotFound,
+                        contents: ExpenseTypeComponent,
                     },
                 },
             ],
