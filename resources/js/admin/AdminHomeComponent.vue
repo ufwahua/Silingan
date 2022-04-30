@@ -72,16 +72,21 @@ export default {
                             icon: "pi pi-fw pi-home",
                             to: "/admin/timeline",
                         },
-                        {
-                            label: "Announcement",
-                            icon: "pi pi-info",
-                            to: "/admin/view-announcement",
-                        },
+                        // {
+                        //     label: "Announcement",
+                        //     icon: "pi pi-info",
+                        //     to: "/admin/view-announcement",
+                        // },
 
                         {
                             label: "Marketplace",
                             icon: "pi pi-shopping-cart",
                             to: "/admin/marketplace",
+                        },
+                        {
+                            label: "Announcement",
+                            icon: "pi pi-volume-down",
+                            to: "/admin/view-announcement",
                         },
                         {
                             label: "Cash Flow",
@@ -162,6 +167,11 @@ export default {
                                     label: "Collection Types",
                                     icon: "pi pi-info-circle",
                                     to: "/admin/collection_type",
+                                },
+                                {
+                                    label: "Expense Types",
+                                    icon: "pi pi-info-circle",
+                                    to: "/admin/expense_type",
                                 },
                             ],
                         },
@@ -295,7 +305,7 @@ export default {
         this.$store.dispatch("announcements/getAll");
         this.$store.dispatch("positions/getAll");
         this.$store.dispatch("emergency_contact_details/getAll");
-        this.$store.dispatch("candidates/getAll");
+
         this.$store.dispatch("getAllUsers");
         this.$store.dispatch("cards/getAllCards");
         this.$store.dispatch("logs/getAll");
@@ -309,6 +319,11 @@ export default {
         this.$store.dispatch("collection/getAll");
         this.$store.dispatch("fund/getAll");
         this.$store.dispatch("expense/getAll");
+        this.$store.dispatch(
+            "notifications/getSpecific",
+            this.$store.state.userLogged.id
+        );
+        this.$store.dispatch("expenseType/getAll");
     },
 };
 </script>

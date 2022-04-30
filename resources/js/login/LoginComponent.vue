@@ -9,16 +9,16 @@
             >
                 <div class="col-12 mt-5 xl:mt-0 text-center">
                     <router-link to="/" :key="$route.fullPath">
-                        <!-- <img
-                            class="Silingan-logo"
-                            alt="Silingan-Logo"
-                            src="http://127.0.0.1:8000/storage/images/silingan-icon.png"
-                    />-->
                         <img
                             class="Silingan-logo"
                             alt="Silingan-Logo"
-                            src="https://i.ibb.co/V3B8NBM/silingan-icon.png"
+                            src="http://127.0.0.1:8000/storage/images/silingan-icon.png"
                         />
+                        <!-- <img
+                            class="Silingan-logo"
+                            alt="Silingan-Logo"
+                            src="https://i.ibb.co/V3B8NBM/silingan-icon.png"
+                        /> -->
                     </router-link>
                 </div>
                 <div class="w-full md:w-10 mx-auto" autocomplete="on">
@@ -194,7 +194,7 @@ export default {
 </script>
 
 <style scoped>
-@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap");
+
 
 .login100-form {
     height: 475px;

@@ -31,7 +31,7 @@ class ExpenseRequest extends FormRequest
             'official_receipt' => ['sometimes'],
             'running_balance' => ['required'],
             'fund_id' => ['required'],
-            'expense_source' => ['required']
+            'expense_type_id' => ['required', Rule::exists('expense_types', 'id')]
         ];
     }
 }

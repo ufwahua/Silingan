@@ -18,7 +18,7 @@ div
                             </div>
                             <div v-else>
                                 <Avatar
-                                    image="http://127.0.0.1:8000/storage/images/default-prof-pic.png"
+                                    image="http://127.0.0.1:8000/storage/images/avatar.png"
                                     class="mr-2"
                                     size="large"
                                     shape="circle"
@@ -96,25 +96,22 @@ div
             <hr />
             <div
                 v-if="approved == true"
-                class="flex justify-content-between p-0 m-0"
+                class="flex justify-content-end p-0 m-0 mr-4"
             >
                 <Button
-                    label="Comment"
+                    v-if="comment_count <= 1"
+                    :label="`${comment_count.toString()} comment`"
                     icon="pi pi-comment"
-                    style="width: 150px"
+                    style="width: 200px"
                     class="p-button-outlined p-button-primary ml-5"
                     @click="commentShow"
                 />
                 <Button
-                    v-if="comment_count === 1"
-                    :label="`${comment_count.toString()} comment`"
-                    class="p-button-primary p-button-text"
-                    @click="commentShow"
-                />
-                <Button
-                    v-if="comment_count > 1"
+                    v-else
                     :label="`${comment_count.toString()} comments`"
-                    class="p-button-primary p-button-text mr-4"
+                    icon="pi pi-comments"
+                    style="width: 200px"
+                    class="p-button-outlined p-button-primary ml-5"
                     @click="commentShow"
                 />
             </div>
@@ -147,7 +144,7 @@ div
                     </div>
                     <div v-else>
                         <Avatar
-                            image="http://127.0.0.1:8000/storage/images/default-prof-pic.png"
+                            image="http://127.0.0.1:8000/storage/images/avatar.png"
                             class="mr-2"
                             size="large"
                             shape="circle"
@@ -169,6 +166,7 @@ div
                         v-if="comment.id"
                         :comment="comment"
                         :group_id="group_id"
+                        :post_id="comment.post_id"
                     />
                 </div>
             </div>
@@ -549,7 +547,7 @@ export default {
                     message: this.message,
                 },
             })
-                .then((res) => {
+                .then(async (res) => {
                     if (this.group_id == 1) {
                         this.$store.dispatch(
                             "posts/getTimeLine",
@@ -561,6 +559,25 @@ export default {
                             this.$store.state.userLogged.id
                         );
                     }
+                    if (this.post.user.id != this.$store.state.userLogged.id) {
+                        await axios({
+                            method: "post",
+                            url: "/api/notification/comment",
+                            data: {
+                                from_user_id: this.$store.state.userLogged.id,
+                                to_user_id: this.post.user.id,
+                                post_id: this.post.id,
+                                message: "has commented on your post",
+                            },
+                        })
+                            .then(() => {
+                                console.log("notify success");
+                            })
+                            .catch((e) => {
+                                console.log(e.response);
+                            });
+                    }
+                    this.$store.dispatch("posts/getSpecificPost", this.post.id);
                     this.message = null;
                 })
                 .catch((error) => {

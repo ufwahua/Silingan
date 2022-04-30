@@ -3,9 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Candidate;
 use Illuminate\Support\Str;
-use Illuminate\Http\Request;
 
+use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
@@ -327,7 +328,103 @@ class UserController extends Controller
         else
             return null;
     }
+    public function getSearchUser(Request $request): JsonResponse
+    {
+       
+        $users = User::orWhere(DB::raw("concat(first_name, ' ', last_name)"), 'LIKE', "%".$request->input('query')."%")
+                       ->where('verified',1)
+                       ->with(['lot.block','position','emergency_contact'])
+                       ->latest()
+                       ->get();
+        return response()->json($users);
+        
+    }
+    public function getUsersVerified(Request $request): JsonResponse
+    {
+       
+        $users =  User::where('verified',1)
+        ->with(['lot.block','position'])->get();
 
+        return response()->json($users);
+        
+    }
+    public function filterResident(Request $request): JsonResponse
+    {
+        $candidates_user_id = DB::table('candidates')->pluck('user_id')->toArray();
+        $users = User::whereNotIn('id', $candidates_user_id)
+        ->where('verified',1)
+        ->whereNested(function($query)  {
+        $query
+            ->where('role', 'resident')
+            ->orWhere('role', 'officer');
+            
+        })
+        ->with(['lot.block','position'])->get();
+       
+
+        return response()->json($users);
+        
+    }
+     public function getOfficers(Request $request): JsonResponse
+    {
+        $users =  User::where('role','officer')->with(['lot.block','position'])->get();
+        $req = [];
+        foreach ($users as $user){
+            if(strtoupper($user->position['name']) === "PRESIDENT"){
+                array_push($req,$user);
+                break;
+            }
+        };
+        foreach ($users as $user){
+            if(strtoupper($user->position['name']) === "VICE-PRESIDENT"){
+                array_push($req,$user);
+                break;
+            }
+        };
+        foreach ($users as $user){
+            if(strtoupper($user->position['name']) === "SECRETARY"){
+                array_push($req,$user);
+                break;
+            }
+        };
+        foreach ($users as $user){
+            if(strtoupper($user->position['name']) === "TREASURER"){
+                array_push($req,$user);
+                break;
+            }
+        };
+        foreach ($users as $user){
+            if(strtoupper($user->position['name']) === "AUDITOR"){
+                array_push($req,$user);
+                break;
+            }
+        };
+        foreach ($users as $user){
+            if(strtoupper($user->position['name']) === "AUDITOR" || strtoupper($user->position['name']) === "TREASURER" ||strtoupper($user->position['name']) === "SECRETARY" ||strtoupper($user->position['name']) === "VICE-PRESIDENT" ||strtoupper($user->position['name']) === "PRESIDENT"){
+                
+            }
+            else{
+                array_push($req,$user);
+            }
+        };
+       
+        return response()->json(
+           $req
+        );
+        
+       
+    }
+
+   
+    public function updateHasVoted(Request $request): JsonResponse
+    {
+      
+        User::query()->where('id', $request->route('user'))->update([
+            'has_voted' => $request['has_voted'],
+        ]);
+
+        return response()->json(['ok']);
+    }
     public function destroy(User $user): JsonResponse
     {
         $user->delete();

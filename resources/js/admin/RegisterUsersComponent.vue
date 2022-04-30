@@ -3,7 +3,7 @@
         <Toast />
         <div class="grid">
             <div class="col-12">
-                <h1>Registered Users</h1>
+                <h1 class="layout-text">All Users</h1>
             </div>
         </div>
         <div class="grid mb-2 flex justify-content-flex-start">
@@ -1036,852 +1036,12 @@
                             <Button
                                 label="Update"
                                 icon="pi pi-check"
-                                class="p-button-text p-button-warning"
+                                class="p-button-text p-button-success"
                                 @click="confirmUpdateUser"
                             />
                         </template>
                     </Dialog>
 
-                    <Dialog
-                        v-model:visible="registerUserDialog"
-                        :style="{ width: '470px' }"
-                        header="Register User"
-                        :modal="true"
-                    >
-                        <div
-                            v-if="form.selected_role == 'resident'"
-                            class="grid"
-                        >
-                            <div class="col-12">
-                                <label
-                                    ><h5>
-                                        <span class="text-primary"
-                                            >General Information</span
-                                        >
-                                    </h5></label
-                                >
-                            </div>
-
-                            <div class="p-fluid formgrid grid ml-0">
-                                <div class="field col-12 md:col-6">
-                                    <label>Firstname</label>
-
-                                    <InputText
-                                        id="firstname"
-                                        type="text"
-                                        v-model="form.first_name"
-                                        :class="{
-                                            'p-invalid': error_first_name,
-                                        }"
-                                        @keydown.enter="onRegisterClick"
-                                    />
-                                    <label
-                                        style="color: red"
-                                        v-if="error_first_name"
-                                        >{{ error_first_name }}</label
-                                    >
-                                </div>
-
-                                <div class="field col-12 md:col-6">
-                                    <label>Lastname</label>
-
-                                    <InputText
-                                        id="last_name"
-                                        type="text"
-                                        v-model="form.last_name"
-                                        :class="{
-                                            'p-invalid': error_last_name,
-                                        }"
-                                        @keydown.enter="onRegisterClick"
-                                    />
-                                    <label
-                                        style="color: red"
-                                        v-if="error_last_name"
-                                        >{{ error_last_name }}</label
-                                    >
-                                </div>
-
-                                <div class="field col-12 md:col-6">
-                                    <div>
-                                        <label>Gender</label>
-                                    </div>
-
-                                    <div class="field-radiobutton col-6">
-                                        <RadioButton
-                                            name="gender"
-                                            value="male"
-                                            v-model="form.gender"
-                                            :class="{
-                                                'p-invalid': error_gender,
-                                            }"
-                                            @keydown.enter="onRegisterClick"
-                                        />
-                                        <label class="mb-0 ml-1">Male</label>
-                                    </div>
-                                    <div class="field-radiobutton col-6">
-                                        <RadioButton
-                                            name="gender"
-                                            value="female"
-                                            :class="{
-                                                'p-invalid': error_gender,
-                                            }"
-                                            v-model="form.gender"
-                                            @keydown.enter="onRegisterClick"
-                                        />
-                                        <label class="mb-0 ml-1">Female</label>
-                                    </div>
-                                    <div>
-                                        <label
-                                            style="color: red"
-                                            v-if="error_gender"
-                                            >{{ error_gender }}</label
-                                        >
-                                    </div>
-                                </div>
-
-                                <div class="field col-12 md:col-6">
-                                    <label>Age</label>
-                                    <InputText
-                                        id="age"
-                                        type="number"
-                                        min="0"
-                                        step="1"
-                                        onfocus="this.previousValue = this.value"
-                                        onkeydown="this.previousValue = this.value"
-                                        oninput="validity.valid || (value = this.previousValue)"
-                                        v-model="form.age"
-                                        :class="{
-                                            'p-invalid': error_age,
-                                        }"
-                                    />
-                                    <label
-                                        style="color: red"
-                                        v-if="error_age"
-                                        >{{ error_age }}</label
-                                    >
-                                </div>
-                                <div class="field col-12 md:col-6">
-                                    <label>Block</label>
-
-                                    <Dropdown
-                                        v-model="form.selected_block"
-                                        :options="blocks"
-                                        optionLabel="number"
-                                        optionValue="number"
-                                        placeholder="Select Block"
-                                        @change="getBlockLot"
-                                        :class="{
-                                            'p-invalid': error_selected_block,
-                                        }"
-                                    />
-                                    <label
-                                        style="color: red"
-                                        v-if="error_selected_block"
-                                        >{{ error_selected_block }}</label
-                                    >
-                                </div>
-
-                                <div class="field col-12 md:col-6">
-                                    <label>Lot</label>
-
-                                    <Dropdown
-                                        v-model="form.selected_block_lot"
-                                        :options="filteredLots"
-                                        optionLabel="number"
-                                        optionValue="id"
-                                        placeholder="Select Lot"
-                                        :class="{
-                                            'p-invalid': error_selected_lot,
-                                        }"
-                                        :disabled="
-                                            form.selected_block ? false : true
-                                        "
-                                    />
-                                    <label
-                                        style="color: red"
-                                        v-if="error_selected_lot"
-                                        >{{ error_selected_lot }}</label
-                                    >
-                                </div>
-                                <div class="field col-12 md:col-6">
-                                    <label>Role</label>
-
-                                    <Dropdown
-                                        v-model="form.selected_role"
-                                        :class="{
-                                            'p-invalid': error_role,
-                                        }"
-                                        :options="role"
-                                        optionLabel="role"
-                                        optionValue="role"
-                                        placeholder="Select Role"
-                                    />
-                                    <label
-                                        style="color: red"
-                                        v-if="error_role"
-                                        >{{ error_role }}</label
-                                    >
-                                </div>
-                                <div class="field col-12 md:col-6">
-                                    <label>Tag as</label>
-
-                                    <Dropdown
-                                        v-model="form.selected_tag"
-                                        :class="{
-                                            'p-invalid': error_selected_tag,
-                                        }"
-                                        :options="tag"
-                                        optionLabel="tag"
-                                        optionValue="tag"
-                                        placeholder="Select tag"
-                                    />
-                                    <label
-                                        style="color: red"
-                                        v-if="error_selected_tag"
-                                        >{{ error_selected_tag }}</label
-                                    >
-                                </div>
-                                <div class="field col-12 md:col-12">
-                                    <label>Contact Number</label>
-                                    <div class="p-inputgroup">
-                                        <span class="p-inputgroup-addon">
-                                            +63
-                                        </span>
-                                        <InputMask
-                                            mask="(999) 99-999-9999"
-                                            placeholder="(639) 99-999-9999"
-                                            :unmask="true"
-                                            id="contact_num"
-                                            type="text"
-                                            oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*?)\..*/g, '$1');"
-                                            v-model="form.contact_num"
-                                            @keydown.enter="onRegisterClick"
-                                            :class="{
-                                                'p-invalid': error_contact_num,
-                                            }"
-                                        />
-                                    </div>
-
-                                    <label
-                                        style="color: red"
-                                        v-if="error_contact_num"
-                                        >{{ error_contact_num }}</label
-                                    >
-                                </div>
-
-                                <div class="col-12 title-form mt-4">
-                                    <label
-                                        ><h5>
-                                            <span class="text-primary"
-                                                >Security Information</span
-                                            >
-                                        </h5></label
-                                    >
-                                </div>
-
-                                <div class="field col-12 md:col-12">
-                                    <label>Email</label>
-                                    <InputText
-                                        type="text"
-                                        name="email"
-                                        v-model="form.email"
-                                        @keydown.enter="onRegisterClick"
-                                        :class="{
-                                            'p-invalid': error_email,
-                                        }"
-                                    />
-                                    <label
-                                        style="color: red"
-                                        v-if="error_email"
-                                        >{{ error_email }}</label
-                                    >
-                                </div>
-                                <div class="field col-12 md:col-12">
-                                    <label>Password</label>
-                                    <InputText
-                                        type="password"
-                                        name="password"
-                                        v-model="form.password"
-                                        @keydown.enter="onRegisterClick"
-                                        :class="{
-                                            'p-invalid': error_password,
-                                        }"
-                                    />
-                                    <label
-                                        style="color: red"
-                                        v-if="error_password"
-                                        >{{ error_password }}</label
-                                    >
-                                </div>
-                                <div class="field col-12 md:col-12">
-                                    <label>Confirm Password</label>
-
-                                    <InputText
-                                        type="password"
-                                        name="confirmpassword"
-                                        v-model="form.confirm_password"
-                                        @keydown.enter="onRegisterClick"
-                                        :class="{
-                                            'p-invalid': error_confirm_password,
-                                        }"
-                                    />
-                                    <label
-                                        style="color: red"
-                                        v-if="error_confirm_password"
-                                        >{{ error_confirm_password }}</label
-                                    >
-                                </div>
-                            </div>
-                        </div>
-                        <div
-                            v-else-if="form.selected_role == 'officer'"
-                            class="grid"
-                        >
-                            <div class="col-12 title-form">
-                                <Badge
-                                    :value="1"
-                                    severity="info"
-                                    class="mr-2 mb-2"
-                                    size="large"
-                                ></Badge>
-                                <label><h6>Basic Information</h6></label>
-                            </div>
-
-                            <div class="p-fluid formgrid grid">
-                                <div class="field col-12 md:col-6">
-                                    <label>Firstname</label>
-
-                                    <InputText
-                                        id="firstname"
-                                        type="text"
-                                        v-model="form.first_name"
-                                        :class="{
-                                            'p-invalid': error_first_name,
-                                        }"
-                                        @keydown.enter="onRegisterClick"
-                                    />
-                                    <label
-                                        style="color: red"
-                                        v-if="error_first_name"
-                                        >{{ error_first_name }}</label
-                                    >
-                                </div>
-
-                                <div class="field col-12 md:col-6">
-                                    <label>Lastname</label>
-
-                                    <InputText
-                                        id="last_name"
-                                        type="text"
-                                        v-model="form.last_name"
-                                        :class="{
-                                            'p-invalid': error_last_name,
-                                        }"
-                                        @keydown.enter="onRegisterClick"
-                                    />
-                                    <label
-                                        style="color: red"
-                                        v-if="error_last_name"
-                                        >{{ error_last_name }}</label
-                                    >
-                                </div>
-
-                                <div class="field col-12 md:col-6">
-                                    <div>
-                                        <label>Gender</label>
-                                    </div>
-
-                                    <div>
-                                        <div class="field-radiobutton mb-0">
-                                            <RadioButton
-                                                name="gender"
-                                                value="male"
-                                                v-model="form.gender"
-                                                :class="{
-                                                    'p-invalid': error_gender,
-                                                }"
-                                                @keydown.enter="onRegisterClick"
-                                            />
-                                            <label class="mb-0 ml-1 mr-5"
-                                                >Male</label
-                                            >
-                                            <RadioButton
-                                                name="gender"
-                                                value="female"
-                                                :class="{
-                                                    'p-invalid': error_gender,
-                                                }"
-                                                v-model="form.gender"
-                                                @keydown.enter="onRegisterClick"
-                                            />
-                                            <label class="mb-0 ml-1"
-                                                >Female</label
-                                            >
-                                        </div>
-                                        <div>
-                                            <label
-                                                style="color: red"
-                                                v-if="error_gender"
-                                                >{{ error_gender }}</label
-                                            >
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="field col-12 md:col-6">
-                                    <label>Age</label>
-                                    <InputText
-                                        id="age"
-                                        type="number"
-                                        min="0"
-                                        step="1"
-                                        onfocus="this.previousValue = this.value"
-                                        onkeydown="this.previousValue = this.value"
-                                        oninput="validity.valid || (value = this.previousValue)"
-                                        v-model="form.age"
-                                        :class="{
-                                            'p-invalid': error_age,
-                                        }"
-                                    />
-                                    <label
-                                        style="color: red"
-                                        v-if="error_age"
-                                        >{{ error_age }}</label
-                                    >
-                                </div>
-
-                                <div class="field col-12 md:col-6">
-                                    <label>Block</label>
-
-                                    <Dropdown
-                                        v-model="form.selected_block"
-                                        :options="blocks"
-                                        optionLabel="number"
-                                        optionValue="number"
-                                        placeholder="Select Block"
-                                        @change="getBlockLot"
-                                        :class="{
-                                            'p-invalid': error_selected_block,
-                                        }"
-                                    />
-                                    <label
-                                        style="color: red"
-                                        v-if="error_selected_block"
-                                        >{{ error_selected_block }}</label
-                                    >
-                                </div>
-                                <div class="field col-12 md:col-6">
-                                    <label>Lot</label>
-
-                                    <Dropdown
-                                        v-model="form.selected_block_lot"
-                                        :options="filteredLots"
-                                        optionLabel="number"
-                                        optionValue="id"
-                                        placeholder="Select Lot"
-                                        :class="{
-                                            'p-invalid': error_selected_lot,
-                                        }"
-                                        :disabled="
-                                            form.selected_block ? false : true
-                                        "
-                                    />
-                                    <label
-                                        style="color: red"
-                                        v-if="error_selected_lot"
-                                        >{{ error_selected_lot }}</label
-                                    >
-                                </div>
-                                <div class="field col-12 md:col-6">
-                                    <label>Tag as</label>
-
-                                    <Dropdown
-                                        v-model="form.selected_tag"
-                                        :class="{
-                                            'p-invalid': error_selected_tag,
-                                        }"
-                                        :options="tag"
-                                        optionLabel="tag"
-                                        optionValue="tag"
-                                        placeholder="Select tag"
-                                    />
-                                    <label
-                                        style="color: red"
-                                        v-if="error_selected_tag"
-                                        >{{ error_selected_tag }}</label
-                                    >
-                                </div>
-
-                                <div class="field col-12 md:col-6">
-                                    <label>Contact Number</label>
-                                    <div class="p-inputgroup">
-                                        <span class="p-inputgroup-addon">
-                                            +63
-                                        </span>
-                                        <InputMask
-                                            mask="(999) 99-999-9999"
-                                            placeholder="(639) 99-999-9999"
-                                            :unmask="true"
-                                            id="contact_num"
-                                            type="text"
-                                            oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*?)\..*/g, '$1');"
-                                            v-model="form.contact_num"
-                                            @keydown.enter="onRegisterClick"
-                                            :class="{
-                                                'p-invalid': error_contact_num,
-                                            }"
-                                        />
-                                    </div>
-
-                                    <label
-                                        style="color: red"
-                                        v-if="error_contact_num"
-                                        >{{ error_contact_num }}</label
-                                    >
-                                </div>
-                                <div class="field col-12 md:col-6">
-                                    <label>Role</label>
-
-                                    <Dropdown
-                                        v-model="form.selected_role"
-                                        :class="{
-                                            'p-invalid': error_role,
-                                        }"
-                                        :options="role"
-                                        optionLabel="role"
-                                        optionValue="role"
-                                        placeholder="Select Role"
-                                    />
-                                    <label
-                                        style="color: red"
-                                        v-if="error_role"
-                                        >{{ error_role }}</label
-                                    >
-                                </div>
-                                <div class="field col-12 md:col-6">
-                                    <label>Position</label>
-
-                                    <Dropdown
-                                        v-model="form.selected_position"
-                                        :class="{
-                                            'p-invalid':
-                                                error_selected_position,
-                                        }"
-                                        :options="positions"
-                                        optionLabel="name"
-                                        optionValue="id"
-                                        placeholder="Select Position"
-                                    />
-                                    <label
-                                        style="color: red"
-                                        v-if="error_selected_position"
-                                        >{{ error_selected_position }}</label
-                                    >
-                                </div>
-
-                                <div class="col-12 title-form">
-                                    <Badge
-                                        :value="2"
-                                        severity="info"
-                                        class="mr-2 mb-2"
-                                        size="large"
-                                    ></Badge>
-                                    <label><h6>Security Information</h6></label>
-                                </div>
-
-                                <div class="field col-12 md:col-4">
-                                    <label>Email</label>
-                                    <InputText
-                                        type="text"
-                                        name="email"
-                                        v-model="form.email"
-                                        @keydown.enter="onRegisterClick"
-                                        :class="{
-                                            'p-invalid': error_email,
-                                        }"
-                                    />
-                                    <label
-                                        style="color: red"
-                                        v-if="error_email"
-                                        >{{ error_email }}</label
-                                    >
-                                </div>
-                                <div class="field col-12 md:col-4">
-                                    <label>Password</label>
-                                    <InputText
-                                        type="password"
-                                        name="password"
-                                        v-model="form.password"
-                                        @keydown.enter="onRegisterClick"
-                                        :class="{
-                                            'p-invalid': error_password,
-                                        }"
-                                    />
-                                    <label
-                                        style="color: red"
-                                        v-if="error_password"
-                                        >{{ error_password }}</label
-                                    >
-                                </div>
-                                <div class="field col-12 md:col-4">
-                                    <label>Confirm Password</label>
-
-                                    <InputText
-                                        type="password"
-                                        name="confirmpassword"
-                                        v-model="form.confirm_password"
-                                        @keydown.enter="onRegisterClick"
-                                        :class="{
-                                            'p-invalid': error_confirm_password,
-                                        }"
-                                    />
-                                    <label
-                                        style="color: red"
-                                        v-if="error_confirm_password"
-                                        >{{ error_confirm_password }}</label
-                                    >
-                                </div>
-
-                                <br />
-                            </div>
-                        </div>
-                        <div v-else class="grid">
-                            <div class="col-12 title-form">
-                                <Badge
-                                    :value="1"
-                                    severity="info"
-                                    class="mr-2 mb-2"
-                                    size="large"
-                                ></Badge>
-                                <label><h6>Basic Information</h6></label>
-                            </div>
-
-                            <div class="p-fluid formgrid grid">
-                                <div class="field col-12 md:col-6">
-                                    <label>Firstname</label>
-
-                                    <InputText
-                                        id="firstname"
-                                        type="text"
-                                        v-model="form.first_name"
-                                        :class="{
-                                            'p-invalid': error_first_name,
-                                        }"
-                                        @keydown.enter="onRegisterClick"
-                                    />
-                                    <label
-                                        style="color: red"
-                                        v-if="error_first_name"
-                                        >{{ error_first_name }}</label
-                                    >
-                                </div>
-
-                                <div class="field col-12 md:col-6">
-                                    <label>Lastname</label>
-
-                                    <InputText
-                                        id="last_name"
-                                        type="text"
-                                        v-model="form.last_name"
-                                        :class="{
-                                            'p-invalid': error_last_name,
-                                        }"
-                                        @keydown.enter="onRegisterClick"
-                                    />
-                                    <label
-                                        style="color: red"
-                                        v-if="error_last_name"
-                                        >{{ error_last_name }}</label
-                                    >
-                                </div>
-
-                                <div class="field col-12 md:col-6">
-                                    <div>
-                                        <label>Gender</label>
-                                    </div>
-
-                                    <div>
-                                        <div class="field-radiobutton mb-0">
-                                            <RadioButton
-                                                name="gender"
-                                                value="male"
-                                                v-model="form.gender"
-                                                :class="{
-                                                    'p-invalid': error_gender,
-                                                }"
-                                                @keydown.enter="onRegisterClick"
-                                            />
-                                            <label class="mb-0 ml-1 mr-5"
-                                                >Male</label
-                                            >
-                                            <RadioButton
-                                                name="gender"
-                                                value="female"
-                                                :class="{
-                                                    'p-invalid': error_gender,
-                                                }"
-                                                v-model="form.gender"
-                                                @keydown.enter="onRegisterClick"
-                                            />
-                                            <label class="mb-0 ml-1"
-                                                >Female</label
-                                            >
-                                        </div>
-                                        <div>
-                                            <label
-                                                style="color: red"
-                                                v-if="error_gender"
-                                                >{{ error_gender }}</label
-                                            >
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="field col-12 md:col-6">
-                                    <label>Age</label>
-                                    <InputText
-                                        id="age"
-                                        type="number"
-                                        min="0"
-                                        step="1"
-                                        onfocus="this.previousValue = this.value"
-                                        onkeydown="this.previousValue = this.value"
-                                        oninput="validity.valid || (value = this.previousValue)"
-                                        v-model="form.age"
-                                        :class="{
-                                            'p-invalid': error_age,
-                                        }"
-                                    />
-                                    <label
-                                        style="color: red"
-                                        v-if="error_age"
-                                        >{{ error_age }}</label
-                                    >
-                                </div>
-                                <div class="field col-12 md:col-12">
-                                    <label>Role</label>
-
-                                    <Dropdown
-                                        v-model="form.selected_role"
-                                        :class="{
-                                            'p-invalid': error_role,
-                                        }"
-                                        :options="role"
-                                        optionLabel="role"
-                                        optionValue="role"
-                                        placeholder="Select Role"
-                                    />
-                                    <label
-                                        style="color: red"
-                                        v-if="error_role"
-                                        >{{ error_role }}</label
-                                    >
-                                </div>
-
-                                <div class="field col-12 md:col-12">
-                                    <label>Contact Number</label>
-                                    <div class="p-inputgroup">
-                                        <span class="p-inputgroup-addon">
-                                            +63 </span
-                                        ><InputMask
-                                            mask="(999) 99-999-9999"
-                                            placeholder="(639) 99-999-9999"
-                                            :unmask="true"
-                                            id="contact_num"
-                                            type="text"
-                                            oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*?)\..*/g, '$1');"
-                                            v-model="form.contact_num"
-                                            @keydown.enter="onRegisterClick"
-                                            :class="{
-                                                'p-invalid': error_contact_num,
-                                            }"
-                                        />
-                                    </div>
-
-                                    <label
-                                        style="color: red"
-                                        v-if="error_contact_num"
-                                        >{{ error_contact_num }}</label
-                                    >
-                                </div>
-
-                                <div class="col-12 title-form">
-                                    <Badge
-                                        :value="2"
-                                        severity="info"
-                                        class="mr-2 mb-2"
-                                        size="large"
-                                    ></Badge>
-                                    <label><h6>Security Information</h6></label>
-                                </div>
-
-                                <div class="field col-12 md:col-4">
-                                    <label>Email</label>
-                                    <InputText
-                                        type="text"
-                                        name="email"
-                                        v-model="form.email"
-                                        @keydown.enter="onRegisterClick"
-                                        :class="{
-                                            'p-invalid': error_email,
-                                        }"
-                                    />
-                                    <label
-                                        style="color: red"
-                                        v-if="error_email"
-                                        >{{ error_email }}</label
-                                    >
-                                </div>
-                                <div class="field col-12 md:col-4">
-                                    <label>Password</label>
-                                    <InputText
-                                        type="password"
-                                        name="password"
-                                        v-model="form.password"
-                                        @keydown.enter="onRegisterClick"
-                                        :class="{
-                                            'p-invalid': error_password,
-                                        }"
-                                    />
-                                    <label
-                                        style="color: red"
-                                        v-if="error_password"
-                                        >{{ error_password }}</label
-                                    >
-                                </div>
-                                <div class="field col-12 md:col-4">
-                                    <label>Confirm Password</label>
-
-                                    <InputText
-                                        type="password"
-                                        name="confirmpassword"
-                                        v-model="form.confirm_password"
-                                        @keydown.enter="onRegisterClick"
-                                        :class="{
-                                            'p-invalid': error_confirm_password,
-                                        }"
-                                    />
-                                    <label
-                                        style="color: red"
-                                        v-if="error_confirm_password"
-                                        >{{ error_confirm_password }}</label
-                                    >
-                                </div>
-                            </div>
-                        </div>
-                        <template #footer>
-                            <Button
-                                label="Cancel"
-                                class="p-button-text p-button-danger"
-                                @click="registerUserDialog = false"
-                            />
-                            <Button
-                                label="Register"
-                                class="p-button-primary"
-                                autofocus
-                                @click="onRegisterClick"
-                            />
-                        </template>
-                    </Dialog>
                     <Dialog
                         v-model:visible="registerUserDialog"
                         :style="{ width: '500px' }"
@@ -2124,7 +1284,7 @@
                                     <label><h6>Security Information</h6></label>
                                 </div>
 
-                                <div class="field col-12 md:col-4">
+                                <div class="field col-12 md:col-12">
                                     <label>Email</label>
                                     <InputText
                                         type="text"
@@ -2141,7 +1301,7 @@
                                         >{{ error_email }}</label
                                     >
                                 </div>
-                                <div class="field col-12 md:col-4">
+                                <div class="field col-12 md:col-12">
                                     <label>Password</label>
                                     <InputText
                                         type="password"
@@ -2158,7 +1318,7 @@
                                         >{{ error_password }}</label
                                     >
                                 </div>
-                                <div class="field col-12 md:col-4">
+                                <div class="field col-12 md:col-12">
                                     <label>Confirm Password</label>
 
                                     <InputText
@@ -3744,7 +2904,7 @@
                         </DataTable>
                     </Dialog>
                     <Dialog
-                        v-model:visible="process"
+                        v-model:visible="loading"
                         :style="{ width: '450px' }"
                         :modal="true"
                         :closable="false"
@@ -3837,7 +2997,7 @@ export default {
             filters: {},
             id: null,
             name: null,
-            process: false,
+            loading: false,
             registerUserDialog: false,
             deleteUserDialog: false,
             updateUserDialog: false,
@@ -4099,9 +3259,9 @@ export default {
             this.resetFields();
             this.resetErrors();
             this.id = data.id;
-            console.log("populate fields", data);
+
             this.name = data.name;
-            this.form.selected_position = data.position_id;
+
             this.form.first_name = data.first_name;
             this.form.last_name = data.last_name;
             this.form.gender = data.gender;
@@ -4109,6 +3269,9 @@ export default {
                 this.form.selected_block = data.lot.block.number;
                 this.getBlockLot();
                 this.form.selected_block_lot = data.block_lot_id;
+            }
+            if (data.role == "officer") {
+                this.form.selected_position = data.position_id;
             }
             this.form.email = data.email;
             this.form.age = data.age;
@@ -4174,13 +3337,13 @@ export default {
         async confirmDeleteItem() {
             try {
                 this.deleteUserDialog = false;
-                this.process = true;
+                this.loading = true;
                 await axios({
                     method: "delete",
                     url: "/api/user/" + this.id,
                 });
                 this.$store.dispatch("getAllUsers");
-                this.process = false;
+                this.loading = false;
                 this.$toast.add({
                     severity: "success",
                     summary: "Successful Request",
@@ -4188,7 +3351,7 @@ export default {
                     life: 3000,
                 });
             } catch (err) {
-                this.process = false;
+                this.loading = false;
                 console.log(err.response);
             }
         },
@@ -4222,7 +3385,7 @@ export default {
             this.form.status = data.status;
         },
         async confirmUpdateUser() {
-            this.process = true;
+            this.loading = true;
             await axios({
                 method: "put",
                 url: "/api/user/" + this.id,
@@ -4250,17 +3413,17 @@ export default {
                     this.$store.dispatch("getAllUsers");
                     this.resetFields();
                     this.updateUserDialog = false;
-                    this.process = false;
+                    this.loading = false;
                 })
                 .catch((err) => {
                     console.log(err.response);
                     this.resetErrors();
                     this.validate(err);
-                    this.process = false;
+                    this.loading = false;
                 });
         },
         async verifyUser() {
-            this.process = true;
+            this.loading = true;
             await axios({
                 method: "post",
                 url: "/api/sms/",
@@ -4297,22 +3460,22 @@ export default {
                             this.$store.dispatch("getAllUsers");
                             this.resetFields();
                             this.viewVerifytDialog = false;
-                            this.process = false;
+                            this.loading = false;
                         })
                         .catch((err) => {
                             console.log(err.response);
                             this.resetErrors();
                             this.validate(err);
-                            this.process = false;
+                            this.loading = false;
                         });
                 })
                 .catch(async (err) => {
                     console.log(err.response);
-                    this.process = false;
+                    this.loading = false;
                 });
         },
         async changeStatus() {
-            this.process = true;
+            this.loading = true;
             await axios({
                 method: "put",
                 url: "/api/user/" + this.id,
@@ -4344,13 +3507,13 @@ export default {
                     });
                     this.$store.dispatch("getAllUsers");
                     this.resetFields();
-                    this.process = false;
+                    this.loading = false;
                 })
                 .catch((err) => {
                     console.log(err.response);
                     this.resetErrors();
                     this.validate(err);
-                    this.process = false;
+                    this.loading = false;
                 });
         },
         //REGISTER USER
@@ -4361,7 +3524,7 @@ export default {
             this.resetErrors();
         },
         async onRegisterClick() {
-            this.process = true;
+            this.loading = true;
             await axios({
                 method: "post",
                 url: "/api/user",
@@ -4391,13 +3554,13 @@ export default {
                         detail: "Registered User",
                         life: 3000,
                     });
-                    this.process = false;
+                    this.loading = false;
                 })
                 .catch((err) => {
                     console.log(err.response);
                     this.resetErrors();
                     this.validate(err);
-                    this.process = false;
+                    this.loading = false;
                 });
         },
         resetFields() {

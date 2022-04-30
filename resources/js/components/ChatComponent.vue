@@ -10,7 +10,7 @@
             <i class="pi pi-user"></i>
         </a>
         <div class="grid">
-            <div class="col flex align-content-center m-3">
+            <div class="col flex align-content-center mt-3 mx-3">
                 <div class="col">
                     <b class="flex align-items-center text-xl">{{
                         resident
@@ -23,20 +23,31 @@
                     }}</b>
                 </div>
                 <div>
-                    <Button icon="pi pi-replay" @click="toggle" />
+                    <Button
+                        icon="pi pi-replay"
+                        @click="toggle"
+                        aria-haspopup="true"
+                        aria-controls="overlay_menu"
+                    />
                     <Menu
-                        id="chat_menu"
-                        ref="menu_chat"
+                        id="overlay_menu"
+                        ref="menu"
                         :model="items"
                         :popup="true"
                         v-tooltip="'Chat'"
                     />
                 </div>
             </div>
-
+            <div class="col-12 flex justify-content-center">
+                <InputText
+                    v-model="search"
+                    placeholder="search"
+                    style="width: 300px"
+                />
+            </div>
             <div class="col-12 layout-config-content">
                 <div v-if="resident">
-                    <div v-for="resident in users" :key="resident.id">
+                    <div v-for="resident in users_verified" :key="resident.id">
                         <ChatSideBarComponent
                             v-if="resident.role === 'resident'"
                             @click="openChatRoom(resident)"
@@ -46,7 +57,7 @@
                 </div>
                 <div v-if="security_officer">
                     <div
-                        v-for="security_officer in users"
+                        v-for="security_officer in users_verified"
                         :key="security_officer.id"
                     >
                         <ChatSideBarComponent
@@ -57,7 +68,7 @@
                     </div>
                 </div>
                 <div v-if="officer">
-                    <div v-for="officer in users" :key="officer.id">
+                    <div v-for="officer in users_verified" :key="officer.id">
                         <ChatSideBarComponent
                             v-if="officer.role === 'officer'"
                             @click="openChatRoom(resident)"
@@ -66,7 +77,7 @@
                     </div>
                 </div>
                 <div v-if="admin">
-                    <div v-for="admin in users" :key="admin.id">
+                    <div v-for="admin in users_verified" :key="admin.id">
                         <ChatSideBarComponent
                             v-if="admin.role === 'admin'"
                             @click="openChatRoom(admin)"
@@ -103,7 +114,11 @@
                     </Button>
                 </div>
             </template>
-            <div class="flex flex-column-reverse" style="min-height: 370px">
+            <div
+                ref="chat_container"
+                class="flex flex-column-reverse"
+                style="min-height: 370px"
+            >
                 <p v-if="!this.chats" class="text-right">Say Hi</p>
                 <div
                     v-else
@@ -115,18 +130,38 @@
                 </div>
             </div>
 
-            <template v-if="!loading" #footer>
+            <template #footer>
                 <div class="col-12">
                     <Textarea
                         v-model="message"
                         :autoResize="true"
                         rows="1"
                         class="w-full"
+                        autofocus
                         @keypress.enter="sendMessage"
                     >
                     </Textarea>
                 </div>
             </template>
+        </Dialog>
+        <Dialog
+            v-model:visible="loading"
+            :style="{ width: '450px' }"
+            :modal="true"
+            :closable="false"
+            :closeOnEscape="true"
+        >
+            <div class="grid">
+                <div class="col-12 text-center">
+                    <ProgressSpinner
+                        class="block mb-4"
+                        style="width: 100px; height: 100px"
+                        strokeWidth="4"
+                        fill="#EEEEEE"
+                        animationDuration="1s"
+                    />
+                </div>
+            </div>
         </Dialog>
     </div>
 </template>
@@ -141,8 +176,17 @@ export default {
     setup() {
         const store = useStore();
         return {
-            users: computed(() => store.state.users),
+            users_verified: computed(() => store.state.users_verified),
+
             chats: computed(() => store.state.chats),
+            notifications: computed(
+                () => store.state.notifications.specific_notifications
+            ),
+            notif_count: computed(() => {
+                return store.state.notifications.specific_notifications.filter(
+                    (n) => n.viewed == 0
+                ).length;
+            }),
         };
     },
 
@@ -162,11 +206,10 @@ export default {
     },
     data() {
         return {
-            chat_room_id: null,
             chatRoomModal: false,
             chats: null,
             user: null,
-
+            search: null,
             loading: false,
             message: null,
             position: null,
@@ -217,16 +260,16 @@ export default {
         };
     },
     watch: {
+        search(after, before) {
+            this.searchUser();
+        },
         $route() {
             if (this.active) {
                 this.active = false;
                 this.unbindOutsideClickListener();
             }
         },
-    },
-    outsideClickListener: null,
-    watch: {
-        chat_room_id(val, oldVal) {
+        "$store.state.chat_room_id"(val, oldVal) {
             if (oldVal) {
                 this.disconnect(oldVal);
                 this.connect();
@@ -235,12 +278,27 @@ export default {
             }
         },
     },
+    outsideClickListener: null,
     methods: {
+        searchUser() {
+            axios({
+                method: "get",
+                url: "/api/user/search/",
+                params: { query: this.search },
+            })
+                .then((res) => {
+                    this.$store.commit("getSearchUser", res.data);
+                })
+                .catch((e) => {
+                    console.log(e.response);
+                });
+        },
         toggle() {
-            this.$refs.menu_chat.toggle(event);
+            this.$refs.menu.toggle(event);
         },
         async sendMessage() {
             if (this.message) {
+                this.loading = true;
                 await axios({
                     method: "post",
                     url: "/api/chat/",
@@ -250,26 +308,48 @@ export default {
                         read: 0,
                     },
                 })
-                    .then((res) => {
+                    .then(async (res) => {
                         this.message = null;
-                        console.log("post chat", res.data[0].chats);
+                        console.log("post chats", res.data);
                         this.$store.commit("getChats", res.data[0].chats);
+                        if (this.notif_count == 0) {
+                            await axios({
+                                method: "post",
+                                url: "/api/notification/chat",
+                                data: {
+                                    from_user_id:
+                                        this.$store.state.userLogged.id,
+                                    to_user_id: this.user.id,
+                                    chat_room_id:
+                                        res.data[0].chats[0].chat_room_id,
+                                    message: "sent you a message",
+                                },
+                            })
+                                .then(() => {
+                                    console.log("notify success ");
+                                })
+                                .catch((e) => {
+                                    console.log(e.response);
+                                });
+                        }
+
+                        this.loading = false;
                     })
                     .catch((error) => {
                         this.$store.commit("getChats", null);
                         console.log(error.response);
+                        this.loading = false;
                     });
             }
         },
         connect() {
-            if (this.chat_room_id) {
+            if (this.$store.state.chat_room_id) {
                 let vm = this;
-                window.Echo.private("chat." + this.chat_room_id).listen(
-                    ".message.new",
-                    (e) => {
-                        vm.openChatRoom(this.user);
-                    }
-                );
+                window.Echo.private(
+                    "chat." + this.$store.state.chat_room_id
+                ).listen(".message.new", (e) => {
+                    vm.openChatRoom(this.user);
+                });
             }
         },
         disconnect(chat_room_id) {
@@ -284,7 +364,7 @@ export default {
                 url: "/api/chat_room/" + this.user.id,
             })
                 .then((res) => {
-                    this.chat_room_id = res.data[0].id;
+                    this.$store.commit("getChatRoomId", res.data[0].id);
                     console.log("chats", res.data);
                     this.$store.commit("getChats", res.data[0].chats);
                 })
@@ -326,11 +406,31 @@ export default {
                 this.$el.contains(event.target)
             );
         },
+        scrollToEnd() {
+            // var content = this.$refs.chat_container;
+            // content.scrollTop = content.scrollHeight;
+            // alert(
+            //     "scroll height is " +
+            //         content.scrollHeight +
+            //         " scroll Top is " +
+            //         content.scrollTop
+            // );
+        },
     },
     computed: {
         containerClass() {
             return ["layout-config", { "layout-config-active": this.active }];
         },
+    },
+    mounted() {
+        // this.$nextTick(() => this.scrollToEnd());
+    },
+    created() {
+        this.$store.dispatch(
+            "notifications/getSpecific",
+            this.$store.state.userLogged.id
+        );
+        this.$store.dispatch("getUsersVerified");
     },
 };
 </script>

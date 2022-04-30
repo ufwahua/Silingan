@@ -10,10 +10,11 @@ import emergency_contact_details from "./admin/emergency_contact_details";
 import candidates from "./admin/candidates";
 import timeNow from "./admin/timeNow";
 import adminVehicles from "./admin/vehicles";
-import collectionType from "./admin/collection_type"
-import fund from "./admin/fund"
-import collection from "./admin/collection"
-import expense from "./admin/expense"
+import collectionType from "./admin/collection_type";
+import fund from "./admin/fund";
+import collection from "./admin/collection";
+import expense from "./admin/expense";
+import expenseType from "./admin/expense_type";
 //user
 import news from "./user/news";
 import posts from "./user/posts";
@@ -23,22 +24,39 @@ import userVehicles from "./user/vehicles";
 import cards from "./security_officer/cards";
 import logs from "./security_officer/logs";
 
+import notifications from "./notification";
+
 export default createStore({
     state: {
         users: null,
+        users_verified: null,
+        filtered_resident: null,
+        officers: null,
         userLogged: null,
         chat_room: null,
         not_blocked_users: null,
         block_users: null,
         chats: null,
+        chat_room_id: null,
     },
 
     //synchronous
     mutations: {
         getAllUsers(state, payload) {
+            state.user_search = payload;
+        },
+        getUsersVerified(state, payload) {
+            state.users_verified = payload;
+        },
+        filterResident(state, payload) {
+            state.filtered_resident = payload;
+        },
+        getOfficers(state, payload) {
+            state.officers = payload;
+        },
+        getSearchUser(state, payload) {
             state.users = payload;
         },
-
         getUsersNotBlocked(state, payload) {
             state.not_blocked_users = payload;
         },
@@ -57,14 +75,17 @@ export default createStore({
         logout(state, payload) {
             state.userLogged = payload;
         },
+        getChatRoomId(state, payload) {
+            state.chat_room_id = payload;
+        },
     },
 
     actions: {
         async getAllUsers({ commit }) {
             await axios({
-                    method: "get",
-                    url: "/api/user/",
-                })
+                method: "get",
+                url: "/api/user/",
+            })
                 .then((res) => {
                     commit("getAllUsers", res.data);
                     console.log("users", res.data);
@@ -73,12 +94,51 @@ export default createStore({
                     console.log(err.response.data);
                 });
         },
+        async getOfficers({ commit }) {
+            await axios({
+                method: "get",
+                url: "/api/user/officers",
+            })
+                .then((res) => {
+                    commit("getOfficers", res.data);
+                    console.log("officers", res.data);
+                })
+                .catch((err) => {
+                    console.log(err.response.data);
+                });
+        },
+        async filterResident({ commit }) {
+            await axios({
+                method: "get",
+                url: "/api/user/filter-resident/",
+            })
+                .then((res) => {
+                    commit("filterResident", res.data);
+                    console.log("filter resident", res.data);
+                })
+                .catch((err) => {
+                    console.log(err.response.data);
+                });
+        },
+        async getUsersVerified({ commit }) {
+            await axios({
+                method: "get",
+                url: "/api/user/user-verified",
+            })
+                .then((res) => {
+                    commit("getUsersVerified", res.data);
+                    console.log("users verified", res.data);
+                })
+                .catch((err) => {
+                    console.log(err.response.data);
+                });
+        },
 
         async getUsersNotBlocked({ commit }, payload) {
             await axios({
-                    method: "get",
-                    url: "/api/user/not-blocked/" + payload,
-                })
+                method: "get",
+                url: "/api/user/not-blocked/" + payload,
+            })
                 .then((res) => {
                     commit("getUsersNotBlocked", res.data);
                 })
@@ -88,9 +148,9 @@ export default createStore({
         },
         async getUserLogged({ commit }) {
             await axios({
-                    method: "get",
-                    url: "/api/user-logged",
-                })
+                method: "get",
+                url: "/api/user-logged",
+            })
                 .then((res) => {
                     commit("getUserLogged", res.data[0]);
                 })
@@ -100,9 +160,9 @@ export default createStore({
         },
         async getBlockUsers({ commit }, payload) {
             await axios({
-                    method: "get",
-                    url: "/api/block_user/" + payload,
-                })
+                method: "get",
+                url: "/api/block_user/" + payload,
+            })
                 .then((res) => {
                     console.log("block users", res.data);
                     commit("getBlockUsers", res.data);
@@ -117,9 +177,9 @@ export default createStore({
         },
         async getChats({ commit }, id) {
             await axios({
-                    method: "get",
-                    url: "/api/chat_room/" + id,
-                })
+                method: "get",
+                url: "/api/chat_room/" + id,
+            })
                 .then((res) => {
                     commit("getChats", res.data[0].chats);
                 })
@@ -152,7 +212,9 @@ export default createStore({
         collectionType,
         fund,
         collection,
-        expense
+        expense,
+        notifications,
+        expenseType,
     },
 
     plugins: [createPersistedState()],

@@ -15,7 +15,7 @@ class CandidateSeeder extends Seeder
     public function run()
     {
         Candidate::factory()
-        ->count(15)
+        ->count(35)
         ->create();
     }
 }

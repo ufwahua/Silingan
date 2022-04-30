@@ -18,6 +18,7 @@ class CreateCandidatesTable extends Migration
             $table->foreignId('position_id');
             $table->foreignId('user_id');
             $table->foreignId('election_id');
+            $table->integer('vote_count')->default(0);
             $table->timestamps();
         });
     }

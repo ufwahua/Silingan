@@ -2,3 +2,9 @@
     z-index: 1000;
     top: 7rem;
 }
+
+@media (max-width: 991px) {
+    .layout-text {
+        text-align: center;
+    }
+}

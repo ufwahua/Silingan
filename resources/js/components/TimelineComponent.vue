@@ -3,7 +3,7 @@
         <div
             class="col-12 sm:col-12 md:col-8 md:col-offset-2 lg:col-6 lg:col-offset-1 xl:col-6 xl:col-offset-1"
         >
-            <h2>Timeline</h2>
+            <h2 class="layout-text">Timeline</h2>
             <div class="col justify-content-center pt-0">
                 <div class="card p-3">
                     <div class="p-inputgroup mb-2">
@@ -18,7 +18,7 @@
                         </div>
                         <div v-else>
                             <Avatar
-                                image="http://127.0.0.1:8000/storage/images/default-prof-pic.png"
+                                image="http://127.0.0.1:8000/storage/images/avatar.png"
                                 class="mr-2"
                                 size="large"
                                 shape="circle"
@@ -259,20 +259,4 @@ export default {
 };
 </script>
 
-<style>
-@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap");
-
-.container {
-    margin-left: 5%;
-    margin-right: 5%;
-}
-.lanex-font {
-    font-family: "Poppins", sans-serif;
-}
-.lanex-font-title {
-    font-size: 24px;
-}
-.lanex-font-content {
-    font-size: 14px;
-}
-</style>
+<style></style>
