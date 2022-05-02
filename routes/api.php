@@ -57,6 +57,7 @@ Route::get('/user/officers/', [UserController::class, 'getOfficers']);
 Route::get('/user/user-verified/', [UserController::class, 'getUsersVerified']);
 Route::get('/user/filter-resident/{user}', [UserController::class, 'filterResident']);
 Route::put('/user/vote/{user}', [UserController::class, 'updateHasVoted']);
+Route::get('/user/filter-resident/block-lot/{user}', [UserController::class, 'getResidentInBlockLot']);
 Route::put('/candidate/vote/{candidate}', [CandidateController::class, 'vote']);
 Route::delete('/candidate/election/{candidate}', [CandidateController::class, 'deleteAllCandidate']);
 Route::get('/post/marketplace/verified/{post}', [PostController::class, 'getMarketPlaceVerified']);

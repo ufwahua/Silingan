@@ -788,11 +788,10 @@
                                     >
                                 </div>
                             </div>
-                            <div class="col-12">
-                                <label>Destination</label>
-                            </div>
+
                             <div class="col-12 md:col-6">
                                 <div class="field">
+                                    <label>Block</label>
                                     <Dropdown
                                         v-model="selected_block"
                                         :class="{
@@ -802,7 +801,7 @@
                                         :options="blocks"
                                         optionLabel="number"
                                         optionValue="number"
-                                        placeholder="Select Block"
+                                        placeholder="Destination Block"
                                         @change="getBlockLot"
                                     />
                                     <label
@@ -815,6 +814,7 @@
 
                             <div class="col-12 md:col-6">
                                 <div class="field">
+                                    <label>Lot</label>
                                     <Dropdown
                                         v-model="selected_block_lot"
                                         :class="{
@@ -824,7 +824,8 @@
                                         :options="filteredLots"
                                         optionLabel="number"
                                         optionValue="id"
-                                        placeholder="Select Lot"
+                                        placeholder="Destination Lot"
+                                        @change="getResidents"
                                         :disabled="
                                             selected_block ? false : true
                                         "
@@ -834,6 +835,41 @@
                                         v-if="error_selected_lot"
                                         >{{ error_selected_lot }}</label
                                     >
+                                </div>
+                            </div>
+                            <div v-if="selected_block_lot" class="col-12 mb-3">
+                                <div v-if="filtered_resident_block_lot[0]">
+                                    <DataTable
+                                        :value="filtered_resident_block_lot"
+                                        class="w-full"
+                                    >
+                                        <template #header>
+                                            <h6 class="text-center mb-0">
+                                                House Residents
+                                            </h6>
+                                        </template>
+                                        <Column
+                                            header="Full name"
+                                            field="full_name"
+                                        >
+                                            <template #body="{ data }">
+                                                {{
+                                                    (data["full_name"] =
+                                                        data.first_name +
+                                                        " " +
+                                                        data.last_name)
+                                                }}
+                                            </template>
+                                        </Column>
+                                        <Column
+                                            field="role"
+                                            header="Role"
+                                        ></Column>
+                                        <Column
+                                            field="tag_as"
+                                            header="Tag"
+                                        ></Column>
+                                    </DataTable>
                                 </div>
                             </div>
                             <div class="col-12">
@@ -933,11 +969,10 @@
                                     >
                                 </div>
                             </div>
-                            <div class="col-12">
-                                <label>Destination</label>
-                            </div>
+
                             <div class="col-12 md:col-6">
                                 <div class="field">
+                                    <label>Block</label>
                                     <Dropdown
                                         v-model="selected_block"
                                         :class="{
@@ -947,7 +982,7 @@
                                         :options="blocks"
                                         optionLabel="number"
                                         optionValue="number"
-                                        placeholder="Select Block"
+                                        placeholder="Destination Block"
                                         @change="getBlockLot"
                                     />
                                     <label
@@ -960,6 +995,7 @@
 
                             <div class="col-12 md:col-6">
                                 <div class="field">
+                                    <label>Lot</label>
                                     <Dropdown
                                         v-model="selected_block_lot"
                                         :class="{
@@ -969,7 +1005,8 @@
                                         :options="filteredLots"
                                         optionLabel="number"
                                         optionValue="id"
-                                        placeholder="Select Lot"
+                                        placeholder="Destination Lot"
+                                        @change="getResidents"
                                         :disabled="
                                             selected_block ? false : true
                                         "
@@ -979,6 +1016,41 @@
                                         v-if="error_selected_lot"
                                         >{{ error_selected_lot }}</label
                                     >
+                                </div>
+                            </div>
+                            <div v-if="selected_block_lot" class="col-12 mb-3">
+                                <div v-if="filtered_resident_block_lot[0]">
+                                    <DataTable
+                                        :value="filtered_resident_block_lot"
+                                        class="w-full"
+                                    >
+                                        <template #header>
+                                            <h6 class="text-center mb-0">
+                                                House Residents
+                                            </h6>
+                                        </template>
+                                        <Column
+                                            header="Full name"
+                                            field="full_name"
+                                        >
+                                            <template #body="{ data }">
+                                                {{
+                                                    (data["full_name"] =
+                                                        data.first_name +
+                                                        " " +
+                                                        data.last_name)
+                                                }}
+                                            </template>
+                                        </Column>
+                                        <Column
+                                            field="role"
+                                            header="Role"
+                                        ></Column>
+                                        <Column
+                                            field="tag_as"
+                                            header="Tag"
+                                        ></Column>
+                                    </DataTable>
                                 </div>
                             </div>
                             <div class="col-12">
@@ -1056,11 +1128,10 @@
                             >
                         </div>
                     </div>
-                    <div class="col-12">
-                        <label>Destination</label>
-                    </div>
+
                     <div class="col-12 md:col-6">
                         <div class="field">
+                            <label>Block</label>
                             <Dropdown
                                 v-model="selected_block"
                                 :class="{
@@ -1070,7 +1141,7 @@
                                 :options="blocks"
                                 optionLabel="number"
                                 optionValue="number"
-                                placeholder="Select Block"
+                                placeholder="Destination Block"
                                 @change="getBlockLot"
                             />
                             <label
@@ -1083,6 +1154,7 @@
 
                     <div class="col-12 md:col-6">
                         <div class="field">
+                            <label>Lot</label>
                             <Dropdown
                                 v-model="selected_block_lot"
                                 :class="{
@@ -1092,7 +1164,8 @@
                                 :options="filteredLots"
                                 optionLabel="number"
                                 optionValue="id"
-                                placeholder="Select Lot"
+                                placeholder="Destination Lot"
+                                @change="getResidents"
                                 :disabled="selected_block ? false : true"
                             />
                             <label
@@ -1100,6 +1173,35 @@
                                 v-if="error_selected_lot"
                                 >{{ error_selected_lot }}</label
                             >
+                        </div>
+                    </div>
+                    <div
+                        v-if="selected_block_lot"
+                        class="col-12 md:col-12 mb-3"
+                    >
+                        <div v-if="filtered_resident_block_lot[0]">
+                            <DataTable
+                                :value="filtered_resident_block_lot"
+                                class="w-full"
+                            >
+                                <template #header>
+                                    <h6 class="text-center mb-0">
+                                        House Residents
+                                    </h6>
+                                </template>
+                                <Column header="Full name" field="full_name">
+                                    <template #body="{ data }">
+                                        {{
+                                            (data["full_name"] =
+                                                data.first_name +
+                                                " " +
+                                                data.last_name)
+                                        }}
+                                    </template>
+                                </Column>
+                                <Column field="role" header="Role"></Column>
+                                <Column field="tag_as" header="Tag"></Column>
+                            </DataTable>
                         </div>
                     </div>
                     <div class="col-12">
@@ -1204,11 +1306,10 @@
                             >
                         </div>
                     </div>
-                    <div class="col-12">
-                        <label>Destination</label>
-                    </div>
+
                     <div class="col-12 md:col-6">
                         <div class="field">
+                            <label>Block</label>
                             <Dropdown
                                 v-model="selected_block"
                                 :class="{
@@ -1218,7 +1319,7 @@
                                 :options="blocks"
                                 optionLabel="number"
                                 optionValue="number"
-                                placeholder="Select Block"
+                                placeholder="Destination Block"
                                 @change="getBlockLot"
                             />
                             <label
@@ -1231,6 +1332,7 @@
 
                     <div class="col-12 md:col-6">
                         <div class="field">
+                            <label>Lot</label>
                             <Dropdown
                                 v-model="selected_block_lot"
                                 :class="{
@@ -1240,7 +1342,8 @@
                                 :options="filteredLots"
                                 optionLabel="number"
                                 optionValue="id"
-                                placeholder="Select Lot"
+                                placeholder="Destination Lot"
+                                @change="getResidents"
                                 :disabled="selected_block ? false : true"
                             />
                             <label
@@ -1248,6 +1351,32 @@
                                 v-if="error_selected_lot"
                                 >{{ error_selected_lot }}</label
                             >
+                        </div>
+                    </div>
+                    <div v-if="selected_block_lot" class="col-12 mb-3">
+                        <div v-if="filtered_resident_block_lot[0]">
+                            <DataTable
+                                :value="filtered_resident_block_lot"
+                                class="w-full"
+                            >
+                                <template #header>
+                                    <h6 class="text-center mb-0">
+                                        House Residents
+                                    </h6>
+                                </template>
+                                <Column header="Full name" field="full_name">
+                                    <template #body="{ data }">
+                                        {{
+                                            (data["full_name"] =
+                                                data.first_name +
+                                                " " +
+                                                data.last_name)
+                                        }}
+                                    </template>
+                                </Column>
+                                <Column field="role" header="Role"></Column>
+                                <Column field="tag_as" header="Tag"></Column>
+                            </DataTable>
                         </div>
                     </div>
                     <div class="col-12">
@@ -1325,6 +1454,9 @@ export default {
             cards: computed(() => store.state.cards.cards),
             blocks: computed(() => store.state.blocks.blocks),
             filteredLots: computed(() => store.state.lots.filteredLots),
+            filtered_resident_block_lot: computed(
+                () => store.state.filtered_resident_block_lot
+            ),
             visitor_logs: computed(() => {
                 let temp = [];
                 store.state.logs.logs_masterlist.forEach((elem) => {
@@ -1422,6 +1554,12 @@ export default {
         };
     },
     methods: {
+        getResidents() {
+            this.$store.dispatch(
+                "filterResidentBlockLot",
+                this.selected_block_lot
+            );
+        },
         clearFilter() {
             this.filters["global"].value = null;
             this.filters["lot.block.number"].value = null;
@@ -1659,6 +1797,7 @@ export default {
             this.selected_block = data.lot.block.number;
             this.getBlockLot();
             this.selected_block_lot = data.block_lot_id;
+            this.getResidents();
             this.purpose_visit = data.purpose_visit;
             this.logUpdate = true;
         },

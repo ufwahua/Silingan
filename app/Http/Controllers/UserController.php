@@ -337,14 +337,7 @@ class UserController extends Controller
                        ->where('verified',1)
                        ->with(['lot.block','position','emergency_contact'])
                        ->latest()
-                       ->get();
-
-        // $users = Post::orWhere(DB::raw("LOWER(content)"), 'LIKE', "%".strtolower($request->input('query'))."%")
-        //                ->where('approved',1)
-        //                ->where('group_id',2)
-        //                ->with(['user','group','comment','comment.user','comment.reply.user'])->withCount(['comment','reply'])
-                       
-        //                ->get();
+                       ->get();  
         return response()->json($users);
         
     }
@@ -433,6 +426,13 @@ class UserController extends Controller
         ]);
 
         return response()->json(['ok']);
+    }
+     public function getResidentInBlockLot(Request $request): JsonResponse
+    {
+      
+        $user = User::where('block_lot_id',$request->route('user'))->get();
+        
+        return response()->json($user);
     }
     public function destroy(User $user): JsonResponse
     {
