@@ -191,9 +191,15 @@ export default {
                 return temp;
             }),
             notif_count: computed(() => {
-                return store.state.notifications.specific_notifications.filter(
-                    (n) => n.viewed == 0
-                ).length;
+                let temp = [];
+                store.state.notifications.specific_notifications.forEach(
+                    (elem) => {
+                        if (elem != null) {
+                            temp.push(elem);
+                        }
+                    }
+                );
+                return temp.filter((n) => n.viewed == 0).length;
             }),
         };
     },
