@@ -30,6 +30,7 @@ export default createStore({
     state: {
         users: null,
         users_verified: null,
+        verified_user_chat: null,
         filtered_resident: null,
         officers: null,
         userLogged: null,
@@ -55,7 +56,7 @@ export default createStore({
             state.officers = payload;
         },
         getSearchUser(state, payload) {
-            state.users = payload;
+            state.verified_user_chat = payload;
         },
         getUsersNotBlocked(state, payload) {
             state.not_blocked_users = payload;
@@ -127,7 +128,7 @@ export default createStore({
             })
                 .then((res) => {
                     commit("getUsersVerified", res.data);
-                    console.log("users verified", res.data);
+                    commit("getSearchUser", res.data);
                 })
                 .catch((err) => {
                     console.log(err.response.data);

@@ -332,7 +332,7 @@ class UserController extends Controller
     public function getSearchUser(Request $request): JsonResponse
     {
        
-        $users = User::orWhere(DB::raw("concat(first_name, ' ', last_name)"), 'LIKE', "%".$request->input('query')."%")
+        $users = User::orWhere(DB::raw("LOWER(concat(first_name, ' ', last_name))"), 'LIKE', "%".strtolower($request->input('query'))."%")
                        ->where('verified',1)
                        ->with(['lot.block','position','emergency_contact'])
                        ->latest()
