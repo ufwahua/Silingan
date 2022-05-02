@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Post;
 use App\Models\User;
 use App\Models\Candidate;
-use Illuminate\Support\Str;
 
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\Http\JsonResponse;
@@ -337,6 +338,13 @@ class UserController extends Controller
                        ->with(['lot.block','position','emergency_contact'])
                        ->latest()
                        ->get();
+
+        // $users = Post::orWhere(DB::raw("LOWER(content)"), 'LIKE', "%".strtolower($request->input('query'))."%")
+        //                ->where('approved',1)
+        //                ->where('group_id',2)
+        //                ->with(['user','group','comment','comment.user','comment.reply.user'])->withCount(['comment','reply'])
+                       
+        //                ->get();
         return response()->json($users);
         
     }

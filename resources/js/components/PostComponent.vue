@@ -35,6 +35,11 @@ div
                                     <b class="p-0 m-0">
                                         [{{ post.user.role }}]
                                     </b>
+                                    <b v-if="post.user.lot">
+                                        Block
+                                        {{ post.user.lot.block.number }} Lot
+                                        {{ post.user.lot.number }}</b
+                                    >
                                 </div>
                                 <div class="col-12">
                                     <p>{{ post.updated_at }}</p>
@@ -559,6 +564,7 @@ export default {
                             this.$store.state.userLogged.id
                         );
                     }
+
                     if (this.post.user.id != this.$store.state.userLogged.id) {
                         await axios({
                             method: "post",
@@ -578,6 +584,7 @@ export default {
                             });
                     }
                     this.$store.dispatch("posts/getSpecificPost", this.post.id);
+
                     this.message = null;
                 })
                 .catch((error) => {
