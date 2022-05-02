@@ -36,7 +36,7 @@
                         </Textarea>
                     </div>
                 </div>
-                <div v-for="post in posts" :key="post.id">
+                <div v-for="post in posts_timeline" :key="post.id">
                     <PostComponent
                         :post="post"
                         :group_id="post.group_id"
@@ -66,6 +66,7 @@
                         :autoResize="true"
                         class="w-full"
                         placeholder="What's on you mind?"
+                        autofocus
                     >
                     </Textarea>
                     <FileUpload
@@ -160,7 +161,7 @@ export default {
     setup() {
         const store = useStore();
         return {
-            posts: computed(() => store.state.posts.posts),
+            posts_timeline: computed(() => store.state.posts.posts_timeline),
             userLogged: computed(() => store.state.userLogged),
         };
     },

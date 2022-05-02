@@ -68,7 +68,7 @@ Route::post('/notification/chat',[NotificationController::class, 'notificationCh
 Route::post('/notification/announcement',[NotificationController::class, 'notificationAnnouncement']);
 Route::post('/notification/election',[NotificationController::class, 'notificationElection']);
 Route::post('/notification/comment',[NotificationController::class, 'notificationComment']);
-
+Route::get('/post/search/', [PostController::class, 'getMarketPlacePost']);
 
 
 Route::apiResources([

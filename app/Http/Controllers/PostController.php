@@ -26,7 +26,21 @@ class PostController extends Controller
         );
         
     }
+    public function getMarketPlacePost(Request $request) : JsonResponse
+    {
+       
+        $posts = Post::orWhere(DB::raw("LOWER(content)"), 'LIKE', "%".strtolower($request->input('query'))."%")
+                    ->where('approved',1)
+                    ->where('group_id',2)
+                    ->with(['user','group','comment','comment.user','comment.reply.user'])->withCount(['comment','reply'])
+                    
+                    ->get();
+                    
+        return response()->json($posts);
+        
+    }
 
+    
    public function getSpecificPost(Request $request) : JsonResponse
     {   
          
