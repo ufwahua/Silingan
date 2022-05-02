@@ -180,26 +180,16 @@ export default {
 
             chats: computed(() => store.state.chats),
             notifications: computed(() => {
-                let temp = [];
-                store.state.notifications.specific_notifications.forEach(
-                    (elem) => {
-                        if (elem != null) {
-                            temp.push(elem);
-                        }
-                    }
-                );
-                return temp;
+                if (store.state.notifications.specific_notifications != null) {
+                    return store.state.notifications.specific_notifications;
+                }
             }),
             notif_count: computed(() => {
-                let temp = [];
-                store.state.notifications.specific_notifications.forEach(
-                    (elem) => {
-                        if (elem != null) {
-                            temp.push(elem);
-                        }
-                    }
-                );
-                return temp.filter((n) => n.viewed == 0).length;
+                if (store.state.notifications.specific_notifications != null) {
+                    return store.state.notifications.specific_notifications.filter(
+                        (n) => n.viewed == 0
+                    ).length;
+                }
             }),
         };
     },
