@@ -30,7 +30,9 @@ export default createStore({
     state: {
         users: null,
         users_verified: null,
+        verified_user_chat: null,
         filtered_resident: null,
+        filtered_resident_block_lot: null,
         officers: null,
         userLogged: null,
         chat_room: null,
@@ -51,11 +53,14 @@ export default createStore({
         filterResident(state, payload) {
             state.filtered_resident = payload;
         },
+        filterResidentBlockLot(state, payload) {
+            state.filtered_resident_block_lot = payload;
+        },
         getOfficers(state, payload) {
             state.officers = payload;
         },
         getSearchUser(state, payload) {
-            state.users = payload;
+            state.verified_user_chat = payload;
         },
         getUsersNotBlocked(state, payload) {
             state.not_blocked_users = payload;
@@ -120,6 +125,19 @@ export default createStore({
                     console.log(err.response.data);
                 });
         },
+        async filterResidentBlockLot({ commit }, payload) {
+            await axios({
+                method: "get",
+                url: "/api/user/filter-resident/block-lot/" + payload,
+            })
+                .then((res) => {
+                    commit("filterResidentBlockLot", res.data);
+                    console.log("filter resident by block and lot", res.data);
+                })
+                .catch((err) => {
+                    console.log(err.response.data);
+                });
+        },
         async getUsersVerified({ commit }) {
             await axios({
                 method: "get",
@@ -127,7 +145,7 @@ export default createStore({
             })
                 .then((res) => {
                     commit("getUsersVerified", res.data);
-                    console.log("users verified", res.data);
+                    commit("getSearchUser", res.data);
                 })
                 .catch((err) => {
                     console.log(err.response.data);

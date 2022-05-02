@@ -3,12 +3,20 @@ import axios from "axios";
 const posts = {
     namespaced: true,
     state: {
-        posts: null,
+        posts_timeline: null,
+        post_marketplace: null,
+        post_marketplace_not_verified: null,
         specific_post: null,
     },
     mutations: {
-        getAll(state, payload) {
-            state.posts = payload;
+        getTimelinePost(state, payload) {
+            state.posts_timeline = payload;
+        },
+        getMarketplacePost(state, payload) {
+            state.post_marketplace = payload;
+        },
+        getMarketplacePostNotVerified(state, payload) {
+            state.post_marketplace_not_verified = payload;
         },
         getSpecificPost(state, payload) {
             state.specific_post = payload;
@@ -21,7 +29,7 @@ const posts = {
                 url: "/api/post/" + id,
             })
                 .then((res) => {
-                    commit("getAll", res.data);
+                    commit("getTimelinePost", res.data);
                     console.log("posts", res.data);
                 })
                 .catch((err) => {
@@ -34,7 +42,7 @@ const posts = {
                 url: "/api/post/marketplace/verified/" + id,
             })
                 .then((res) => {
-                    commit("getAll", res.data);
+                    commit("getMarketplacePost", res.data);
                     console.log("posts", res.data);
                 })
                 .catch((err) => {
@@ -47,7 +55,7 @@ const posts = {
                 url: "/api/post/marketplace/not-verified/" + id,
             })
                 .then((res) => {
-                    commit("getAll", res.data);
+                    commit("getMarketplacePostNotVerified", res.data);
                     console.log("not verified", res.data);
                 })
                 .catch((err) => {
