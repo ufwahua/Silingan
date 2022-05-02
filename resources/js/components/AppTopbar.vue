@@ -373,9 +373,17 @@ export default {
         return {
             userLogged: computed(() => store.state.userLogged),
             chats: computed(() => store.state.chats),
-            notifications: computed(
-                () => store.state.notifications.specific_notifications
-            ),
+            notifications: computed(() => {
+                let temp = [];
+                store.state.notifications.specific_notifications.forEach(
+                    (elem) => {
+                        if (elem != null) {
+                            temp.push(elem);
+                        }
+                    }
+                );
+                return temp;
+            }),
             notif_count: computed(() => {
                 return store.state.notifications.specific_notifications.filter(
                     (n) => n.viewed == 0
