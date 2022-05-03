@@ -2399,7 +2399,7 @@ export default {
         });
       });
       expense.forEach((col, idx) => {
-        temp.push(["", col.name, totals_exp[idx] + " PHP"]);
+        temp.push(["", col.name, totals_exp[idx].toLocaleString() + " PHP"]);
       });
       // list.forEach((elem) => {
       //   if(elem.collection_type){
