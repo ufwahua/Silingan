@@ -1565,16 +1565,196 @@ export default {
         ],
       });
       if (start != null && end != null) {
-        doc.save(
-          "Income Statement " +
-            month[start.getMonth()] +
-            "" +
-            start.getFullYear() +
-            " to " +
-            month[end.getMonth()] +
-            "" +
-            end.getFullYear()
-        );
+        if (this.reportDate == 1) {
+          start = new Date(new Date(this.reportDateYear).getFullYear(), 0, 1);
+          end = new Date(new Date(this.reportDateYear).getFullYear(), 2, 1);
+          doc.save(
+            "Income Statement Report " +
+              month[start.getMonth()] +
+              " " +
+              start.getFullYear() +
+              " to " +
+              month[end.getMonth()] +
+              " " +
+              end.getFullYear()
+          );
+        }
+        if (this.reportDate == 2) {
+          start = new Date(new Date(this.reportDateYear).getFullYear(), 3, 1);
+          end = new Date(new Date(this.reportDateYear).getFullYear(), 5, 1);
+          doc.save(
+            "Income Statement Report " +
+              month[start.getMonth()] +
+              " " +
+              start.getFullYear() +
+              " to " +
+              month[end.getMonth()] +
+              " " +
+              end.getFullYear()
+          );
+        }
+        if (this.reportDate == 3) {
+          start = new Date(new Date(this.reportDateYear).getFullYear(), 6, 1);
+          end = new Date(new Date(this.reportDateYear).getFullYear(), 8, 1);
+          doc.save(
+            "Income Statement Report " +
+              month[start.getMonth()] +
+              " " +
+              start.getFullYear() +
+              " to " +
+              month[end.getMonth()] +
+              " " +
+              end.getFullYear()
+          );
+        }
+        if (this.reportDate == 4) {
+          start = new Date(new Date(this.reportDateYear).getFullYear(), 0, 1);
+          end = new Date(new Date(this.reportDateYear).getFullYear(), 11, 1);
+          doc.save(
+            "Income Statement Report " +
+              month[start.getMonth()] +
+              " " +
+              start.getFullYear() +
+              " to " +
+              month[end.getMonth()] +
+              " " +
+              end.getFullYear()
+          );
+        }
+        if (this.reportDate == "JAN") {
+          start = new Date(new Date(this.reportDateYear).getFullYear(), 0, 1);
+          end = new Date(new Date(this.reportDateYear).getFullYear(), 1, 1);
+          doc.save(
+            "Income Statement Report " +
+              month[start.getMonth()] +
+              " " +
+              start.getFullYear()
+          );
+        }
+        if (this.reportDate == "FEB") {
+          start = new Date(new Date(this.reportDateYear).getFullYear(), 1, 1);
+          end = new Date(new Date(this.reportDateYear).getFullYear(), 2, 1);
+          doc.save(
+            "Income Statement Report " +
+              month[start.getMonth()] +
+              " " +
+              start.getFullYear()
+          );
+        }
+        if (this.reportDate == "MAR") {
+          start = new Date(new Date(this.reportDateYear).getFullYear(), 2, 1);
+          end = new Date(new Date(this.reportDateYear).getFullYear(), 3, 1);
+          doc.save(
+            "Income Statement Report " +
+              month[start.getMonth()] +
+              " " +
+              start.getFullYear()
+          );
+        }
+        if (this.reportDate == "APR") {
+          start = new Date(new Date(this.reportDateYear).getFullYear(), 3, 1);
+          end = new Date(new Date(this.reportDateYear).getFullYear(), 4, 1);
+          doc.save(
+            "Income Statement Report " +
+              month[start.getMonth()] +
+              " " +
+              start.getFullYear()
+          );
+        }
+        if (this.reportDate == "MAY") {
+          start = new Date(new Date(this.reportDateYear).getFullYear(), 4, 1);
+          end = new Date(new Date(this.reportDateYear).getFullYear(), 5, 1);
+          doc.save(
+            "Income Statement Report " +
+              month[start.getMonth()] +
+              " " +
+              start.getFullYear()
+          );
+        }
+        if (this.reportDate == "JUN") {
+          start = new Date(new Date(this.reportDateYear).getFullYear(), 5, 1);
+          end = new Date(new Date(this.reportDateYear).getFullYear(), 6, 1);
+          doc.save(
+            "Income Statement Report " +
+              month[start.getMonth()] +
+              " " +
+              start.getFullYear()
+          );
+        }
+        if (this.reportDate == "JUL") {
+          start = new Date(new Date(this.reportDateYear).getFullYear(), 6, 1);
+          end = new Date(new Date(this.reportDateYear).getFullYear(), 7, 1);
+          doc.save(
+            "Income Statement Report " +
+              month[start.getMonth()] +
+              " " +
+              start.getFullYear()
+          );
+        }
+        if (this.reportDate == "AUG") {
+          start = new Date(new Date(this.reportDateYear).getFullYear(), 7, 1);
+          end = new Date(new Date(this.reportDateYear).getFullYear(), 8, 1);
+          doc.save(
+            "Income Statement Report " +
+              month[start.getMonth()] +
+              " " +
+              start.getFullYear()
+          );
+        }
+        if (this.reportDate == "SEP") {
+          start = new Date(new Date(this.reportDateYear).getFullYear(), 8, 1);
+          end = new Date(new Date(this.reportDateYear).getFullYear(), 9, 1);
+          doc.save(
+            "Income Statement Report " +
+              month[start.getMonth()] +
+              " " +
+              start.getFullYear()
+          );
+        }
+        if (this.reportDate == "OCT") {
+          start = new Date(new Date(this.reportDateYear).getFullYear(), 9, 1);
+          end = new Date(new Date(this.reportDateYear).getFullYear(), 10, 1);
+          doc.save(
+            "Income Statement Report " +
+              month[start.getMonth()] +
+              " " +
+              start.getFullYear()
+          );
+        }
+        if (this.reportDate == "NOV") {
+          start = new Date(new Date(this.reportDateYear).getFullYear(), 10, 1);
+          end = new Date(new Date(this.reportDateYear).getFullYear(), 11, 1);
+          doc.save(
+            "Income Statement Report " +
+              month[start.getMonth()] +
+              " " +
+              start.getFullYear()
+          );
+        }
+        if (this.reportDate == "DEC") {
+          start = new Date(new Date(this.reportDateYear).getFullYear(), 11, 1);
+          end = new Date(new Date(this.reportDateYear).getFullYear() + 1, 0, 1);
+          doc.save(
+            "Income Statement Report " +
+              month[start.getMonth()] +
+              " " +
+              start.getFullYear()
+          );
+        }
+        if (this.reportDate == 12) {
+          start = new Date(new Date(this.reportDateYear).getFullYear(), 0, 1);
+          end = new Date(new Date(this.reportDateYear).getFullYear(), 11, 1);
+          doc.save(
+            "Income Statement Report " +
+              month[start.getMonth()] +
+              " " +
+              start.getFullYear() +
+              " to " +
+              month[end.getMonth()] +
+              " " +
+              end.getFullYear()
+          );
+        }
       }
     },
     setLots() {
