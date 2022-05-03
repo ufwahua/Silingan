@@ -28,10 +28,10 @@
           <h4>Cash Flow</h4>
         </div>
       </div>
-      <div class="grid mb-2">
+      <!-- <div class="grid mb-2">
         <div class="col-12">
           <Toolbar>
-            <!-- <template #start>
+            <template #start>
               <span class="p-input-icon-left inline-block">
                 <i class="pi pi-search" />
                 <InputText
@@ -40,20 +40,20 @@
                   placeholder="Keyword Search"
                 />
               </span>
-            </template> -->
-            <!-- <template #end>
-                            <div class="mr-2">
-                                <Button
-                                    label="Download PDF Report"
-                                    icon="pi pi-file-pdf"
-                                    class="p-button-primary p-mr-2"
-                                    @click="generatePDF()"
-                                />
-                            </div>
-                        </template> -->
+            </template>
+            <template #end>
+                <div class="mr-2">
+                    <Button
+                        label="Download PDF Report"
+                        icon="pi pi-file-pdf"
+                        class="p-button-primary p-mr-2"
+                        @click="generatePDF()"
+                    />
+                </div>
+            </template>
           </Toolbar>
         </div>
-      </div>
+      </div> -->
       <DataTable
         :value="cashflow"
         :paginator="true"
