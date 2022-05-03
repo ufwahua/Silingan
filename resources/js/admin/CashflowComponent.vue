@@ -2380,7 +2380,7 @@ export default {
         });
       });
       collection.forEach((col, idx) => {
-        temp.push(["", col.name, totals_col[idx] + " PHP"]);
+        temp.push(["", col.name, totals_col[idx].toLocaleString() + " PHP"]);
       });
       temp.push(["Expense", "", ""]);
       expense.forEach((elem) => {
