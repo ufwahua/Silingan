@@ -31,7 +31,7 @@
       <div class="grid mb-2">
         <div class="col-12">
           <Toolbar>
-            <template #start>
+            <!-- <template #start>
               <span class="p-input-icon-left inline-block">
                 <i class="pi pi-search" />
                 <InputText
@@ -40,7 +40,7 @@
                   placeholder="Keyword Search"
                 />
               </span>
-            </template>
+            </template> -->
             <!-- <template #end>
                             <div class="mr-2">
                                 <Button
@@ -114,7 +114,7 @@
             -->
         <TabPanel header="Revenue">
           <Toolbar>
-            <template #start>
+            <!-- <template #start>
               <span class="p-input-icon-left inline-block">
                 <i class="pi pi-search" />
                 <InputText
@@ -122,7 +122,7 @@
                   placeholder="Keyword Search"
                 />
               </span>
-            </template>
+            </template> -->
 
             <template #end>
               <div class="mr-2">
@@ -176,7 +176,7 @@
             -->
         <TabPanel header="Expenses">
           <Toolbar>
-            <template #start>
+            <!-- <template #start>
               <span class="p-input-icon-left inline-block">
                 <i class="pi pi-search" />
                 <InputText
@@ -184,7 +184,7 @@
                   placeholder="Keyword Search"
                 />
               </span>
-            </template>
+            </template> -->
 
             <template #end>
               <div class="mr-2">
