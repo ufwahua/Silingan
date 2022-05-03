@@ -257,6 +257,16 @@
                   @change="setStatement()"
                 />
               </div>
+              <div class="mr-2">
+                <Calendar
+                  id="yearpicker"
+                  v-model="reportDateYear"
+                  view="year"
+                  dateFormat="yy"
+                  placeholder="Year"
+                  @date-select="setStatement()"
+                />
+              </div>
               <!-- <div class="mr-2">
                 <Button
                   label="Download Income Statement"
@@ -632,6 +642,10 @@ export default {
     return {
       userLogged: computed(() => store.state.userLogged),
       funds: computed(() => store.state.fund.Fund),
+      collection_type_list: computed(
+        () => store.state.collectionType.CollectionType
+      ),
+      expense_type_list: computed(() => store.state.expenseType.ExpenseType),
       dropdown_expense_type: computed(
         () => store.state.expenseType.ExpenseType
       ),
@@ -681,6 +695,7 @@ export default {
     return {
       revRowSize: true,
       expRowSize: true,
+      reportDateYear: new Date(),
       reportDate: null,
       reportDateSelect: [
         {
@@ -852,8 +867,8 @@ export default {
       if (this.reportDate == 1) {
         let temp = [];
         let list = this.cashflow;
-        let start = new Date(new Date().getFullYear(), 0, 1);
-        let end = new Date(new Date().getFullYear(), 3, 1);
+        let start = new Date(new Date(this.reportDateYear).getFullYear(), 0, 1);
+        let end = new Date(new Date(this.reportDateYear).getFullYear(), 3, 1);
         list.reverse();
         list.forEach((elem) => {
           elem.created_at = new Date(elem.created_at);
@@ -872,8 +887,8 @@ export default {
       if (this.reportDate == 2) {
         let temp = [];
         let list = this.cashflow;
-        let start = new Date(new Date().getFullYear(), 3, 1);
-        let end = new Date(new Date().getFullYear(), 6, 1);
+        let start = new Date(new Date(this.reportDateYear).getFullYear(), 3, 1);
+        let end = new Date(new Date(this.reportDateYear).getFullYear(), 6, 1);
         list.reverse();
         list.forEach((elem) => {
           elem.created_at = new Date(elem.created_at);
@@ -892,8 +907,8 @@ export default {
       if (this.reportDate == 3) {
         let temp = [];
         let list = this.cashflow;
-        let start = new Date(new Date().getFullYear(), 6, 1);
-        let end = new Date(new Date().getFullYear(), 9, 1);
+        let start = new Date(new Date(this.reportDateYear).getFullYear(), 6, 1);
+        let end = new Date(new Date(this.reportDateYear).getFullYear(), 9, 1);
         list.reverse();
         list.forEach((elem) => {
           elem.created_at = new Date(elem.created_at);
@@ -912,8 +927,12 @@ export default {
       if (this.reportDate == 4) {
         let temp = [];
         let list = this.cashflow;
-        let start = new Date(new Date().getFullYear(), 0, 1);
-        let end = new Date(new Date().getFullYear() + 1, 0, 1);
+        let start = new Date(new Date(this.reportDateYear).getFullYear(), 0, 1);
+        let end = new Date(
+          new Date(this.reportDateYear).getFullYear() + 1,
+          0,
+          1
+        );
         list.reverse();
         list.forEach((elem) => {
           elem.created_at = new Date(elem.created_at);
@@ -932,8 +951,8 @@ export default {
       if (this.reportDate == "JAN") {
         let temp = [];
         let list = this.cashflow;
-        let start = new Date(new Date().getFullYear(), 0, 1);
-        let end = new Date(new Date().getFullYear(), 1, 1);
+        let start = new Date(new Date(this.reportDateYear).getFullYear(), 0, 1);
+        let end = new Date(new Date(this.reportDateYear).getFullYear(), 1, 1);
         list.reverse();
         list.forEach((elem) => {
           elem.created_at = new Date(elem.created_at);
@@ -952,8 +971,8 @@ export default {
       if (this.reportDate == "FEB") {
         let temp = [];
         let list = this.cashflow;
-        let start = new Date(new Date().getFullYear(), 1, 1);
-        let end = new Date(new Date().getFullYear(), 2, 1);
+        let start = new Date(new Date(this.reportDateYear).getFullYear(), 1, 1);
+        let end = new Date(new Date(this.reportDateYear).getFullYear(), 2, 1);
         list.reverse();
         list.forEach((elem) => {
           elem.created_at = new Date(elem.created_at);
@@ -972,8 +991,8 @@ export default {
       if (this.reportDate == "MAR") {
         let temp = [];
         let list = this.cashflow;
-        let start = new Date(new Date().getFullYear(), 2, 1);
-        let end = new Date(new Date().getFullYear(), 3, 1);
+        let start = new Date(new Date(this.reportDateYear).getFullYear(), 2, 1);
+        let end = new Date(new Date(this.reportDateYear).getFullYear(), 3, 1);
         list.reverse();
         list.forEach((elem) => {
           elem.created_at = new Date(elem.created_at);
@@ -992,8 +1011,8 @@ export default {
       if (this.reportDate == "APR") {
         let temp = [];
         let list = this.cashflow;
-        let start = new Date(new Date().getFullYear(), 3, 1);
-        let end = new Date(new Date().getFullYear(), 4, 1);
+        let start = new Date(new Date(this.reportDateYear).getFullYear(), 3, 1);
+        let end = new Date(new Date(this.reportDateYear).getFullYear(), 4, 1);
         list.reverse();
         list.forEach((elem) => {
           elem.created_at = new Date(elem.created_at);
@@ -1012,8 +1031,8 @@ export default {
       if (this.reportDate == "MAY") {
         let temp = [];
         let list = this.cashflow;
-        let start = new Date(new Date().getFullYear(), 4, 1);
-        let end = new Date(new Date().getFullYear(), 5, 1);
+        let start = new Date(new Date(this.reportDateYear).getFullYear(), 4, 1);
+        let end = new Date(new Date(this.reportDateYear).getFullYear(), 5, 1);
         list.reverse();
         list.forEach((elem) => {
           elem.created_at = new Date(elem.created_at);
@@ -1032,8 +1051,8 @@ export default {
       if (this.reportDate == "JUN") {
         let temp = [];
         let list = this.cashflow;
-        let start = new Date(new Date().getFullYear(), 5, 1);
-        let end = new Date(new Date().getFullYear(), 6, 1);
+        let start = new Date(new Date(this.reportDateYear).getFullYear(), 5, 1);
+        let end = new Date(new Date(this.reportDateYear).getFullYear(), 6, 1);
         list.reverse();
         list.forEach((elem) => {
           elem.created_at = new Date(elem.created_at);
@@ -1052,8 +1071,8 @@ export default {
       if (this.reportDate == "JUL") {
         let temp = [];
         let list = this.cashflow;
-        let start = new Date(new Date().getFullYear(), 6, 1);
-        let end = new Date(new Date().getFullYear(), 7, 1);
+        let start = new Date(new Date(this.reportDateYear).getFullYear(), 6, 1);
+        let end = new Date(new Date(this.reportDateYear).getFullYear(), 7, 1);
         list.reverse();
         list.forEach((elem) => {
           elem.created_at = new Date(elem.created_at);
@@ -1072,8 +1091,8 @@ export default {
       if (this.reportDate == "AUG") {
         let temp = [];
         let list = this.cashflow;
-        let start = new Date(new Date().getFullYear(), 7, 1);
-        let end = new Date(new Date().getFullYear(), 8, 1);
+        let start = new Date(new Date(this.reportDateYear).getFullYear(), 7, 1);
+        let end = new Date(new Date(this.reportDateYear).getFullYear(), 8, 1);
         list.reverse();
         list.forEach((elem) => {
           elem.created_at = new Date(elem.created_at);
@@ -1092,8 +1111,8 @@ export default {
       if (this.reportDate == "SEP") {
         let temp = [];
         let list = this.cashflow;
-        let start = new Date(new Date().getFullYear(), 8, 1);
-        let end = new Date(new Date().getFullYear(), 9, 1);
+        let start = new Date(new Date(this.reportDateYear).getFullYear(), 8, 1);
+        let end = new Date(new Date(this.reportDateYear).getFullYear(), 9, 1);
         list.reverse();
         list.forEach((elem) => {
           elem.created_at = new Date(elem.created_at);
@@ -1112,8 +1131,8 @@ export default {
       if (this.reportDate == "OCT") {
         let temp = [];
         let list = this.cashflow;
-        let start = new Date(new Date().getFullYear(), 9, 1);
-        let end = new Date(new Date().getFullYear(), 10, 1);
+        let start = new Date(new Date(this.reportDateYear).getFullYear(), 9, 1);
+        let end = new Date(new Date(this.reportDateYear).getFullYear(), 10, 1);
         list.reverse();
         list.forEach((elem) => {
           elem.created_at = new Date(elem.created_at);
@@ -1132,8 +1151,12 @@ export default {
       if (this.reportDate == "NOV") {
         let temp = [];
         let list = this.cashflow;
-        let start = new Date(new Date().getFullYear(), 10, 1);
-        let end = new Date(new Date().getFullYear(), 11, 1);
+        let start = new Date(
+          new Date(this.reportDateYear).getFullYear(),
+          10,
+          1
+        );
+        let end = new Date(new Date(this.reportDateYear).getFullYear(), 11, 1);
         list.reverse();
         list.forEach((elem) => {
           elem.created_at = new Date(elem.created_at);
@@ -1152,8 +1175,16 @@ export default {
       if (this.reportDate == "DEC") {
         let temp = [];
         let list = this.cashflow;
-        let start = new Date(new Date().getFullYear(), 11, 1);
-        let end = new Date(new Date().getFullYear() + 1, 0, 1);
+        let start = new Date(
+          new Date(this.reportDateYear).getFullYear(),
+          11,
+          1
+        );
+        let end = new Date(
+          new Date(this.reportDateYear).getFullYear() + 1,
+          0,
+          1
+        );
         list.reverse();
         list.forEach((elem) => {
           elem.created_at = new Date(elem.created_at);
@@ -1172,8 +1203,12 @@ export default {
       if (this.reportDate == 12) {
         let temp = [];
         let list = this.cashflow;
-        let start = new Date(new Date().getFullYear(), 0, 1);
-        let end = new Date(new Date().getFullYear() + 1, 0, 1);
+        let start = new Date(new Date(this.reportDateYear).getFullYear(), 0, 1);
+        let end = new Date(
+          new Date(this.reportDateYear).getFullYear() + 1,
+          0,
+          1
+        );
         list.reverse();
         list.forEach((elem) => {
           elem.created_at = new Date(elem.created_at);
@@ -1236,8 +1271,8 @@ export default {
       let start = null;
       let end = null;
       if (this.reportDate == 1) {
-        start = new Date(new Date().getFullYear(), 0, 1);
-        end = new Date(new Date().getFullYear(), 2, 1);
+        start = new Date(new Date(this.reportDateYear).getFullYear(), 0, 1);
+        end = new Date(new Date(this.reportDateYear).getFullYear(), 2, 1);
         doc.text(
           "Financial Statement Report " +
             month[start.getMonth()] +
@@ -1252,8 +1287,8 @@ export default {
         );
       }
       if (this.reportDate == 2) {
-        start = new Date(new Date().getFullYear(), 3, 1);
-        end = new Date(new Date().getFullYear(), 5, 1);
+        start = new Date(new Date(this.reportDateYear).getFullYear(), 3, 1);
+        end = new Date(new Date(this.reportDateYear).getFullYear(), 5, 1);
         doc.text(
           "Financial Statement Report " +
             month[start.getMonth()] +
@@ -1268,8 +1303,8 @@ export default {
         );
       }
       if (this.reportDate == 3) {
-        start = new Date(new Date().getFullYear(), 6, 1);
-        end = new Date(new Date().getFullYear(), 8, 1);
+        start = new Date(new Date(this.reportDateYear).getFullYear(), 6, 1);
+        end = new Date(new Date(this.reportDateYear).getFullYear(), 8, 1);
         doc.text(
           "Financial Statement Report " +
             month[start.getMonth()] +
@@ -1284,8 +1319,8 @@ export default {
         );
       }
       if (this.reportDate == 4) {
-        start = new Date(new Date().getFullYear(), 0, 1);
-        end = new Date(new Date().getFullYear(), 11, 1);
+        start = new Date(new Date(this.reportDateYear).getFullYear(), 0, 1);
+        end = new Date(new Date(this.reportDateYear).getFullYear(), 11, 1);
         doc.text(
           "Financial Statement Report " +
             month[start.getMonth()] +
@@ -1300,8 +1335,8 @@ export default {
         );
       }
       if (this.reportDate == "JAN") {
-        start = new Date(new Date().getFullYear(), 0, 1);
-        end = new Date(new Date().getFullYear(), 1, 1);
+        start = new Date(new Date(this.reportDateYear).getFullYear(), 0, 1);
+        end = new Date(new Date(this.reportDateYear).getFullYear(), 1, 1);
         doc.text(
           "Financial Statement Report " +
             month[start.getMonth()] +
@@ -1312,8 +1347,8 @@ export default {
         );
       }
       if (this.reportDate == "FEB") {
-        start = new Date(new Date().getFullYear(), 1, 1);
-        end = new Date(new Date().getFullYear(), 2, 1);
+        start = new Date(new Date(this.reportDateYear).getFullYear(), 1, 1);
+        end = new Date(new Date(this.reportDateYear).getFullYear(), 2, 1);
         doc.text(
           "Financial Statement Report " +
             month[start.getMonth()] +
@@ -1324,8 +1359,8 @@ export default {
         );
       }
       if (this.reportDate == "MAR") {
-        start = new Date(new Date().getFullYear(), 2, 1);
-        end = new Date(new Date().getFullYear(), 3, 1);
+        start = new Date(new Date(this.reportDateYear).getFullYear(), 2, 1);
+        end = new Date(new Date(this.reportDateYear).getFullYear(), 3, 1);
         doc.text(
           "Financial Statement Report " +
             month[start.getMonth()] +
@@ -1336,8 +1371,8 @@ export default {
         );
       }
       if (this.reportDate == "APR") {
-        start = new Date(new Date().getFullYear(), 3, 1);
-        end = new Date(new Date().getFullYear(), 4, 1);
+        start = new Date(new Date(this.reportDateYear).getFullYear(), 3, 1);
+        end = new Date(new Date(this.reportDateYear).getFullYear(), 4, 1);
         doc.text(
           "Financial Statement Report " +
             month[start.getMonth()] +
@@ -1348,8 +1383,8 @@ export default {
         );
       }
       if (this.reportDate == "MAY") {
-        start = new Date(new Date().getFullYear(), 4, 1);
-        end = new Date(new Date().getFullYear(), 5, 1);
+        start = new Date(new Date(this.reportDateYear).getFullYear(), 4, 1);
+        end = new Date(new Date(this.reportDateYear).getFullYear(), 5, 1);
         doc.text(
           "Financial Statement Report " +
             month[start.getMonth()] +
@@ -1360,8 +1395,8 @@ export default {
         );
       }
       if (this.reportDate == "JUN") {
-        start = new Date(new Date().getFullYear(), 5, 1);
-        end = new Date(new Date().getFullYear(), 6, 1);
+        start = new Date(new Date(this.reportDateYear).getFullYear(), 5, 1);
+        end = new Date(new Date(this.reportDateYear).getFullYear(), 6, 1);
         doc.text(
           "Financial Statement Report " +
             month[start.getMonth()] +
@@ -1372,8 +1407,8 @@ export default {
         );
       }
       if (this.reportDate == "JUL") {
-        start = new Date(new Date().getFullYear(), 6, 1);
-        end = new Date(new Date().getFullYear(), 7, 1);
+        start = new Date(new Date(this.reportDateYear).getFullYear(), 6, 1);
+        end = new Date(new Date(this.reportDateYear).getFullYear(), 7, 1);
         doc.text(
           "Financial Statement Report " +
             month[start.getMonth()] +
@@ -1384,8 +1419,8 @@ export default {
         );
       }
       if (this.reportDate == "AUG") {
-        start = new Date(new Date().getFullYear(), 7, 1);
-        end = new Date(new Date().getFullYear(), 8, 1);
+        start = new Date(new Date(this.reportDateYear).getFullYear(), 7, 1);
+        end = new Date(new Date(this.reportDateYear).getFullYear(), 8, 1);
         doc.text(
           "Financial Statement Report " +
             month[start.getMonth()] +
@@ -1396,8 +1431,8 @@ export default {
         );
       }
       if (this.reportDate == "SEP") {
-        start = new Date(new Date().getFullYear(), 8, 1);
-        end = new Date(new Date().getFullYear(), 9, 1);
+        start = new Date(new Date(this.reportDateYear).getFullYear(), 8, 1);
+        end = new Date(new Date(this.reportDateYear).getFullYear(), 9, 1);
         doc.text(
           "Financial Statement Report " +
             month[start.getMonth()] +
@@ -1408,8 +1443,8 @@ export default {
         );
       }
       if (this.reportDate == "OCT") {
-        start = new Date(new Date().getFullYear(), 9, 1);
-        end = new Date(new Date().getFullYear(), 10, 1);
+        start = new Date(new Date(this.reportDateYear).getFullYear(), 9, 1);
+        end = new Date(new Date(this.reportDateYear).getFullYear(), 10, 1);
         doc.text(
           "Financial Statement Report " +
             month[start.getMonth()] +
@@ -1420,8 +1455,8 @@ export default {
         );
       }
       if (this.reportDate == "NOV") {
-        start = new Date(new Date().getFullYear(), 10, 1);
-        end = new Date(new Date().getFullYear(), 11, 1);
+        start = new Date(new Date(this.reportDateYear).getFullYear(), 10, 1);
+        end = new Date(new Date(this.reportDateYear).getFullYear(), 11, 1);
         doc.text(
           "Financial Statement Report " +
             month[start.getMonth()] +
@@ -1432,8 +1467,8 @@ export default {
         );
       }
       if (this.reportDate == "DEC") {
-        start = new Date(new Date().getFullYear(), 11, 1);
-        end = new Date(new Date().getFullYear() + 1, 0, 1);
+        start = new Date(new Date(this.reportDateYear).getFullYear(), 11, 1);
+        end = new Date(new Date(this.reportDateYear).getFullYear() + 1, 0, 1);
         doc.text(
           "Financial Statement Report " +
             month[start.getMonth()] +
@@ -1444,8 +1479,8 @@ export default {
         );
       }
       if (this.reportDate == 12) {
-        start = new Date(new Date().getFullYear(), 0, 1);
-        end = new Date(new Date().getFullYear(), 11, 1);
+        start = new Date(new Date(this.reportDateYear).getFullYear(), 0, 1);
+        end = new Date(new Date(this.reportDateYear).getFullYear(), 11, 1);
         doc.text(
           "Financial Statement Report " +
             month[start.getMonth()] +
@@ -1509,10 +1544,7 @@ export default {
         startY: finalY + 20,
         theme: "plain",
         head: [["Net Income", "", ""]],
-        body: [
-          ["", "Revenue", this.revenueTotal + " PHP"],
-          ["", "Expense", this.expenseTotal + " PHP"],
-        ],
+        body: this.netIncome,
         foot: [
           [
             { content: "", colSpan: 1, rowSpan: 1 },
@@ -1811,8 +1843,8 @@ export default {
         },
       };
     },
-    setRevRowSize() {
-      this.revRowSize = false;
+    test() {
+      console.log("Hello");
     },
   },
   computed: {
@@ -1820,72 +1852,72 @@ export default {
       let start = null;
       let end = null;
       if (this.reportDate == 1) {
-        start = new Date(new Date().getFullYear(), 0, 1);
-        end = new Date(new Date().getFullYear(), 3, 1);
+        start = new Date(new Date(this.reportDateYear).getFullYear(), 0, 1);
+        end = new Date(new Date(this.reportDateYear).getFullYear(), 3, 1);
       }
       if (this.reportDate == 2) {
-        start = new Date(new Date().getFullYear(), 3, 1);
-        end = new Date(new Date().getFullYear(), 6, 1);
+        start = new Date(new Date(this.reportDateYear).getFullYear(), 3, 1);
+        end = new Date(new Date(this.reportDateYear).getFullYear(), 6, 1);
       }
       if (this.reportDate == 3) {
-        start = new Date(new Date().getFullYear(), 6, 1);
-        end = new Date(new Date().getFullYear(), 9, 1);
+        start = new Date(new Date(this.reportDateYear).getFullYear(), 6, 1);
+        end = new Date(new Date(this.reportDateYear).getFullYear(), 9, 1);
       }
       if (this.reportDate == 4) {
-        start = new Date(new Date().getFullYear(), 0, 1);
-        end = new Date(new Date().getFullYear() + 1, 0, 1);
+        start = new Date(new Date(this.reportDateYear).getFullYear(), 0, 1);
+        end = new Date(new Date(this.reportDateYear).getFullYear() + 1, 0, 1);
       }
       if (this.reportDate == "JAN") {
-        start = new Date(new Date().getFullYear(), 0, 1);
-        end = new Date(new Date().getFullYear(), 1, 1);
+        start = new Date(new Date(this.reportDateYear).getFullYear(), 0, 1);
+        end = new Date(new Date(this.reportDateYear).getFullYear(), 1, 1);
       }
       if (this.reportDate == "FEB") {
-        start = new Date(new Date().getFullYear(), 1, 1);
-        end = new Date(new Date().getFullYear(), 2, 1);
+        start = new Date(new Date(this.reportDateYear).getFullYear(), 1, 1);
+        end = new Date(new Date(this.reportDateYear).getFullYear(), 2, 1);
       }
       if (this.reportDate == "MAR") {
-        start = new Date(new Date().getFullYear(), 2, 1);
-        end = new Date(new Date().getFullYear(), 3, 1);
+        start = new Date(new Date(this.reportDateYear).getFullYear(), 2, 1);
+        end = new Date(new Date(this.reportDateYear).getFullYear(), 3, 1);
       }
       if (this.reportDate == "APR") {
-        start = new Date(new Date().getFullYear(), 3, 1);
-        end = new Date(new Date().getFullYear(), 4, 1);
+        start = new Date(new Date(this.reportDateYear).getFullYear(), 3, 1);
+        end = new Date(new Date(this.reportDateYear).getFullYear(), 4, 1);
       }
       if (this.reportDate == "MAY") {
-        start = new Date(new Date().getFullYear(), 4, 1);
-        end = new Date(new Date().getFullYear(), 5, 1);
+        start = new Date(new Date(this.reportDateYear).getFullYear(), 4, 1);
+        end = new Date(new Date(this.reportDateYear).getFullYear(), 5, 1);
       }
       if (this.reportDate == "JUN") {
-        start = new Date(new Date().getFullYear(), 5, 1);
-        end = new Date(new Date().getFullYear(), 6, 1);
+        start = new Date(new Date(this.reportDateYear).getFullYear(), 5, 1);
+        end = new Date(new Date(this.reportDateYear).getFullYear(), 6, 1);
       }
       if (this.reportDate == "JUL") {
-        start = new Date(new Date().getFullYear(), 6, 1);
-        end = new Date(new Date().getFullYear(), 7, 1);
+        start = new Date(new Date(this.reportDateYear).getFullYear(), 6, 1);
+        end = new Date(new Date(this.reportDateYear).getFullYear(), 7, 1);
       }
       if (this.reportDate == "AUG") {
-        start = new Date(new Date().getFullYear(), 7, 1);
-        end = new Date(new Date().getFullYear(), 8, 1);
+        start = new Date(new Date(this.reportDateYear).getFullYear(), 7, 1);
+        end = new Date(new Date(this.reportDateYear).getFullYear(), 8, 1);
       }
       if (this.reportDate == "SEP") {
-        start = new Date(new Date().getFullYear(), 8, 1);
-        end = new Date(new Date().getFullYear(), 9, 1);
+        start = new Date(new Date(this.reportDateYear).getFullYear(), 8, 1);
+        end = new Date(new Date(this.reportDateYear).getFullYear(), 9, 1);
       }
       if (this.reportDate == "OCT") {
-        start = new Date(new Date().getFullYear(), 9, 1);
-        end = new Date(new Date().getFullYear(), 10, 1);
+        start = new Date(new Date(this.reportDateYear).getFullYear(), 9, 1);
+        end = new Date(new Date(this.reportDateYear).getFullYear(), 10, 1);
       }
       if (this.reportDate == "NOV") {
-        start = new Date(new Date().getFullYear(), 10, 1);
-        end = new Date(new Date().getFullYear(), 11, 1);
+        start = new Date(new Date(this.reportDateYear).getFullYear(), 10, 1);
+        end = new Date(new Date(this.reportDateYear).getFullYear(), 11, 1);
       }
       if (this.reportDate == "DEC") {
-        start = new Date(new Date().getFullYear(), 11, 1);
-        end = new Date(new Date().getFullYear() + 1, 0, 1);
+        start = new Date(new Date(this.reportDateYear).getFullYear(), 11, 1);
+        end = new Date(new Date(this.reportDateYear).getFullYear() + 1, 0, 1);
       }
       if (this.reportDate == 12) {
-        start = new Date(new Date().getFullYear(), 0, 1);
-        end = new Date(new Date().getFullYear() + 1, 0, 1);
+        start = new Date(new Date(this.reportDateYear).getFullYear(), 0, 1);
+        end = new Date(new Date(this.reportDateYear).getFullYear() + 1, 0, 1);
       }
       let temp = [];
       let list = this.cashflow;
@@ -1939,72 +1971,72 @@ export default {
       let start = null;
       let end = null;
       if (this.reportDate == 1) {
-        start = new Date(new Date().getFullYear(), 0, 1);
-        end = new Date(new Date().getFullYear(), 3, 1);
+        start = new Date(new Date(this.reportDateYear).getFullYear(), 0, 1);
+        end = new Date(new Date(this.reportDateYear).getFullYear(), 3, 1);
       }
       if (this.reportDate == 2) {
-        start = new Date(new Date().getFullYear(), 3, 1);
-        end = new Date(new Date().getFullYear(), 6, 1);
+        start = new Date(new Date(this.reportDateYear).getFullYear(), 3, 1);
+        end = new Date(new Date(this.reportDateYear).getFullYear(), 6, 1);
       }
       if (this.reportDate == 3) {
-        start = new Date(new Date().getFullYear(), 6, 1);
-        end = new Date(new Date().getFullYear(), 9, 1);
+        start = new Date(new Date(this.reportDateYear).getFullYear(), 6, 1);
+        end = new Date(new Date(this.reportDateYear).getFullYear(), 9, 1);
       }
       if (this.reportDate == 4) {
-        start = new Date(new Date().getFullYear(), 0, 1);
-        end = new Date(new Date().getFullYear() + 1, 0, 1);
+        start = new Date(new Date(this.reportDateYear).getFullYear(), 0, 1);
+        end = new Date(new Date(this.reportDateYear).getFullYear() + 1, 0, 1);
       }
       if (this.reportDate == "JAN") {
-        start = new Date(new Date().getFullYear(), 0, 1);
-        end = new Date(new Date().getFullYear(), 1, 1);
+        start = new Date(new Date(this.reportDateYear).getFullYear(), 0, 1);
+        end = new Date(new Date(this.reportDateYear).getFullYear(), 1, 1);
       }
       if (this.reportDate == "FEB") {
-        start = new Date(new Date().getFullYear(), 1, 1);
-        end = new Date(new Date().getFullYear(), 2, 1);
+        start = new Date(new Date(this.reportDateYear).getFullYear(), 1, 1);
+        end = new Date(new Date(this.reportDateYear).getFullYear(), 2, 1);
       }
       if (this.reportDate == "MAR") {
-        start = new Date(new Date().getFullYear(), 2, 1);
-        end = new Date(new Date().getFullYear(), 3, 1);
+        start = new Date(new Date(this.reportDateYear).getFullYear(), 2, 1);
+        end = new Date(new Date(this.reportDateYear).getFullYear(), 3, 1);
       }
       if (this.reportDate == "APR") {
-        start = new Date(new Date().getFullYear(), 3, 1);
-        end = new Date(new Date().getFullYear(), 4, 1);
+        start = new Date(new Date(this.reportDateYear).getFullYear(), 3, 1);
+        end = new Date(new Date(this.reportDateYear).getFullYear(), 4, 1);
       }
       if (this.reportDate == "MAY") {
-        start = new Date(new Date().getFullYear(), 4, 1);
-        end = new Date(new Date().getFullYear(), 5, 1);
+        start = new Date(new Date(this.reportDateYear).getFullYear(), 4, 1);
+        end = new Date(new Date(this.reportDateYear).getFullYear(), 5, 1);
       }
       if (this.reportDate == "JUN") {
-        start = new Date(new Date().getFullYear(), 5, 1);
-        end = new Date(new Date().getFullYear(), 6, 1);
+        start = new Date(new Date(this.reportDateYear).getFullYear(), 5, 1);
+        end = new Date(new Date(this.reportDateYear).getFullYear(), 6, 1);
       }
       if (this.reportDate == "JUL") {
-        start = new Date(new Date().getFullYear(), 6, 1);
-        end = new Date(new Date().getFullYear(), 7, 1);
+        start = new Date(new Date(this.reportDateYear).getFullYear(), 6, 1);
+        end = new Date(new Date(this.reportDateYear).getFullYear(), 7, 1);
       }
       if (this.reportDate == "AUG") {
-        start = new Date(new Date().getFullYear(), 7, 1);
-        end = new Date(new Date().getFullYear(), 8, 1);
+        start = new Date(new Date(this.reportDateYear).getFullYear(), 7, 1);
+        end = new Date(new Date(this.reportDateYear).getFullYear(), 8, 1);
       }
       if (this.reportDate == "SEP") {
-        start = new Date(new Date().getFullYear(), 8, 1);
-        end = new Date(new Date().getFullYear(), 9, 1);
+        start = new Date(new Date(this.reportDateYear).getFullYear(), 8, 1);
+        end = new Date(new Date(this.reportDateYear).getFullYear(), 9, 1);
       }
       if (this.reportDate == "OCT") {
-        start = new Date(new Date().getFullYear(), 9, 1);
-        end = new Date(new Date().getFullYear(), 10, 1);
+        start = new Date(new Date(this.reportDateYear).getFullYear(), 9, 1);
+        end = new Date(new Date(this.reportDateYear).getFullYear(), 10, 1);
       }
       if (this.reportDate == "NOV") {
-        start = new Date(new Date().getFullYear(), 10, 1);
-        end = new Date(new Date().getFullYear(), 11, 1);
+        start = new Date(new Date(this.reportDateYear).getFullYear(), 10, 1);
+        end = new Date(new Date(this.reportDateYear).getFullYear(), 11, 1);
       }
       if (this.reportDate == "DEC") {
-        start = new Date(new Date().getFullYear(), 11, 1);
-        end = new Date(new Date().getFullYear() + 1, 0, 1);
+        start = new Date(new Date(this.reportDateYear).getFullYear(), 11, 1);
+        end = new Date(new Date(this.reportDateYear).getFullYear() + 1, 0, 1);
       }
       if (this.reportDate == 12) {
-        start = new Date(new Date().getFullYear(), 0, 1);
-        end = new Date(new Date().getFullYear() + 1, 0, 1);
+        start = new Date(new Date(this.reportDateYear).getFullYear(), 0, 1);
+        end = new Date(new Date(this.reportDateYear).getFullYear() + 1, 0, 1);
       }
       let total = 0;
       let list = this.cashflow;
@@ -2037,72 +2069,72 @@ export default {
       let start = null;
       let end = null;
       if (this.reportDate == 1) {
-        start = new Date(new Date().getFullYear(), 0, 1);
-        end = new Date(new Date().getFullYear(), 3, 1);
+        start = new Date(new Date(this.reportDateYear).getFullYear(), 0, 1);
+        end = new Date(new Date(this.reportDateYear).getFullYear(), 3, 1);
       }
       if (this.reportDate == 2) {
-        start = new Date(new Date().getFullYear(), 3, 1);
-        end = new Date(new Date().getFullYear(), 6, 1);
+        start = new Date(new Date(this.reportDateYear).getFullYear(), 3, 1);
+        end = new Date(new Date(this.reportDateYear).getFullYear(), 6, 1);
       }
       if (this.reportDate == 3) {
-        start = new Date(new Date().getFullYear(), 6, 1);
-        end = new Date(new Date().getFullYear(), 9, 1);
+        start = new Date(new Date(this.reportDateYear).getFullYear(), 6, 1);
+        end = new Date(new Date(this.reportDateYear).getFullYear(), 9, 1);
       }
       if (this.reportDate == 4) {
-        start = new Date(new Date().getFullYear(), 0, 1);
-        end = new Date(new Date().getFullYear() + 1, 0, 1);
+        start = new Date(new Date(this.reportDateYear).getFullYear(), 0, 1);
+        end = new Date(new Date(this.reportDateYear).getFullYear() + 1, 0, 1);
       }
       if (this.reportDate == "JAN") {
-        start = new Date(new Date().getFullYear(), 0, 1);
-        end = new Date(new Date().getFullYear(), 1, 1);
+        start = new Date(new Date(this.reportDateYear).getFullYear(), 0, 1);
+        end = new Date(new Date(this.reportDateYear).getFullYear(), 1, 1);
       }
       if (this.reportDate == "FEB") {
-        start = new Date(new Date().getFullYear(), 1, 1);
-        end = new Date(new Date().getFullYear(), 2, 1);
+        start = new Date(new Date(this.reportDateYear).getFullYear(), 1, 1);
+        end = new Date(new Date(this.reportDateYear).getFullYear(), 2, 1);
       }
       if (this.reportDate == "MAR") {
-        start = new Date(new Date().getFullYear(), 2, 1);
-        end = new Date(new Date().getFullYear(), 3, 1);
+        start = new Date(new Date(this.reportDateYear).getFullYear(), 2, 1);
+        end = new Date(new Date(this.reportDateYear).getFullYear(), 3, 1);
       }
       if (this.reportDate == "APR") {
-        start = new Date(new Date().getFullYear(), 3, 1);
-        end = new Date(new Date().getFullYear(), 4, 1);
+        start = new Date(new Date(this.reportDateYear).getFullYear(), 3, 1);
+        end = new Date(new Date(this.reportDateYear).getFullYear(), 4, 1);
       }
       if (this.reportDate == "MAY") {
-        start = new Date(new Date().getFullYear(), 4, 1);
-        end = new Date(new Date().getFullYear(), 5, 1);
+        start = new Date(new Date(this.reportDateYear).getFullYear(), 4, 1);
+        end = new Date(new Date(this.reportDateYear).getFullYear(), 5, 1);
       }
       if (this.reportDate == "JUN") {
-        start = new Date(new Date().getFullYear(), 5, 1);
-        end = new Date(new Date().getFullYear(), 6, 1);
+        start = new Date(new Date(this.reportDateYear).getFullYear(), 5, 1);
+        end = new Date(new Date(this.reportDateYear).getFullYear(), 6, 1);
       }
       if (this.reportDate == "JUL") {
-        start = new Date(new Date().getFullYear(), 6, 1);
-        end = new Date(new Date().getFullYear(), 7, 1);
+        start = new Date(new Date(this.reportDateYear).getFullYear(), 6, 1);
+        end = new Date(new Date(this.reportDateYear).getFullYear(), 7, 1);
       }
       if (this.reportDate == "AUG") {
-        start = new Date(new Date().getFullYear(), 7, 1);
-        end = new Date(new Date().getFullYear(), 8, 1);
+        start = new Date(new Date(this.reportDateYear).getFullYear(), 7, 1);
+        end = new Date(new Date(this.reportDateYear).getFullYear(), 8, 1);
       }
       if (this.reportDate == "SEP") {
-        start = new Date(new Date().getFullYear(), 8, 1);
-        end = new Date(new Date().getFullYear(), 9, 1);
+        start = new Date(new Date(this.reportDateYear).getFullYear(), 8, 1);
+        end = new Date(new Date(this.reportDateYear).getFullYear(), 9, 1);
       }
       if (this.reportDate == "OCT") {
-        start = new Date(new Date().getFullYear(), 9, 1);
-        end = new Date(new Date().getFullYear(), 10, 1);
+        start = new Date(new Date(this.reportDateYear).getFullYear(), 9, 1);
+        end = new Date(new Date(this.reportDateYear).getFullYear(), 10, 1);
       }
       if (this.reportDate == "NOV") {
-        start = new Date(new Date().getFullYear(), 10, 1);
-        end = new Date(new Date().getFullYear(), 11, 1);
+        start = new Date(new Date(this.reportDateYear).getFullYear(), 10, 1);
+        end = new Date(new Date(this.reportDateYear).getFullYear(), 11, 1);
       }
       if (this.reportDate == "DEC") {
-        start = new Date(new Date().getFullYear(), 11, 1);
-        end = new Date(new Date().getFullYear() + 1, 0, 1);
+        start = new Date(new Date(this.reportDateYear).getFullYear(), 11, 1);
+        end = new Date(new Date(this.reportDateYear).getFullYear() + 1, 0, 1);
       }
       if (this.reportDate == 12) {
-        start = new Date(new Date().getFullYear(), 0, 1);
-        end = new Date(new Date().getFullYear() + 1, 0, 1);
+        start = new Date(new Date(this.reportDateYear).getFullYear(), 0, 1);
+        end = new Date(new Date(this.reportDateYear).getFullYear() + 1, 0, 1);
       }
       let temp = [];
       let list = this.cashflow;
@@ -2156,72 +2188,72 @@ export default {
       let start = null;
       let end = null;
       if (this.reportDate == 1) {
-        start = new Date(new Date().getFullYear(), 0, 1);
-        end = new Date(new Date().getFullYear(), 3, 1);
+        start = new Date(new Date(this.reportDateYear).getFullYear(), 0, 1);
+        end = new Date(new Date(this.reportDateYear).getFullYear(), 3, 1);
       }
       if (this.reportDate == 2) {
-        start = new Date(new Date().getFullYear(), 3, 1);
-        end = new Date(new Date().getFullYear(), 6, 1);
+        start = new Date(new Date(this.reportDateYear).getFullYear(), 3, 1);
+        end = new Date(new Date(this.reportDateYear).getFullYear(), 6, 1);
       }
       if (this.reportDate == 3) {
-        start = new Date(new Date().getFullYear(), 6, 1);
-        end = new Date(new Date().getFullYear(), 9, 1);
+        start = new Date(new Date(this.reportDateYear).getFullYear(), 6, 1);
+        end = new Date(new Date(this.reportDateYear).getFullYear(), 9, 1);
       }
       if (this.reportDate == 4) {
-        start = new Date(new Date().getFullYear(), 0, 1);
-        end = new Date(new Date().getFullYear() + 1, 0, 1);
+        start = new Date(new Date(this.reportDateYear).getFullYear(), 0, 1);
+        end = new Date(new Date(this.reportDateYear).getFullYear() + 1, 0, 1);
       }
       if (this.reportDate == "JAN") {
-        start = new Date(new Date().getFullYear(), 0, 1);
-        end = new Date(new Date().getFullYear(), 1, 1);
+        start = new Date(new Date(this.reportDateYear).getFullYear(), 0, 1);
+        end = new Date(new Date(this.reportDateYear).getFullYear(), 1, 1);
       }
       if (this.reportDate == "FEB") {
-        start = new Date(new Date().getFullYear(), 1, 1);
-        end = new Date(new Date().getFullYear(), 2, 1);
+        start = new Date(new Date(this.reportDateYear).getFullYear(), 1, 1);
+        end = new Date(new Date(this.reportDateYear).getFullYear(), 2, 1);
       }
       if (this.reportDate == "MAR") {
-        start = new Date(new Date().getFullYear(), 2, 1);
-        end = new Date(new Date().getFullYear(), 3, 1);
+        start = new Date(new Date(this.reportDateYear).getFullYear(), 2, 1);
+        end = new Date(new Date(this.reportDateYear).getFullYear(), 3, 1);
       }
       if (this.reportDate == "APR") {
-        start = new Date(new Date().getFullYear(), 3, 1);
-        end = new Date(new Date().getFullYear(), 4, 1);
+        start = new Date(new Date(this.reportDateYear).getFullYear(), 3, 1);
+        end = new Date(new Date(this.reportDateYear).getFullYear(), 4, 1);
       }
       if (this.reportDate == "MAY") {
-        start = new Date(new Date().getFullYear(), 4, 1);
-        end = new Date(new Date().getFullYear(), 5, 1);
+        start = new Date(new Date(this.reportDateYear).getFullYear(), 4, 1);
+        end = new Date(new Date(this.reportDateYear).getFullYear(), 5, 1);
       }
       if (this.reportDate == "JUN") {
-        start = new Date(new Date().getFullYear(), 5, 1);
-        end = new Date(new Date().getFullYear(), 6, 1);
+        start = new Date(new Date(this.reportDateYear).getFullYear(), 5, 1);
+        end = new Date(new Date(this.reportDateYear).getFullYear(), 6, 1);
       }
       if (this.reportDate == "JUL") {
-        start = new Date(new Date().getFullYear(), 6, 1);
-        end = new Date(new Date().getFullYear(), 7, 1);
+        start = new Date(new Date(this.reportDateYear).getFullYear(), 6, 1);
+        end = new Date(new Date(this.reportDateYear).getFullYear(), 7, 1);
       }
       if (this.reportDate == "AUG") {
-        start = new Date(new Date().getFullYear(), 7, 1);
-        end = new Date(new Date().getFullYear(), 8, 1);
+        start = new Date(new Date(this.reportDateYear).getFullYear(), 7, 1);
+        end = new Date(new Date(this.reportDateYear).getFullYear(), 8, 1);
       }
       if (this.reportDate == "SEP") {
-        start = new Date(new Date().getFullYear(), 8, 1);
-        end = new Date(new Date().getFullYear(), 9, 1);
+        start = new Date(new Date(this.reportDateYear).getFullYear(), 8, 1);
+        end = new Date(new Date(this.reportDateYear).getFullYear(), 9, 1);
       }
       if (this.reportDate == "OCT") {
-        start = new Date(new Date().getFullYear(), 9, 1);
-        end = new Date(new Date().getFullYear(), 10, 1);
+        start = new Date(new Date(this.reportDateYear).getFullYear(), 9, 1);
+        end = new Date(new Date(this.reportDateYear).getFullYear(), 10, 1);
       }
       if (this.reportDate == "NOV") {
-        start = new Date(new Date().getFullYear(), 10, 1);
-        end = new Date(new Date().getFullYear(), 11, 1);
+        start = new Date(new Date(this.reportDateYear).getFullYear(), 10, 1);
+        end = new Date(new Date(this.reportDateYear).getFullYear(), 11, 1);
       }
       if (this.reportDate == "DEC") {
-        start = new Date(new Date().getFullYear(), 11, 1);
-        end = new Date(new Date().getFullYear() + 1, 0, 1);
+        start = new Date(new Date(this.reportDateYear).getFullYear(), 11, 1);
+        end = new Date(new Date(this.reportDateYear).getFullYear() + 1, 0, 1);
       }
       if (this.reportDate == 12) {
-        start = new Date(new Date().getFullYear(), 0, 1);
-        end = new Date(new Date().getFullYear() + 1, 0, 1);
+        start = new Date(new Date(this.reportDateYear).getFullYear(), 0, 1);
+        end = new Date(new Date(this.reportDateYear).getFullYear() + 1, 0, 1);
       }
       let total = 0;
       let list = this.cashflow;
@@ -2253,6 +2285,135 @@ export default {
         }
       });
       return total;
+    },
+    netIncome() {
+      let start = null;
+      let end = null;
+      if (this.reportDate == 1) {
+        start = new Date(new Date(this.reportDateYear).getFullYear(), 0, 1);
+        end = new Date(new Date(this.reportDateYear).getFullYear(), 3, 1);
+      }
+      if (this.reportDate == 2) {
+        start = new Date(new Date(this.reportDateYear).getFullYear(), 3, 1);
+        end = new Date(new Date(this.reportDateYear).getFullYear(), 6, 1);
+      }
+      if (this.reportDate == 3) {
+        start = new Date(new Date(this.reportDateYear).getFullYear(), 6, 1);
+        end = new Date(new Date(this.reportDateYear).getFullYear(), 9, 1);
+      }
+      if (this.reportDate == 4) {
+        start = new Date(new Date(this.reportDateYear).getFullYear(), 0, 1);
+        end = new Date(new Date(this.reportDateYear).getFullYear() + 1, 0, 1);
+      }
+      if (this.reportDate == "JAN") {
+        start = new Date(new Date(this.reportDateYear).getFullYear(), 0, 1);
+        end = new Date(new Date(this.reportDateYear).getFullYear(), 1, 1);
+      }
+      if (this.reportDate == "FEB") {
+        start = new Date(new Date(this.reportDateYear).getFullYear(), 1, 1);
+        end = new Date(new Date(this.reportDateYear).getFullYear(), 2, 1);
+      }
+      if (this.reportDate == "MAR") {
+        start = new Date(new Date(this.reportDateYear).getFullYear(), 2, 1);
+        end = new Date(new Date(this.reportDateYear).getFullYear(), 3, 1);
+      }
+      if (this.reportDate == "APR") {
+        start = new Date(new Date(this.reportDateYear).getFullYear(), 3, 1);
+        end = new Date(new Date(this.reportDateYear).getFullYear(), 4, 1);
+      }
+      if (this.reportDate == "MAY") {
+        start = new Date(new Date(this.reportDateYear).getFullYear(), 4, 1);
+        end = new Date(new Date(this.reportDateYear).getFullYear(), 5, 1);
+      }
+      if (this.reportDate == "JUN") {
+        start = new Date(new Date(this.reportDateYear).getFullYear(), 5, 1);
+        end = new Date(new Date(this.reportDateYear).getFullYear(), 6, 1);
+      }
+      if (this.reportDate == "JUL") {
+        start = new Date(new Date(this.reportDateYear).getFullYear(), 6, 1);
+        end = new Date(new Date(this.reportDateYear).getFullYear(), 7, 1);
+      }
+      if (this.reportDate == "AUG") {
+        start = new Date(new Date(this.reportDateYear).getFullYear(), 7, 1);
+        end = new Date(new Date(this.reportDateYear).getFullYear(), 8, 1);
+      }
+      if (this.reportDate == "SEP") {
+        start = new Date(new Date(this.reportDateYear).getFullYear(), 8, 1);
+        end = new Date(new Date(this.reportDateYear).getFullYear(), 9, 1);
+      }
+      if (this.reportDate == "OCT") {
+        start = new Date(new Date(this.reportDateYear).getFullYear(), 9, 1);
+        end = new Date(new Date(this.reportDateYear).getFullYear(), 10, 1);
+      }
+      if (this.reportDate == "NOV") {
+        start = new Date(new Date(this.reportDateYear).getFullYear(), 10, 1);
+        end = new Date(new Date(this.reportDateYear).getFullYear(), 11, 1);
+      }
+      if (this.reportDate == "DEC") {
+        start = new Date(new Date(this.reportDateYear).getFullYear(), 11, 1);
+        end = new Date(new Date(this.reportDateYear).getFullYear() + 1, 0, 1);
+      }
+      if (this.reportDate == 12) {
+        start = new Date(new Date(this.reportDateYear).getFullYear(), 0, 1);
+        end = new Date(new Date(this.reportDateYear).getFullYear() + 1, 0, 1);
+      }
+      let temp = [];
+      let totals_col = [];
+      let totals_exp = [];
+      let list = this.cashflow;
+      let collection = this.collection_type_list;
+      let expense = this.expense_type_list;
+      temp.push(["Revenue", "", ""]);
+      collection.forEach((elem) => {
+        totals_col.push(0);
+      });
+      collection.forEach((col, idx) => {
+        list.forEach((elem) => {
+          let item_date = new Date(elem.created_at);
+          if (
+            elem.collection_type_id == col.id &&
+            item_date >= start &&
+            item_date <= end
+          ) {
+            totals_col[idx] += elem.amount;
+          }
+        });
+      });
+      collection.forEach((col, idx) => {
+        temp.push(["", col.name, totals_col[idx] + " PHP"]);
+      });
+      temp.push(["Expense", "", ""]);
+      expense.forEach((elem) => {
+        totals_exp.push(0);
+      });
+      expense.forEach((col, idx) => {
+        list.forEach((elem) => {
+          let item_date = new Date(elem.created_at);
+          if (
+            elem.expense_type_id == col.id &&
+            item_date >= start &&
+            item_date <= end
+          ) {
+            totals_exp[idx] += elem.amount;
+          }
+        });
+      });
+      expense.forEach((col, idx) => {
+        temp.push(["", col.name, totals_exp[idx] + " PHP"]);
+      });
+      // list.forEach((elem) => {
+      //   if(elem.collection_type){
+      //     collection.forEach((col)=>{
+      //       if(col.id==elem.collection_type_id){
+      //         totals[col.id-1]+=elem.amount
+      //       }
+      //     })
+      //   }
+      //   if(elem.expense_type){
+
+      //   }
+      // });
+      return temp;
     },
     // revenueCount() {
     //   let count = 0;
@@ -2286,6 +2447,7 @@ export default {
       return list;
     },
   },
+  mounted() {},
   created() {
     this.initFilters();
   },
