@@ -1543,13 +1543,13 @@ export default {
       doc.autoTable({
         startY: finalY + 20,
         theme: "plain",
-        head: [["Net Income", "", ""]],
+        head: [["Summary", "", ""]],
         body: this.netIncome,
         foot: [
           [
             { content: "", colSpan: 1, rowSpan: 1 },
             {
-              content: "Total",
+              content: "Net Income",
               colSpan: 1,
               rowSpan: 1,
               styles: { halign: "right" },
