@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use App\Models\Election;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
@@ -31,6 +32,13 @@ class ElectionController extends Controller
             'result' => ['required'],
         ]));
         return response()->json($election);
+    }
+    public function updateVoters(Request $request, ) : JsonResponse
+    {
+        $user = User::query()->where('role', 'officer')->where('role', 'resident')->update([
+            'has_voted' => 0,
+        ]);
+        return response()->json($user);
     }
     public function destroy(Election $election) : JsonResponse
     {

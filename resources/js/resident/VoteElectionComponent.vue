@@ -4,7 +4,10 @@
         <div v-else>
             <div v-if="election_on_going">
                 <div v-if="userLogged.has_voted == 0">
-                    <h4 class="text-center">ELECTION IS ON GOING</h4>
+                    <h4 class="text-center">
+                        ELECTION IS ON GOING ({{ election_start }} -
+                        {{ election_end }} )
+                    </h4>
                     <h3 class="text-center">Voted</h3>
                     <h2 class="text-center">
                         {{ number_voted }} out of {{ total_voter }}
@@ -102,7 +105,10 @@
                     </div>
                 </div>
                 <div v-else>
-                    <h4 class="text-center">ELECTION IS ON GOING</h4>
+                    <h4 class="text-center">
+                        ELECTION IS ON GOING ({{ election_start }} -
+                        {{ election_end }} )
+                    </h4>
                     <h3 class="text-center">Voted</h3>
                     <h2 class="text-center">
                         {{ number_voted }} out of {{ total_voter }}
@@ -216,7 +222,10 @@
                 <div v-else class="text-center">No current officers added</div>
                 <div v-if="result">
                     <hr />
-                    <h2 class="text-center">ELECTION RESULT</h2>
+                    <h2 class="text-center">
+                        ELECTION RESULT ({{ election_start }} -
+                        {{ election_end }} )
+                    </h2>
                     <h3 class="text-center">Voted</h3>
                     <h2 class="text-center">
                         {{ number_voted }} out of {{ total_voter }}
@@ -877,6 +886,8 @@ export default {
             election_id: null,
             election_on_going: false,
             result: false,
+            election_start: null,
+            election_end: null,
         };
     },
     methods: {
@@ -1030,6 +1041,15 @@ export default {
                 this.error_position_id = error.position_id[0];
             if (error.user_id) this.error_user_id = error.user_id[0];
         },
+        dateFormat(date) {
+            var options = {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+            };
+
+            return new Date(date).toLocaleDateString("en-US", options);
+        },
         async checkElectionDate() {
             this.loading = true;
             await axios({
@@ -1040,7 +1060,11 @@ export default {
                     this.id = res.data.id;
                     console.log("result", (this.result = res.data.result));
                     var end_date = res.data.end_date;
-
+                    var start_date = res.data.start_date;
+                    this.election_start = this.dateFormat(start_date);
+                    console.log("election_start", this.election_start);
+                    this.election_end = this.dateFormat(end_date);
+                    console.log("election_end", this.election_end);
                     // var date = new Date(
                     //         this.$store.state.timeNow.timeNow.datetime
                     //     ),

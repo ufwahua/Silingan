@@ -74,6 +74,7 @@ Route::get('/post/search/', [PostController::class, 'getMarketPlacePost']);
 Route::post('/invoice/bill-all/', [InvoiceController::class, 'billToAll']);
 Route::post('/invoice/bill-specific/', [InvoiceController::class, 'billSpecificBlockLot']);
 Route::get('/invoice/block-lot/{invoice}', [InvoiceController::class, 'getInvoicesByBlockLotID']);
+Route::post('/election/update-voters/', [ElectionController::class, 'updateVoters']);
 
 
 Route::apiResources([

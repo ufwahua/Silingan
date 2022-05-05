@@ -177,7 +177,10 @@
                 </div>
             </div>
             <div v-else>
-                <h4 class="text-center">ELECTION IS ON GOING</h4>
+                <h4 class="text-center">
+                    ELECTION IS ON GOING ({{ election_start }} -
+                    {{ election_end }} )
+                </h4>
                 <h3 class="text-center">Voted</h3>
                 <h2 class="text-center">
                     {{ number_voted }} out of {{ total_voter }}
@@ -1169,9 +1172,20 @@ export default {
                 { tag: "renter" },
                 { tag: "family member" },
             ],
+            election_start: null,
+            election_end: null,
         };
     },
     methods: {
+        dateFormat(date) {
+            var options = {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+            };
+
+            return new Date(date).toLocaleDateString("en-US", options);
+        },
         showWarningVote() {
             this.$toast.add({
                 severity: "warn",
@@ -1522,6 +1536,11 @@ export default {
                     this.id = res.data.id;
                     this.result = res.data.result;
                     var end_date = res.data.end_date;
+                    var start_date = res.data.start_date;
+                    this.election_start = this.dateFormat(start_date);
+                    console.log("election_start", this.election_start);
+                    this.election_end = this.dateFormat(end_date);
+                    console.log("election_end", this.election_end);
                     // this.$store.state.timeNow.timeNow.datetime
                     var date = new Date(),
                         mnth = ("0" + (date.getMonth() + 1)).slice(-2),
@@ -1576,6 +1595,16 @@ export default {
                                             console.log(
                                                 "notify announcement success "
                                             );
+                                        })
+                                        .catch((e) => {
+                                            console.log(e.response);
+                                        });
+                                    await axios({
+                                        method: "post",
+                                        url: "/api/election/update-voters",
+                                    })
+                                        .then(() => {
+                                            console.log("updated voters ");
                                         })
                                         .catch((e) => {
                                             console.log(e.response);
