@@ -79,7 +79,7 @@ export default {
                         {
                             label: "View Billing",
                             icon: "pi pi-fw pi-calendar",
-                            to: "/resident/view-billing",
+                            to: "/resident/invoices",
                         },
                         {
                             label: "Election",

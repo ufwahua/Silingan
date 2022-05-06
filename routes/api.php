@@ -26,6 +26,7 @@ use App\Http\Controllers\ExpenseTypeController;
 use App\Http\Controllers\CollectionController;
 use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\FundController;
+use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\SmsController;
 
@@ -70,6 +71,9 @@ Route::post('/notification/announcement',[NotificationController::class, 'notifi
 Route::post('/notification/election',[NotificationController::class, 'notificationElection']);
 Route::post('/notification/comment',[NotificationController::class, 'notificationComment']);
 Route::get('/post/search/', [PostController::class, 'getMarketPlacePost']);
+Route::post('/invoice/bill-all/', [InvoiceController::class, 'billToAll']);
+Route::post('/invoice/bill-specific/', [InvoiceController::class, 'billSpecificBlockLot']);
+Route::get('/invoice/block-lot/{invoice}', [InvoiceController::class, 'getInvoicesByBlockLotID']);
 
 
 Route::apiResources([
@@ -95,6 +99,7 @@ Route::apiResources([
     'collection' => CollectionController::class,
     'expense' => ExpenseController::class,
     'fund' => FundController::class,
-     'notification'     => NotificationController::class,
-    'expense_type' => ExpenseTypeController::class
+    'notification'     => NotificationController::class,
+    'expense_type' => ExpenseTypeController::class,
+    'invoice' => InvoiceController::class,
 ]);

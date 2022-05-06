@@ -2,7 +2,7 @@
     <div class="mr-5">
         <div v-if="loading"></div>
         <div v-else>
-            <div v-if="!result">
+            <div v-if="election_on_going">
                 <div v-if="userLogged.has_voted == 0">
                     <h4 class="text-center">ELECTION IS ON GOING</h4>
                     <h3 class="text-center">Voted</h3>
@@ -70,37 +70,6 @@
                                                         candidate.user.last_name
                                                     }}
                                                 </h5>
-                                            </template>
-                                            <template #content>
-                                                <div
-                                                    v-if="!result"
-                                                    class="flex justify-content-center"
-                                                >
-                                                    <Button
-                                                        icon="pi pi-trash"
-                                                        class="p-button-rounded p-button-secondary mr-2"
-                                                        @click="
-                                                            deleteCandidate(
-                                                                candidate
-                                                            )
-                                                        "
-                                                        v-tooltip="
-                                                            'Delete Candidate'
-                                                        "
-                                                    />
-                                                    <Button
-                                                        icon="pi pi-pencil"
-                                                        class="p-button-rounded p-button-primary"
-                                                        @click="
-                                                            updateCandidate(
-                                                                candidate
-                                                            )
-                                                        "
-                                                        v-tooltip="
-                                                            'Edit Candidate'
-                                                        "
-                                                    />
-                                                </div>
                                             </template>
                                         </Card>
                                     </Button>
@@ -200,74 +169,14 @@
             </div>
 
             <div v-else>
-                <h2 class="text-center">ELECTION RESULT</h2>
-                <h3 class="text-center">Voted</h3>
-                <h2 class="text-center">
-                    {{ number_voted }} out of {{ total_voter }}
-                </h2>
-                <div v-for="position in positions" :key="position.id">
-                    <hr />
-                    <div class="grid flex">
-                        <div
-                            class="col-12 p-inputgroup flex justify-content-center"
-                        >
-                            <h4 class="text-center mr-2">
-                                {{ position.name }}
-                            </h4>
-                        </div>
-
-                        <div
-                            class="col-12 flex justify-content-center flex-wrap"
-                        >
-                            <div
-                                v-for="candidate in last_candidates"
-                                :key="candidate.id"
-                            >
-                                <Card
-                                    v-if="candidate.position_id == position.id"
-                                    class="mr-2 m-2"
-                                    style="width: 200px; min-height: 350px"
-                                >
-                                    <template #header>
-                                        <img
-                                            v-if="
-                                                candidate.user.profile_pic !==
-                                                null
-                                            "
-                                            src="https://www.primefaces.org/wp-content/uploads/2020/02/primefacesorg-primevue-2020.png"
-                                            style="height: 7rem"
-                                        />
-                                        <img
-                                            v-else
-                                            src="http://127.0.0.1:8000/storage/images/default-prof-pic.png"
-                                            style="height: 10rem"
-                                        />
-                                    </template>
-                                    <template #title>
-                                        <h5 class="text-center">
-                                            {{ candidate.user.first_name }}
-                                            {{ candidate.user.last_name }}
-                                        </h5>
-                                    </template>
-                                    <template #content>
-                                        <div class="text-center">
-                                            <p>Vote count:</p>
-                                            {{ candidate.vote_count }}
-                                        </div>
-                                    </template>
-                                </Card>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <hr />
-
                 <div>
                     <h4 class="text-center">Current Officers</h4>
                 </div>
 
-                <div class="flex justify-content-center flex-row flex-wrap">
+                <div
+                    v-if="officers"
+                    class="flex justify-content-center flex-row flex-wrap"
+                >
                     <div v-for="officer in officers" :key="officer.id">
                         <Button
                             label="Primary"
@@ -302,6 +211,72 @@
                                 </template>
                             </Card>
                         </Button>
+                    </div>
+                </div>
+                <div v-else class="text-center">No current officers added</div>
+                <div v-if="result">
+                    <hr />
+                    <h2 class="text-center">ELECTION RESULT</h2>
+                    <h3 class="text-center">Voted</h3>
+                    <h2 class="text-center">
+                        {{ number_voted }} out of {{ total_voter }}
+                    </h2>
+                    <div v-for="position in positions" :key="position.id">
+                        <hr />
+                        <div class="grid flex">
+                            <div
+                                class="col-12 p-inputgroup flex justify-content-center"
+                            >
+                                <h4 class="text-center mr-2">
+                                    {{ position.name }}
+                                </h4>
+                            </div>
+
+                            <div
+                                class="col-12 flex justify-content-center flex-wrap"
+                            >
+                                <div
+                                    v-for="candidate in last_candidates"
+                                    :key="candidate.id"
+                                >
+                                    <Card
+                                        v-if="
+                                            candidate.position_id == position.id
+                                        "
+                                        class="mr-2 m-2"
+                                        style="width: 200px; min-height: 350px"
+                                    >
+                                        <template #header>
+                                            <img
+                                                v-if="
+                                                    candidate.user
+                                                        .profile_pic !== null
+                                                "
+                                                src="https://www.primefaces.org/wp-content/uploads/2020/02/primefacesorg-primevue-2020.png"
+                                                style="height: 7rem"
+                                            />
+                                            <img
+                                                v-else
+                                                src="http://127.0.0.1:8000/storage/images/default-prof-pic.png"
+                                                style="height: 10rem"
+                                            />
+                                        </template>
+                                        <template #title>
+                                            <h5 class="text-center">
+                                                {{ candidate.user.first_name }}
+                                                {{ candidate.user.last_name }}
+                                            </h5>
+                                        </template>
+                                        <template #content>
+                                            <div class="text-center">
+                                                <p>Vote count:</p>
+                                                {{ candidate.vote_count }}
+                                            </div>
+                                        </template>
+                                    </Card>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -884,6 +859,7 @@ export default {
                 selected_tag: "",
             },
             selected_candidate: [],
+
             error_first_name: "",
             error_last_name: "",
             error_gender: "",
@@ -899,7 +875,8 @@ export default {
             error_selected_tag: "",
 
             election_id: null,
-            result: null,
+            election_on_going: false,
+            result: false,
         };
     },
     methods: {
@@ -1061,12 +1038,17 @@ export default {
             })
                 .then((res) => {
                     this.id = res.data.id;
-                    this.result = res.data.result;
+                    console.log("result", (this.result = res.data.result));
                     var end_date = res.data.end_date;
-                    // this.$store.state.timeNow.timeNow.datetime;
-                    var date = new Date(
-                            this.$store.state.timeNow.timeNow.datetime
-                        ),
+
+                    // var date = new Date(
+                    //         this.$store.state.timeNow.timeNow.datetime
+                    //     ),
+                    //     mnth = ("0" + (date.getMonth() + 1)).slice(-2),
+                    //     day = ("0" + date.getDate()).slice(-2);
+                    // var date_now = [date.getFullYear(), mnth, day].join("-");
+
+                    var date = new Date(),
                         mnth = ("0" + (date.getMonth() + 1)).slice(-2),
                         day = ("0" + date.getDate()).slice(-2);
                     var date_now = [date.getFullYear(), mnth, day].join("-");
@@ -1074,9 +1056,9 @@ export default {
                     if (!this.id) {
                         console.log("NO ELECTION");
                         this.election_id = 1;
-                        this.result = false;
-                    } else if (this.id && !this.result) {
+                    } else if (this.id && end_date > date_now) {
                         console.log("ELECTION ON GOING 2nd if ");
+                        this.election_on_going = true;
                         this.election_id = res.data.id;
                     } else {
                         console.log("NO ELECTION 3rd");
@@ -1084,6 +1066,7 @@ export default {
                             "candidates/getLastCandidates",
                             this.id
                         );
+                        this.election_on_going = false;
                         this.election_id = parseInt(res.data.id) + 1;
                     }
                     this.$store.dispatch("candidates/getAll", this.election_id);

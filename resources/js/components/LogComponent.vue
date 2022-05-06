@@ -1516,9 +1516,7 @@ export default {
             from: null,
             to_masterlist: null,
             to: null,
-
             user_login_id: null,
-
             selected_card: null,
             selected_card_id: null,
             purpose_visit: null,

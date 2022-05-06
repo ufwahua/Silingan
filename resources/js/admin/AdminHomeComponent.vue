@@ -99,9 +99,9 @@ export default {
                             to: "/admin/verify-marketplace",
                         },
                         {
-                            label: "Logs",
-                            icon: "pi pi-info-circle",
-                            to: "/admin/log",
+                            label: "Invoice",
+                            icon: "pi pi-send",
+                            to: "/admin/invoice",
                         },
                     ],
                 },
@@ -179,6 +179,11 @@ export default {
                 },
                 {
                     items: [
+                        {
+                            label: "Logs",
+                            icon: "pi pi-info-circle",
+                            to: "/admin/log",
+                        },
                         {
                             label: "Election",
                             icon: "pi pi-user-plus",

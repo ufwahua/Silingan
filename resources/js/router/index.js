@@ -18,10 +18,11 @@ import VerifyMarketPlaceComponent from "../admin/VerifyMarketPlaceComponent.vue"
 import CashflowComponent from "../admin/CashflowComponent.vue";
 import CollectionTypeComponent from "../admin/CollectionTypeComponent.vue";
 import ExpenseTypeComponent from "../admin/ExpenseTypeComponent";
+import InvoiceComponent from "../admin/InvoiceComponent";
 
 //resident
 import ResidentHomeComponent from "../resident/ResidentHomeComponent.vue";
-import BillingComponent from "../resident/BillingComponent.vue";
+import ResidentInvoicesComponent from "../resident/ResidentInvoicesComponent.vue";
 import VoteElectionComponent from "../resident/VoteElectionComponent.vue";
 
 //security officer
@@ -389,6 +390,17 @@ const router = createRouter({
                         contents: ExpenseTypeComponent,
                     },
                 },
+                {
+                    path: "invoice",
+                    meta: {
+                        role: "admin",
+                    },
+                    beforeEnter: checkRole,
+                    components: {
+                        default: NotFound,
+                        contents: InvoiceComponent,
+                    },
+                },
             ],
         },
         {
@@ -472,14 +484,14 @@ const router = createRouter({
                     },
                 },
                 {
-                    path: "view-billing",
+                    path: "invoices",
                     meta: {
                         role: "resident",
                     },
 
                     components: {
                         default: NotFound,
-                        contents: BillingComponent,
+                        contents: ResidentInvoicesComponent,
                     },
                 },
                 {
