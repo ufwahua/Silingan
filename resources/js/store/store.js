@@ -34,6 +34,7 @@ export default createStore({
         filtered_resident: null,
         filtered_resident_block_lot: null,
         officers: null,
+        residents: null,
         userLogged: null,
         chat_room: null,
         not_blocked_users: null,
@@ -61,6 +62,9 @@ export default createStore({
         },
         getOfficers(state, payload) {
             state.officers = payload;
+        },
+        getResidents(state, payload) {
+            state.residents = payload;
         },
         getSearchUser(state, payload) {
             state.verified_user_chat = payload;
@@ -122,6 +126,19 @@ export default createStore({
                 .then((res) => {
                     commit("getOfficers", res.data);
                     console.log("officers", res.data);
+                })
+                .catch((err) => {
+                    console.log(err.response.data);
+                });
+        },
+        async getResidents({ commit }) {
+            await axios({
+                method: "get",
+                url: "/api/user/residents",
+            })
+                .then((res) => {
+                    commit("getResidents", res.data);
+                    console.log("residents", res.data);
                 })
                 .catch((err) => {
                     console.log(err.response.data);

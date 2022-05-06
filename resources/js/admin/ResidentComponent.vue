@@ -101,176 +101,107 @@
             <div class="col-12">
                 <div class="card">
                     <DataTable
-                        :value="users"
+                        :value="residents"
                         :filters="filters"
                         breakpoint="1350px"
-                        :paginator="true"
-                        :rows="10"
+                        :rows="15"
                     >
-                        <div>
-                            <div class="grid formgrid">
-                                <div class="col-12 mb-2 lg:col-3 lg:mb-0">
-                                    <span class="p-input-icon-left">
-                                        <i class="pi pi-search" />
-                                        <InputText
-                                            v-model="filters['global'].value"
-                                            placeholder="Keyword Search"
-                                        />
-                                    </span>
-                                </div>
-                                <div class="col-12 mb-2 lg:col-3 lg:mb-0">
-                                    <Dropdown
-                                        v-model="
-                                            filters['lot.block.number'].value
-                                        "
-                                        :showClear="true"
-                                        :options="blocks"
-                                        optionLabel="number"
-                                        optionValue="number"
-                                        placeholder="Filter by block"
-                                        @change="getFilterBlockLot"
-                                    ></Dropdown>
-                                </div>
-                                <div class="col-12 mb-2 lg:col-3 lg:mb-0">
-                                    <Dropdown
-                                        v-model="filters['lot.number'].value"
-                                        :showClear="true"
-                                        :options="filteredLots"
-                                        optionLabel="number"
-                                        optionValue="number"
-                                        placeholder="Filter by lot"
-                                    ></Dropdown>
-                                </div>
-                                <div class="col-12 mb-2 lg:col-3 lg:mb-0">
-                                    <Dropdown
-                                        v-model="filters['tag_as'].value"
-                                        :showClear="true"
-                                        :options="tag"
-                                        optionLabel="tag"
-                                        optionValue="tag"
-                                        placeholder="Filter by tag"
-                                    ></Dropdown>
-                                </div>
-                            </div>
-                            <div class="grid formgrid mt-2">
-                                <div class="col-12 mb-2 lg:col-3 lg:mb-0">
-                                    <Dropdown
-                                        v-model="filters['status'].value"
-                                        :showClear="true"
-                                        :options="status"
-                                        optionLabel="status"
-                                        optionValue="status"
-                                        placeholder="Filter by status"
-                                    ></Dropdown>
-                                </div>
-                                <div class="col-12 mb-2 lg:col-3 lg:mb-0">
-                                    <Dropdown
-                                        v-model="filters['verified'].value"
-                                        :showClear="true"
-                                        :options="verification"
-                                        optionLabel="status"
-                                        optionValue="value"
-                                        placeholder="Filter by verification"
-                                    ></Dropdown>
-                                </div>
-
-                                <div
-                                    class="col-12 mb-2 lg:col-6 lg:mb-0 flex justify-content-end"
-                                >
-                                    <Button
-                                        icon="pi pi-filter-slash"
-                                        class="my-2 p-button-outlined p-button-secondary"
-                                        @click="clearFilter"
-                                        v-tooltip="'Clear'"
-                                    />
-
-                                    <Button
-                                        label="Add"
-                                        icon="pi pi-plus"
-                                        class="ml-2 my-2 p-button-primary"
-                                        style="width: auto"
-                                        @click="registerUser"
-                                    />
-                                </div>
-                            </div>
-                        </div>
-                        <!-- <template #header>
-                            <div class="flex flex-wrap justify-content-between">
-                                <span class="p-input-icon-left inline-block">
-                                    <i class="pi pi-search" />
-                                    <InputText
-                                        v-model="filters['global'].value"
-                                        placeholder="Keyword Search"
-                                        class="my-2"
-                                    />
-                                </span>
-                                <Dropdown
-                                    v-model="filters['lot.block.number'].value"
-                                    :showClear="true"
-                                    :options="blocks"
-                                    optionLabel="number"
-                                    optionValue="number"
-                                    placeholder="Filter by block"
-                                    class="my-2"
-                                    style="width: 200px"
-                                    @change="getFilterBlockLot"
-                                ></Dropdown>
-                                <Dropdown
-                                    v-model="filters['lot.number'].value"
-                                    :showClear="true"
-                                    :options="filteredLots"
-                                    optionLabel="number"
-                                    optionValue="number"
-                                    placeholder="Filter by lot"
-                                    style="width: 200px"
-                                    class="my-2"
-                                ></Dropdown>
-                                <Dropdown
-                                    v-model="filters['tag_as'].value"
-                                    :showClear="true"
-                                    :options="tag"
-                                    optionLabel="tag"
-                                    optionValue="tag"
-                                    placeholder="Filter by tag"
-                                    style="width: 200px"
-                                    class="my-2"
-                                ></Dropdown>
-                                <Dropdown
-                                    v-model="filters['status'].value"
-                                    :showClear="true"
-                                    :options="status"
-                                    optionLabel="status"
-                                    optionValue="status"
-                                    placeholder="Filter by status"
-                                    style="width: 200px"
-                                    class="my-2"
-                                ></Dropdown>
-                                <Dropdown
-                                    v-model="filters['verified'].value"
-                                    :showClear="true"
-                                    :options="verification"
-                                    optionLabel="status"
-                                    optionValue="value"
-                                    placeholder="Filter by verification"
-                                    style="width: 215px"
-                                    class="my-2"
-                                ></Dropdown>
-                                <Button
-                                    label="Clear"
-                                    icon="pi pi-filter-slash"
-                                    class="my-2 p-button-outlined p-button-secondary"
-                                    @click="clearFilter"
-                                />
-                                <Button
-                                    label="Add"
-                                    icon="pi pi-plus"
-                                    class="p-button-primary my-2"
-                                    @click="registerUser"
-                                />
-                            </div>
-                        </template> -->
                         <template #empty> No registered users found </template>
                         <template #loading> Loading Users </template>
+                        <template #header>
+                            <div>
+                                <div class="grid formgrid">
+                                    <div class="col-12 mb-2 lg:col-3 lg:mb-0">
+                                        <span class="p-input-icon-left">
+                                            <i class="pi pi-search" />
+                                            <InputText
+                                                v-model="
+                                                    filters['global'].value
+                                                "
+                                                placeholder="Keyword Search"
+                                            />
+                                        </span>
+                                    </div>
+                                    <div class="col-12 mb-2 lg:col-3 lg:mb-0">
+                                        <Dropdown
+                                            v-model="
+                                                filters['lot.block.number']
+                                                    .value
+                                            "
+                                            :showClear="true"
+                                            :options="blocks"
+                                            optionLabel="number"
+                                            optionValue="number"
+                                            placeholder="Filter by block"
+                                            @change="getFilterBlockLot"
+                                        ></Dropdown>
+                                    </div>
+                                    <div class="col-12 mb-2 lg:col-3 lg:mb-0">
+                                        <Dropdown
+                                            v-model="
+                                                filters['lot.number'].value
+                                            "
+                                            :showClear="true"
+                                            :options="filteredLots"
+                                            optionLabel="number"
+                                            optionValue="number"
+                                            placeholder="Filter by lot"
+                                        ></Dropdown>
+                                    </div>
+                                    <div class="col-12 mb-2 lg:col-3 lg:mb-0">
+                                        <Dropdown
+                                            v-model="filters['tag_as'].value"
+                                            :showClear="true"
+                                            :options="tag"
+                                            optionLabel="tag"
+                                            optionValue="tag"
+                                            placeholder="Filter by tag"
+                                        ></Dropdown>
+                                    </div>
+                                </div>
+                                <div class="grid formgrid mt-2">
+                                    <div class="col-12 mb-2 lg:col-3 lg:mb-0">
+                                        <Dropdown
+                                            v-model="filters['status'].value"
+                                            :showClear="true"
+                                            :options="status"
+                                            optionLabel="status"
+                                            optionValue="status"
+                                            placeholder="Filter by status"
+                                        ></Dropdown>
+                                    </div>
+                                    <div class="col-12 mb-2 lg:col-3 lg:mb-0">
+                                        <Dropdown
+                                            v-model="filters['verified'].value"
+                                            :showClear="true"
+                                            :options="verification"
+                                            optionLabel="status"
+                                            optionValue="value"
+                                            placeholder="Filter by verification"
+                                        ></Dropdown>
+                                    </div>
+
+                                    <div
+                                        class="col-12 mb-2 lg:col-6 lg:mb-0 flex justify-content-end"
+                                    >
+                                        <Button
+                                            icon="pi pi-filter-slash"
+                                            class="my-2 p-button-outlined p-button-secondary"
+                                            @click="clearFilter"
+                                            v-tooltip="'Clear'"
+                                        />
+
+                                        <Button
+                                            label="Add"
+                                            icon="pi pi-plus"
+                                            class="ml-2 my-2 p-button-primary"
+                                            style="width: auto"
+                                            @click="registerUser"
+                                        />
+                                    </div>
+                                </div></div
+                        ></template>
+
                         <Column header="Profile Pic">
                             <template #body="{ data }">
                                 <div v-if="data.profile_pic">
@@ -558,7 +489,7 @@
                                         :class="{
                                             'p-invalid': error_role,
                                         }"
-                                        :options="role"
+                                        :options="role_dropdown"
                                         optionLabel="type"
                                         optionValue="value"
                                         placeholder="Select Role"
@@ -827,7 +758,7 @@
                                         :class="{
                                             'p-invalid': error_role,
                                         }"
-                                        :options="role"
+                                        :options="role_dropdown"
                                         optionLabel="type"
                                         optionValue="value"
                                         placeholder="Select Role"
@@ -1145,7 +1076,7 @@
                                         :class="{
                                             'p-invalid': error_role,
                                         }"
-                                        :options="role"
+                                        :options="role_dropdown"
                                         optionLabel="type"
                                         optionValue="value"
                                         placeholder="Select Role"
@@ -1405,7 +1336,7 @@
                                         :class="{
                                             'p-invalid': error_role,
                                         }"
-                                        :options="role"
+                                        :options="role_dropdown"
                                         optionLabel="type"
                                         optionValue="value"
                                         placeholder="Select Role"
@@ -1569,7 +1500,7 @@ export default {
             blocks: computed(() => store.state.blocks.blocks),
             filteredLots: computed(() => store.state.lots.filteredLots),
             lots: computed(() => store.state.lots.lots),
-            users: computed(() => store.state.users),
+            residents: computed(() => store.state.residents),
 
             active: computed(() => {
                 let active = [];
@@ -1668,7 +1599,7 @@ export default {
                 confirm_password: "",
                 age: "",
                 contact_num: "",
-                selected_role: "",
+                selected_role: "resident",
                 verified: "",
                 has_voted: "",
                 status: "",
@@ -1689,7 +1620,7 @@ export default {
             role: null,
             selected_role: null,
             user: null,
-            role: [{ type: "resident", value: "resident" }],
+            role_dropdown: [{ type: "resident", value: "resident" }],
             error_first_name: "",
             error_last_name: "",
             error_gender: "",
@@ -1939,7 +1870,7 @@ export default {
         initFilters() {
             this.filters = {
                 global: { value: null, matchMode: FilterMatchMode.CONTAINS },
-                role: { value: "resident", matchMode: FilterMatchMode.EQUALS },
+
                 "lot.block.number": {
                     value: null,
                     matchMode: FilterMatchMode.EQUALS,
@@ -2261,6 +2192,7 @@ export default {
 
     created() {
         this.initFilters();
+        this.$store.dispatch("getResidents");
     },
 };
 </script>

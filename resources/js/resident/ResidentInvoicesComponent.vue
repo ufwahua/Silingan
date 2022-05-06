@@ -6,7 +6,6 @@
         <div class="card">
             <DataTable
                 :value="block_lot_invoices"
-                :paginator="true"
                 :rows="20"
                 :filters="filters"
             >

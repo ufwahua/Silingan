@@ -208,6 +208,7 @@ class UserSeeder extends Seeder
             'email' => 'rikamae.diamos@gmail.com',
             'password' => Hash::make("12345678"),
             'tag_as' => 'owner',
+            'profile_pic' => null,
         ]);
     }
 }

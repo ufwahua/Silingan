@@ -55,6 +55,7 @@ Route::get('/logout', [UserController::class, 'logout']);
 Route::get('/user/not-blocked/{user}', [UserController::class, 'notBlockedUsers']);
 Route::get('/user/search/', [UserController::class, 'getSearchUser']);
 Route::get('/user/officers/', [UserController::class, 'getOfficers']);
+Route::get('/user/residents/', [UserController::class, 'getResidents']);
 Route::get('/user/user-verified/', [UserController::class, 'getUsersVerified']);
 Route::get('/user/filter-resident/{user}', [UserController::class, 'filterResident']);
 Route::put('/user/vote/{user}', [UserController::class, 'updateHasVoted']);

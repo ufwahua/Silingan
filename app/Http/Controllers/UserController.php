@@ -416,6 +416,17 @@ class UserController extends Controller
         
        
     }
+     public function getResidents(Request $request): JsonResponse
+    {
+        $users =  User::where('role','resident')->with(['lot.block','position','emergency_contact'])->get();
+       
+        
+        return response()->json(
+           $users
+        );
+        
+       
+    }
 
    
     public function updateHasVoted(Request $request): JsonResponse
