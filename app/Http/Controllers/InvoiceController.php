@@ -22,19 +22,10 @@ class InvoiceController extends Controller
     public function show(Request $request) : JsonResponse
     {
        
-        $get = Invoice::where('id',$request->route('invoice'))->first();
-        $invoices = Invoice::where('block_lot_id',$get->block_lot_id)->with(['user','lot.block','collection_type'])->latest()->get();
-        $req = [];
-        $found = false;
-        foreach($invoices as $invoice){
-            if($invoice->id == $request->route('invoice')){
-                $found = true;
-            }
-            if($found){
-                array_push($req,$invoice);
-            }
-        }
-        return response()->json($req);
+       $invoice = Invoice::where('block_lot_id',$request->route('invoice'))->with(['user','lot.block','collection_type'])->latest()->first();
+        
+       
+        return response()->json($invoice);
     }
     public function getInvoicesByBlockLotID(Request $request) :JsonResponse{
         $get = Invoice::where('id',$request->route('invoice'))->first();

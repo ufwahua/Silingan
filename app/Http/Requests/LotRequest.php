@@ -28,6 +28,7 @@ class LotRequest extends FormRequest
         return [
             'block_id' =>['required',  Rule::exists('blocks', 'id')],
             'number' => ['required','integer', 'max:255','gt:0'],
+            'active' => ['required'],
         ];
     }
 }

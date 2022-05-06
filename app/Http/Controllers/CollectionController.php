@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Invoice;
 use App\Models\Collection;
-use App\Http\Requests\CollectionRequest;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
+use App\Http\Requests\CollectionRequest;
 
 class CollectionController extends Controller
 {
@@ -33,7 +34,19 @@ class CollectionController extends Controller
      * @return JsonResponse
      */
     public function store(CollectionRequest $request) : JsonResponse{
-
+        $invoices = Invoice::where('block_lot_id',$request['block_lot_id'])->where('payment',false)->latest()->get();
+        foreach($invoices as $invoice){
+            if($invoice->running_balance > $request['amount']){
+                Invoice::query()->where('id',$invoice->id)->update([
+                    'running_balance'           => $invoice->running_balance - $request['amount'], 
+                ]);
+            }else{
+                 Invoice::query()->where('id',$invoice->id)->update([
+                    'running_balance'   => 0, 
+                    'payment'           => true, 
+                ]);
+        }       
+        }
         $collection = Collection::query()->create($request->validated());
        
         return response()->json($collection);

@@ -246,7 +246,7 @@ export default createStore({
             })
                 .then((res) => {
                     commit("getSpecificInvoices", res.data);
-                    console.log("all invoices", res.data);
+                    console.log("specific invoice", res.data);
                 })
                 .catch((err) => {
                     console.log(err.response);

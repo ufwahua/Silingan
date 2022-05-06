@@ -3079,8 +3079,8 @@ export default {
                 { tag: "family member" },
             ],
             verification: [
-                { status: "verified", value: 1 },
-                { status: "not verified", value: 0 },
+                { status: "verified", value: true },
+                { status: "not verified", value: false },
             ],
             emergencyContactDialog: false,
             emergency_contacts: null,
@@ -3629,7 +3629,6 @@ export default {
         },
 
         getBlockLot(lot) {
-          
             this.$store.dispatch("lots/getBlockLots", this.form.selected_block);
             this.form.selected_block_lot = lot;
         },

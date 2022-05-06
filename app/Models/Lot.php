@@ -17,6 +17,7 @@ class Lot extends Model
     protected $fillable = [
         'block_id',
         'number',
+        'active',
     ];
     public function block(){
         return $this->hasOne(Block::class,'id','block_id');
