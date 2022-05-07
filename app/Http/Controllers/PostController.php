@@ -32,7 +32,7 @@ class PostController extends Controller
         $posts = Post::orWhere(DB::raw("LOWER(content)"), 'LIKE', "%".strtolower($request->input('query'))."%")
                     ->where('approved',1)
                     ->where('group_id',2)
-                    ->with(['user','group','comment','comment.user','comment.reply.user'])->withCount(['comment','reply'])
+                    ->with(['user.lot.block','group','comment','comment.user','comment.reply.user'])->withCount(['comment','reply'])
                     
                     ->get();
                     
