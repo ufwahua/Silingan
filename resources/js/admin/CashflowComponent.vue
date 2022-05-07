@@ -29,34 +29,35 @@
                     <h4>Cash Flow</h4>
                 </div>
             </div>
-            <div class="grid mb-2">
-                <div class="col-12">
-                    <Toolbar>
-                        <template #start>
-                            <span class="p-input-icon-left inline-block">
-                                <i class="pi pi-search" />
-                                <InputText
-                                    class="mr-2"
-                                    v-model="filters['global'].value"
-                                    placeholder="Keyword Search"
-                                />
-                            </span>
-                        </template>
-                        <!-- <template #end>
-                            <div class="mr-2">
-                                <Button
-                                    label="Download PDF Report"
-                                    icon="pi pi-file-pdf"
-                                    class="p-button-primary p-mr-2"
-                                    @click="generatePDF()"
-                                />
-                            </div>
-                        </template> -->
-                    </Toolbar>
+            <!-- <div class="grid mb-2">
+        <div class="col-12">
+          <Toolbar>
+            <template #start>
+              <span class="p-input-icon-left inline-block">
+                <i class="pi pi-search" />
+                <InputText
+                  class="mr-2"
+                  v-model="filters['global'].value"
+                  placeholder="Keyword Search"
+                />
+              </span>
+            </template>
+            <template #end>
+                <div class="mr-2">
+                    <Button
+                        label="Download PDF Report"
+                        icon="pi pi-file-pdf"
+                        class="p-button-primary p-mr-2"
+                        @click="generatePDF()"
+                    />
                 </div>
-            </div>
+            </template>
+          </Toolbar>
+        </div>
+      </div> -->
             <DataTable
                 :value="cashflow"
+                :paginator="true"
                 :rows="15"
                 :filters="filters"
                 filterDisplay="menu"
@@ -117,15 +118,15 @@
             -->
                 <TabPanel header="Revenue">
                     <Toolbar>
-                        <template #start>
-                            <span class="p-input-icon-left inline-block">
-                                <i class="pi pi-search" />
-                                <InputText
-                                    v-model="revenue_filters['global'].value"
-                                    placeholder="Keyword Search"
-                                />
-                            </span>
-                        </template>
+                        <!-- <template #start>
+              <span class="p-input-icon-left inline-block">
+                <i class="pi pi-search" />
+                <InputText
+                  v-model="revenue_filters['global'].value"
+                  placeholder="Keyword Search"
+                />
+              </span>
+            </template> -->
 
                         <template #end>
                             <div class="mr-2">
@@ -142,23 +143,23 @@
                         <div class="col-12">
                             <DataTable
                                 :value="revenue"
+                                :paginator="true"
                                 :rows="15"
                                 :filters="revenue_filters"
                             >
                                 <template #empty> No Revenue found </template>
                                 <template #loading> Loading data </template>
                                 <Column field="id" header="ID"></Column>
-
-                                <Column
-                                    field="collection_type.name"
-                                    header="Type"
-                                ></Column>
                                 <Column field="lot" header="Block and Lot">
                                     <template #body="{ data }">
                                         Block {{ data.lot.block_id }} Lot
                                         {{ data.lot.number }}
                                     </template>
                                 </Column>
+                                <Column
+                                    field="collection_type.name"
+                                    header="Type"
+                                ></Column>
                                 <Column field="amount" header="Credit">
                                     <template #body="{ data }">
                                         ₱{{ data.amount }}
@@ -203,15 +204,15 @@
             -->
                 <TabPanel header="Expenses">
                     <Toolbar>
-                        <template #start>
-                            <span class="p-input-icon-left inline-block">
-                                <i class="pi pi-search" />
-                                <InputText
-                                    v-model="expense_filters['global'].value"
-                                    placeholder="Keyword Search"
-                                />
-                            </span>
-                        </template>
+                        <!-- <template #start>
+              <span class="p-input-icon-left inline-block">
+                <i class="pi pi-search" />
+                <InputText
+                  v-model="expense_filters['global'].value"
+                  placeholder="Keyword Search"
+                />
+              </span>
+            </template> -->
 
                         <template #end>
                             <div class="mr-2">
@@ -228,6 +229,7 @@
                         <div class="col-12">
                             <DataTable
                                 :value="expense"
+                                :paginator="true"
                                 :rows="15"
                                 :filters="expense_filters"
                             >
@@ -300,6 +302,16 @@
                                     style="minwidth: 14rem"
                                     placeholder="Date"
                                     @change="setStatement()"
+                                />
+                            </div>
+                            <div class="mr-2">
+                                <Calendar
+                                    id="yearpicker"
+                                    v-model="reportDateYear"
+                                    view="year"
+                                    dateFormat="yy"
+                                    placeholder="Year"
+                                    @date-select="setStatement()"
                                 />
                             </div>
                             <!-- <div class="mr-2">
@@ -383,6 +395,7 @@
                             <DataTable
                                 class="p-datatable-sm"
                                 :value="statement"
+                                :paginator="true"
                                 :rows="15"
                                 id="statement"
                                 rowGroupMode="rowspan"
@@ -433,10 +446,10 @@
                         optionLabel="name"
                         optionValue="code"
                         placeholder="Select Collection Type"
-                        @change="setAmount"
                         :class="{
                             'p-invalid': revenue_valid.state.collection_type,
                         }"
+                        @change="setAmount"
                     />
                     <small
                         v-if="revenue_valid.state.collection_type"
@@ -445,7 +458,7 @@
                     >
                 </div>
                 <div class="col-12 lg:col-6">
-                    <h5>Add to</h5>
+                    <h5>Add Credit to</h5>
                     <Dropdown
                         v-model="revenue_form.source"
                         :options="funds"
@@ -564,7 +577,7 @@
                         :options="dropdown_expense_type"
                         optionLabel="name"
                         optionValue="id"
-                        placeholder="Select expense type"
+                        placeholder="Select Fund Source"
                         :class="{
                             'p-invalid': expense_valid.state.type,
                         }"
@@ -694,6 +707,12 @@ export default {
         return {
             userLogged: computed(() => store.state.userLogged),
             funds: computed(() => store.state.fund.Fund),
+            collection_type_list: computed(
+                () => store.state.collectionType.CollectionType
+            ),
+            expense_type_list: computed(
+                () => store.state.expenseType.ExpenseType
+            ),
             dropdown_expense_type: computed(
                 () => store.state.expenseType.ExpenseType
             ),
@@ -742,8 +761,10 @@ export default {
     },
     data() {
         return {
+            balance: null,
             revRowSize: true,
             expRowSize: true,
+            reportDateYear: new Date(),
             reportDate: null,
             reportDateSelect: [
                 {
@@ -903,8 +924,6 @@ export default {
             filters: {},
             revenue_filters: {},
             expense_filters: {},
-
-            balance: null,
         };
     },
     methods: {
@@ -913,11 +932,7 @@ export default {
                 "getSpecificInvoices",
                 this.revenue_form.lot
             );
-            if (this.specific_invoices.running_balance > 0) {
-                this.balance = this.specific_invoices.running_balance;
-            } else {
-                this.balance = 0;
-            }
+            this.balance = this.specific_invoices.running_balance;
         },
         // testTable() {
         //   var doc = new jsPDF();
@@ -928,8 +943,16 @@ export default {
             if (this.reportDate == 1) {
                 let temp = [];
                 let list = this.cashflow;
-                let start = new Date(new Date().getFullYear(), 0, 1);
-                let end = new Date(new Date().getFullYear(), 3, 1);
+                let start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    0,
+                    1
+                );
+                let end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    3,
+                    1
+                );
                 list.reverse();
                 list.forEach((elem) => {
                     elem.created_at = new Date(elem.created_at);
@@ -948,8 +971,16 @@ export default {
             if (this.reportDate == 2) {
                 let temp = [];
                 let list = this.cashflow;
-                let start = new Date(new Date().getFullYear(), 3, 1);
-                let end = new Date(new Date().getFullYear(), 6, 1);
+                let start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    3,
+                    1
+                );
+                let end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    6,
+                    1
+                );
                 list.reverse();
                 list.forEach((elem) => {
                     elem.created_at = new Date(elem.created_at);
@@ -968,8 +999,16 @@ export default {
             if (this.reportDate == 3) {
                 let temp = [];
                 let list = this.cashflow;
-                let start = new Date(new Date().getFullYear(), 6, 1);
-                let end = new Date(new Date().getFullYear(), 9, 1);
+                let start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    6,
+                    1
+                );
+                let end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    9,
+                    1
+                );
                 list.reverse();
                 list.forEach((elem) => {
                     elem.created_at = new Date(elem.created_at);
@@ -988,8 +1027,16 @@ export default {
             if (this.reportDate == 4) {
                 let temp = [];
                 let list = this.cashflow;
-                let start = new Date(new Date().getFullYear(), 0, 1);
-                let end = new Date(new Date().getFullYear() + 1, 0, 1);
+                let start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    0,
+                    1
+                );
+                let end = new Date(
+                    new Date(this.reportDateYear).getFullYear() + 1,
+                    0,
+                    1
+                );
                 list.reverse();
                 list.forEach((elem) => {
                     elem.created_at = new Date(elem.created_at);
@@ -1008,8 +1055,16 @@ export default {
             if (this.reportDate == "JAN") {
                 let temp = [];
                 let list = this.cashflow;
-                let start = new Date(new Date().getFullYear(), 0, 1);
-                let end = new Date(new Date().getFullYear(), 1, 1);
+                let start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    0,
+                    1
+                );
+                let end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    1,
+                    1
+                );
                 list.reverse();
                 list.forEach((elem) => {
                     elem.created_at = new Date(elem.created_at);
@@ -1028,8 +1083,16 @@ export default {
             if (this.reportDate == "FEB") {
                 let temp = [];
                 let list = this.cashflow;
-                let start = new Date(new Date().getFullYear(), 1, 1);
-                let end = new Date(new Date().getFullYear(), 2, 1);
+                let start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    1,
+                    1
+                );
+                let end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    2,
+                    1
+                );
                 list.reverse();
                 list.forEach((elem) => {
                     elem.created_at = new Date(elem.created_at);
@@ -1048,8 +1111,16 @@ export default {
             if (this.reportDate == "MAR") {
                 let temp = [];
                 let list = this.cashflow;
-                let start = new Date(new Date().getFullYear(), 2, 1);
-                let end = new Date(new Date().getFullYear(), 3, 1);
+                let start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    2,
+                    1
+                );
+                let end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    3,
+                    1
+                );
                 list.reverse();
                 list.forEach((elem) => {
                     elem.created_at = new Date(elem.created_at);
@@ -1068,8 +1139,16 @@ export default {
             if (this.reportDate == "APR") {
                 let temp = [];
                 let list = this.cashflow;
-                let start = new Date(new Date().getFullYear(), 3, 1);
-                let end = new Date(new Date().getFullYear(), 4, 1);
+                let start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    3,
+                    1
+                );
+                let end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    4,
+                    1
+                );
                 list.reverse();
                 list.forEach((elem) => {
                     elem.created_at = new Date(elem.created_at);
@@ -1088,8 +1167,16 @@ export default {
             if (this.reportDate == "MAY") {
                 let temp = [];
                 let list = this.cashflow;
-                let start = new Date(new Date().getFullYear(), 4, 1);
-                let end = new Date(new Date().getFullYear(), 5, 1);
+                let start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    4,
+                    1
+                );
+                let end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    5,
+                    1
+                );
                 list.reverse();
                 list.forEach((elem) => {
                     elem.created_at = new Date(elem.created_at);
@@ -1108,8 +1195,16 @@ export default {
             if (this.reportDate == "JUN") {
                 let temp = [];
                 let list = this.cashflow;
-                let start = new Date(new Date().getFullYear(), 5, 1);
-                let end = new Date(new Date().getFullYear(), 6, 1);
+                let start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    5,
+                    1
+                );
+                let end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    6,
+                    1
+                );
                 list.reverse();
                 list.forEach((elem) => {
                     elem.created_at = new Date(elem.created_at);
@@ -1128,8 +1223,16 @@ export default {
             if (this.reportDate == "JUL") {
                 let temp = [];
                 let list = this.cashflow;
-                let start = new Date(new Date().getFullYear(), 6, 1);
-                let end = new Date(new Date().getFullYear(), 7, 1);
+                let start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    6,
+                    1
+                );
+                let end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    7,
+                    1
+                );
                 list.reverse();
                 list.forEach((elem) => {
                     elem.created_at = new Date(elem.created_at);
@@ -1148,8 +1251,16 @@ export default {
             if (this.reportDate == "AUG") {
                 let temp = [];
                 let list = this.cashflow;
-                let start = new Date(new Date().getFullYear(), 7, 1);
-                let end = new Date(new Date().getFullYear(), 8, 1);
+                let start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    7,
+                    1
+                );
+                let end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    8,
+                    1
+                );
                 list.reverse();
                 list.forEach((elem) => {
                     elem.created_at = new Date(elem.created_at);
@@ -1168,8 +1279,16 @@ export default {
             if (this.reportDate == "SEP") {
                 let temp = [];
                 let list = this.cashflow;
-                let start = new Date(new Date().getFullYear(), 8, 1);
-                let end = new Date(new Date().getFullYear(), 9, 1);
+                let start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    8,
+                    1
+                );
+                let end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    9,
+                    1
+                );
                 list.reverse();
                 list.forEach((elem) => {
                     elem.created_at = new Date(elem.created_at);
@@ -1188,8 +1307,16 @@ export default {
             if (this.reportDate == "OCT") {
                 let temp = [];
                 let list = this.cashflow;
-                let start = new Date(new Date().getFullYear(), 9, 1);
-                let end = new Date(new Date().getFullYear(), 10, 1);
+                let start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    9,
+                    1
+                );
+                let end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    10,
+                    1
+                );
                 list.reverse();
                 list.forEach((elem) => {
                     elem.created_at = new Date(elem.created_at);
@@ -1208,8 +1335,16 @@ export default {
             if (this.reportDate == "NOV") {
                 let temp = [];
                 let list = this.cashflow;
-                let start = new Date(new Date().getFullYear(), 10, 1);
-                let end = new Date(new Date().getFullYear(), 11, 1);
+                let start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    10,
+                    1
+                );
+                let end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    11,
+                    1
+                );
                 list.reverse();
                 list.forEach((elem) => {
                     elem.created_at = new Date(elem.created_at);
@@ -1228,8 +1363,16 @@ export default {
             if (this.reportDate == "DEC") {
                 let temp = [];
                 let list = this.cashflow;
-                let start = new Date(new Date().getFullYear(), 11, 1);
-                let end = new Date(new Date().getFullYear() + 1, 0, 1);
+                let start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    11,
+                    1
+                );
+                let end = new Date(
+                    new Date(this.reportDateYear).getFullYear() + 1,
+                    0,
+                    1
+                );
                 list.reverse();
                 list.forEach((elem) => {
                     elem.created_at = new Date(elem.created_at);
@@ -1248,8 +1391,16 @@ export default {
             if (this.reportDate == 12) {
                 let temp = [];
                 let list = this.cashflow;
-                let start = new Date(new Date().getFullYear(), 0, 1);
-                let end = new Date(new Date().getFullYear() + 1, 0, 1);
+                let start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    0,
+                    1
+                );
+                let end = new Date(
+                    new Date(this.reportDateYear).getFullYear() + 1,
+                    0,
+                    1
+                );
                 list.reverse();
                 list.forEach((elem) => {
                     elem.created_at = new Date(elem.created_at);
@@ -1312,8 +1463,16 @@ export default {
             let start = null;
             let end = null;
             if (this.reportDate == 1) {
-                start = new Date(new Date().getFullYear(), 0, 1);
-                end = new Date(new Date().getFullYear(), 2, 1);
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    0,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    2,
+                    1
+                );
                 doc.text(
                     "Financial Statement Report " +
                         month[start.getMonth()] +
@@ -1328,8 +1487,16 @@ export default {
                 );
             }
             if (this.reportDate == 2) {
-                start = new Date(new Date().getFullYear(), 3, 1);
-                end = new Date(new Date().getFullYear(), 5, 1);
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    3,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    5,
+                    1
+                );
                 doc.text(
                     "Financial Statement Report " +
                         month[start.getMonth()] +
@@ -1344,8 +1511,16 @@ export default {
                 );
             }
             if (this.reportDate == 3) {
-                start = new Date(new Date().getFullYear(), 6, 1);
-                end = new Date(new Date().getFullYear(), 8, 1);
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    6,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    8,
+                    1
+                );
                 doc.text(
                     "Financial Statement Report " +
                         month[start.getMonth()] +
@@ -1360,8 +1535,16 @@ export default {
                 );
             }
             if (this.reportDate == 4) {
-                start = new Date(new Date().getFullYear(), 0, 1);
-                end = new Date(new Date().getFullYear(), 11, 1);
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    0,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    11,
+                    1
+                );
                 doc.text(
                     "Financial Statement Report " +
                         month[start.getMonth()] +
@@ -1376,8 +1559,16 @@ export default {
                 );
             }
             if (this.reportDate == "JAN") {
-                start = new Date(new Date().getFullYear(), 0, 1);
-                end = new Date(new Date().getFullYear(), 1, 1);
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    0,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    1,
+                    1
+                );
                 doc.text(
                     "Financial Statement Report " +
                         month[start.getMonth()] +
@@ -1388,8 +1579,16 @@ export default {
                 );
             }
             if (this.reportDate == "FEB") {
-                start = new Date(new Date().getFullYear(), 1, 1);
-                end = new Date(new Date().getFullYear(), 2, 1);
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    1,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    2,
+                    1
+                );
                 doc.text(
                     "Financial Statement Report " +
                         month[start.getMonth()] +
@@ -1400,8 +1599,16 @@ export default {
                 );
             }
             if (this.reportDate == "MAR") {
-                start = new Date(new Date().getFullYear(), 2, 1);
-                end = new Date(new Date().getFullYear(), 3, 1);
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    2,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    3,
+                    1
+                );
                 doc.text(
                     "Financial Statement Report " +
                         month[start.getMonth()] +
@@ -1412,8 +1619,16 @@ export default {
                 );
             }
             if (this.reportDate == "APR") {
-                start = new Date(new Date().getFullYear(), 3, 1);
-                end = new Date(new Date().getFullYear(), 4, 1);
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    3,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    4,
+                    1
+                );
                 doc.text(
                     "Financial Statement Report " +
                         month[start.getMonth()] +
@@ -1424,8 +1639,16 @@ export default {
                 );
             }
             if (this.reportDate == "MAY") {
-                start = new Date(new Date().getFullYear(), 4, 1);
-                end = new Date(new Date().getFullYear(), 5, 1);
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    4,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    5,
+                    1
+                );
                 doc.text(
                     "Financial Statement Report " +
                         month[start.getMonth()] +
@@ -1436,8 +1659,16 @@ export default {
                 );
             }
             if (this.reportDate == "JUN") {
-                start = new Date(new Date().getFullYear(), 5, 1);
-                end = new Date(new Date().getFullYear(), 6, 1);
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    5,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    6,
+                    1
+                );
                 doc.text(
                     "Financial Statement Report " +
                         month[start.getMonth()] +
@@ -1448,8 +1679,16 @@ export default {
                 );
             }
             if (this.reportDate == "JUL") {
-                start = new Date(new Date().getFullYear(), 6, 1);
-                end = new Date(new Date().getFullYear(), 7, 1);
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    6,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    7,
+                    1
+                );
                 doc.text(
                     "Financial Statement Report " +
                         month[start.getMonth()] +
@@ -1460,8 +1699,16 @@ export default {
                 );
             }
             if (this.reportDate == "AUG") {
-                start = new Date(new Date().getFullYear(), 7, 1);
-                end = new Date(new Date().getFullYear(), 8, 1);
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    7,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    8,
+                    1
+                );
                 doc.text(
                     "Financial Statement Report " +
                         month[start.getMonth()] +
@@ -1472,8 +1719,16 @@ export default {
                 );
             }
             if (this.reportDate == "SEP") {
-                start = new Date(new Date().getFullYear(), 8, 1);
-                end = new Date(new Date().getFullYear(), 9, 1);
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    8,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    9,
+                    1
+                );
                 doc.text(
                     "Financial Statement Report " +
                         month[start.getMonth()] +
@@ -1484,8 +1739,16 @@ export default {
                 );
             }
             if (this.reportDate == "OCT") {
-                start = new Date(new Date().getFullYear(), 9, 1);
-                end = new Date(new Date().getFullYear(), 10, 1);
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    9,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    10,
+                    1
+                );
                 doc.text(
                     "Financial Statement Report " +
                         month[start.getMonth()] +
@@ -1496,8 +1759,16 @@ export default {
                 );
             }
             if (this.reportDate == "NOV") {
-                start = new Date(new Date().getFullYear(), 10, 1);
-                end = new Date(new Date().getFullYear(), 11, 1);
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    10,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    11,
+                    1
+                );
                 doc.text(
                     "Financial Statement Report " +
                         month[start.getMonth()] +
@@ -1508,8 +1779,16 @@ export default {
                 );
             }
             if (this.reportDate == "DEC") {
-                start = new Date(new Date().getFullYear(), 11, 1);
-                end = new Date(new Date().getFullYear() + 1, 0, 1);
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    11,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear() + 1,
+                    0,
+                    1
+                );
                 doc.text(
                     "Financial Statement Report " +
                         month[start.getMonth()] +
@@ -1520,8 +1799,16 @@ export default {
                 );
             }
             if (this.reportDate == 12) {
-                start = new Date(new Date().getFullYear(), 0, 1);
-                end = new Date(new Date().getFullYear(), 11, 1);
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    0,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    11,
+                    1
+                );
                 doc.text(
                     "Financial Statement Report " +
                         month[start.getMonth()] +
@@ -1538,10 +1825,11 @@ export default {
             doc.autoTable({
                 startY: finalY + 20,
                 theme: "plain",
-                head: [["Revenue", "", ""]],
+                head: [["Revenue", "", "", ""]],
                 body: this.revenueReport,
                 foot: [
                     [
+                        { content: "", colSpan: 1, rowSpan: 1 },
                         { content: "", colSpan: 1, rowSpan: 1 },
                         {
                             content: "Total",
@@ -1586,16 +1874,13 @@ export default {
             doc.autoTable({
                 startY: finalY + 20,
                 theme: "plain",
-                head: [["Net Income", "", ""]],
-                body: [
-                    ["", "Revenue", this.revenueTotal + " PHP"],
-                    ["", "Expense", this.expenseTotal + " PHP"],
-                ],
+                head: [["Summary", "", ""]],
+                body: this.netIncome,
                 foot: [
                     [
                         { content: "", colSpan: 1, rowSpan: 1 },
                         {
-                            content: "Total",
+                            content: "Net Income",
                             colSpan: 1,
                             rowSpan: 1,
                             styles: { halign: "right" },
@@ -1612,22 +1897,339 @@ export default {
                 ],
             });
             if (start != null && end != null) {
-                doc.save(
-                    "Income Statement " +
-                        month[start.getMonth()] +
-                        "" +
-                        start.getFullYear() +
-                        " to " +
-                        month[end.getMonth()] +
-                        "" +
-                        end.getFullYear()
-                );
+                if (this.reportDate == 1) {
+                    start = new Date(
+                        new Date(this.reportDateYear).getFullYear(),
+                        0,
+                        1
+                    );
+                    end = new Date(
+                        new Date(this.reportDateYear).getFullYear(),
+                        2,
+                        1
+                    );
+                    doc.save(
+                        "Income Statement Report " +
+                            month[start.getMonth()] +
+                            " " +
+                            start.getFullYear() +
+                            " to " +
+                            month[end.getMonth()] +
+                            " " +
+                            end.getFullYear()
+                    );
+                }
+                if (this.reportDate == 2) {
+                    start = new Date(
+                        new Date(this.reportDateYear).getFullYear(),
+                        3,
+                        1
+                    );
+                    end = new Date(
+                        new Date(this.reportDateYear).getFullYear(),
+                        5,
+                        1
+                    );
+                    doc.save(
+                        "Income Statement Report " +
+                            month[start.getMonth()] +
+                            " " +
+                            start.getFullYear() +
+                            " to " +
+                            month[end.getMonth()] +
+                            " " +
+                            end.getFullYear()
+                    );
+                }
+                if (this.reportDate == 3) {
+                    start = new Date(
+                        new Date(this.reportDateYear).getFullYear(),
+                        6,
+                        1
+                    );
+                    end = new Date(
+                        new Date(this.reportDateYear).getFullYear(),
+                        8,
+                        1
+                    );
+                    doc.save(
+                        "Income Statement Report " +
+                            month[start.getMonth()] +
+                            " " +
+                            start.getFullYear() +
+                            " to " +
+                            month[end.getMonth()] +
+                            " " +
+                            end.getFullYear()
+                    );
+                }
+                if (this.reportDate == 4) {
+                    start = new Date(
+                        new Date(this.reportDateYear).getFullYear(),
+                        0,
+                        1
+                    );
+                    end = new Date(
+                        new Date(this.reportDateYear).getFullYear(),
+                        11,
+                        1
+                    );
+                    doc.save(
+                        "Income Statement Report " +
+                            month[start.getMonth()] +
+                            " " +
+                            start.getFullYear() +
+                            " to " +
+                            month[end.getMonth()] +
+                            " " +
+                            end.getFullYear()
+                    );
+                }
+                if (this.reportDate == "JAN") {
+                    start = new Date(
+                        new Date(this.reportDateYear).getFullYear(),
+                        0,
+                        1
+                    );
+                    end = new Date(
+                        new Date(this.reportDateYear).getFullYear(),
+                        1,
+                        1
+                    );
+                    doc.save(
+                        "Income Statement Report " +
+                            month[start.getMonth()] +
+                            " " +
+                            start.getFullYear()
+                    );
+                }
+                if (this.reportDate == "FEB") {
+                    start = new Date(
+                        new Date(this.reportDateYear).getFullYear(),
+                        1,
+                        1
+                    );
+                    end = new Date(
+                        new Date(this.reportDateYear).getFullYear(),
+                        2,
+                        1
+                    );
+                    doc.save(
+                        "Income Statement Report " +
+                            month[start.getMonth()] +
+                            " " +
+                            start.getFullYear()
+                    );
+                }
+                if (this.reportDate == "MAR") {
+                    start = new Date(
+                        new Date(this.reportDateYear).getFullYear(),
+                        2,
+                        1
+                    );
+                    end = new Date(
+                        new Date(this.reportDateYear).getFullYear(),
+                        3,
+                        1
+                    );
+                    doc.save(
+                        "Income Statement Report " +
+                            month[start.getMonth()] +
+                            " " +
+                            start.getFullYear()
+                    );
+                }
+                if (this.reportDate == "APR") {
+                    start = new Date(
+                        new Date(this.reportDateYear).getFullYear(),
+                        3,
+                        1
+                    );
+                    end = new Date(
+                        new Date(this.reportDateYear).getFullYear(),
+                        4,
+                        1
+                    );
+                    doc.save(
+                        "Income Statement Report " +
+                            month[start.getMonth()] +
+                            " " +
+                            start.getFullYear()
+                    );
+                }
+                if (this.reportDate == "MAY") {
+                    start = new Date(
+                        new Date(this.reportDateYear).getFullYear(),
+                        4,
+                        1
+                    );
+                    end = new Date(
+                        new Date(this.reportDateYear).getFullYear(),
+                        5,
+                        1
+                    );
+                    doc.save(
+                        "Income Statement Report " +
+                            month[start.getMonth()] +
+                            " " +
+                            start.getFullYear()
+                    );
+                }
+                if (this.reportDate == "JUN") {
+                    start = new Date(
+                        new Date(this.reportDateYear).getFullYear(),
+                        5,
+                        1
+                    );
+                    end = new Date(
+                        new Date(this.reportDateYear).getFullYear(),
+                        6,
+                        1
+                    );
+                    doc.save(
+                        "Income Statement Report " +
+                            month[start.getMonth()] +
+                            " " +
+                            start.getFullYear()
+                    );
+                }
+                if (this.reportDate == "JUL") {
+                    start = new Date(
+                        new Date(this.reportDateYear).getFullYear(),
+                        6,
+                        1
+                    );
+                    end = new Date(
+                        new Date(this.reportDateYear).getFullYear(),
+                        7,
+                        1
+                    );
+                    doc.save(
+                        "Income Statement Report " +
+                            month[start.getMonth()] +
+                            " " +
+                            start.getFullYear()
+                    );
+                }
+                if (this.reportDate == "AUG") {
+                    start = new Date(
+                        new Date(this.reportDateYear).getFullYear(),
+                        7,
+                        1
+                    );
+                    end = new Date(
+                        new Date(this.reportDateYear).getFullYear(),
+                        8,
+                        1
+                    );
+                    doc.save(
+                        "Income Statement Report " +
+                            month[start.getMonth()] +
+                            " " +
+                            start.getFullYear()
+                    );
+                }
+                if (this.reportDate == "SEP") {
+                    start = new Date(
+                        new Date(this.reportDateYear).getFullYear(),
+                        8,
+                        1
+                    );
+                    end = new Date(
+                        new Date(this.reportDateYear).getFullYear(),
+                        9,
+                        1
+                    );
+                    doc.save(
+                        "Income Statement Report " +
+                            month[start.getMonth()] +
+                            " " +
+                            start.getFullYear()
+                    );
+                }
+                if (this.reportDate == "OCT") {
+                    start = new Date(
+                        new Date(this.reportDateYear).getFullYear(),
+                        9,
+                        1
+                    );
+                    end = new Date(
+                        new Date(this.reportDateYear).getFullYear(),
+                        10,
+                        1
+                    );
+                    doc.save(
+                        "Income Statement Report " +
+                            month[start.getMonth()] +
+                            " " +
+                            start.getFullYear()
+                    );
+                }
+                if (this.reportDate == "NOV") {
+                    start = new Date(
+                        new Date(this.reportDateYear).getFullYear(),
+                        10,
+                        1
+                    );
+                    end = new Date(
+                        new Date(this.reportDateYear).getFullYear(),
+                        11,
+                        1
+                    );
+                    doc.save(
+                        "Income Statement Report " +
+                            month[start.getMonth()] +
+                            " " +
+                            start.getFullYear()
+                    );
+                }
+                if (this.reportDate == "DEC") {
+                    start = new Date(
+                        new Date(this.reportDateYear).getFullYear(),
+                        11,
+                        1
+                    );
+                    end = new Date(
+                        new Date(this.reportDateYear).getFullYear() + 1,
+                        0,
+                        1
+                    );
+                    doc.save(
+                        "Income Statement Report " +
+                            month[start.getMonth()] +
+                            " " +
+                            start.getFullYear()
+                    );
+                }
+                if (this.reportDate == 12) {
+                    start = new Date(
+                        new Date(this.reportDateYear).getFullYear(),
+                        0,
+                        1
+                    );
+                    end = new Date(
+                        new Date(this.reportDateYear).getFullYear(),
+                        11,
+                        1
+                    );
+                    doc.save(
+                        "Income Statement Report " +
+                            month[start.getMonth()] +
+                            " " +
+                            start.getFullYear() +
+                            " to " +
+                            month[end.getMonth()] +
+                            " " +
+                            end.getFullYear()
+                    );
+                }
             }
         },
         setLots() {
             this.lot_bool = false;
             let temp = null;
             let list = [];
+            this.revenue_form.lot = null;
             // console.log(this.lots.filter(elem=>{return elem.block_id===this.blocks.code}))
             temp = this.lots.filter((elem) => {
                 return elem.block_id === this.revenue_form.block;
@@ -1691,7 +2293,6 @@ export default {
                 global: { value: null, matchMode: FilterMatchMode.CONTAINS },
             };
         },
-
         async confirmAddExpense() {
             this.resetExpenseFormError();
             this.process = !this.process;
@@ -1898,8 +2499,8 @@ export default {
                 },
             };
         },
-        setRevRowSize() {
-            this.revRowSize = false;
+        test() {
+            console.log("Hello");
         },
     },
     computed: {
@@ -1907,72 +2508,208 @@ export default {
             let start = null;
             let end = null;
             if (this.reportDate == 1) {
-                start = new Date(new Date().getFullYear(), 0, 1);
-                end = new Date(new Date().getFullYear(), 3, 1);
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    0,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    3,
+                    1
+                );
             }
             if (this.reportDate == 2) {
-                start = new Date(new Date().getFullYear(), 3, 1);
-                end = new Date(new Date().getFullYear(), 6, 1);
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    3,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    6,
+                    1
+                );
             }
             if (this.reportDate == 3) {
-                start = new Date(new Date().getFullYear(), 6, 1);
-                end = new Date(new Date().getFullYear(), 9, 1);
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    6,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    9,
+                    1
+                );
             }
             if (this.reportDate == 4) {
-                start = new Date(new Date().getFullYear(), 0, 1);
-                end = new Date(new Date().getFullYear() + 1, 0, 1);
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    0,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear() + 1,
+                    0,
+                    1
+                );
             }
             if (this.reportDate == "JAN") {
-                start = new Date(new Date().getFullYear(), 0, 1);
-                end = new Date(new Date().getFullYear(), 1, 1);
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    0,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    1,
+                    1
+                );
             }
             if (this.reportDate == "FEB") {
-                start = new Date(new Date().getFullYear(), 1, 1);
-                end = new Date(new Date().getFullYear(), 2, 1);
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    1,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    2,
+                    1
+                );
             }
             if (this.reportDate == "MAR") {
-                start = new Date(new Date().getFullYear(), 2, 1);
-                end = new Date(new Date().getFullYear(), 3, 1);
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    2,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    3,
+                    1
+                );
             }
             if (this.reportDate == "APR") {
-                start = new Date(new Date().getFullYear(), 3, 1);
-                end = new Date(new Date().getFullYear(), 4, 1);
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    3,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    4,
+                    1
+                );
             }
             if (this.reportDate == "MAY") {
-                start = new Date(new Date().getFullYear(), 4, 1);
-                end = new Date(new Date().getFullYear(), 5, 1);
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    4,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    5,
+                    1
+                );
             }
             if (this.reportDate == "JUN") {
-                start = new Date(new Date().getFullYear(), 5, 1);
-                end = new Date(new Date().getFullYear(), 6, 1);
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    5,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    6,
+                    1
+                );
             }
             if (this.reportDate == "JUL") {
-                start = new Date(new Date().getFullYear(), 6, 1);
-                end = new Date(new Date().getFullYear(), 7, 1);
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    6,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    7,
+                    1
+                );
             }
             if (this.reportDate == "AUG") {
-                start = new Date(new Date().getFullYear(), 7, 1);
-                end = new Date(new Date().getFullYear(), 8, 1);
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    7,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    8,
+                    1
+                );
             }
             if (this.reportDate == "SEP") {
-                start = new Date(new Date().getFullYear(), 8, 1);
-                end = new Date(new Date().getFullYear(), 9, 1);
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    8,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    9,
+                    1
+                );
             }
             if (this.reportDate == "OCT") {
-                start = new Date(new Date().getFullYear(), 9, 1);
-                end = new Date(new Date().getFullYear(), 10, 1);
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    9,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    10,
+                    1
+                );
             }
             if (this.reportDate == "NOV") {
-                start = new Date(new Date().getFullYear(), 10, 1);
-                end = new Date(new Date().getFullYear(), 11, 1);
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    10,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    11,
+                    1
+                );
             }
             if (this.reportDate == "DEC") {
-                start = new Date(new Date().getFullYear(), 11, 1);
-                end = new Date(new Date().getFullYear() + 1, 0, 1);
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    11,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear() + 1,
+                    0,
+                    1
+                );
             }
             if (this.reportDate == 12) {
-                start = new Date(new Date().getFullYear(), 0, 1);
-                end = new Date(new Date().getFullYear() + 1, 0, 1);
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    0,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear() + 1,
+                    0,
+                    1
+                );
             }
             let temp = [];
             let list = this.cashflow;
@@ -2012,6 +2749,15 @@ export default {
                             rowSpan: 1,
                         },
                         {
+                            content:
+                                "Block " +
+                                elem.lot.block.number +
+                                " Lot " +
+                                elem.lot.number,
+                            colSpan: 1,
+                            rowSpan: 1,
+                        },
+                        {
                             content: elem.collection_type.name,
                             colSpan: 1,
                             rowSpan: 1,
@@ -2030,72 +2776,208 @@ export default {
             let start = null;
             let end = null;
             if (this.reportDate == 1) {
-                start = new Date(new Date().getFullYear(), 0, 1);
-                end = new Date(new Date().getFullYear(), 3, 1);
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    0,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    3,
+                    1
+                );
             }
             if (this.reportDate == 2) {
-                start = new Date(new Date().getFullYear(), 3, 1);
-                end = new Date(new Date().getFullYear(), 6, 1);
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    3,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    6,
+                    1
+                );
             }
             if (this.reportDate == 3) {
-                start = new Date(new Date().getFullYear(), 6, 1);
-                end = new Date(new Date().getFullYear(), 9, 1);
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    6,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    9,
+                    1
+                );
             }
             if (this.reportDate == 4) {
-                start = new Date(new Date().getFullYear(), 0, 1);
-                end = new Date(new Date().getFullYear() + 1, 0, 1);
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    0,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear() + 1,
+                    0,
+                    1
+                );
             }
             if (this.reportDate == "JAN") {
-                start = new Date(new Date().getFullYear(), 0, 1);
-                end = new Date(new Date().getFullYear(), 1, 1);
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    0,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    1,
+                    1
+                );
             }
             if (this.reportDate == "FEB") {
-                start = new Date(new Date().getFullYear(), 1, 1);
-                end = new Date(new Date().getFullYear(), 2, 1);
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    1,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    2,
+                    1
+                );
             }
             if (this.reportDate == "MAR") {
-                start = new Date(new Date().getFullYear(), 2, 1);
-                end = new Date(new Date().getFullYear(), 3, 1);
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    2,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    3,
+                    1
+                );
             }
             if (this.reportDate == "APR") {
-                start = new Date(new Date().getFullYear(), 3, 1);
-                end = new Date(new Date().getFullYear(), 4, 1);
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    3,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    4,
+                    1
+                );
             }
             if (this.reportDate == "MAY") {
-                start = new Date(new Date().getFullYear(), 4, 1);
-                end = new Date(new Date().getFullYear(), 5, 1);
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    4,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    5,
+                    1
+                );
             }
             if (this.reportDate == "JUN") {
-                start = new Date(new Date().getFullYear(), 5, 1);
-                end = new Date(new Date().getFullYear(), 6, 1);
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    5,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    6,
+                    1
+                );
             }
             if (this.reportDate == "JUL") {
-                start = new Date(new Date().getFullYear(), 6, 1);
-                end = new Date(new Date().getFullYear(), 7, 1);
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    6,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    7,
+                    1
+                );
             }
             if (this.reportDate == "AUG") {
-                start = new Date(new Date().getFullYear(), 7, 1);
-                end = new Date(new Date().getFullYear(), 8, 1);
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    7,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    8,
+                    1
+                );
             }
             if (this.reportDate == "SEP") {
-                start = new Date(new Date().getFullYear(), 8, 1);
-                end = new Date(new Date().getFullYear(), 9, 1);
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    8,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    9,
+                    1
+                );
             }
             if (this.reportDate == "OCT") {
-                start = new Date(new Date().getFullYear(), 9, 1);
-                end = new Date(new Date().getFullYear(), 10, 1);
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    9,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    10,
+                    1
+                );
             }
             if (this.reportDate == "NOV") {
-                start = new Date(new Date().getFullYear(), 10, 1);
-                end = new Date(new Date().getFullYear(), 11, 1);
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    10,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    11,
+                    1
+                );
             }
             if (this.reportDate == "DEC") {
-                start = new Date(new Date().getFullYear(), 11, 1);
-                end = new Date(new Date().getFullYear() + 1, 0, 1);
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    11,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear() + 1,
+                    0,
+                    1
+                );
             }
             if (this.reportDate == 12) {
-                start = new Date(new Date().getFullYear(), 0, 1);
-                end = new Date(new Date().getFullYear() + 1, 0, 1);
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    0,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear() + 1,
+                    0,
+                    1
+                );
             }
             let total = 0;
             let list = this.cashflow;
@@ -2123,7 +3005,7 @@ export default {
                     item_date >= start &&
                     item_date <= end
                 ) {
-                    total += elem.amount;
+                    total += +elem.amount;
                 }
             });
             return total;
@@ -2132,72 +3014,208 @@ export default {
             let start = null;
             let end = null;
             if (this.reportDate == 1) {
-                start = new Date(new Date().getFullYear(), 0, 1);
-                end = new Date(new Date().getFullYear(), 3, 1);
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    0,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    3,
+                    1
+                );
             }
             if (this.reportDate == 2) {
-                start = new Date(new Date().getFullYear(), 3, 1);
-                end = new Date(new Date().getFullYear(), 6, 1);
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    3,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    6,
+                    1
+                );
             }
             if (this.reportDate == 3) {
-                start = new Date(new Date().getFullYear(), 6, 1);
-                end = new Date(new Date().getFullYear(), 9, 1);
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    6,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    9,
+                    1
+                );
             }
             if (this.reportDate == 4) {
-                start = new Date(new Date().getFullYear(), 0, 1);
-                end = new Date(new Date().getFullYear() + 1, 0, 1);
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    0,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear() + 1,
+                    0,
+                    1
+                );
             }
             if (this.reportDate == "JAN") {
-                start = new Date(new Date().getFullYear(), 0, 1);
-                end = new Date(new Date().getFullYear(), 1, 1);
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    0,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    1,
+                    1
+                );
             }
             if (this.reportDate == "FEB") {
-                start = new Date(new Date().getFullYear(), 1, 1);
-                end = new Date(new Date().getFullYear(), 2, 1);
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    1,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    2,
+                    1
+                );
             }
             if (this.reportDate == "MAR") {
-                start = new Date(new Date().getFullYear(), 2, 1);
-                end = new Date(new Date().getFullYear(), 3, 1);
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    2,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    3,
+                    1
+                );
             }
             if (this.reportDate == "APR") {
-                start = new Date(new Date().getFullYear(), 3, 1);
-                end = new Date(new Date().getFullYear(), 4, 1);
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    3,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    4,
+                    1
+                );
             }
             if (this.reportDate == "MAY") {
-                start = new Date(new Date().getFullYear(), 4, 1);
-                end = new Date(new Date().getFullYear(), 5, 1);
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    4,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    5,
+                    1
+                );
             }
             if (this.reportDate == "JUN") {
-                start = new Date(new Date().getFullYear(), 5, 1);
-                end = new Date(new Date().getFullYear(), 6, 1);
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    5,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    6,
+                    1
+                );
             }
             if (this.reportDate == "JUL") {
-                start = new Date(new Date().getFullYear(), 6, 1);
-                end = new Date(new Date().getFullYear(), 7, 1);
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    6,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    7,
+                    1
+                );
             }
             if (this.reportDate == "AUG") {
-                start = new Date(new Date().getFullYear(), 7, 1);
-                end = new Date(new Date().getFullYear(), 8, 1);
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    7,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    8,
+                    1
+                );
             }
             if (this.reportDate == "SEP") {
-                start = new Date(new Date().getFullYear(), 8, 1);
-                end = new Date(new Date().getFullYear(), 9, 1);
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    8,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    9,
+                    1
+                );
             }
             if (this.reportDate == "OCT") {
-                start = new Date(new Date().getFullYear(), 9, 1);
-                end = new Date(new Date().getFullYear(), 10, 1);
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    9,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    10,
+                    1
+                );
             }
             if (this.reportDate == "NOV") {
-                start = new Date(new Date().getFullYear(), 10, 1);
-                end = new Date(new Date().getFullYear(), 11, 1);
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    10,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    11,
+                    1
+                );
             }
             if (this.reportDate == "DEC") {
-                start = new Date(new Date().getFullYear(), 11, 1);
-                end = new Date(new Date().getFullYear() + 1, 0, 1);
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    11,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear() + 1,
+                    0,
+                    1
+                );
             }
             if (this.reportDate == 12) {
-                start = new Date(new Date().getFullYear(), 0, 1);
-                end = new Date(new Date().getFullYear() + 1, 0, 1);
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    0,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear() + 1,
+                    0,
+                    1
+                );
             }
             let temp = [];
             let list = this.cashflow;
@@ -2255,72 +3273,208 @@ export default {
             let start = null;
             let end = null;
             if (this.reportDate == 1) {
-                start = new Date(new Date().getFullYear(), 0, 1);
-                end = new Date(new Date().getFullYear(), 3, 1);
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    0,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    3,
+                    1
+                );
             }
             if (this.reportDate == 2) {
-                start = new Date(new Date().getFullYear(), 3, 1);
-                end = new Date(new Date().getFullYear(), 6, 1);
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    3,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    6,
+                    1
+                );
             }
             if (this.reportDate == 3) {
-                start = new Date(new Date().getFullYear(), 6, 1);
-                end = new Date(new Date().getFullYear(), 9, 1);
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    6,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    9,
+                    1
+                );
             }
             if (this.reportDate == 4) {
-                start = new Date(new Date().getFullYear(), 0, 1);
-                end = new Date(new Date().getFullYear() + 1, 0, 1);
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    0,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear() + 1,
+                    0,
+                    1
+                );
             }
             if (this.reportDate == "JAN") {
-                start = new Date(new Date().getFullYear(), 0, 1);
-                end = new Date(new Date().getFullYear(), 1, 1);
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    0,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    1,
+                    1
+                );
             }
             if (this.reportDate == "FEB") {
-                start = new Date(new Date().getFullYear(), 1, 1);
-                end = new Date(new Date().getFullYear(), 2, 1);
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    1,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    2,
+                    1
+                );
             }
             if (this.reportDate == "MAR") {
-                start = new Date(new Date().getFullYear(), 2, 1);
-                end = new Date(new Date().getFullYear(), 3, 1);
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    2,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    3,
+                    1
+                );
             }
             if (this.reportDate == "APR") {
-                start = new Date(new Date().getFullYear(), 3, 1);
-                end = new Date(new Date().getFullYear(), 4, 1);
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    3,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    4,
+                    1
+                );
             }
             if (this.reportDate == "MAY") {
-                start = new Date(new Date().getFullYear(), 4, 1);
-                end = new Date(new Date().getFullYear(), 5, 1);
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    4,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    5,
+                    1
+                );
             }
             if (this.reportDate == "JUN") {
-                start = new Date(new Date().getFullYear(), 5, 1);
-                end = new Date(new Date().getFullYear(), 6, 1);
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    5,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    6,
+                    1
+                );
             }
             if (this.reportDate == "JUL") {
-                start = new Date(new Date().getFullYear(), 6, 1);
-                end = new Date(new Date().getFullYear(), 7, 1);
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    6,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    7,
+                    1
+                );
             }
             if (this.reportDate == "AUG") {
-                start = new Date(new Date().getFullYear(), 7, 1);
-                end = new Date(new Date().getFullYear(), 8, 1);
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    7,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    8,
+                    1
+                );
             }
             if (this.reportDate == "SEP") {
-                start = new Date(new Date().getFullYear(), 8, 1);
-                end = new Date(new Date().getFullYear(), 9, 1);
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    8,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    9,
+                    1
+                );
             }
             if (this.reportDate == "OCT") {
-                start = new Date(new Date().getFullYear(), 9, 1);
-                end = new Date(new Date().getFullYear(), 10, 1);
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    9,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    10,
+                    1
+                );
             }
             if (this.reportDate == "NOV") {
-                start = new Date(new Date().getFullYear(), 10, 1);
-                end = new Date(new Date().getFullYear(), 11, 1);
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    10,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    11,
+                    1
+                );
             }
             if (this.reportDate == "DEC") {
-                start = new Date(new Date().getFullYear(), 11, 1);
-                end = new Date(new Date().getFullYear() + 1, 0, 1);
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    11,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear() + 1,
+                    0,
+                    1
+                );
             }
             if (this.reportDate == 12) {
-                start = new Date(new Date().getFullYear(), 0, 1);
-                end = new Date(new Date().getFullYear() + 1, 0, 1);
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    0,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear() + 1,
+                    0,
+                    1
+                );
             }
             let total = 0;
             let list = this.cashflow;
@@ -2348,10 +3502,283 @@ export default {
                     item_date >= start &&
                     item_date <= end
                 ) {
-                    total += elem.amount;
+                    total += +elem.amount;
                 }
             });
             return total;
+        },
+        netIncome() {
+            let start = null;
+            let end = null;
+            if (this.reportDate == 1) {
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    0,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    3,
+                    1
+                );
+            }
+            if (this.reportDate == 2) {
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    3,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    6,
+                    1
+                );
+            }
+            if (this.reportDate == 3) {
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    6,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    9,
+                    1
+                );
+            }
+            if (this.reportDate == 4) {
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    0,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear() + 1,
+                    0,
+                    1
+                );
+            }
+            if (this.reportDate == "JAN") {
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    0,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    1,
+                    1
+                );
+            }
+            if (this.reportDate == "FEB") {
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    1,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    2,
+                    1
+                );
+            }
+            if (this.reportDate == "MAR") {
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    2,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    3,
+                    1
+                );
+            }
+            if (this.reportDate == "APR") {
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    3,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    4,
+                    1
+                );
+            }
+            if (this.reportDate == "MAY") {
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    4,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    5,
+                    1
+                );
+            }
+            if (this.reportDate == "JUN") {
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    5,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    6,
+                    1
+                );
+            }
+            if (this.reportDate == "JUL") {
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    6,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    7,
+                    1
+                );
+            }
+            if (this.reportDate == "AUG") {
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    7,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    8,
+                    1
+                );
+            }
+            if (this.reportDate == "SEP") {
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    8,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    9,
+                    1
+                );
+            }
+            if (this.reportDate == "OCT") {
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    9,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    10,
+                    1
+                );
+            }
+            if (this.reportDate == "NOV") {
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    10,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    11,
+                    1
+                );
+            }
+            if (this.reportDate == "DEC") {
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    11,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear() + 1,
+                    0,
+                    1
+                );
+            }
+            if (this.reportDate == 12) {
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    0,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear() + 1,
+                    0,
+                    1
+                );
+            }
+            let temp = [];
+            let totals_col = [];
+            let totals_exp = [];
+            let list = this.cashflow;
+            let collection = this.collection_type_list;
+            let expense = this.expense_type_list;
+            temp.push(["Revenue", "", ""]);
+            collection.forEach((elem) => {
+                totals_col.push(0);
+            });
+            collection.forEach((col, idx) => {
+                list.forEach((elem) => {
+                    let item_date = new Date(elem.created_at);
+                    if (
+                        elem.collection_type_id == col.id &&
+                        item_date >= start &&
+                        item_date <= end
+                    ) {
+                        totals_col[idx] += +elem.amount;
+                    }
+                });
+            });
+            collection.forEach((col, idx) => {
+                temp.push([
+                    "",
+                    col.name,
+                    totals_col[idx].toLocaleString() + " PHP",
+                ]);
+            });
+            temp.push(["Expense", "", ""]);
+            expense.forEach((elem) => {
+                totals_exp.push(0);
+            });
+            expense.forEach((col, idx) => {
+                list.forEach((elem) => {
+                    let item_date = new Date(elem.created_at);
+                    if (
+                        elem.expense_type_id == col.id &&
+                        item_date >= start &&
+                        item_date <= end
+                    ) {
+                        totals_exp[idx] += +elem.amount;
+                    }
+                });
+            });
+            expense.forEach((col, idx) => {
+                temp.push([
+                    "",
+                    col.name,
+                    totals_exp[idx].toLocaleString() + " PHP",
+                ]);
+            });
+            // list.forEach((elem) => {
+            //   if(elem.collection_type){
+            //     collection.forEach((col)=>{
+            //       if(col.id==elem.collection_type_id){
+            //         totals[col.id-1]+=elem.amount
+            //       }
+            //     })
+            //   }
+            //   if(elem.expense_type){
+
+            //   }
+            // });
+            return temp;
         },
         // revenueCount() {
         //   let count = 0;
@@ -2385,6 +3812,7 @@ export default {
             return list;
         },
     },
+    mounted() {},
     created() {
         this.initFilters();
     },
