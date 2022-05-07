@@ -468,7 +468,7 @@ export default {
 
     methods: {
         async changeFlagStatus(data) {
-            this.process = true;
+            this.loading = true;
             if (data.role == "security officer") {
                 await axios({
                     method: "put",
@@ -511,11 +511,11 @@ export default {
                             );
                         }
 
-                        this.process = false;
+                        this.loading = false;
                     })
                     .catch((err) => {
                         console.log(err.response);
-                        this.process = false;
+                        this.loading = false;
                     });
             } else if (data.role == "officer" || data.role == "resident") {
                 await axios({
@@ -559,11 +559,11 @@ export default {
                             );
                         }
 
-                        this.process = false;
+                        this.loading = false;
                     })
                     .catch((err) => {
                         console.log(err.response);
-                        this.process = false;
+                        this.loading = false;
                     });
             }
         },
@@ -695,8 +695,8 @@ export default {
             this.comment_show = !this.comment_show;
         },
         toggle(event) {
-            this.$refs.menu.toggle(event);
             this.populateMenu();
+            this.$refs.menu.toggle(event);
         },
         showDeletedPostToast() {
             this.$toast.add({
@@ -910,6 +910,5 @@ export default {
     mounted() {
         this.countComment();
     },
-    created() {},
 };
 </script>

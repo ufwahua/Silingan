@@ -148,16 +148,17 @@
                                 <template #empty> No Revenue found </template>
                                 <template #loading> Loading data </template>
                                 <Column field="id" header="ID"></Column>
-                                <Column field="lot" header="Block and Lot">
-                                    <template #body="{ data }">
-                                        Block {{ data.lot[0].block_id }} Lot
-                                        {{ data.lot[0].number }}
-                                    </template>
-                                </Column>
+
                                 <Column
                                     field="collection_type.name"
                                     header="Type"
                                 ></Column>
+                                <Column field="lot" header="Block and Lot">
+                                    <template #body="{ data }">
+                                        Block {{ data.lot.block_id }} Lot
+                                        {{ data.lot.number }}
+                                    </template>
+                                </Column>
                                 <Column field="amount" header="Credit">
                                     <template #body="{ data }">
                                         ₱{{ data.amount }}
@@ -432,6 +433,7 @@
                         optionLabel="name"
                         optionValue="code"
                         placeholder="Select Collection Type"
+                        @change="setAmount"
                         :class="{
                             'p-invalid': revenue_valid.state.collection_type,
                         }"
@@ -443,7 +445,7 @@
                     >
                 </div>
                 <div class="col-12 lg:col-6">
-                    <h5>Add Credit to</h5>
+                    <h5>Add to</h5>
                     <Dropdown
                         v-model="revenue_form.source"
                         :options="funds"
@@ -467,7 +469,7 @@
                         optionLabel="name"
                         optionValue="code"
                         placeholder="Select Block and Lot"
-                        @change="setLots()"
+                        @change="setLots"
                         :class="{ 'p-invalid': revenue_valid.state.block }"
                     />
                     <small v-if="revenue_valid.state.block" class="p-error">{{
@@ -503,7 +505,10 @@
                         revenue_valid.msg.amount
                     }}</small>
                 </div>
-                <div class="col-12 lg:col-6">
+                <div
+                    v-if="revenue_form.collection_type == 1 && revenue_form.lot"
+                    class="col-12 lg:col-6"
+                >
                     <h5>Balance</h5>
                     <InputNumber
                         v-model="balance"
@@ -1686,6 +1691,7 @@ export default {
                 global: { value: null, matchMode: FilterMatchMode.CONTAINS },
             };
         },
+
         async confirmAddExpense() {
             this.resetExpenseFormError();
             this.process = !this.process;

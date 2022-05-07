@@ -38,7 +38,7 @@ class CollectionController extends Controller
      * @return JsonResponse
      */
     public function store(CollectionRequest $request) : JsonResponse{
-        $invoices = Invoice::where('block_lot_id',$request['block_lot_id'])->where('payment',false)->latest()->get();
+        $invoices = Invoice::where('block_lot_id',$request['block_lot_id'])->where('payment',false)->where('collection_type_id',$request['collection_type_id'])->latest()->get();
         foreach($invoices as $invoice){
             if($invoice->running_balance > $request['amount']){
                 Invoice::query()->where('id',$invoice->id)->update([
