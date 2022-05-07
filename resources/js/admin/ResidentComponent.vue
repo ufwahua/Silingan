@@ -43,7 +43,7 @@
                 </div>
             </div>
             <div class="col-12 lg:col-6 xl:col-3">
-                <div class="card mb-0 bg-orange-100">
+                <div class="card mb-0 bg-green-100">
                     <div class="flex justify-content-between mb-3">
                         <div>
                             <span
@@ -61,7 +61,7 @@
                 </div>
             </div>
             <div class="col-12 lg:col-6 xl:col-3">
-                <div class="card mb-0 bg-gray-400">
+                <div class="card mb-0 bg-pink-100">
                     <div class="flex justify-content-between mb-3">
                         <div>
                             <span
@@ -78,7 +78,42 @@
                     </div>
                 </div>
             </div>
+            <div class="col-12 lg:col-6 xl:col-3">
+                <div class="card mb-0 bg-green-100">
+                    <div class="flex justify-content-between mb-3">
+                        <div>
+                            <span
+                                class="block font-medium text-4xl font-bold mb-3"
+                                >{{ not_flagged }}</span
+                            >
+                            <div class="text-900">Not Flagged</div>
+                        </div>
 
+                        <div
+                            class="flex align-items-center justify-content-center"
+                            style="width: 2.5rem; height: 2.5rem"
+                        ></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 lg:col-6 xl:col-3">
+                <div class="card mb-0 bg-pink-100">
+                    <div class="flex justify-content-between mb-3">
+                        <div>
+                            <span
+                                class="block font-medium text-4xl font-bold mb-3"
+                                >{{ flagged }}</span
+                            >
+                            <div class="text-900">Flagged</div>
+                        </div>
+
+                        <div
+                            class="flex align-items-center justify-content-center"
+                            style="width: 2.5rem; height: 2.5rem"
+                        ></div>
+                    </div>
+                </div>
+            </div>
             <div class="col-12 lg:col-6 xl:col-3">
                 <div class="card mb-0 bg-blue-100">
                     <div class="flex justify-content-between mb-3">
@@ -108,99 +143,103 @@
                     >
                         <template #empty> No registered users found </template>
                         <template #loading> Loading Users </template>
-                        <template #header>
-                            <div>
-                                <div class="grid formgrid">
-                                    <div class="col-12 mb-2 lg:col-3 lg:mb-0">
-                                        <span class="p-input-icon-left">
-                                            <i class="pi pi-search" />
-                                            <InputText
-                                                v-model="
-                                                    filters['global'].value
-                                                "
-                                                placeholder="Keyword Search"
-                                            />
-                                        </span>
-                                    </div>
-                                    <div class="col-12 mb-2 lg:col-3 lg:mb-0">
-                                        <Dropdown
-                                            v-model="
-                                                filters['lot.block.number']
-                                                    .value
-                                            "
-                                            :showClear="true"
-                                            :options="blocks"
-                                            optionLabel="number"
-                                            optionValue="number"
-                                            placeholder="Filter by block"
-                                            @change="getFilterBlockLot"
-                                        ></Dropdown>
-                                    </div>
-                                    <div class="col-12 mb-2 lg:col-3 lg:mb-0">
-                                        <Dropdown
-                                            v-model="
-                                                filters['lot.number'].value
-                                            "
-                                            :showClear="true"
-                                            :options="filteredLots"
-                                            optionLabel="number"
-                                            optionValue="number"
-                                            placeholder="Filter by lot"
-                                        ></Dropdown>
-                                    </div>
-                                    <div class="col-12 mb-2 lg:col-3 lg:mb-0">
-                                        <Dropdown
-                                            v-model="filters['tag_as'].value"
-                                            :showClear="true"
-                                            :options="tag"
-                                            optionLabel="tag"
-                                            optionValue="tag"
-                                            placeholder="Filter by tag"
-                                        ></Dropdown>
-                                    </div>
+                        <div>
+                            <div class="grid formgrid">
+                                <div class="col-12 mb-2 lg:col-3 lg:mb-0">
+                                    <span class="p-input-icon-left">
+                                        <i class="pi pi-search" />
+                                        <InputText
+                                            v-model="filters['global'].value"
+                                            placeholder="Keyword Search"
+                                        />
+                                    </span>
                                 </div>
-                                <div class="grid formgrid mt-2">
-                                    <div class="col-12 mb-2 lg:col-3 lg:mb-0">
-                                        <Dropdown
-                                            v-model="filters['status'].value"
-                                            :showClear="true"
-                                            :options="status"
-                                            optionLabel="status"
-                                            optionValue="status"
-                                            placeholder="Filter by status"
-                                        ></Dropdown>
-                                    </div>
-                                    <div class="col-12 mb-2 lg:col-3 lg:mb-0">
-                                        <Dropdown
-                                            v-model="filters['verified'].value"
-                                            :showClear="true"
-                                            :options="verification"
-                                            optionLabel="status"
-                                            optionValue="value"
-                                            placeholder="Filter by verification"
-                                        ></Dropdown>
-                                    </div>
+                                <div class="col-12 mb-2 lg:col-3 lg:mb-0">
+                                    <Dropdown
+                                        v-model="
+                                            filters['lot.block.number'].value
+                                        "
+                                        :showClear="true"
+                                        :options="blocks"
+                                        optionLabel="number"
+                                        optionValue="number"
+                                        placeholder="Filter by block"
+                                        @change="getFilterBlockLot"
+                                    ></Dropdown>
+                                </div>
+                                <div class="col-12 mb-2 lg:col-3 lg:mb-0">
+                                    <Dropdown
+                                        v-model="filters['lot.number'].value"
+                                        :showClear="true"
+                                        :options="filteredLots"
+                                        optionLabel="number"
+                                        optionValue="number"
+                                        placeholder="Filter by lot"
+                                    ></Dropdown>
+                                </div>
+                                <div class="col-12 mb-2 lg:col-3 lg:mb-0">
+                                    <Dropdown
+                                        v-model="filters['tag_as'].value"
+                                        :showClear="true"
+                                        :options="tag"
+                                        optionLabel="tag"
+                                        optionValue="tag"
+                                        placeholder="Filter by tag"
+                                    ></Dropdown>
+                                </div>
+                            </div>
+                            <div class="grid formgrid mt-2">
+                                <div class="col-12 mb-2 lg:col-3 lg:mb-0">
+                                    <Dropdown
+                                        v-model="filters['status'].value"
+                                        :showClear="true"
+                                        :options="status"
+                                        optionLabel="status"
+                                        optionValue="status"
+                                        placeholder="Filter by status"
+                                    ></Dropdown>
+                                </div>
+                                <div class="col-12 mb-2 lg:col-3 lg:mb-0">
+                                    <Dropdown
+                                        v-model="filters['verified'].value"
+                                        :showClear="true"
+                                        :options="verification"
+                                        optionLabel="status"
+                                        optionValue="value"
+                                        placeholder="Filter by verification"
+                                    ></Dropdown>
+                                </div>
+                                <div class="col-12 mb-2 lg:col-3 lg:mb-0">
+                                    <Dropdown
+                                        v-model="filters['flagged'].value"
+                                        :showClear="true"
+                                        :options="flag_dropdown"
+                                        optionLabel="status"
+                                        optionValue="value"
+                                        placeholder="Filter flag"
+                                    ></Dropdown>
+                                </div>
 
-                                    <div
-                                        class="col-12 mb-2 lg:col-6 lg:mb-0 flex justify-content-end"
-                                    >
-                                        <Button
-                                            icon="pi pi-filter-slash"
-                                            class="my-2 p-button-outlined p-button-secondary"
-                                            @click="clearFilter"
-                                            v-tooltip="'Clear'"
-                                        />
+                                <div
+                                    class="col-12 mb-2 lg:col-3 lg:mb-0 flex justify-content-end"
+                                >
+                                    <Button
+                                        icon="pi pi-filter-slash"
+                                        class="my-2 p-button-outlined p-button-secondary"
+                                        @click="clearFilter"
+                                        v-tooltip="'Clear'"
+                                    />
 
-                                        <Button
-                                            label="Add"
-                                            icon="pi pi-plus"
-                                            class="ml-2 my-2 p-button-primary"
-                                            style="width: auto"
-                                            @click="registerUser"
-                                        />
-                                    </div>
-                                </div></div
-                        ></template>
+                                    <Button
+                                        label="Add"
+                                        icon="pi pi-plus"
+                                        class="ml-2 my-2 p-button-primary"
+                                        style="width: auto"
+                                        @click="registerUser"
+                                    />
+                                </div>
+                            </div>
+                        </div>
 
                         <Column header="Profile Pic">
                             <template #body="{ data }">
@@ -255,6 +294,22 @@
                                         verified
                                     </Badge>
                                 </div>
+                            </template>
+                        </Column>
+                        <Column header="Flag" field="flag">
+                            <template #body="{ data }">
+                                <Button
+                                    v-if="data.flagged == true"
+                                    icon="pi pi-flag-fill"
+                                    class="p-button-rounded p-button-danger"
+                                    disabled
+                                />
+                                <Button
+                                    v-else
+                                    icon="pi pi-flag-fill"
+                                    class="p-button-rounded p-button-success"
+                                    disabled
+                                />
                             </template>
                         </Column>
                         <Column header="Actions" field="actions">
@@ -1437,11 +1492,7 @@
                         header="Emergency Contacts"
                         :modal="true"
                     >
-                        <DataTable
-                            :value="emergency_contacts"
-                            :paginator="true"
-                            :rows="10"
-                        >
+                        <DataTable :value="emergency_contacts" :rows="10">
                             <template #empty>
                                 No emergency contacts found
                             </template>
@@ -1504,13 +1555,8 @@ export default {
 
             active: computed(() => {
                 let active = [];
-                let temp = [];
-                store.state.users.forEach((elem) => {
-                    if (elem.role == "resident") {
-                        temp.push(elem);
-                    }
-                });
-                temp.forEach((elem) => {
+
+                store.state.residents.forEach((elem) => {
                     if (elem.status == "active") {
                         active.push(elem);
                     }
@@ -1519,13 +1565,8 @@ export default {
             }),
             inactive: computed(() => {
                 let inactive = [];
-                let temp = [];
-                store.state.users.forEach((elem) => {
-                    if (elem.role == "resident") {
-                        temp.push(elem);
-                    }
-                });
-                temp.forEach((elem) => {
+
+                store.state.residents.forEach((elem) => {
                     if (elem.status == "inactive") {
                         inactive.push(elem);
                     }
@@ -1534,13 +1575,8 @@ export default {
             }),
             verified: computed(() => {
                 let verified = [];
-                let temp = [];
-                store.state.users.forEach((elem) => {
-                    if (elem.role == "resident") {
-                        temp.push(elem);
-                    }
-                });
-                temp.forEach((elem) => {
+
+                store.state.residents.forEach((elem) => {
                     if (elem.verified == 1) {
                         verified.push(elem);
                     }
@@ -1549,18 +1585,33 @@ export default {
             }),
             not_verified: computed(() => {
                 let not_verified = [];
-                let temp = [];
-                store.state.users.forEach((elem) => {
-                    if (elem.role == "resident") {
-                        temp.push(elem);
-                    }
-                });
-                temp.forEach((elem) => {
+
+                store.state.residents.forEach((elem) => {
                     if (elem.verified == 0) {
                         not_verified.push(elem);
                     }
                 });
                 return not_verified.length;
+            }),
+            flagged: computed(() => {
+                let flagged = [];
+
+                store.state.residents.forEach((elem) => {
+                    if (elem.flagged == true) {
+                        flagged.push(elem);
+                    }
+                });
+                return flagged.length;
+            }),
+            not_flagged: computed(() => {
+                let not_flagged = [];
+
+                store.state.residents.forEach((elem) => {
+                    if (elem.flagged == false) {
+                        not_flagged.push(elem);
+                    }
+                });
+                return not_flagged.length;
             }),
             total: computed(() => {
                 let temp = [];
@@ -1576,7 +1627,7 @@ export default {
     },
     data() {
         return {
-            menus: null,
+            menus: [],
             isInvalid: false,
             filters: {},
             id: null,
@@ -1604,6 +1655,7 @@ export default {
                 has_voted: "",
                 status: "",
                 selected_tag: "",
+                flagged: "",
             },
 
             first_name: null,
@@ -1644,12 +1696,59 @@ export default {
                 { status: "verified", value: true },
                 { status: "not verified", value: false },
             ],
+            flag_dropdown: [
+                { status: "flagged", value: true },
+                { status: "not flagged", value: false },
+            ],
 
             emergencyContactDialog: false,
             emergency_contacts: null,
         };
     },
     methods: {
+        async changeFlagStatus() {
+            this.loading = true;
+
+            await axios({
+                method: "put",
+                url: "/api/user/" + this.id,
+                data: {
+                    first_name: this.form.first_name,
+                    last_name: this.form.last_name,
+                    gender: this.form.gender,
+                    block_lot_id: this.form.selected_block_lot,
+                    email: this.form.email,
+                    verified: this.form.verified,
+                    has_voted: this.form.has_voted,
+                    age: this.form.age,
+                    contact_num: this.form.contact_num,
+                    role: this.form.selected_role,
+                    status: this.form.status,
+                    tag_as: this.form.selected_tag,
+                    flagged: this.form.flagged == false ? true : false,
+                },
+            })
+                .then(() => {
+                    this.$toast.add({
+                        severity: "success",
+                        summary: "Successful",
+                        detail:
+                            this.form.flagged == false
+                                ? "User Flagged"
+                                : "User UnFlagged",
+                        life: 3000,
+                    });
+                    this.$store.dispatch("getResidents");
+                    this.resetFields();
+                    this.loading = false;
+                })
+                .catch((err) => {
+                    console.log(err.response);
+                    this.resetErrors();
+                    this.validate(err);
+                    this.loading = false;
+                });
+        },
         async viewEmergencyContacts() {
             this.loading = true;
             await axios({
@@ -1673,169 +1772,106 @@ export default {
             this.$refs.menu.toggle(event);
             console.log("data resident", data);
             this.populateFields(data);
-            if (data.status == "active" && data.verified == true) {
-                this.menus = [
-                    {
-                        label: "View Resident",
-                        icon: "pi pi-user",
-                        command: () => {
-                            this.getBlockLot(this.form.selected_block_lot);
-                            this.viewResident();
-                        },
+            this.menus = [];
+            this.menus.push({
+                label: "View Resident",
+                icon: "pi pi-user",
+                command: () => {
+                    this.getBlockLot(this.form.selected_block_lot);
+                    this.viewResident();
+                },
+            });
+            this.menus.push({
+                label: "Update Resident",
+                icon: "pi pi-pencil",
+                command: () => {
+                    this.getBlockLot(this.form.selected_block_lot);
+                    this.updateUser();
+                },
+            });
+            this.menus.push({
+                label: "Emergency Contacts",
+                icon: "pi pi-id-card",
+                command: () => {
+                    this.getBlockLot(this.form.selected_block_lot);
+                    this.viewEmergencyContacts();
+                },
+            });
+            if (data.verified == false) {
+                this.menus.push({
+                    label: "Verify Resident",
+                    icon: "pi pi-check",
+                    command: () => {
+                        this.getBlockLot(this.form.selected_block_lot);
+                        this.viewVerifytDialog = true;
                     },
-                    {
-                        label: "Update Resident",
-                        icon: "pi pi-pencil",
-                        command: () => {
-                            this.getBlockLot(this.form.selected_block_lot);
-                            this.updateUser();
-                        },
-                    },
-                    {
-                        label: "Emergency Contacts",
-                        icon: "pi pi-id-card",
-                        command: () => {
-                            this.getBlockLot(this.form.selected_block_lot);
-                            this.viewEmergencyContacts();
-                        },
-                    },
-                    {
-                        label: "Deactivate Resident",
-                        icon: "pi pi-lock",
-                        command: () => {
-                            this.getBlockLot(this.form.selected_block_lot);
-                            this.changeStatus();
-                        },
-                    },
-                ];
-            } else if (data.status == "active" && data.verified == false) {
-                this.menus = [
-                    {
-                        label: "View Resident",
-                        icon: "pi pi-user",
-                        command: () => {
-                            this.getBlockLot(this.form.selected_block_lot);
-                            this.viewResident();
-                        },
-                    },
-                    {
-                        label: "Verify Resident",
-                        icon: "pi pi-check",
-                        command: () => {
-                            this.getBlockLot(this.form.selected_block_lot);
-                            this.viewVerifytDialog = true;
-                        },
-                    },
-                    {
-                        label: "Update Resident",
-                        icon: "pi pi-pencil",
-                        command: () => {
-                            this.getBlockLot(this.form.selected_block_lot);
-                            this.updateUser();
-                        },
-                    },
-                    {
-                        label: "Emergency Contacts",
-                        icon: "pi pi-id-card",
-                        command: () => {
-                            this.getBlockLot(this.form.selected_block_lot);
-                            this.viewEmergencyContacts();
-                        },
-                    },
-                    {
-                        label: "Deactivate Resident",
-                        icon: "pi pi-unlock",
-                        command: () => {
-                            this.getBlockLot(this.form.selected_block_lot);
-                            this.changeStatus();
-                        },
-                    },
-                ];
-            } else if (data.status == "inactive" && data.verified == true) {
-                this.menus = [
-                    {
-                        label: "View Resident",
-                        icon: "pi pi-user",
-                        command: () => {
-                            this.getBlockLot(this.form.selected_block_lot);
-                            this.viewResident();
-                        },
-                    },
-                    {
-                        label: "Update Resident",
-                        icon: "pi pi-pencil",
-                        command: () => {
-                            this.getBlockLot(this.form.selected_block_lot);
-                            this.updateUser();
-                        },
-                    },
-                    {
-                        label: "Emergency Contacts",
-                        icon: "pi pi-id-card",
-                        command: () => {
-                            this.getBlockLot(this.form.selected_block_lot);
-                            this.viewEmergencyContacts();
-                        },
-                    },
-                    {
-                        label: "Activate Resident",
-                        icon: "pi pi-unlock",
-                        command: () => {
-                            this.getBlockLot(this.form.selected_block_lot);
-                            this.changeStatus();
-                        },
-                    },
-                ];
-            } else {
-                this.menus = [
-                    {
-                        label: "View Resident",
-                        icon: "pi pi-user",
-                        command: () => {
-                            this.getBlockLot(this.form.selected_block_lot);
-                            this.viewResident();
-                        },
-                    },
-                    {
-                        label: "Verify Resident",
-                        icon: "pi pi-check",
-                        command: () => {
-                            this.getBlockLot(this.form.selected_block_lot);
-                            this.viewVerifytDialog = true;
-                        },
-                    },
-                    {
-                        label: "Update Resident",
-                        icon: "pi pi-pencil",
-                        command: () => {
-                            this.getBlockLot(this.form.selected_block_lot);
-                            this.updateUser();
-                        },
-                    },
-                    {
-                        label: "Emergency Contacts",
-                        icon: "pi pi-id-card",
-                        command: () => {
-                            this.getBlockLot(this.form.selected_block_lot);
-                            this.viewEmergencyContacts();
-                        },
-                    },
-                    {
-                        label: "Activate Resident",
-                        icon: "pi pi-unlock",
-                        command: () => {
-                            getBlockLot(this.form.selected_block_lot);
-                            this.changeStatus();
-                        },
-                    },
-                ];
+                });
             }
+            if (data.status == "active") {
+                this.menus.push({
+                    label: "Deactivate Resident",
+                    icon: "pi pi-lock",
+                    command: () => {
+                        this.getBlockLot(this.form.selected_block_lot);
+                        this.changeStatus();
+                    },
+                });
+            } else {
+                this.menus.push({
+                    label: "Activate Resident",
+                    icon: "pi pi-unlock",
+                    command: () => {
+                        this.getBlockLot(this.form.selected_block_lot);
+                        this.changeStatus();
+                    },
+                });
+            }
+            if (data.flagged == false) {
+                this.menus.push({
+                    label: "Flag Resident",
+                    icon: "pi pi-flag-fill",
+                    command: () => {
+                        this.getBlockLot(this.form.selected_block_lot);
+                        this.changeFlagStatus();
+                    },
+                });
+            } else {
+                this.menus.push({
+                    label: "UnFlag Resident",
+                    icon: "pi pi-flag",
+                    command: () => {
+                        this.getBlockLot(this.form.selected_block_lot);
+                        this.changeFlagStatus();
+                    },
+                });
+            }
+
+            // if (data.status == "active" && data.verified == true) {
+            // } else if (data.status == "active" && data.verified == false) {
+            // } else if (data.status == "inactive" && data.verified == true) {
+            // } else {
+            //     this.menus.push({
+            //         label: "Verify Resident",
+            //         icon: "pi pi-check",
+            //         command: () => {
+            //             this.getBlockLot(this.form.selected_block_lot);
+            //             this.viewVerifytDialog = true;
+            //         },
+            //     });
+            //     this.menus.push({
+            //         label: "Activate Resident",
+            //         icon: "pi pi-unlock",
+            //         command: () => {
+            //             getBlockLot(this.form.selected_block_lot);
+            //             this.changeStatus();
+            //         },
+            //     });
+            // }
         },
         populateFields(data) {
             this.resetFields();
             this.resetErrors();
             this.name = data.name;
-
             this.id = data.id;
             this.form.first_name = data.first_name;
             this.form.last_name = data.last_name;
@@ -1851,6 +1887,7 @@ export default {
             this.form.has_voted = data.has_voted;
             this.form.status = data.status;
             this.form.selected_tag = data.tag_as;
+            this.form.flagged = data.flagged;
         },
         clearFilter() {
             this.filters["lot.block.number"].value = null;
@@ -1858,6 +1895,7 @@ export default {
             this.filters["tag_as"].value = null;
             this.filters["status"].value = null;
             this.filters["verified"].value = null;
+            this.filters["flagged"].value = null;
         },
         showSuccess() {
             this.$toast.add({
@@ -1891,6 +1929,10 @@ export default {
                     value: null,
                     matchMode: FilterMatchMode.EQUALS,
                 },
+                flagged: {
+                    value: null,
+                    matchMode: FilterMatchMode.EQUALS,
+                },
             };
         },
         badgecolor(color) {
@@ -1900,6 +1942,13 @@ export default {
                 return "bg-orange-500";
             } else if (color == 0) {
                 return "bg-gray-500";
+            } else {
+                return "bg-pink-500";
+            }
+        },
+        badgecolorFlag(color) {
+            if (!color) {
+                return "bg-green-500";
             } else {
                 return "bg-pink-500";
             }
@@ -1917,7 +1966,7 @@ export default {
                     method: "delete",
                     url: "/api/user/" + this.id,
                 });
-                this.$store.dispatch("getAllUsers");
+                this.$store.dispatch("getResidents");
                 this.loading = false;
                 this.$toast.add({
                     severity: "success",
@@ -1962,7 +2011,7 @@ export default {
                         detail: "Updated User",
                         life: 3000,
                     });
-                    this.$store.dispatch("getAllUsers");
+                    this.$store.dispatch("getResidents");
                     this.resetFields();
                     this.updateUserDialog = false;
                     this.loading = false;
@@ -2009,7 +2058,7 @@ export default {
                                 detail: "Resident Verified",
                                 life: 3000,
                             });
-                            this.$store.dispatch("getAllUsers");
+                            this.$store.dispatch("getResidents");
                             this.resetFields();
                             this.viewVerifytDialog = false;
                             this.loading = false;
@@ -2058,7 +2107,7 @@ export default {
                                 : "User Deactivated",
                         life: 3000,
                     });
-                    this.$store.dispatch("getAllUsers");
+                    this.$store.dispatch("getResidents");
                     this.resetFields();
                     this.loading = false;
                 })
@@ -2101,7 +2150,7 @@ export default {
                 .then(() => {
                     this.registerUserDialog = false;
                     this.resetFields();
-                    this.$store.dispatch("getAllUsers");
+                    this.$store.dispatch("getResidents");
                     this.$toast.add({
                         severity: "success",
                         summary: "Successful Request",

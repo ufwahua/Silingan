@@ -215,6 +215,7 @@ class UserController extends Controller
                     'tag_as' => ['sometimes'],
                     'profile_pic'=> ['sometimes'],
                     'security_shift'=> ['required'],
+                    'flagged'=> ['sometimes'],
                 ]));
             }else{
                  User::query()->where('id', $request->route('user'))->update($request->validate([
@@ -231,6 +232,7 @@ class UserController extends Controller
                     'tag_as' => ['sometimes'],
                     'profile_pic'=> ['sometimes'],
                     'security_shift'=> ['sometimes'],
+                    'flagged'=> ['sometimes'],
                 ]));
             }
          
@@ -249,6 +251,7 @@ class UserController extends Controller
                 'profile_pic'=> ['sometimes'],
                 'tag_as' => ['required'],
                 'position_id' => ['sometimes'],
+                'flagged'=> ['sometimes'],
             ]));
         }
 

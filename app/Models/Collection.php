@@ -26,7 +26,7 @@ class Collection extends Model
         return $this->hasOne(User::class,'id','user_id');
     }
     public function lot(){
-        return $this->hasMany(Lot::class,'id','block_lot_id');
+        return $this->hasOne(Lot::class,'id','block_lot_id');
     }
     public function fund(){
         return $this->hasOne(Fund::class,'id','fund_id');

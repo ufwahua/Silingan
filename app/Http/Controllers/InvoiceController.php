@@ -23,14 +23,13 @@ class InvoiceController extends Controller
     {
        
        $invoice = Invoice::where('block_lot_id',$request->route('invoice'))->with(['user','lot.block','collection_type'])->latest()->first();
-        
-       
+    
         return response()->json($invoice);
     }
-    public function getInvoicesByBlockLotID(Request $request) :JsonResponse{
-        $get = Invoice::where('id',$request->route('invoice'))->first();
-        $invoices = Invoice::where('block_lot_id',$get->block_lot_id)->with(['user','lot.block','collection_type'])->latest()->get();
-        return response()->json($invoices);
+    public function getInvoicesBlockLot(Request $request) :JsonResponse{
+      
+        $invoice = Invoice::where('block_lot_id',$request->route('invoice'))->with(['user','lot.block','collection_type'])->latest()->get();
+        return response()->json($invoice);
     }
     public function store(InvoiceRequest $request) : JsonResponse
     {

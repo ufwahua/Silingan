@@ -32,7 +32,6 @@
                         :value="adminVehicles"
                         :filters="filters"
                         breakpoint="1350px"
-                        :paginator="true"
                         :rows="10"
                     >
                         <template #header>

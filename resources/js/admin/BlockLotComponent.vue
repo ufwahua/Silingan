@@ -73,12 +73,7 @@
             </div>
             <div class="grid">
                 <div class="col-12">
-                    <DataTable
-                        :value="blocks"
-                        :filters="filters"
-                        :paginator="true"
-                        :rows="10"
-                    >
+                    <DataTable :value="blocks" :filters="filters" :rows="10">
                         <template #empty> No Blocks found </template>
                         <template #loading> Loading </template>
 

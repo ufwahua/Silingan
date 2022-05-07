@@ -68,7 +68,6 @@
                         :value="cards"
                         :filters="filters"
                         breakpoint="1230px"
-                        :paginator="true"
                         :rows="15"
                     >
                         <div class="grid formgrid">

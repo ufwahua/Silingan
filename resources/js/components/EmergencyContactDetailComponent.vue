@@ -16,7 +16,6 @@
             <div v-if="emergency_contacts" class="card">
                 <DataTable
                     :value="emergency_contacts"
-                    :paginator="true"
                     breakpoint="1300px"
                     :rows="10"
                 >

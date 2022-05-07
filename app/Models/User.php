@@ -35,6 +35,7 @@ class User extends Authenticatable
         'position_id',
         'tag_as',
         'security_shift',
+        'flagged',
     ];
     //relationships
     public function post(){

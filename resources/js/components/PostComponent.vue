@@ -467,6 +467,106 @@ export default {
     },
 
     methods: {
+        async changeFlagStatus(data) {
+            this.process = true;
+            if (data.role == "security officer") {
+                await axios({
+                    method: "put",
+                    url: "/api/user/" + data.id,
+                    data: {
+                        first_name: data.first_name,
+                        last_name: data.last_name,
+                        gender: data.gender,
+                        block_lot_id: null,
+                        email: data.email,
+                        verified: data.verified,
+                        status: data.status,
+                        flagged: data.flagged ? false : true,
+                        has_voted: data.has_voted,
+                        age: data.age,
+                        contact_num: data.contact_num,
+                        role: data.role,
+                        security_shift: data.security_shift,
+                    },
+                })
+                    .then(() => {
+                        this.$toast.add({
+                            severity: "success",
+                            summary: "Successful",
+                            detail:
+                                data.flagged == false
+                                    ? "Security Officer flagged"
+                                    : "Security Officer unflagged",
+                            life: 3000,
+                        });
+                        if (this.group_id == 1) {
+                            this.$store.dispatch(
+                                "posts/getTimeLine",
+                                this.$store.state.userLogged.id
+                            );
+                        } else {
+                            this.$store.dispatch(
+                                "posts/getMarketPlaceNotVerified",
+                                this.$store.state.userLogged.id
+                            );
+                        }
+
+                        this.process = false;
+                    })
+                    .catch((err) => {
+                        console.log(err.response);
+                        this.process = false;
+                    });
+            } else if (data.role == "officer" || data.role == "resident") {
+                await axios({
+                    method: "put",
+                    url: "/api/user/" + data.id,
+                    data: {
+                        first_name: data.first_name,
+                        last_name: data.last_name,
+                        gender: data.gender,
+                        block_lot_id: data.block_lot_id,
+                        email: data.email,
+                        verified: data.verified,
+                        has_voted: data.has_voted,
+                        age: data.age,
+                        contact_num: data.contact_num,
+                        role: data.role,
+                        status: data.status,
+                        tag_as: data.tag_as,
+                        flagged: data.flagged ? false : true,
+                    },
+                })
+                    .then(() => {
+                        this.$toast.add({
+                            severity: "success",
+                            summary: "Successful",
+                            detail:
+                                data.flagged == false
+                                    ? "User Flagged"
+                                    : "User UnFlagged",
+                            life: 3000,
+                        });
+                        if (this.group_id == 1) {
+                            this.$store.dispatch(
+                                "posts/getTimeLine",
+                                this.$store.state.userLogged.id
+                            );
+                        } else {
+                            this.$store.dispatch(
+                                "posts/getMarketPlaceNotVerified",
+                                this.$store.state.userLogged.id
+                            );
+                        }
+
+                        this.process = false;
+                    })
+                    .catch((err) => {
+                        console.log(err.response);
+                        this.process = false;
+                    });
+            }
+        },
         async approvePost() {
             this.loading = true;
             await axios({
@@ -596,6 +696,7 @@ export default {
         },
         toggle(event) {
             this.$refs.menu.toggle(event);
+            this.populateMenu();
         },
         showDeletedPostToast() {
             this.$toast.add({
@@ -771,6 +872,23 @@ export default {
                         },
                     },
                 ];
+                if (this.post.user.flagged) {
+                    this.menus.push({
+                        label: "UnFlag " + this.post.user.first_name,
+                        icon: "pi pi-flag",
+                        command: () => {
+                            this.changeFlagStatus(this.post.user);
+                        },
+                    });
+                } else {
+                    this.menus.push({
+                        label: "Flag " + this.post.user.first_name,
+                        icon: "pi pi-flag-fill",
+                        command: () => {
+                            this.changeFlagStatus(this.post.user);
+                        },
+                    });
+                }
             } else {
                 this.menus = [
                     {
@@ -792,8 +910,6 @@ export default {
     mounted() {
         this.countComment();
     },
-    created() {
-        this.populateMenu();
-    },
+    created() {},
 };
 </script>

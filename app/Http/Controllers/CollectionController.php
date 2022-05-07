@@ -16,7 +16,7 @@ class CollectionController extends Controller
      */
     public function index() : JsonResponse{
         return response()->json(
-            Collection::with(['collectionType','user','lot','fund'])->latest()->get()
+            Collection::with(['collectionType','user','lot.block','fund'])->latest()->get()
         );
     }
 
@@ -28,7 +28,11 @@ class CollectionController extends Controller
     {
         return response()->json($collection);
     }
-
+     public function getCollectionBlockLot(Request $request) : JsonResponse
+    {
+        $collection = Collection::where('block_lot_id',$request->route('collection'))->with(['lot.block','collectionType','user'])->latest()->get();
+        return response()->json($collection);
+    }
     /**
      * @param CollectionRequest $request
      * @return JsonResponse

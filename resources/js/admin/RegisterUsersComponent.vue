@@ -43,7 +43,7 @@
                 </div>
             </div>
             <div class="col-12 lg:col-6 xl:col-3">
-                <div class="card mb-0 bg-orange-100">
+                <div class="card mb-0 bg-green-100">
                     <div class="flex justify-content-between mb-3">
                         <div>
                             <span
@@ -61,7 +61,7 @@
                 </div>
             </div>
             <div class="col-12 lg:col-6 xl:col-3">
-                <div class="card mb-0 bg-gray-400">
+                <div class="card mb-0 bg-pink-100">
                     <div class="flex justify-content-between mb-3">
                         <div>
                             <span
@@ -78,7 +78,77 @@
                     </div>
                 </div>
             </div>
+            <div class="col-12 lg:col-6 xl:col-3">
+                <div class="card mb-0 bg-green-100">
+                    <div class="flex justify-content-between mb-3">
+                        <div>
+                            <span
+                                class="block font-medium text-4xl font-bold mb-3"
+                                >{{ not_flagged }}</span
+                            >
+                            <div class="text-900">Not Flagged</div>
+                        </div>
+                        <div
+                            class="flex align-items-center justify-content-center"
+                            style="width: 2.5rem; height: 2.5rem"
+                        ></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 lg:col-6 xl:col-3">
+                <div class="card mb-0 bg-pink-100">
+                    <div class="flex justify-content-between mb-3">
+                        <div>
+                            <span
+                                class="block font-medium text-4xl font-bold mb-3"
+                                >{{ flagged }}</span
+                            >
+                            <div class="text-900">Flagged</div>
+                        </div>
 
+                        <div
+                            class="flex align-items-center justify-content-center"
+                            style="width: 2.5rem; height: 2.5rem"
+                        ></div>
+                    </div>
+                </div>
+            </div>
+            <!-- <div class="col-12 lg:col-6 xl:col-3">
+                <div class="card mb-0 bg-green-100">
+                    <div class="flex justify-content-between mb-3">
+                        <div>
+                            <span
+                                class="block font-medium text-4xl font-bold mb-3"
+                                >{{ not_flagged }}</span
+                            >
+                            <div class="text-900">Not Flagged</div>
+                        </div>
+
+                        <div
+                            class="flex align-items-center justify-content-center"
+                            style="width: 2.5rem; height: 2.5rem"
+                        ></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 lg:col-6 xl:col-3">
+                <div class="card mb-0 bg-pink-100">
+                    <div class="flex justify-content-between mb-3">
+                        <div>
+                            <span
+                                class="block font-medium text-4xl font-bold mb-3"
+                                >{{ flagged }}</span
+                            >
+                            <div class="text-900">Flagged</div>
+                        </div>
+
+                        <div
+                            class="flex align-items-center justify-content-center"
+                            style="width: 2.5rem; height: 2.5rem"
+                        ></div>
+                    </div>
+                </div>
+            </div> -->
             <div class="col-12 lg:col-6 xl:col-3">
                 <div class="card mb-0 bg-blue-100">
                     <div class="flex justify-content-between mb-3">
@@ -105,12 +175,11 @@
                         :value="users"
                         :filters="filters"
                         breakpoint="1350px"
-                        :paginator="true"
                         :rows="10"
                     >
                         <div>
                             <div class="grid formgrid">
-                                <div class="col-12 mb-2 lg:col-3 lg:mb-0">
+                                <div class="col-12 mb-2 lg:col-4 lg:mb-0">
                                     <span class="p-input-icon-left">
                                         <i class="pi pi-search" />
                                         <InputText
@@ -119,7 +188,7 @@
                                         />
                                     </span>
                                 </div>
-                                <div class="col-12 mb-2 lg:col-3 lg:mb-0">
+                                <div class="col-12 mb-2 lg:col-2 lg:mb-0">
                                     <Dropdown
                                         v-model="
                                             filters['lot.block.number'].value
@@ -132,7 +201,7 @@
                                         @change="getFilterBlockLot"
                                     ></Dropdown>
                                 </div>
-                                <div class="col-12 mb-2 lg:col-3 lg:mb-0">
+                                <div class="col-12 mb-2 lg:col-2 lg:mb-0">
                                     <Dropdown
                                         v-model="filters['lot.number'].value"
                                         :showClear="true"
@@ -142,7 +211,7 @@
                                         placeholder="Filter by lot"
                                     ></Dropdown>
                                 </div>
-                                <div class="col-12 mb-2 lg:col-3 lg:mb-0">
+                                <div class="col-12 mb-2 lg:col-2 lg:mb-0">
                                     <Dropdown
                                         v-model="filters['tag_as'].value"
                                         :showClear="true"
@@ -152,9 +221,8 @@
                                         placeholder="Filter by tag"
                                     ></Dropdown>
                                 </div>
-                            </div>
-                            <div class="grid formgrid mt-2">
-                                <div class="col-12 mb-2 lg:col-3 lg:mb-0">
+
+                                <div class="col-12 mb-2 lg:col-2 lg:mb-0">
                                     <Dropdown
                                         v-model="filters['role'].value"
                                         :showClear="true"
@@ -164,7 +232,7 @@
                                         placeholder="Filter by role"
                                     ></Dropdown>
                                 </div>
-                                <div class="col-12 mb-2 lg:col-3 lg:mb-0">
+                                <div class="col-12 mb-2 lg:col-2 lg:mb-0">
                                     <Dropdown
                                         v-model="filters['status'].value"
                                         :showClear="true"
@@ -174,7 +242,7 @@
                                         placeholder="Filter by status"
                                     ></Dropdown>
                                 </div>
-                                <div class="col-12 mb-2 lg:col-3 lg:mb-0">
+                                <div class="col-12 mb-2 lg:col-2 lg:mb-0">
                                     <Dropdown
                                         v-model="filters['verified'].value"
                                         :showClear="true"
@@ -184,9 +252,19 @@
                                         placeholder="Filter by verification"
                                     ></Dropdown>
                                 </div>
+                                <div class="col-12 mb-2 lg:col-2 lg:mb-0">
+                                    <Dropdown
+                                        v-model="filters['flagged'].value"
+                                        :showClear="true"
+                                        :options="flag_dropdown"
+                                        optionLabel="status"
+                                        optionValue="value"
+                                        placeholder="Filter flag"
+                                    ></Dropdown>
+                                </div>
 
                                 <div
-                                    class="col-12 mb-2 lg:col-3 lg:mb-0 flex justify-content-end"
+                                    class="col-12 mb-2 lg:col-4 lg:mb-0 flex justify-content-end"
                                 >
                                     <Button
                                         icon="pi pi-filter-slash"
@@ -272,6 +350,22 @@
                                         verified
                                     </Badge>
                                 </div>
+                            </template>
+                        </Column>
+                        <Column header="Flag" field="flag">
+                            <template #body="{ data }">
+                                <Button
+                                    v-if="data.flagged == true"
+                                    icon="pi pi-flag-fill"
+                                    class="p-button-rounded p-button-danger"
+                                    disabled
+                                />
+                                <Button
+                                    v-else
+                                    icon="pi pi-flag-fill"
+                                    class="p-button-rounded p-button-success"
+                                    disabled
+                                />
                             </template>
                         </Column>
                         <Column header="Actions" field="actions">
@@ -2893,11 +2987,7 @@
                         header="Emergency Contacts"
                         :modal="true"
                     >
-                        <DataTable
-                            :value="emergency_contacts"
-                            :paginator="true"
-                            :rows="10"
-                        >
+                        <DataTable :value="emergency_contacts" :rows="10">
                             <template #empty>
                                 No emergency contacts found
                             </template>
@@ -2997,6 +3087,26 @@ export default {
                 });
                 return not_verified.length;
             }),
+            flagged: computed(() => {
+                let flagged = [];
+
+                store.state.users.forEach((elem) => {
+                    if (elem.flagged == true) {
+                        flagged.push(elem);
+                    }
+                });
+                return flagged.length;
+            }),
+            not_flagged: computed(() => {
+                let not_flagged = [];
+
+                store.state.users.forEach((elem) => {
+                    if (elem.flagged == false) {
+                        not_flagged.push(elem);
+                    }
+                });
+                return not_flagged.length;
+            }),
             total: computed(() => {
                 return store.state.users.length;
             }),
@@ -3034,6 +3144,7 @@ export default {
                 status: "",
                 selected_tag: "",
                 selected_position: "",
+                flagged: "",
             },
 
             first_name: null,
@@ -3082,11 +3193,58 @@ export default {
                 { status: "verified", value: true },
                 { status: "not verified", value: false },
             ],
+            flag_dropdown: [
+                { status: "flagged", value: true },
+                { status: "not flagged", value: false },
+            ],
             emergencyContactDialog: false,
             emergency_contacts: null,
         };
     },
     methods: {
+        async changeFlagStatus() {
+            this.loading = true;
+
+            await axios({
+                method: "put",
+                url: "/api/user/" + this.id,
+                data: {
+                    first_name: this.form.first_name,
+                    last_name: this.form.last_name,
+                    gender: this.form.gender,
+                    block_lot_id: this.form.selected_block_lot,
+                    email: this.form.email,
+                    verified: this.form.verified,
+                    has_voted: this.form.has_voted,
+                    age: this.form.age,
+                    contact_num: this.form.contact_num,
+                    role: this.form.selected_role,
+                    status: this.form.status,
+                    tag_as: this.form.selected_tag,
+                    flagged: this.form.flagged ? false : true,
+                },
+            })
+                .then(() => {
+                    this.$toast.add({
+                        severity: "success",
+                        summary: "Successful",
+                        detail:
+                            this.form.flagged == false
+                                ? "User Flagged"
+                                : "User UnFlagged",
+                        life: 3000,
+                    });
+                    this.$store.dispatch("getAllUsers");
+                    this.resetFields();
+                    this.loading = false;
+                })
+                .catch((err) => {
+                    console.log(err.response);
+                    this.resetErrors();
+                    this.validate(err);
+                    this.loading = false;
+                });
+        },
         async viewEmergencyContacts() {
             this.loading = true;
             await axios({
@@ -3128,163 +3286,219 @@ export default {
         toggle(data) {
             this.$refs.menu.toggle(event);
             this.populateFields(data);
-            if (data.status == "active" && data.verified == 1) {
-                this.menus = [
-                    {
-                        label: `View ${data.role}`,
-                        icon: "pi pi-user",
-                        command: () => {
-                            this.getBlockLot(this.form.selected_block_lot);
-                            this.viewUser();
-                        },
+            this.menus = [];
+            this.menus.push({
+                label: `View ${data.role}`,
+                icon: "pi pi-user",
+                command: () => {
+                    this.getBlockLot(this.form.selected_block_lot);
+                    this.viewUser();
+                },
+            });
+            this.menus.push({
+                label: `Update ${data.role}`,
+                icon: "pi pi-pencil",
+                command: () => {
+                    this.getBlockLot(this.form.selected_block_lot);
+                    this.updateUser();
+                },
+            });
+            this.menus.push({
+                label: "Emergency Contacts",
+                icon: "pi pi-id-card",
+                command: () => {
+                    this.getBlockLot(this.form.selected_block_lot);
+                    this.viewEmergencyContacts();
+                },
+            });
+            if (data.verified == false) {
+                this.menus.push({
+                    label: `Verify ${data.role}`,
+                    icon: "pi pi-check",
+                    command: () => {
+                        this.getBlockLot(this.form.selected_block_lot);
+                        this.viewVerifytDialog = true;
                     },
-                    {
-                        label: `Update ${data.role}`,
-                        icon: "pi pi-pencil",
-                        command: () => {
-                            this.getBlockLot(this.form.selected_block_lot);
-                            this.updateUser();
-                        },
-                    },
-                    {
-                        label: "Emergency Contacts",
-                        icon: "pi pi-id-card",
-                        command: () => {
-                            this.getBlockLot(this.form.selected_block_lot);
-                            this.viewEmergencyContacts();
-                        },
-                    },
-                    {
-                        label: `Deactivate ${data.role}`,
-                        icon: "pi pi-lock",
-                        command: () => {
-                            this.getBlockLot(this.form.selected_block_lot);
-                            this.changeStatus();
-                        },
-                    },
-                ];
-            } else if (data.status == "active" && data.verified == 0) {
-                this.menus = [
-                    {
-                        label: `View ${data.role}`,
-                        icon: "pi pi-user",
-                        command: () => {
-                            this.getBlockLot(this.form.selected_block_lot);
-                            this.viewUser();
-                        },
-                    },
-                    {
-                        label: `Verify ${data.role}`,
-                        icon: "pi pi-check",
-                        command: () => {
-                            this.getBlockLot(this.form.selected_block_lot);
-                            this.viewVerifytDialog = true;
-                        },
-                    },
-                    {
-                        label: `Update ${data.role}`,
-                        icon: "pi pi-pencil",
-                        command: () => {
-                            this.getBlockLot(this.form.selected_block_lot);
-                            this.updateUser();
-                        },
-                    },
-                    {
-                        label: "Emergency Contacts",
-                        icon: "pi pi-id-card",
-                        command: () => {
-                            this.getBlockLot(this.form.selected_block_lot);
-                            this.viewEmergencyContacts();
-                        },
-                    },
-                    {
-                        label: `Deactivate ${data.role}`,
-                        icon: "pi pi-unlock",
-                        command: () => {
-                            this.getBlockLot(this.form.selected_block_lot);
-                            this.changeStatus();
-                        },
-                    },
-                ];
-            } else if (data.status == "inactive" && data.verified == 1) {
-                this.menus = [
-                    {
-                        label: `View ${data.role}`,
-                        icon: "pi pi-user",
-                        command: () => {
-                            this.getBlockLot(this.form.selected_block_lot);
-                            this.viewUser();
-                        },
-                    },
-                    {
-                        label: `Update ${data.role}`,
-                        icon: "pi pi-pencil",
-                        command: () => {
-                            this.getBlockLot(this.form.selected_block_lot);
-                            this.updateUser();
-                        },
-                    },
-                    {
-                        label: "Emergency Contacts",
-                        icon: "pi pi-id-card",
-                        command: () => {
-                            this.getBlockLot(this.form.selected_block_lot);
-                            this.viewEmergencyContacts();
-                        },
-                    },
-                    {
-                        label: `Activate ${data.role}`,
-                        icon: "pi pi-unlock",
-                        command: () => {
-                            this.getBlockLot(this.form.selected_block_lot);
-                            this.changeStatus();
-                        },
-                    },
-                ];
-            } else {
-                this.menus = [
-                    {
-                        label: `View ${data.role}`,
-                        icon: "pi pi-user",
-                        command: () => {
-                            this.getBlockLot(this.form.selected_block_lot);
-                            this.viewUser();
-                        },
-                    },
-                    {
-                        label: `Verify ${data.role}`,
-                        icon: "pi pi-check",
-                        command: () => {
-                            this.getBlockLot(this.form.selected_block_lot);
-                            this.viewVerifytDialog = true;
-                        },
-                    },
-                    {
-                        label: `Update ${data.role}`,
-                        icon: "pi pi-pencil",
-                        command: () => {
-                            this.getBlockLot(this.form.selected_block_lot);
-                            this.updateUser();
-                        },
-                    },
-                    {
-                        label: "Emergency Contacts",
-                        icon: "pi pi-id-card",
-                        command: () => {
-                            this.getBlockLot(this.form.selected_block_lot);
-                            this.viewEmergencyContacts();
-                        },
-                    },
-
-                    {
-                        label: `Activate ${data.role}`,
-                        icon: "pi pi-unlock",
-                        command: () => {
-                            this.changeStatus();
-                        },
-                    },
-                ];
+                });
             }
+            if (data.status == "active") {
+                this.menus.push({
+                    label: `Deactivate ${data.role}`,
+                    icon: "pi pi-lock",
+                    command: () => {
+                        this.getBlockLot(this.form.selected_block_lot);
+                        this.changeStatus();
+                    },
+                });
+            } else {
+                this.menus.push({
+                    label: `Activate ${data.role}`,
+                    icon: "pi pi-unlock",
+                    command: () => {
+                        this.getBlockLot(this.form.selected_block_lot);
+                        this.changeStatus();
+                    },
+                });
+            }
+            if (data.flagged == false) {
+                this.menus.push({
+                    label: `Flag ${data.role}`,
+                    icon: "pi pi-flag-fill",
+                    command: () => {
+                        this.getBlockLot(this.form.selected_block_lot);
+                        this.changeFlagStatus();
+                    },
+                });
+            } else {
+                this.menus.push({
+                    label: `UnFlag ${data.role}`,
+                    icon: "pi pi-flag",
+                    command: () => {
+                        this.getBlockLot(this.form.selected_block_lot);
+                        this.changeFlagStatus();
+                    },
+                });
+            }
+
+            // if (data.status == "active" && data.verified == 1) {
+            //     this.menus = [
+            //         {
+            //             label: `View ${data.role}`,
+            //             icon: "pi pi-user",
+            //             command: () => {},
+            //         },
+            //         {
+            //             label: `Update ${data.role}`,
+            //             icon: "pi pi-pencil",
+            //             command: () => {},
+            //         },
+            //         {
+            //             label: "Emergency Contacts",
+            //             icon: "pi pi-id-card",
+            //             command: () => {},
+            //         },
+            //         {
+            //             label: `Deactivate ${data.role}`,
+            //             icon: "pi pi-lock",
+            //             command: () => {},
+            //         },
+            //     ];
+            // } else if (data.status == "active" && data.verified == 0) {
+            //     this.menus = [
+            //         {
+            //             label: `View ${data.role}`,
+            //             icon: "pi pi-user",
+            //             command: () => {
+            //                 this.getBlockLot(this.form.selected_block_lot);
+            //                 this.viewUser();
+            //             },
+            //         },
+            //         {
+            //             label: `Verify ${data.role}`,
+            //             icon: "pi pi-check",
+            //             command: () => {},
+            //         },
+            //         {
+            //             label: `Update ${data.role}`,
+            //             icon: "pi pi-pencil",
+            //             command: () => {
+            //                 this.getBlockLot(this.form.selected_block_lot);
+            //                 this.updateUser();
+            //             },
+            //         },
+            //         {
+            //             label: "Emergency Contacts",
+            //             icon: "pi pi-id-card",
+            //             command: () => {
+            //                 this.getBlockLot(this.form.selected_block_lot);
+            //                 this.viewEmergencyContacts();
+            //             },
+            //         },
+            //         {
+            //             label: `Deactivate ${data.role}`,
+            //             icon: "pi pi-unlock",
+            //             command: () => {
+            //                 this.getBlockLot(this.form.selected_block_lot);
+            //                 this.changeStatus();
+            //             },
+            //         },
+            //     ];
+            // } else if (data.status == "inactive" && data.verified == 1) {
+            //     this.menus = [
+            //         {
+            //             label: `View ${data.role}`,
+            //             icon: "pi pi-user",
+            //             command: () => {
+            //                 this.getBlockLot(this.form.selected_block_lot);
+            //                 this.viewUser();
+            //             },
+            //         },
+            //         {
+            //             label: `Update ${data.role}`,
+            //             icon: "pi pi-pencil",
+            //             command: () => {
+            //                 this.getBlockLot(this.form.selected_block_lot);
+            //                 this.updateUser();
+            //             },
+            //         },
+            //         {
+            //             label: "Emergency Contacts",
+            //             icon: "pi pi-id-card",
+            //             command: () => {
+            //                 this.getBlockLot(this.form.selected_block_lot);
+            //                 this.viewEmergencyContacts();
+            //             },
+            //         },
+            //         {
+            //             label: `Activate ${data.role}`,
+            //             icon: "pi pi-unlock",
+            //             command: () => {},
+            //         },
+            //     ];
+            // } else {
+            //     this.menus = [
+            //         {
+            //             label: `View ${data.role}`,
+            //             icon: "pi pi-user",
+            //             command: () => {
+            //                 this.getBlockLot(this.form.selected_block_lot);
+            //                 this.viewUser();
+            //             },
+            //         },
+            //         {
+            //             label: `Verify ${data.role}`,
+            //             icon: "pi pi-check",
+            //             command: () => {
+            //                 this.getBlockLot(this.form.selected_block_lot);
+            //                 this.viewVerifytDialog = true;
+            //             },
+            //         },
+            //         {
+            //             label: `Update ${data.role}`,
+            //             icon: "pi pi-pencil",
+            //             command: () => {
+            //                 this.getBlockLot(this.form.selected_block_lot);
+            //                 this.updateUser();
+            //             },
+            //         },
+            //         {
+            //             label: "Emergency Contacts",
+            //             icon: "pi pi-id-card",
+            //             command: () => {
+            //                 this.getBlockLot(this.form.selected_block_lot);
+            //                 this.viewEmergencyContacts();
+            //             },
+            //         },
+
+            //         {
+            //             label: `Activate ${data.role}`,
+            //             icon: "pi pi-unlock",
+            //             command: () => {
+            //                 this.changeStatus();
+            //             },
+            //         },
+            //     ];
+            // }
         },
         populateFields(data) {
             this.resetFields();
@@ -3309,6 +3523,7 @@ export default {
             this.form.has_voted = data.has_voted;
             this.form.status = data.status;
             this.form.selected_tag = data.tag_as;
+            this.form.flagged = data.flagged;
         },
         clearFilter() {
             this.filters["lot.block.number"].value = null;
@@ -3317,6 +3532,7 @@ export default {
             this.filters["role"].value = null;
             this.filters["status"].value = null;
             this.filters["verified"].value = null;
+            this.filters["flagged"].value = null;
         },
         showSuccess() {
             this.$toast.add({
@@ -3351,6 +3567,10 @@ export default {
                     matchMode: FilterMatchMode.EQUALS,
                 },
                 verified: {
+                    value: null,
+                    matchMode: FilterMatchMode.EQUALS,
+                },
+                flagged: {
                     value: null,
                     matchMode: FilterMatchMode.EQUALS,
                 },

@@ -16,7 +16,6 @@
                                 :value="visitor_logs"
                                 :filters="filters_masterlist"
                                 breakpoint="1230px"
-                                :paginator="true"
                                 :rows="15"
                             >
                                 <template #empty> No Visitors found </template>
@@ -169,7 +168,6 @@
                                 :value="vehicle_logs"
                                 :filters="filters_masterlist"
                                 breakpoint="1230px"
-                                :paginator="true"
                                 :rows="15"
                             >
                                 <template #empty> No Vehicles found </template>
@@ -369,7 +367,6 @@
                                 :value="visitors"
                                 :filters="filters"
                                 breakpoint="1230px"
-                                :paginator="true"
                                 :rows="15"
                             >
                                 <template #empty> No Visitors found </template>
@@ -521,7 +518,6 @@
                                 :value="vehicles"
                                 :filters="filters"
                                 breakpoint="1230px"
-                                :paginator="true"
                                 :rows="15"
                             >
                                 <template #empty> No Vehicles found </template>

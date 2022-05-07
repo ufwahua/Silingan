@@ -4,12 +4,7 @@
         <h1>Invoices</h1>
 
         <div class="card">
-            <DataTable
-                :value="invoices"
-                :paginator="true"
-                :rows="20"
-                :filters="filters"
-            >
+            <DataTable :value="invoices" :rows="20" :filters="filters">
                 <template #header>
                     <div class="flex flex-wrap justify-content-between">
                         <span class="p-input-icon-left inline-block">
@@ -77,6 +72,7 @@
                             @click="showInvoice(data)"
                             label="Primary"
                             class="p-button-text"
+                            v-tooltip="'View PDF'"
                         >
                             {{ (data["invoice_id"] = "Invoice#" + data.id) }}
                         </Button>
@@ -331,98 +327,89 @@ export default {
         async showInvoice(data) {
             this.loading = true;
             //specific block and lot
-            await axios({
-                method: "get",
-                url: "/api/invoice/" + data.id,
-            })
-                .then((res) => {
-                    this.specific_invoices = res.data;
-                    console.log("all invoices", res.data);
-                    var props = {
-                        outputType: "save",
-                        returnJsPDFDocObject: true,
-                        fileName:
-                            "Invoice#" +
-                            data.id +
-                            "_" +
-                            this.dateFormat(data.due_date),
-                        orientationLandscape: false,
-                        compress: true,
-                        logo: {
-                            src: "http://127.0.0.1:8000/storage/images/silingan-icon.png",
-                            type: "PNG", //optional, when src= data:uri (nodejs case)
-                            width: 53.33, //aspect ratio = width/height
-                            height: 26.66,
-                            margin: {
-                                top: 0, //negative or positive num, from the current position
-                                left: 0, //negative or positive num, from the current position
-                            },
-                        },
-                        business: {
-                            name: "Silingan",
-                            address: "Camella Homes Mactan, Lapu-Lapu City",
-                            phone: "(+63) 908 302 4328",
-                            email: "silinganapp.ph@gmail.com",
-                            website: "http://127.0.0.1:8000/",
-                        },
-                        contact: {
-                            label: "Invoice issued for:",
-                            name:
-                                "Block " +
-                                data.lot.block.number +
-                                " Lot " +
-                                data.lot.number,
-                            address: "Camella Homes Mactan, Lapu Lapu City",
-                            phone: "+" + data.user.contact_num,
-                            email: data.user.email,
-                        },
-                        invoice: {
-                            label: "Invoice #: ",
-                            num: data.id,
-                            invDate: "Due Date: " + data.due_date,
-                            invGenDate:
-                                "Invoice Date: " +
-                                this.dateFormat(data.created_at),
+            // await axios({
+            //     method: "get",
+            //     url: "/api/invoice/" + data.id,
+            // })
+            //     .then((res) => {
+            //         this.specific_invoices = res.data;
+            //         console.log("specific invoices", res.data);
+            var props = {
+                outputType: "save",
+                returnJsPDFDocObject: true,
+                fileName:
+                    "Invoice#" + data.id + "_" + this.dateFormat(data.due_date),
+                orientationLandscape: false,
+                compress: true,
+                logo: {
+                    src: "http://127.0.0.1:8000/storage/images/silingan-icon.png",
+                    type: "PNG", //optional, when src= data:uri (nodejs case)
+                    width: 53.33, //aspect ratio = width/height
+                    height: 26.66,
+                    margin: {
+                        top: 0, //negative or positive num, from the current position
+                        left: 0, //negative or positive num, from the current position
+                    },
+                },
+                business: {
+                    name: "Silingan",
+                    address: "Camella Homes Mactan, Lapu-Lapu City",
+                    phone: "(+63) 908 302 4328",
+                    email: "silinganapp.ph@gmail.com",
+                    website: "http://127.0.0.1:8000/",
+                },
+                contact: {
+                    label: "Invoice issued for:",
+                    name:
+                        "Block " +
+                        data.lot.block.number +
+                        " Lot " +
+                        data.lot.number,
+                    address: "Camella Homes Mactan, Lapu Lapu City",
+                },
+                invoice: {
+                    label: "Invoice #: ",
+                    num: data.id,
+                    invDate: "Due Date: " + data.due_date,
+                    invGenDate:
+                        "Invoice Date: " + this.dateFormat(data.created_at),
 
-                            invTotalLabel: "Out. Balance:",
-                            invTotal: this.getOBalance(
-                                data.over_due,
-                                data.collection_type.amount
-                            ),
-                            row1: {
-                                col1: "Current:",
-                                col2: data.collection_type.amount,
-                                style: {
-                                    fontSize: 10, //optional, default 12
-                                },
-                            },
-                            row2: {
-                                col1: "Overdue:",
-                                col2: this.getOverDue(data.over_due),
-                                style: {
-                                    fontSize: 10, //optional, default 12
-                                },
-                            },
-
-                            invDescLabel: "Invoice Note",
-                            invDesc:
-                                "Please settle your accounts in the admin office thank you!",
+                    invTotalLabel: "Out. Balance:",
+                    invTotal: this.getOBalance(
+                        data.over_due,
+                        data.collection_type.amount
+                    ),
+                    row1: {
+                        col1: "Current:",
+                        col2: data.collection_type.amount,
+                        style: {
+                            fontSize: 10, //optional, default 12
                         },
-                        footer: {
-                            text: "The invoice is created on a computer and is valid without the signature and stamp.",
+                    },
+                    row2: {
+                        col1: "Overdue:",
+                        col2: this.getOverDue(data.over_due),
+                        style: {
+                            fontSize: 10, //optional, default 12
                         },
-                        pageEnable: true,
-                        pageLabel: "Page ",
-                    };
-                    jsPDFInvoiceTemplate.default(props);
-                })
-                .catch((err) => {
-                    console.log(err.response);
-                });
+                    },
 
-            var first_invoice = null;
-
+                    invDescLabel: "Invoice Note",
+                    invDesc:
+                        "Please settle your accounts in the admin office thank you!",
+                },
+                footer: {
+                    text: "The invoice is created on a computer and is valid without the signature and stamp.",
+                },
+                pageEnable: true,
+                pageLabel: "Page ",
+            };
+            jsPDFInvoiceTemplate.default(props);
             this.loading = false;
+            // })
+            // .catch((err) => {
+            //     console.log(err.response);
+            // });
         },
 
         getOverDue(over_due) {

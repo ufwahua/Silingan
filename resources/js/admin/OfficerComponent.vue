@@ -42,6 +42,42 @@
                     </div>
                 </div>
             </div>
+            <div class="col-12 lg:col-6 xl:col-3">
+                <div class="card mb-0 bg-green-100">
+                    <div class="flex justify-content-between mb-3">
+                        <div>
+                            <span
+                                class="block font-medium text-4xl font-bold mb-3"
+                                >{{ not_flagged }}</span
+                            >
+                            <div class="text-900">Not Flagged</div>
+                        </div>
+
+                        <div
+                            class="flex align-items-center justify-content-center"
+                            style="width: 2.5rem; height: 2.5rem"
+                        ></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 lg:col-6 xl:col-3">
+                <div class="card mb-0 bg-pink-100">
+                    <div class="flex justify-content-between mb-3">
+                        <div>
+                            <span
+                                class="block font-medium text-4xl font-bold mb-3"
+                                >{{ flagged }}</span
+                            >
+                            <div class="text-900">Flagged</div>
+                        </div>
+
+                        <div
+                            class="flex align-items-center justify-content-center"
+                            style="width: 2.5rem; height: 2.5rem"
+                        ></div>
+                    </div>
+                </div>
+            </div>
 
             <div class="col-12 lg:col-6 xl:col-3">
                 <div class="card mb-0 bg-blue-100">
@@ -68,7 +104,6 @@
                         :value="users"
                         :filters="filters"
                         breakpoint="1350px"
-                        :paginator="true"
                         :rows="10"
                     >
                         <div>
@@ -135,6 +170,16 @@
                                         optionLabel="status"
                                         optionValue="value"
                                         placeholder="Filter by verification"
+                                    ></Dropdown>
+                                </div>
+                                <div class="col-12 mb-2 lg:col-3 lg:mb-0">
+                                    <Dropdown
+                                        v-model="filters['flagged'].value"
+                                        :showClear="true"
+                                        :options="flag_dropdown"
+                                        optionLabel="status"
+                                        optionValue="value"
+                                        placeholder="Filter flag"
                                     ></Dropdown>
                                 </div>
 
@@ -276,7 +321,22 @@
                                 }}</Badge>
                             </template>
                         </Column>
-
+                        <Column header="Flag" field="flagged">
+                            <template #body="{ data }">
+                                <Button
+                                    v-if="data.flagged == true"
+                                    icon="pi pi-flag-fill"
+                                    class="p-button-rounded p-button-danger"
+                                    disabled
+                                />
+                                <Button
+                                    v-else
+                                    icon="pi pi-flag-fill"
+                                    class="p-button-rounded p-button-success"
+                                    disabled
+                                />
+                            </template>
+                        </Column>
                         <Column header="Actions" field="actions">
                             <template #body="{ data }">
                                 <Button
@@ -1143,11 +1203,7 @@
                         header="Emergency Contacts"
                         :modal="true"
                     >
-                        <DataTable
-                            :value="emergency_contacts"
-                            :paginator="true"
-                            :rows="10"
-                        >
+                        <DataTable :value="emergency_contacts" :rows="10">
                             <template #empty>
                                 No emergency contacts found
                             </template>
@@ -1289,6 +1345,36 @@ export default {
                 });
                 return inactive.length;
             }),
+            flagged: computed(() => {
+                let temp = [];
+                let flagged = [];
+                store.state.users.forEach((elem) => {
+                    if (elem.role.toUpperCase() == "OFFICER") {
+                        temp.push(elem);
+                    }
+                });
+                temp.forEach((elem) => {
+                    if (elem.flagged == true) {
+                        flagged.push(elem);
+                    }
+                });
+                return flagged.length;
+            }),
+            not_flagged: computed(() => {
+                let temp = [];
+                let not_flagged = [];
+                store.state.users.forEach((elem) => {
+                    if (elem.role.toUpperCase() == "OFFICER") {
+                        temp.push(elem);
+                    }
+                });
+                temp.forEach((elem) => {
+                    if (elem.flagged == false) {
+                        not_flagged.push(elem);
+                    }
+                });
+                return not_flagged.length;
+            }),
 
             total: computed(() => {
                 let temp = [];
@@ -1333,6 +1419,7 @@ export default {
                 status: "",
                 selected_position: "",
                 selected_tag: "",
+                flagged: "",
             },
 
             first_name: null,
@@ -1377,12 +1464,60 @@ export default {
                 { status: "verified", value: true },
                 { status: "not verified", value: false },
             ],
+            flag_dropdown: [
+                { status: "flagged", value: true },
+                { status: "not flagged", value: false },
+            ],
 
             emergencyContactDialog: false,
             emergency_contacts: null,
         };
     },
     methods: {
+        async changeFlagStatus() {
+            this.loading = true;
+
+            await axios({
+                method: "put",
+                url: "/api/user/" + this.id,
+                data: {
+                    first_name: this.form.first_name,
+                    last_name: this.form.last_name,
+                    gender: this.form.gender,
+                    block_lot_id: this.form.selected_block_lot,
+                    email: this.form.email,
+                    verified: this.form.verified,
+                    has_voted: this.form.has_voted,
+                    age: this.form.age,
+                    contact_num: this.form.contact_num,
+                    role: this.form.selected_role,
+                    status: this.form.status,
+                    position_id: this.form.selected_position,
+                    tag_as: this.form.selected_tag,
+                    flagged: this.form.flagged ? false : true,
+                },
+            })
+                .then(() => {
+                    this.$toast.add({
+                        severity: "success",
+                        summary: "Successful",
+                        detail:
+                            this.form.flagged == false
+                                ? "Officer Flagged"
+                                : "Officer Unflagged",
+                        life: 3000,
+                    });
+                    this.$store.dispatch("getAllUsers");
+                    this.resetFields();
+                    this.loading = false;
+                })
+                .catch((err) => {
+                    console.log(err.response);
+                    this.resetErrors();
+                    this.validate(err);
+                    this.loading = false;
+                });
+        },
         async confirmOfficer() {
             await axios({
                 method: "put",
@@ -1474,129 +1609,219 @@ export default {
         toggle(data) {
             this.$refs.menu.toggle(event);
             this.populateFields(data);
+            this.menus = [];
+
             if (this.$store.state.userLogged.id == data.id) {
-                this.menus = [
-                    {
-                        label: "View",
-                        icon: "pi pi-user",
-                        command: () => {
-                            this.getBlockLot(this.form.selected_block_lot);
-                            this.viewOfficer();
-                        },
+                this.menus.push({
+                    label: "View",
+                    icon: "pi pi-user",
+                    command: () => {
+                        this.getBlockLot(this.form.selected_block_lot);
+                        this.viewOfficer();
                     },
-                    {
-                        label: "Update",
-                        icon: "pi pi-pencil",
-                        command: () => {
-                            this.getBlockLot(this.form.selected_block_lot);
-                            this.updateUser();
-                        },
+                });
+                this.menus.push({
+                    label: "Update",
+                    icon: "pi pi-pencil",
+                    command: () => {
+                        this.getBlockLot(this.form.selected_block_lot);
+                        this.updateUser();
                     },
-                    {
-                        label: "Emergency Contacts",
-                        icon: "pi pi-id-card",
-                        command: () => {
-                            this.getBlockLot(this.form.selected_block_lot);
-                            this.viewEmergencyContacts();
-                        },
+                });
+                this.menus.push({
+                    label: "Emergency Contacts",
+                    icon: "pi pi-id-card",
+                    command: () => {
+                        this.getBlockLot(this.form.selected_block_lot);
+                        this.viewEmergencyContacts();
                     },
-                ];
-            } else if (
-                this.$store.state.userLogged.role == "admin" &&
-                data.status == "active"
-            ) {
-                this.menus = [
-                    {
-                        label: "View Officer",
-                        icon: "pi pi-user",
-                        command: () => {
-                            this.getBlockLot(this.form.selected_block_lot);
-                            this.viewOfficer();
-                        },
-                    },
-                    {
-                        label: "Update Officer",
-                        icon: "pi pi-pencil",
-                        command: () => {
-                            this.getBlockLot(this.form.selected_block_lot);
-                            this.updateUser();
-                        },
-                    },
-                    {
-                        label: "Emergency Contacts",
-                        icon: "pi pi-id-card",
-                        command: () => {
-                            this.getBlockLot(this.form.selected_block_lot);
-                            this.viewEmergencyContacts();
-                        },
-                    },
-                    {
-                        label: "Deactivate Officer",
-                        icon: "pi pi-lock",
-                        command: () => {
-                            this.getBlockLot(this.form.selected_block_lot);
-                            this.changeStatus();
-                        },
-                    },
-                ];
-            } else if (
-                this.$store.state.userLogged.role == "admin" &&
-                data.status == "inactive"
-            ) {
-                this.menus = [
-                    {
-                        label: "View Officer",
-                        icon: "pi pi-user",
-                        command: () => {
-                            this.getBlockLot(this.form.selected_block_lot);
-                            this.viewOfficer();
-                        },
-                    },
-                    {
-                        label: "Update Officer",
-                        icon: "pi pi-pencil",
-                        command: () => {
-                            this.getBlockLot(this.form.selected_block_lot);
-                            this.updateUser();
-                        },
-                    },
-                    {
-                        label: "Emergency Contacts",
-                        icon: "pi pi-id-card",
-                        command: () => {
-                            this.getBlockLot(this.form.selected_block_lot);
-                            this.viewEmergencyContacts();
-                        },
-                    },
-                    {
-                        label: "Activate Officer",
-                        icon: "pi pi-lock",
-                        command: () => {
-                            this.getBlockLot(this.form.selected_block_lot);
-                            this.changeStatus();
-                        },
-                    },
-                ];
+                });
             } else {
-                this.menus = [
-                    {
-                        label: "View Officer",
-                        icon: "pi pi-user",
-                        command: () => {
-                            this.getBlockLot(this.form.selected_block_lot);
-                            this.viewOfficer();
-                        },
+                this.menus.push({
+                    label: "View Officer",
+                    icon: "pi pi-user",
+                    command: () => {
+                        this.getBlockLot(this.form.selected_block_lot);
+                        this.viewOfficer();
                     },
-                    {
-                        label: "Emergency Contacts",
-                        icon: "pi pi-id-card",
-                        command: () => {
-                            this.getBlockLot(this.form.selected_block_lot);
-                            this.viewEmergencyContacts();
-                        },
+                });
+                this.menus.push({
+                    label: "Update Officer",
+                    icon: "pi pi-pencil",
+                    command: () => {
+                        this.getBlockLot(this.form.selected_block_lot);
+                        this.updateUser();
                     },
-                ];
+                });
+                this.menus.push({
+                    label: "Emergency Officer",
+                    icon: "pi pi-id-card",
+                    command: () => {
+                        this.getBlockLot(this.form.selected_block_lot);
+                        this.viewEmergencyContacts();
+                    },
+                });
             }
+
+            if (data.status == "active") {
+                this.menus.push({
+                    label: "Deactivate Officer",
+                    icon: "pi pi-lock",
+                    command: () => {
+                        this.getBlockLot(this.form.selected_block_lot);
+                        this.changeStatus();
+                    },
+                });
+            } else {
+                this.menus.push({
+                    label: "Activate Officer",
+                    icon: "pi pi-unlock",
+                    command: () => {
+                        this.getBlockLot(this.form.selected_block_lot);
+                        this.changeStatus();
+                    },
+                });
+            }
+            if (data.flagged == false) {
+                this.menus.push({
+                    label: "Flag Officer",
+                    icon: "pi pi-flag-fill",
+                    command: () => {
+                        this.changeFlagStatus();
+                    },
+                });
+            } else {
+                this.menus.push({
+                    label: "UnFlag Officer",
+                    icon: "pi pi-flag",
+                    command: () => {
+                        this.changeFlagStatus();
+                    },
+                });
+            }
+            // if (this.$store.state.userLogged.id == data.id) {
+            //     this.menus = [
+            //         {
+            //             label: "View",
+            //             icon: "pi pi-user",
+            //             command: () => {
+            //                 this.getBlockLot(this.form.selected_block_lot);
+            //                 this.viewOfficer();
+            //             },
+            //         },
+            //         {
+            //             label: "Update",
+            //             icon: "pi pi-pencil",
+            //             command: () => {
+            //                 this.getBlockLot(this.form.selected_block_lot);
+            //                 this.updateUser();
+            //             },
+            //         },
+            //         {
+            //             label: "Emergency Contacts",
+            //             icon: "pi pi-id-card",
+            //             command: () => {
+            //                 this.getBlockLot(this.form.selected_block_lot);
+            //                 this.viewEmergencyContacts();
+            //             },
+            //         },
+            //     ];
+            // } else if (
+            //     this.$store.state.userLogged.role == "admin" &&
+            //     data.status == "active"
+            // ) {
+            //     this.menus = [
+            //         {
+            //             label: "View Officer",
+            //             icon: "pi pi-user",
+            //             command: () => {
+            //                 this.getBlockLot(this.form.selected_block_lot);
+            //                 this.viewOfficer();
+            //             },
+            //         },
+            //         {
+            //             label: "Update Officer",
+            //             icon: "pi pi-pencil",
+            //             command: () => {
+            //                 this.getBlockLot(this.form.selected_block_lot);
+            //                 this.updateUser();
+            //             },
+            //         },
+            //         {
+            //             label: "Emergency Contacts",
+            //             icon: "pi pi-id-card",
+            //             command: () => {
+            //                 this.getBlockLot(this.form.selected_block_lot);
+            //                 this.viewEmergencyContacts();
+            //             },
+            //         },
+            //         {
+            //             label: "Deactivate Officer",
+            //             icon: "pi pi-lock",
+            //             command: () => {
+            //                 this.getBlockLot(this.form.selected_block_lot);
+            //                 this.changeStatus();
+            //             },
+            //         },
+            //     ];
+            // } else if (
+            //     this.$store.state.userLogged.role == "admin" &&
+            //     data.status == "inactive"
+            // ) {
+            //     this.menus = [
+            //         {
+            //             label: "View Officer",
+            //             icon: "pi pi-user",
+            //             command: () => {
+            //                 this.getBlockLot(this.form.selected_block_lot);
+            //                 this.viewOfficer();
+            //             },
+            //         },
+            //         {
+            //             label: "Update Officer",
+            //             icon: "pi pi-pencil",
+            //             command: () => {
+            //                 this.getBlockLot(this.form.selected_block_lot);
+            //                 this.updateUser();
+            //             },
+            //         },
+            //         {
+            //             label: "Emergency Contacts",
+            //             icon: "pi pi-id-card",
+            //             command: () => {
+            //                 this.getBlockLot(this.form.selected_block_lot);
+            //                 this.viewEmergencyContacts();
+            //             },
+            //         },
+            //         {
+            //             label: "Activate Officer",
+            //             icon: "pi pi-lock",
+            //             command: () => {
+            //                 this.getBlockLot(this.form.selected_block_lot);
+            //                 this.changeStatus();
+            //             },
+            //         },
+            //     ];
+            // } else {
+            //     this.menus = [
+            //         {
+            //             label: "View Officer",
+            //             icon: "pi pi-user",
+            //             command: () => {
+            //                 this.getBlockLot(this.form.selected_block_lot);
+            //                 this.viewOfficer();
+            //             },
+            //         },
+            //         {
+            //             label: "Emergency Contacts",
+            //             icon: "pi pi-id-card",
+            //             command: () => {
+            //                 this.getBlockLot(this.form.selected_block_lot);
+            //                 this.viewEmergencyContacts();
+            //             },
+            //         },
+            //     ];
+            // }
         },
         populateFields(data) {
             this.resetFields();
@@ -1621,6 +1846,7 @@ export default {
             this.form.has_voted = data.has_voted;
             this.form.status = data.status;
             this.form.selected_tag = data.tag_as;
+            this.form.flagged = data.flagged;
         },
         clearFilter() {
             this.filters["lot.block.number"].value = null;
@@ -1628,6 +1854,7 @@ export default {
             this.filters["tag_as"].value = null;
             this.filters["status"].value = null;
             this.filters["verified"].value = null;
+            this.filters["flagged"].value = null;
         },
         showSuccess() {
             this.$toast.add({
@@ -1662,6 +1889,10 @@ export default {
                     matchMode: FilterMatchMode.EQUALS,
                 },
                 "position.name": {
+                    value: null,
+                    matchMode: FilterMatchMode.EQUALS,
+                },
+                flagged: {
                     value: null,
                     matchMode: FilterMatchMode.EQUALS,
                 },

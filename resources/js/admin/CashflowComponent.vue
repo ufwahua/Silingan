@@ -57,7 +57,6 @@
             </div>
             <DataTable
                 :value="cashflow"
-                :paginator="true"
                 :rows="15"
                 :filters="filters"
                 filterDisplay="menu"
@@ -143,7 +142,6 @@
                         <div class="col-12">
                             <DataTable
                                 :value="revenue"
-                                :paginator="true"
                                 :rows="15"
                                 :filters="revenue_filters"
                             >
@@ -229,7 +227,6 @@
                         <div class="col-12">
                             <DataTable
                                 :value="expense"
-                                :paginator="true"
                                 :rows="15"
                                 :filters="expense_filters"
                             >
@@ -385,7 +382,6 @@
                             <DataTable
                                 class="p-datatable-sm"
                                 :value="statement"
-                                :paginator="true"
                                 :rows="15"
                                 id="statement"
                                 rowGroupMode="rowspan"
@@ -563,7 +559,7 @@
                         :options="dropdown_expense_type"
                         optionLabel="name"
                         optionValue="id"
-                        placeholder="Select Fund Source"
+                        placeholder="Select expense type"
                         :class="{
                             'p-invalid': expense_valid.state.type,
                         }"
@@ -912,7 +908,11 @@ export default {
                 "getSpecificInvoices",
                 this.revenue_form.lot
             );
-            this.balance = this.specific_invoices.running_balance;
+            if (this.specific_invoices.running_balance > 0) {
+                this.balance = this.specific_invoices.running_balance;
+            } else {
+                this.balance = 0;
+            }
         },
         // testTable() {
         //   var doc = new jsPDF();

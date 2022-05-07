@@ -74,8 +74,9 @@ Route::post('/notification/comment',[NotificationController::class, 'notificatio
 Route::get('/post/search/', [PostController::class, 'getMarketPlacePost']);
 Route::post('/invoice/bill-all/', [InvoiceController::class, 'billToAll']);
 Route::post('/invoice/bill-specific/', [InvoiceController::class, 'billSpecificBlockLot']);
-Route::get('/invoice/block-lot/{invoice}', [InvoiceController::class, 'getInvoicesByBlockLotID']);
+Route::get('/invoice/block-lot/{invoice}', [InvoiceController::class, 'getInvoicesBlockLot']);
 Route::post('/election/update-voters/', [ElectionController::class, 'updateVoters']);
+Route::get('/collection/block-lot/{collection}', [CollectionController::class, 'getCollectionBlockLot']);
 
 
 Route::apiResources([
