@@ -20,7 +20,7 @@ class FundSeeder extends Seeder
         ]);
         Fund::create([
             'amount' => 0,
-            'fund_type' => 'Savings'
+            'fund_type' => 'Net Income'
         ]);
         Fund::create([
             'amount' => 0,

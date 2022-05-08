@@ -1,9 +1,9 @@
 <template>
     <div>
         <Toast />
-        <h1>Total Revenues</h1>
+        <h1>Summary</h1>
         <div class="grid">
-            <div v-for="fund in funds" class="col-12 lg:col-4">
+            <!-- <div v-for="fund in funds" class="col-12 lg:col-4">
                 <div class="card mb-0">
                     <div class="flex justify-content-between mb-3">
                         <div>
@@ -19,6 +19,86 @@
                         >
                             <i class="pi pi-dollar text-blue-500 text-xl"></i>
                         </div>
+                    </div>
+                </div>
+            </div> -->
+            <div class="card mb-0">
+                <div class="flex justify-content-between mb-3">
+                    <div>
+                        <span class="block font-medium text-4xl font-bold mb-3"
+                            >₱1700</span
+                        >
+                        <div class="text-900">Total Revenue</div>
+                    </div>
+                    <div
+                        class="flex align-items-center justify-content-center"
+                        style="width: 2.5rem; height: 2.5rem"
+                    >
+                        <i class="pi pi-dollar text-blue-500 text-xl"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="card mb-0">
+                <div class="flex justify-content-between mb-3">
+                    <div>
+                        <span class="block font-medium text-4xl font-bold mb-3"
+                            >₱850</span
+                        >
+                        <div class="text-900">Expenses</div>
+                    </div>
+                    <div
+                        class="flex align-items-center justify-content-center"
+                        style="width: 2.5rem; height: 2.5rem"
+                    >
+                        <i class="pi pi-dollar text-blue-500 text-xl"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="card mb-0">
+                <div class="flex justify-content-between mb-3">
+                    <div>
+                        <span class="block font-medium text-4xl font-bold mb-3"
+                            >₱650</span
+                        >
+                        <div class="text-900">Net Income</div>
+                    </div>
+                    <div
+                        class="flex align-items-center justify-content-center"
+                        style="width: 2.5rem; height: 2.5rem"
+                    >
+                        <i class="pi pi-dollar text-blue-500 text-xl"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="card mb-0">
+                <div class="flex justify-content-between mb-3">
+                    <div>
+                        <span class="block font-medium text-4xl font-bold mb-3"
+                            >₱650</span
+                        >
+                        <div class="text-900">Association Funds</div>
+                    </div>
+                    <div
+                        class="flex align-items-center justify-content-center"
+                        style="width: 2.5rem; height: 2.5rem"
+                    >
+                        <i class="pi pi-dollar text-blue-500 text-xl"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="card mb-0">
+                <div class="flex justify-content-between mb-3">
+                    <div>
+                        <span class="block font-medium text-4xl font-bold mb-3"
+                            >₱142.5</span
+                        >
+                        <div class="text-900">Contingency Fund</div>
+                    </div>
+                    <div
+                        class="flex align-items-center justify-content-center"
+                        style="width: 2.5rem; height: 2.5rem"
+                    >
+                        <i class="pi pi-dollar text-blue-500 text-xl"></i>
                     </div>
                 </div>
             </div>
@@ -458,7 +538,7 @@
                     >
                 </div>
                 <div class="col-12 lg:col-6">
-                    <h5>Add Credit to</h5>
+                    <h5>Add to</h5>
                     <Dropdown
                         v-model="revenue_form.source"
                         :options="funds"
@@ -555,6 +635,22 @@
         >
             <div class="grid p-fluid">
                 <div class="col-12 lg:col-6">
+                    <h5>Expense Type</h5>
+                    <Dropdown
+                        v-model="expense_form.type"
+                        :options="dropdown_expense_type"
+                        optionLabel="name"
+                        optionValue="id"
+                        placeholder="Select expense type"
+                        :class="{
+                            'p-invalid': expense_valid.state.type,
+                        }"
+                    />
+                    <small v-if="expense_valid.state.type" class="p-error">{{
+                        expense_valid.msg.type
+                    }}</small>
+                </div>
+                <div class="col-12 lg:col-6">
                     <h5>Get Funds From</h5>
                     <Dropdown
                         v-model="expense_form.source"
@@ -570,22 +666,7 @@
                         expense_valid.msg.source
                     }}</small>
                 </div>
-                <div class="col-12 lg:col-6">
-                    <h5>Expense Type</h5>
-                    <Dropdown
-                        v-model="expense_form.type"
-                        :options="dropdown_expense_type"
-                        optionLabel="name"
-                        optionValue="id"
-                        placeholder="Select Fund Source"
-                        :class="{
-                            'p-invalid': expense_valid.state.type,
-                        }"
-                    />
-                    <small v-if="expense_valid.state.type" class="p-error">{{
-                        expense_valid.msg.type
-                    }}</small>
-                </div>
+
                 <div class="col-12 lg:col-6">
                     <h5>Amount</h5>
                     <InputNumber
@@ -729,6 +810,7 @@ export default {
             }),
             revenue: computed(() => store.state.collection.Collection),
             expense: computed(() => store.state.expense.Expense),
+
             specific_invoices: computed(() => store.state.specific_invoices),
             blocks: computed(() => {
                 let temp = [];
