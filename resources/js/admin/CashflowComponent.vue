@@ -2,12 +2,12 @@
     <div>
         <Toast />
         <div class="grid">
-          <div class="col-12">
-            <h1>Funds</h1>
-          </div>
+            <div class="col-12">
+                <h1>Funds</h1>
+            </div>
         </div>
         <div class="grid mb-2">
-          <div v-for="fund in funds" class="col-12 lg:col-3">
+            <div v-for="fund in funds" class="col-12 lg:col-3">
                 <div class="card mb-0">
                     <div class="flex justify-content-between mb-3">
                         <div>
@@ -16,6 +16,62 @@
                                 >₱{{ fund.amount.toLocaleString() }}</span
                             >
                             <div class="text-900">{{ fund.fund_type }}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="grid">
+            <div class="col-12">
+                <h1>Summary</h1>
+            </div>
+        </div>
+        <div class="grid mb-2 justify-content-center">
+            <div class="col-12 lg:col-6 xl:col-3">
+                <div class="card bg-green-100 mb-0">
+                    <div class="flex justify-content-between mb-3">
+                        <div>
+                            <span
+                                class="block font-medium text-4xl font-bold mb-3"
+                                >₱{{ overall.revenue.toLocaleString() }}</span
+                            >
+                            <div class="text-900">Total Revenue</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 lg:col-6 xl:col-3">
+                <div class="card bg-pink-100 mb-0">
+                    <div class="flex justify-content-between mb-3">
+                        <div>
+                            <span
+                                class="block font-medium text-4xl font-bold mb-3"
+                                >₱{{ overall.expense.toLocaleString() }}</span
+                            >
+                            <div class="text-900">Expenses</div>
+                        </div>
+                        <div
+                            class="flex align-items-center justify-content-center"
+                            style="width: 2.5rem; height: 2.5rem"
+                        >
+                            <i class="pi pi-dollar text-pink-700 text-xl"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 lg:col-6 xl:col-3">
+                <div class="card mb-0">
+                    <div class="flex justify-content-between mb-3">
+                        <div>
+                            <span
+                                class="block font-medium text-4xl font-bold mb-3"
+                                >₱{{
+                                    (
+                                        overall.revenue - overall.expense
+                                    ).toLocaleString()
+                                }}</span
+                            >
+                            <div class="text-900">Net Income</div>
                         </div>
                         <div
                             class="flex align-items-center justify-content-center"
@@ -26,67 +82,6 @@
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="grid">
-          <div class="col-12">
-            <h1>Summary</h1>
-          </div>
-        </div>
-        <div class="grid mb-2 justify-content-center">
-            <div class="col-12 lg:col-6 xl:col-3">
-               <div class="card bg-green-100 mb-0">
-                  <div class="flex justify-content-between mb-3">
-                      <div>
-                          <span class="block font-medium text-4xl font-bold mb-3"
-                              >₱{{overall.revenue.toLocaleString()}}</span
-                          >
-                          <div class="text-900">Total Revenue</div>
-                      </div>
-                      <div
-                          class="flex align-items-center justify-content-center"
-                          style="width: 2.5rem; height: 2.5rem"
-                      >
-                          <i class="pi pi-dollar text-green-700 text-xl"></i>
-                      </div>
-                  </div>
-              </div>
-            </div>
-           <div class="col-12 lg:col-6 xl:col-3">
-               <div class="card bg-pink-100 mb-0">
-                  <div class="flex justify-content-between mb-3">
-                      <div>
-                          <span class="block font-medium text-4xl font-bold mb-3"
-                              >₱{{overall.expense.toLocaleString()}}</span
-                          >
-                          <div class="text-900">Expenses</div>
-                      </div>
-                      <div
-                          class="flex align-items-center justify-content-center"
-                          style="width: 2.5rem; height: 2.5rem"
-                      >
-                          <i class="pi pi-dollar text-pink-700 text-xl"></i>
-                      </div>
-                  </div>
-              </div>
-            </div>
-            <div class="col-12 lg:col-6 xl:col-3">
-               <div class="card mb-0">
-                  <div class="flex justify-content-between mb-3">
-                      <div>
-                          <span class="block font-medium text-4xl font-bold mb-3"
-                              >₱{{(overall.revenue - overall.expense).toLocaleString()}}</span
-                          >
-                          <div class="text-900">Net Income</div>
-                      </div>
-                      <div
-                          class="flex align-items-center justify-content-center"
-                          style="width: 2.5rem; height: 2.5rem"
-                      >
-                          <i class="pi pi-dollar text-blue-500 text-xl"></i>
-                      </div>
-                  </div>
-              </div>
-            </div>   
         </div>
         <div class="card">
             <div class="grid mb-2">
@@ -361,16 +356,16 @@
                                     <div>
                                         <span
                                             class="block font-medium text-4xl font-bold mb-3"
-                                            >{{revenueTotal}}</span
+                                            >₱{{ revenueTotal }}</span
                                         >
-                                        <div class="text-900">Total Revenue</div>
+                                        <div class="text-900">
+                                            Total Revenue
+                                        </div>
                                     </div>
                                     <div
                                         class="flex align-items-center justify-content-center"
                                         style="width: 2.5rem; height: 2.5rem"
-                                    >
-                                        <i class="pi pi-dollar text-blue-500 text-xl"></i>
-                                    </div>
+                                    ></div>
                                 </div>
                             </div>
                         </div>
@@ -380,16 +375,16 @@
                                     <div>
                                         <span
                                             class="block font-medium text-4xl font-bold mb-3"
-                                            >{{expenseTotal}}</span
+                                            >₱{{ expenseTotal }}</span
                                         >
-                                        <div class="text-900">Total Expense</div>
+                                        <div class="text-900">
+                                            Total Expense
+                                        </div>
                                     </div>
                                     <div
                                         class="flex align-items-center justify-content-center"
                                         style="width: 2.5rem; height: 2.5rem"
-                                    >
-                                        <i class="pi pi-dollar text-blue-500 text-xl"></i>
-                                    </div>
+                                    ></div>
                                 </div>
                             </div>
                         </div>
@@ -399,16 +394,16 @@
                                     <div>
                                         <span
                                             class="block font-medium text-4xl font-bold mb-3"
-                                            >{{revenueTotal - expenseTotal}}</span
+                                            >₱{{
+                                                revenueTotal - expenseTotal
+                                            }}</span
                                         >
                                         <div class="text-900">Net Income</div>
                                     </div>
                                     <div
                                         class="flex align-items-center justify-content-center"
                                         style="width: 2.5rem; height: 2.5rem"
-                                    >
-                                        <i class="pi pi-dollar text-blue-500 text-xl"></i>
-                                    </div>
+                                    ></div>
                                 </div>
                             </div>
                         </div>
@@ -830,11 +825,11 @@ export default {
     data() {
         return {
             overall: {
-              revenue: 0,
-              expense: 0,
-              income: 0
+                revenue: 0,
+                expense: 0,
+                income: 0,
             },
-            contingency : null,
+            contingency: null,
             balance: null,
             revRowSize: true,
             expRowSize: true,
@@ -1006,7 +1001,11 @@ export default {
                 "getSpecificInvoices",
                 this.revenue_form.lot
             );
-            this.balance = this.specific_invoices.running_balance;
+            if (this.specific_invoices.running_balance > 0) {
+                this.balance = this.specific_invoices.running_balance;
+            } else {
+                this.balance = 0;
+            }
         },
         // testTable() {
         //   var doc = new jsPDF();
@@ -1968,7 +1967,7 @@ export default {
                             rowSpan: 1,
                         },
                     ],
-                    this.monthlyContingency
+                    this.monthlyContingency,
                 ],
             });
             if (start != null && end != null) {
@@ -2352,13 +2351,13 @@ export default {
                 source: null,
             };
             this.lot_bool = true;
-            let association =  this.funds.filter((elem)=>{
-             return elem.fund_type == "Association Funds"
-            })
-            this.revenue_form.source = association[0].id
-            this.contingency = this.funds.filter((elem)=>{
-              return elem.fund_type == "Contingency Funds"
-            })
+            let association = this.funds.filter((elem) => {
+                return elem.fund_type == "Association Funds";
+            });
+            this.revenue_form.source = association[0].id;
+            this.contingency = this.funds.filter((elem) => {
+                return elem.fund_type == "Contingency Funds";
+            });
         },
         initFilters() {
             this.filters = {
@@ -2505,7 +2504,8 @@ export default {
                             this.revenue_form.source == null
                                 ? null
                                 : this.funds[this.revenue_form.source - 1]
-                                      .amount +this.revenue_form.amount * 0.85,
+                                      .amount +
+                                  this.revenue_form.amount * 0.85,
                         fund_id: this.revenue_form.source,
                     },
                 });
@@ -2519,7 +2519,8 @@ export default {
                         data: {
                             amount:
                                 this.funds[this.revenue_form.source - 1]
-                                    .amount + this.revenue_form.amount*0.85,
+                                    .amount +
+                                this.revenue_form.amount * 0.85,
                             fund_type:
                                 this.funds[this.revenue_form.source - 1]
                                     .fund_type,
@@ -2530,8 +2531,8 @@ export default {
                         method: "put",
                         data: {
                             amount:
-                                this.funds[this.contingency[0].id - 1]
-                                    .amount + this.revenue_form.amount*0.15,
+                                this.funds[this.contingency[0].id - 1].amount +
+                                this.revenue_form.amount * 0.15,
                             fund_type:
                                 this.funds[this.contingency[0].id - 1]
                                     .fund_type,
@@ -3905,142 +3906,190 @@ export default {
             });
             return list;
         },
-        monthlyContingency(){
-          let contingency = []
-          if (this.reportDate == "JAN") {
-            contingency = ["",{
-              content:"Contingency",
-              colSpan:1,
-              rowSpan:1,
-              styles:{
-                halign: "right"
-              }
-            }, (this.revenueTotal-this.expenseTotal)*0.15]
-          }
-          if (this.reportDate == "FEB") {
-            contingency = ["",{
-              content:"Contingency",
-              colSpan:1,
-              rowSpan:1,
-              styles:{
-                halign: "right"
-              }
-            }, (this.revenueTotal-this.expenseTotal)*0.15]
-          }
-          if (this.reportDate == "MAR") {
-            contingency = ["",{
-              content:"Contingency",
-              colSpan:1,
-              rowSpan:1,
-              styles:{
-                halign: "right"
-              }
-            }, (this.revenueTotal-this.expenseTotal)*0.15]
-          }
-          if (this.reportDate == "APR") {
-            contingency = ["",{
-              content:"Contingency",
-              colSpan:1,
-              rowSpan:1,
-              styles:{
-                halign: "right"
-              }
-            }, (this.revenueTotal-this.expenseTotal)*0.15]
-          }
-          if (this.reportDate == "MAY") {
-            contingency = ["",{
-              content:"Contingency",
-              colSpan:1,
-              rowSpan:1,
-              styles:{
-                halign: "right"
-              }
-            }, (this.revenueTotal-this.expenseTotal)*0.15]
-          }
-          if (this.reportDate == "JUN") {
-            contingency = ["",{
-              content:"Contingency",
-              colSpan:1,
-              rowSpan:1,
-              styles:{
-                halign: "right"
-              }
-            }, (this.revenueTotal-this.expenseTotal)*0.15]
-          }
-          if (this.reportDate == "JUL") {
-            contingency = ["",{
-              content:"Contingency",
-              colSpan:1,
-              rowSpan:1,
-              styles:{
-                halign: "right"
-              }
-            }, (this.revenueTotal-this.expenseTotal)*0.15]
-          }
-          if (this.reportDate == "AUG") {
-            contingency = ["",{
-              content:"Contingency",
-              colSpan:1,
-              rowSpan:1,
-              styles:{
-                halign: "right"
-              }
-            }, (this.revenueTotal-this.expenseTotal)*0.15]
-          }
-          if (this.reportDate == "SEP") {
-            contingency = ["",{
-              content:"Contingency",
-              colSpan:1,
-              rowSpan:1,
-              styles:{
-                halign: "right"
-              }
-            }, (this.revenueTotal-this.expenseTotal)*0.15]
-          }
-          if (this.reportDate == "OCT") {
-            contingency = ["",{
-              content:"Contingency",
-              colSpan:1,
-              rowSpan:1,
-              styles:{
-                halign: "right"
-              }
-            }, (this.revenueTotal-this.expenseTotal)*0.15]
-          }
-          if (this.reportDate == "NOV") {
-            contingency = ["",{
-              content:"Contingency",
-              colSpan:1,
-              rowSpan:1,
-              styles:{
-                halign: "right"
-              }
-            }, (this.revenueTotal-this.expenseTotal)*0.15]
-          }
-          if (this.reportDate == "DEC") {
-            contingency = ["",{
-              content:"Contingency",
-              colSpan:1,
-              rowSpan:1,
-              styles:{
-                halign: "right"
-              }
-            }, (this.revenueTotal-this.expenseTotal)*0.15]
-          }
-          return contingency
-        }
+        monthlyContingency() {
+            let contingency = [];
+            if (this.reportDate == "JAN") {
+                contingency = [
+                    "",
+                    {
+                        content: "Contingency",
+                        colSpan: 1,
+                        rowSpan: 1,
+                        styles: {
+                            halign: "right",
+                        },
+                    },
+                    (this.revenueTotal - this.expenseTotal) * 0.15,
+                ];
+            }
+            if (this.reportDate == "FEB") {
+                contingency = [
+                    "",
+                    {
+                        content: "Contingency",
+                        colSpan: 1,
+                        rowSpan: 1,
+                        styles: {
+                            halign: "right",
+                        },
+                    },
+                    (this.revenueTotal - this.expenseTotal) * 0.15,
+                ];
+            }
+            if (this.reportDate == "MAR") {
+                contingency = [
+                    "",
+                    {
+                        content: "Contingency",
+                        colSpan: 1,
+                        rowSpan: 1,
+                        styles: {
+                            halign: "right",
+                        },
+                    },
+                    (this.revenueTotal - this.expenseTotal) * 0.15,
+                ];
+            }
+            if (this.reportDate == "APR") {
+                contingency = [
+                    "",
+                    {
+                        content: "Contingency",
+                        colSpan: 1,
+                        rowSpan: 1,
+                        styles: {
+                            halign: "right",
+                        },
+                    },
+                    (this.revenueTotal - this.expenseTotal) * 0.15,
+                ];
+            }
+            if (this.reportDate == "MAY") {
+                contingency = [
+                    "",
+                    {
+                        content: "Contingency",
+                        colSpan: 1,
+                        rowSpan: 1,
+                        styles: {
+                            halign: "right",
+                        },
+                    },
+                    (this.revenueTotal - this.expenseTotal) * 0.15,
+                ];
+            }
+            if (this.reportDate == "JUN") {
+                contingency = [
+                    "",
+                    {
+                        content: "Contingency",
+                        colSpan: 1,
+                        rowSpan: 1,
+                        styles: {
+                            halign: "right",
+                        },
+                    },
+                    (this.revenueTotal - this.expenseTotal) * 0.15,
+                ];
+            }
+            if (this.reportDate == "JUL") {
+                contingency = [
+                    "",
+                    {
+                        content: "Contingency",
+                        colSpan: 1,
+                        rowSpan: 1,
+                        styles: {
+                            halign: "right",
+                        },
+                    },
+                    (this.revenueTotal - this.expenseTotal) * 0.15,
+                ];
+            }
+            if (this.reportDate == "AUG") {
+                contingency = [
+                    "",
+                    {
+                        content: "Contingency",
+                        colSpan: 1,
+                        rowSpan: 1,
+                        styles: {
+                            halign: "right",
+                        },
+                    },
+                    (this.revenueTotal - this.expenseTotal) * 0.15,
+                ];
+            }
+            if (this.reportDate == "SEP") {
+                contingency = [
+                    "",
+                    {
+                        content: "Contingency",
+                        colSpan: 1,
+                        rowSpan: 1,
+                        styles: {
+                            halign: "right",
+                        },
+                    },
+                    (this.revenueTotal - this.expenseTotal) * 0.15,
+                ];
+            }
+            if (this.reportDate == "OCT") {
+                contingency = [
+                    "",
+                    {
+                        content: "Contingency",
+                        colSpan: 1,
+                        rowSpan: 1,
+                        styles: {
+                            halign: "right",
+                        },
+                    },
+                    (this.revenueTotal - this.expenseTotal) * 0.15,
+                ];
+            }
+            if (this.reportDate == "NOV") {
+                contingency = [
+                    "",
+                    {
+                        content: "Contingency",
+                        colSpan: 1,
+                        rowSpan: 1,
+                        styles: {
+                            halign: "right",
+                        },
+                    },
+                    (this.revenueTotal - this.expenseTotal) * 0.15,
+                ];
+            }
+            if (this.reportDate == "DEC") {
+                contingency = [
+                    "",
+                    {
+                        content: "Contingency",
+                        colSpan: 1,
+                        rowSpan: 1,
+                        styles: {
+                            halign: "right",
+                        },
+                    },
+                    (this.revenueTotal - this.expenseTotal) * 0.15,
+                ];
+            }
+            return contingency;
+        },
     },
     mounted() {
-      let revenue = this.revenue
-      let expenses = this.expense
-      revenue.forEach((elem)=>{
-        this.overall.revenue+=elem.amount
-      })
-      expenses.forEach((elem)=>{
-        this.overall.expense+=elem.amount
-      })
+        let revenue = this.revenue;
+        let expenses = this.expense;
+        revenue.forEach((elem) => {
+            this.overall.revenue += +elem.amount;
+        });
+        expenses.forEach((elem) => {
+            this.overall.expense += +elem.amount;
+        });
 
-      this.overall.income = this.overall.revenue - this.overall.expense
+        this.overall.income = +this.overall.revenue - +this.overall.expense;
     },
     created() {
         this.initFilters();
