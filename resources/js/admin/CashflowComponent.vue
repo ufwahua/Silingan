@@ -1,9 +1,13 @@
 <template>
     <div>
         <Toast />
-        <h1>Summary</h1>
         <div class="grid">
-            <!-- <div v-for="fund in funds" class="col-12 lg:col-4">
+          <div class="col-12">
+            <h1>Funds</h1>
+          </div>
+        </div>
+        <div class="grid mb-2">
+          <div v-for="fund in funds" class="col-12 lg:col-3">
                 <div class="card mb-0">
                     <div class="flex justify-content-between mb-3">
                         <div>
@@ -21,87 +25,68 @@
                         </div>
                     </div>
                 </div>
-            </div> -->
-            <div class="card mb-0">
-                <div class="flex justify-content-between mb-3">
-                    <div>
-                        <span class="block font-medium text-4xl font-bold mb-3"
-                            >₱1700</span
-                        >
-                        <div class="text-900">Total Revenue</div>
-                    </div>
-                    <div
-                        class="flex align-items-center justify-content-center"
-                        style="width: 2.5rem; height: 2.5rem"
-                    >
-                        <i class="pi pi-dollar text-blue-500 text-xl"></i>
-                    </div>
-                </div>
             </div>
-            <div class="card mb-0">
-                <div class="flex justify-content-between mb-3">
-                    <div>
-                        <span class="block font-medium text-4xl font-bold mb-3"
-                            >₱850</span
-                        >
-                        <div class="text-900">Expenses</div>
-                    </div>
-                    <div
-                        class="flex align-items-center justify-content-center"
-                        style="width: 2.5rem; height: 2.5rem"
-                    >
-                        <i class="pi pi-dollar text-blue-500 text-xl"></i>
-                    </div>
-                </div>
+        </div>
+        <div class="grid">
+          <div class="col-12">
+            <h1>Summary</h1>
+          </div>
+        </div>
+        <div class="grid mb-2 justify-content-center">
+            <div class="col-12 lg:col-6 xl:col-3">
+               <div class="card bg-green-100 mb-0">
+                  <div class="flex justify-content-between mb-3">
+                      <div>
+                          <span class="block font-medium text-4xl font-bold mb-3"
+                              >₱{{overall.revenue.toLocaleString()}}</span
+                          >
+                          <div class="text-900">Total Revenue</div>
+                      </div>
+                      <div
+                          class="flex align-items-center justify-content-center"
+                          style="width: 2.5rem; height: 2.5rem"
+                      >
+                          <i class="pi pi-dollar text-green-700 text-xl"></i>
+                      </div>
+                  </div>
+              </div>
             </div>
-            <div class="card mb-0">
-                <div class="flex justify-content-between mb-3">
-                    <div>
-                        <span class="block font-medium text-4xl font-bold mb-3"
-                            >₱650</span
-                        >
-                        <div class="text-900">Net Income</div>
-                    </div>
-                    <div
-                        class="flex align-items-center justify-content-center"
-                        style="width: 2.5rem; height: 2.5rem"
-                    >
-                        <i class="pi pi-dollar text-blue-500 text-xl"></i>
-                    </div>
-                </div>
+           <div class="col-12 lg:col-6 xl:col-3">
+               <div class="card bg-pink-100 mb-0">
+                  <div class="flex justify-content-between mb-3">
+                      <div>
+                          <span class="block font-medium text-4xl font-bold mb-3"
+                              >₱{{overall.expense.toLocaleString()}}</span
+                          >
+                          <div class="text-900">Expenses</div>
+                      </div>
+                      <div
+                          class="flex align-items-center justify-content-center"
+                          style="width: 2.5rem; height: 2.5rem"
+                      >
+                          <i class="pi pi-dollar text-pink-700 text-xl"></i>
+                      </div>
+                  </div>
+              </div>
             </div>
-            <div class="card mb-0">
-                <div class="flex justify-content-between mb-3">
-                    <div>
-                        <span class="block font-medium text-4xl font-bold mb-3"
-                            >₱650</span
-                        >
-                        <div class="text-900">Association Funds</div>
-                    </div>
-                    <div
-                        class="flex align-items-center justify-content-center"
-                        style="width: 2.5rem; height: 2.5rem"
-                    >
-                        <i class="pi pi-dollar text-blue-500 text-xl"></i>
-                    </div>
-                </div>
-            </div>
-            <div class="card mb-0">
-                <div class="flex justify-content-between mb-3">
-                    <div>
-                        <span class="block font-medium text-4xl font-bold mb-3"
-                            >₱142.5</span
-                        >
-                        <div class="text-900">Contingency Fund</div>
-                    </div>
-                    <div
-                        class="flex align-items-center justify-content-center"
-                        style="width: 2.5rem; height: 2.5rem"
-                    >
-                        <i class="pi pi-dollar text-blue-500 text-xl"></i>
-                    </div>
-                </div>
-            </div>
+            <div class="col-12 lg:col-6 xl:col-3">
+               <div class="card mb-0">
+                  <div class="flex justify-content-between mb-3">
+                      <div>
+                          <span class="block font-medium text-4xl font-bold mb-3"
+                              >₱{{(overall.revenue - overall.expense).toLocaleString()}}</span
+                          >
+                          <div class="text-900">Net Income</div>
+                      </div>
+                      <div
+                          class="flex align-items-center justify-content-center"
+                          style="width: 2.5rem; height: 2.5rem"
+                      >
+                          <i class="pi pi-dollar text-blue-500 text-xl"></i>
+                      </div>
+                  </div>
+              </div>
+            </div>   
         </div>
         <div class="card">
             <div class="grid mb-2">
@@ -369,6 +354,65 @@
                     INCOME STATEMENT TAB
                  -->
                 <TabPanel header="Income Statement">
+                    <div class="grid mb-2">
+                        <div class="col-12 lg:col-3">
+                            <div class="card mb-0">
+                                <div class="flex justify-content-between mb-3">
+                                    <div>
+                                        <span
+                                            class="block font-medium text-4xl font-bold mb-3"
+                                            >{{revenueTotal}}</span
+                                        >
+                                        <div class="text-900">Total Revenue</div>
+                                    </div>
+                                    <div
+                                        class="flex align-items-center justify-content-center"
+                                        style="width: 2.5rem; height: 2.5rem"
+                                    >
+                                        <i class="pi pi-dollar text-blue-500 text-xl"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 lg:col-3">
+                            <div class="card mb-0">
+                                <div class="flex justify-content-between mb-3">
+                                    <div>
+                                        <span
+                                            class="block font-medium text-4xl font-bold mb-3"
+                                            >{{expenseTotal}}</span
+                                        >
+                                        <div class="text-900">Total Expense</div>
+                                    </div>
+                                    <div
+                                        class="flex align-items-center justify-content-center"
+                                        style="width: 2.5rem; height: 2.5rem"
+                                    >
+                                        <i class="pi pi-dollar text-blue-500 text-xl"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 lg:col-3">
+                            <div class="card mb-0">
+                                <div class="flex justify-content-between mb-3">
+                                    <div>
+                                        <span
+                                            class="block font-medium text-4xl font-bold mb-3"
+                                            >{{revenueTotal - expenseTotal}}</span
+                                        >
+                                        <div class="text-900">Net Income</div>
+                                    </div>
+                                    <div
+                                        class="flex align-items-center justify-content-center"
+                                        style="width: 2.5rem; height: 2.5rem"
+                                    >
+                                        <i class="pi pi-dollar text-blue-500 text-xl"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <Toolbar>
                         <template #end>
                             <div class="mr-2">
@@ -413,64 +457,6 @@
                         </template>
                     </Toolbar>
                     <div class="grid mt-2">
-                        <div :class="{ hidden: false }">
-                            <!-- <table id="statement">
-                <tbody>
-                  <tr v-for="record in statement">
-                    <td v-if="record.type == 'Revenue'">
-                      {{ record.type }} {{setRevRowSize()}}
-                    </td>
-                    <td v-if="record.type == 'Revenue'">
-                      {{ record.created_at.getMonth() + 1 }}/{{
-                        record.created_at.getDate()
-                      }}/{{ record.created_at.getFullYear() }}
-                    </td>
-                    <td v-if="record.type == 'Revenue'">{{ record.usage }}</td>
-                    <td v-if="record.type == 'Revenue'">
-                      {{ record.amount.toLocaleString() }} PHP
-                    </td>
-                  </tr>
-                  <tr>
-                    <td colspan="3">Total:</td>
-                    <td>{{ revenueCount.toLocaleString() }} PHP</td>
-                  </tr>
-                  <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                  </tr>
-                  <tr v-for="record in statement">
-                    <td v-if="record.type == 'Expense'">{{ record.type }}</td>
-                    <td v-if="record.type == 'Expense'">
-                      {{ record.created_at.getMonth() + 1 }}/{{
-                        record.created_at.getDate()
-                      }}/{{ record.created_at.getFullYear() }}
-                    </td>
-                    <td v-if="record.type == 'Expense'">{{ record.usage }}</td>
-                    <td v-if="record.type == 'Expense'">
-                      {{ record.amount.toLocaleString() }} PHP
-                    </td>
-                  </tr>
-                  <tr>
-                    <td colspan="3">Total:</td>
-                    <td>{{ expenseCount.toLocaleString() }} PHP</td>
-                  </tr>
-                </tbody>
-                <tfoot>
-                  <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                  </tr>
-                  <tr>
-                    <td colspan="3">Net Income</td>
-                    <td>{{ statement.length }}</td>
-                  </tr>
-                </tfoot>
-              </table> -->
-                        </div>
                         <div class="col-12">
                             <DataTable
                                 class="p-datatable-sm"
@@ -538,6 +524,19 @@
                     >
                 </div>
                 <div class="col-12 lg:col-6">
+                    <h5>Amount</h5>
+                    <InputNumber
+                        v-model="revenue_form.amount"
+                        mode="currency"
+                        currency="PHP"
+                        :useGrouping="false"
+                        :class="{ 'p-invalid': revenue_valid.state.amount }"
+                    />
+                    <small v-if="revenue_valid.state.amount" class="p-error">{{
+                        revenue_valid.msg.amount
+                    }}</small>
+                </div>
+                <!-- <div class="col-12 lg:col-6">
                     <h5>Add to</h5>
                     <Dropdown
                         v-model="revenue_form.source"
@@ -552,7 +551,7 @@
                     <small v-if="revenue_valid.state.source" class="p-error">{{
                         revenue_valid.msg.source
                     }}</small>
-                </div>
+                </div> -->
 
                 <div class="col-12 lg:col-6">
                     <h5>Block</h5>
@@ -583,19 +582,6 @@
                     />
                     <small v-if="revenue_valid.state.lot" class="p-error">{{
                         revenue_valid.msg.lot
-                    }}</small>
-                </div>
-                <div class="col-12 lg:col-6">
-                    <h5>Amount</h5>
-                    <InputNumber
-                        v-model="revenue_form.amount"
-                        mode="currency"
-                        currency="PHP"
-                        :useGrouping="false"
-                        :class="{ 'p-invalid': revenue_valid.state.amount }"
-                    />
-                    <small v-if="revenue_valid.state.amount" class="p-error">{{
-                        revenue_valid.msg.amount
                     }}</small>
                 </div>
                 <div
@@ -843,6 +829,12 @@ export default {
     },
     data() {
         return {
+            overall: {
+              revenue: 0,
+              expense: 0,
+              income: 0
+            },
+            contingency : null,
             balance: null,
             revRowSize: true,
             expRowSize: true,
@@ -1111,7 +1103,7 @@ export default {
                 let list = this.cashflow;
                 let start = new Date(
                     new Date(this.reportDateYear).getFullYear(),
-                    0,
+                    9,
                     1
                 );
                 let end = new Date(
@@ -1619,7 +1611,7 @@ export default {
             if (this.reportDate == 4) {
                 start = new Date(
                     new Date(this.reportDateYear).getFullYear(),
-                    0,
+                    9,
                     1
                 );
                 end = new Date(
@@ -1976,6 +1968,7 @@ export default {
                             rowSpan: 1,
                         },
                     ],
+                    this.monthlyContingency
                 ],
             });
             if (start != null && end != null) {
@@ -2048,7 +2041,7 @@ export default {
                 if (this.reportDate == 4) {
                     start = new Date(
                         new Date(this.reportDateYear).getFullYear(),
-                        0,
+                        9,
                         1
                     );
                     end = new Date(
@@ -2359,6 +2352,13 @@ export default {
                 source: null,
             };
             this.lot_bool = true;
+            let association =  this.funds.filter((elem)=>{
+             return elem.fund_type == "Association Funds"
+            })
+            this.revenue_form.source = association[0].id
+            this.contingency = this.funds.filter((elem)=>{
+              return elem.fund_type == "Contingency Funds"
+            })
         },
         initFilters() {
             this.filters = {
@@ -2504,8 +2504,8 @@ export default {
                         running_balance:
                             this.revenue_form.source == null
                                 ? null
-                                : +this.funds[this.revenue_form.source - 1]
-                                      .amount + +this.revenue_form.amount,
+                                : this.funds[this.revenue_form.source - 1]
+                                      .amount +this.revenue_form.amount * 0.85,
                         fund_id: this.revenue_form.source,
                     },
                 });
@@ -2518,10 +2518,22 @@ export default {
                         method: "put",
                         data: {
                             amount:
-                                +this.funds[this.revenue_form.source - 1]
-                                    .amount + +this.revenue_form.amount,
+                                this.funds[this.revenue_form.source - 1]
+                                    .amount + this.revenue_form.amount*0.85,
                             fund_type:
                                 this.funds[this.revenue_form.source - 1]
+                                    .fund_type,
+                        },
+                    });
+                    await axios({
+                        url: "/api/fund/" + this.contingency[0].id,
+                        method: "put",
+                        data: {
+                            amount:
+                                this.funds[this.contingency[0].id - 1]
+                                    .amount + this.revenue_form.amount*0.15,
+                            fund_type:
+                                this.funds[this.contingency[0].id - 1]
                                     .fund_type,
                         },
                     });
@@ -2628,7 +2640,7 @@ export default {
             if (this.reportDate == 4) {
                 start = new Date(
                     new Date(this.reportDateYear).getFullYear(),
-                    0,
+                    9,
                     1
                 );
                 end = new Date(
@@ -2896,7 +2908,7 @@ export default {
             if (this.reportDate == 4) {
                 start = new Date(
                     new Date(this.reportDateYear).getFullYear(),
-                    0,
+                    9,
                     1
                 );
                 end = new Date(
@@ -3134,7 +3146,7 @@ export default {
             if (this.reportDate == 4) {
                 start = new Date(
                     new Date(this.reportDateYear).getFullYear(),
-                    0,
+                    9,
                     1
                 );
                 end = new Date(
@@ -3393,7 +3405,7 @@ export default {
             if (this.reportDate == 4) {
                 start = new Date(
                     new Date(this.reportDateYear).getFullYear(),
-                    0,
+                    9,
                     1
                 );
                 end = new Date(
@@ -3631,7 +3643,7 @@ export default {
             if (this.reportDate == 4) {
                 start = new Date(
                     new Date(this.reportDateYear).getFullYear(),
-                    0,
+                    9,
                     1
                 );
                 end = new Date(
@@ -3893,8 +3905,143 @@ export default {
             });
             return list;
         },
+        monthlyContingency(){
+          let contingency = []
+          if (this.reportDate == "JAN") {
+            contingency = ["",{
+              content:"Contingency",
+              colSpan:1,
+              rowSpan:1,
+              styles:{
+                halign: "right"
+              }
+            }, (this.revenueTotal-this.expenseTotal)*0.15]
+          }
+          if (this.reportDate == "FEB") {
+            contingency = ["",{
+              content:"Contingency",
+              colSpan:1,
+              rowSpan:1,
+              styles:{
+                halign: "right"
+              }
+            }, (this.revenueTotal-this.expenseTotal)*0.15]
+          }
+          if (this.reportDate == "MAR") {
+            contingency = ["",{
+              content:"Contingency",
+              colSpan:1,
+              rowSpan:1,
+              styles:{
+                halign: "right"
+              }
+            }, (this.revenueTotal-this.expenseTotal)*0.15]
+          }
+          if (this.reportDate == "APR") {
+            contingency = ["",{
+              content:"Contingency",
+              colSpan:1,
+              rowSpan:1,
+              styles:{
+                halign: "right"
+              }
+            }, (this.revenueTotal-this.expenseTotal)*0.15]
+          }
+          if (this.reportDate == "MAY") {
+            contingency = ["",{
+              content:"Contingency",
+              colSpan:1,
+              rowSpan:1,
+              styles:{
+                halign: "right"
+              }
+            }, (this.revenueTotal-this.expenseTotal)*0.15]
+          }
+          if (this.reportDate == "JUN") {
+            contingency = ["",{
+              content:"Contingency",
+              colSpan:1,
+              rowSpan:1,
+              styles:{
+                halign: "right"
+              }
+            }, (this.revenueTotal-this.expenseTotal)*0.15]
+          }
+          if (this.reportDate == "JUL") {
+            contingency = ["",{
+              content:"Contingency",
+              colSpan:1,
+              rowSpan:1,
+              styles:{
+                halign: "right"
+              }
+            }, (this.revenueTotal-this.expenseTotal)*0.15]
+          }
+          if (this.reportDate == "AUG") {
+            contingency = ["",{
+              content:"Contingency",
+              colSpan:1,
+              rowSpan:1,
+              styles:{
+                halign: "right"
+              }
+            }, (this.revenueTotal-this.expenseTotal)*0.15]
+          }
+          if (this.reportDate == "SEP") {
+            contingency = ["",{
+              content:"Contingency",
+              colSpan:1,
+              rowSpan:1,
+              styles:{
+                halign: "right"
+              }
+            }, (this.revenueTotal-this.expenseTotal)*0.15]
+          }
+          if (this.reportDate == "OCT") {
+            contingency = ["",{
+              content:"Contingency",
+              colSpan:1,
+              rowSpan:1,
+              styles:{
+                halign: "right"
+              }
+            }, (this.revenueTotal-this.expenseTotal)*0.15]
+          }
+          if (this.reportDate == "NOV") {
+            contingency = ["",{
+              content:"Contingency",
+              colSpan:1,
+              rowSpan:1,
+              styles:{
+                halign: "right"
+              }
+            }, (this.revenueTotal-this.expenseTotal)*0.15]
+          }
+          if (this.reportDate == "DEC") {
+            contingency = ["",{
+              content:"Contingency",
+              colSpan:1,
+              rowSpan:1,
+              styles:{
+                halign: "right"
+              }
+            }, (this.revenueTotal-this.expenseTotal)*0.15]
+          }
+          return contingency
+        }
     },
-    mounted() {},
+    mounted() {
+      let revenue = this.revenue
+      let expenses = this.expense
+      revenue.forEach((elem)=>{
+        this.overall.revenue+=elem.amount
+      })
+      expenses.forEach((elem)=>{
+        this.overall.expense+=elem.amount
+      })
+
+      this.overall.income = this.overall.revenue - this.overall.expense
+    },
     created() {
         this.initFilters();
     },
