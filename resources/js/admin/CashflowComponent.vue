@@ -636,7 +636,7 @@
                         expense_valid.msg.type
                     }}</small>
                 </div>
-                <div class="col-12 lg:col-6">
+                <!-- <div class="col-12 lg:col-6">
                     <h5>Get Funds From</h5>
                     <Dropdown
                         v-model="expense_form.source"
@@ -651,7 +651,7 @@
                     <small v-if="expense_valid.state.source" class="p-error">{{
                         expense_valid.msg.source
                     }}</small>
-                </div>
+                </div> -->
 
                 <div class="col-12 lg:col-6">
                     <h5>Amount</h5>
@@ -1001,6 +1001,23 @@ export default {
         };
     },
     methods: {
+        updateSummary(){
+            this.overall = {
+              revenue: 0,
+              expense: 0,
+              income: 0
+            }
+            let revenue = this.revenue
+            let expenses = this.expense
+            revenue.forEach((elem)=>{
+                this.overall.revenue+=elem.amount
+            })
+            expenses.forEach((elem)=>{
+                this.overall.expense+=elem.amount
+            })
+
+            this.overall.income = this.overall.revenue - this.overall.expense
+        },
         async getBalance() {
             await this.$store.dispatch(
                 "getSpecificInvoices",
@@ -1968,7 +1985,6 @@ export default {
                             rowSpan: 1,
                         },
                     ],
-                    this.monthlyContingency
                 ],
             });
             if (start != null && end != null) {
@@ -2339,6 +2355,10 @@ export default {
                 source: null,
                 type: null,
             };
+            let association =  this.funds.filter((elem)=>{
+             return elem.fund_type == "Association Funds"
+            })
+            this.expense_form.source = association[0].id
         },
         addRevenue() {
             this.resetRevenueFormError();
@@ -2356,9 +2376,6 @@ export default {
              return elem.fund_type == "Association Funds"
             })
             this.revenue_form.source = association[0].id
-            this.contingency = this.funds.filter((elem)=>{
-              return elem.fund_type == "Contingency Funds"
-            })
         },
         initFilters() {
             this.filters = {
@@ -2442,6 +2459,7 @@ export default {
                     });
                     this.$store.dispatch("fund/getAll");
                     this.showSuccess();
+                    this.updateSummary()
                 } catch (error) {
                     console.log(error.response.date);
                 }
@@ -2450,6 +2468,7 @@ export default {
                 this.expenseFormError(error.response.data);
                 console.log(error.response.data);
             }
+            this.updateSummary()
         },
         expenseFormError(e) {
             if (e.errors.amount) {
@@ -2505,7 +2524,7 @@ export default {
                             this.revenue_form.source == null
                                 ? null
                                 : this.funds[this.revenue_form.source - 1]
-                                      .amount +this.revenue_form.amount * 0.85,
+                                      .amount +this.revenue_form.amount,
                         fund_id: this.revenue_form.source,
                     },
                 });
@@ -2519,26 +2538,15 @@ export default {
                         data: {
                             amount:
                                 this.funds[this.revenue_form.source - 1]
-                                    .amount + this.revenue_form.amount*0.85,
+                                    .amount + this.revenue_form.amount,
                             fund_type:
                                 this.funds[this.revenue_form.source - 1]
                                     .fund_type,
                         },
                     });
-                    await axios({
-                        url: "/api/fund/" + this.contingency[0].id,
-                        method: "put",
-                        data: {
-                            amount:
-                                this.funds[this.contingency[0].id - 1]
-                                    .amount + this.revenue_form.amount*0.15,
-                            fund_type:
-                                this.funds[this.contingency[0].id - 1]
-                                    .fund_type,
-                        },
-                    });
                     this.$store.dispatch("fund/getAll");
                     this.showSuccess();
+                    this.updateSummary()
                 } catch (error) {
                     console.log(error.response.date);
                 }
@@ -3905,130 +3913,6 @@ export default {
             });
             return list;
         },
-        monthlyContingency(){
-          let contingency = []
-          if (this.reportDate == "JAN") {
-            contingency = ["",{
-              content:"Contingency",
-              colSpan:1,
-              rowSpan:1,
-              styles:{
-                halign: "right"
-              }
-            }, (this.revenueTotal-this.expenseTotal)*0.15]
-          }
-          if (this.reportDate == "FEB") {
-            contingency = ["",{
-              content:"Contingency",
-              colSpan:1,
-              rowSpan:1,
-              styles:{
-                halign: "right"
-              }
-            }, (this.revenueTotal-this.expenseTotal)*0.15]
-          }
-          if (this.reportDate == "MAR") {
-            contingency = ["",{
-              content:"Contingency",
-              colSpan:1,
-              rowSpan:1,
-              styles:{
-                halign: "right"
-              }
-            }, (this.revenueTotal-this.expenseTotal)*0.15]
-          }
-          if (this.reportDate == "APR") {
-            contingency = ["",{
-              content:"Contingency",
-              colSpan:1,
-              rowSpan:1,
-              styles:{
-                halign: "right"
-              }
-            }, (this.revenueTotal-this.expenseTotal)*0.15]
-          }
-          if (this.reportDate == "MAY") {
-            contingency = ["",{
-              content:"Contingency",
-              colSpan:1,
-              rowSpan:1,
-              styles:{
-                halign: "right"
-              }
-            }, (this.revenueTotal-this.expenseTotal)*0.15]
-          }
-          if (this.reportDate == "JUN") {
-            contingency = ["",{
-              content:"Contingency",
-              colSpan:1,
-              rowSpan:1,
-              styles:{
-                halign: "right"
-              }
-            }, (this.revenueTotal-this.expenseTotal)*0.15]
-          }
-          if (this.reportDate == "JUL") {
-            contingency = ["",{
-              content:"Contingency",
-              colSpan:1,
-              rowSpan:1,
-              styles:{
-                halign: "right"
-              }
-            }, (this.revenueTotal-this.expenseTotal)*0.15]
-          }
-          if (this.reportDate == "AUG") {
-            contingency = ["",{
-              content:"Contingency",
-              colSpan:1,
-              rowSpan:1,
-              styles:{
-                halign: "right"
-              }
-            }, (this.revenueTotal-this.expenseTotal)*0.15]
-          }
-          if (this.reportDate == "SEP") {
-            contingency = ["",{
-              content:"Contingency",
-              colSpan:1,
-              rowSpan:1,
-              styles:{
-                halign: "right"
-              }
-            }, (this.revenueTotal-this.expenseTotal)*0.15]
-          }
-          if (this.reportDate == "OCT") {
-            contingency = ["",{
-              content:"Contingency",
-              colSpan:1,
-              rowSpan:1,
-              styles:{
-                halign: "right"
-              }
-            }, (this.revenueTotal-this.expenseTotal)*0.15]
-          }
-          if (this.reportDate == "NOV") {
-            contingency = ["",{
-              content:"Contingency",
-              colSpan:1,
-              rowSpan:1,
-              styles:{
-                halign: "right"
-              }
-            }, (this.revenueTotal-this.expenseTotal)*0.15]
-          }
-          if (this.reportDate == "DEC") {
-            contingency = ["",{
-              content:"Contingency",
-              colSpan:1,
-              rowSpan:1,
-              styles:{
-                halign: "right"
-              }
-            }, (this.revenueTotal-this.expenseTotal)*0.15]
-          }
-          return contingency
-        }
     },
     mounted() {
       let revenue = this.revenue

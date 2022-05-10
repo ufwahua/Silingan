@@ -18,9 +18,5 @@ class FundSeeder extends Seeder
             'amount' => 0,
             'fund_type' => 'Association Funds'
         ]);
-        Fund::create([
-            'amount' => 0,
-            'fund_type' => 'Contingency Funds'
-        ]);
     }
 }
