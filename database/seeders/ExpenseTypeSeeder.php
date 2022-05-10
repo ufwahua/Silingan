@@ -15,13 +15,20 @@ class ExpenseTypeSeeder extends Seeder
     public function run()
     {
         ExpenseType::create([
-            'name' => 'Maintenance Expense'
+            'name' => 'Maintenance expense'
+        ]);
+    
+        ExpenseType::create([
+            'name' => 'Salary expense'
         ]);
         ExpenseType::create([
-            'name' => 'Utility Expense'
+            'name' => 'Water expense'
         ]);
-        ExpenseType::create([
-            'name' => 'Salary Expense'
+         ExpenseType::create([
+            'name' => 'Electic expense'
+        ]);
+         ExpenseType::create([
+            'name' => 'Miscellaneous expense'
         ]);
     }
 }

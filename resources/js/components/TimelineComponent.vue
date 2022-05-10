@@ -5,7 +5,7 @@
         >
             <h2 class="layout-text">Timeline</h2>
             <div class="col justify-content-center pt-0">
-                <div class="card p-3">
+                <div v-if="!userLogged.flagged" class="card p-3">
                     <div class="p-inputgroup mb-2">
                         <div v-if="userLogged.profile_pic">
                             <Avatar
@@ -32,6 +32,38 @@
                             class="w-full"
                             placeholder="What's on you mind?"
                             rows="1"
+                        >
+                        </Textarea>
+                    </div>
+                </div>
+                <div v-else class="card p-3">
+                    <div class="p-inputgroup mb-2">
+                        <div v-if="userLogged.profile_pic">
+                            <Avatar
+                                :image="`http://127.0.0.1:8000${userLogged.profile_pic}`"
+                                class="mr-2"
+                                size="large"
+                                shape="circle"
+                                alt="Image"
+                            />
+                        </div>
+                        <div v-else>
+                            <Avatar
+                                image="http://127.0.0.1:8000/storage/images/avatar.png"
+                                class="mr-2"
+                                size="large"
+                                shape="circle"
+                                alt="Image"
+                            />
+                        </div>
+
+                        <Textarea
+                            @click="openAddLotModal"
+                            :autoResize="true"
+                            class="w-full"
+                            rows="1"
+                            disabled
+                            placeholder="Can't comment because your account is flagged please contact an admin/officer"
                         >
                         </Textarea>
                     </div>
