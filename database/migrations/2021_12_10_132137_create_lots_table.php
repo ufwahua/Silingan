@@ -17,6 +17,7 @@ class CreateLotsTable extends Migration
             $table->id();
             $table->foreignId('block_id')->constrained();
             $table->integer('number');
+            $table->boolean('active')->default(true);
             $table->timestamps();
         });
     }

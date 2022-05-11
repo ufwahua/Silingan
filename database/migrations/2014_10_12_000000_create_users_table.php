@@ -31,6 +31,7 @@ class CreateUsersTable extends Migration
             $table->foreignId('position_id')->nullable();
             $table->enum('tag_as', ['owner', 'renter', 'family member'])->nullable();
             $table->string('security_shift')->nullable();
+            $table->boolean('flagged')->default(false);
             $table->rememberToken();
             $table->timestamps();
         });

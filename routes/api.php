@@ -26,6 +26,7 @@ use App\Http\Controllers\ExpenseTypeController;
 use App\Http\Controllers\CollectionController;
 use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\FundController;
+use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\SmsController;
 
@@ -54,9 +55,11 @@ Route::get('/logout', [UserController::class, 'logout']);
 Route::get('/user/not-blocked/{user}', [UserController::class, 'notBlockedUsers']);
 Route::get('/user/search/', [UserController::class, 'getSearchUser']);
 Route::get('/user/officers/', [UserController::class, 'getOfficers']);
+Route::get('/user/residents/', [UserController::class, 'getResidents']);
 Route::get('/user/user-verified/', [UserController::class, 'getUsersVerified']);
 Route::get('/user/filter-resident/{user}', [UserController::class, 'filterResident']);
 Route::put('/user/vote/{user}', [UserController::class, 'updateHasVoted']);
+Route::get('/user/filter-resident/block-lot/{user}', [UserController::class, 'getResidentInBlockLot']);
 Route::put('/candidate/vote/{candidate}', [CandidateController::class, 'vote']);
 Route::delete('/candidate/election/{candidate}', [CandidateController::class, 'deleteAllCandidate']);
 Route::get('/post/marketplace/verified/{post}', [PostController::class, 'getMarketPlaceVerified']);
@@ -68,7 +71,12 @@ Route::post('/notification/chat',[NotificationController::class, 'notificationCh
 Route::post('/notification/announcement',[NotificationController::class, 'notificationAnnouncement']);
 Route::post('/notification/election',[NotificationController::class, 'notificationElection']);
 Route::post('/notification/comment',[NotificationController::class, 'notificationComment']);
-
+Route::get('/post/search/', [PostController::class, 'getMarketPlacePost']);
+Route::post('/invoice/bill-all/', [InvoiceController::class, 'billToAll']);
+Route::post('/invoice/bill-specific/', [InvoiceController::class, 'billSpecificBlockLot']);
+Route::get('/invoice/block-lot/{invoice}', [InvoiceController::class, 'getInvoicesBlockLot']);
+Route::post('/election/update-voters/', [ElectionController::class, 'updateVoters']);
+Route::get('/collection/block-lot/{collection}', [CollectionController::class, 'getCollectionBlockLot']);
 
 
 Route::apiResources([
@@ -94,6 +102,7 @@ Route::apiResources([
     'collection' => CollectionController::class,
     'expense' => ExpenseController::class,
     'fund' => FundController::class,
-     'notification'     => NotificationController::class,
-    'expense_type' => ExpenseTypeController::class
+    'notification'     => NotificationController::class,
+    'expense_type' => ExpenseTypeController::class,
+    'invoice' => InvoiceController::class,
 ]);

@@ -1,9 +1,13 @@
 <template>
     <div>
         <Toast />
-        <h1>Total Funds</h1>
         <div class="grid">
-            <div v-for="fund in funds" class="col-12 lg:col-4">
+            <div class="col-12">
+                <h1>Funds</h1>
+            </div>
+        </div>
+        <div class="grid mb-2">
+            <div v-for="fund in funds" class="col-12 lg:col-3">
                 <div class="card mb-0">
                     <div class="flex justify-content-between mb-3">
                         <div>
@@ -12,6 +16,62 @@
                                 >₱{{ fund.amount.toLocaleString() }}</span
                             >
                             <div class="text-900">{{ fund.fund_type }}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="grid">
+            <div class="col-12">
+                <h1>Summary</h1>
+            </div>
+        </div>
+        <div class="grid mb-2 justify-content-center">
+            <div class="col-12 lg:col-6 xl:col-3">
+                <div class="card bg-green-100 mb-0">
+                    <div class="flex justify-content-between mb-3">
+                        <div>
+                            <span
+                                class="block font-medium text-4xl font-bold mb-3"
+                                >₱{{ overall.revenue.toLocaleString() }}</span
+                            >
+                            <div class="text-900">Total Revenue</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 lg:col-6 xl:col-3">
+                <div class="card bg-pink-100 mb-0">
+                    <div class="flex justify-content-between mb-3">
+                        <div>
+                            <span
+                                class="block font-medium text-4xl font-bold mb-3"
+                                >₱{{ overall.expense.toLocaleString() }}</span
+                            >
+                            <div class="text-900">Expenses</div>
+                        </div>
+                        <div
+                            class="flex align-items-center justify-content-center"
+                            style="width: 2.5rem; height: 2.5rem"
+                        >
+                            <i class="pi pi-dollar text-pink-700 text-xl"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 lg:col-6 xl:col-3">
+                <div class="card mb-0">
+                    <div class="flex justify-content-between mb-3">
+                        <div>
+                            <span
+                                class="block font-medium text-4xl font-bold mb-3"
+                                >₱{{
+                                    (
+                                        overall.revenue - overall.expense
+                                    ).toLocaleString()
+                                }}</span
+                            >
+                            <div class="text-900">Net Income</div>
                         </div>
                         <div
                             class="flex align-items-center justify-content-center"
@@ -29,32 +89,32 @@
                     <h4>Cash Flow</h4>
                 </div>
             </div>
-            <div class="grid mb-2">
-                <div class="col-12">
-                    <Toolbar>
-                        <template #start>
-                            <span class="p-input-icon-left inline-block">
-                                <i class="pi pi-search" />
-                                <InputText
-                                    class="mr-2"
-                                    v-model="filters['global'].value"
-                                    placeholder="Keyword Search"
-                                />
-                            </span>
-                        </template>
-                        <template #end>
-                            <div class="mr-2">
-                                <Button
-                                    label="Download PDF Report"
-                                    icon="pi pi-file-pdf"
-                                    class="p-button-primary p-mr-2"
-                                    @click="generatePDF()"
-                                />
-                            </div>
-                        </template>
-                    </Toolbar>
+            <!-- <div class="grid mb-2">
+        <div class="col-12">
+          <Toolbar>
+            <template #start>
+              <span class="p-input-icon-left inline-block">
+                <i class="pi pi-search" />
+                <InputText
+                  class="mr-2"
+                  v-model="filters['global'].value"
+                  placeholder="Keyword Search"
+                />
+              </span>
+            </template>
+            <template #end>
+                <div class="mr-2">
+                    <Button
+                        label="Download PDF Report"
+                        icon="pi pi-file-pdf"
+                        class="p-button-primary p-mr-2"
+                        @click="generatePDF()"
+                    />
                 </div>
-            </div>
+            </template>
+          </Toolbar>
+        </div>
+      </div> -->
             <DataTable
                 :value="cashflow"
                 :paginator="true"
@@ -118,15 +178,15 @@
             -->
                 <TabPanel header="Revenue">
                     <Toolbar>
-                        <template #start>
-                            <span class="p-input-icon-left inline-block">
-                                <i class="pi pi-search" />
-                                <InputText
-                                    v-model="revenue_filters['global'].value"
-                                    placeholder="Keyword Search"
-                                />
-                            </span>
-                        </template>
+                        <!-- <template #start>
+              <span class="p-input-icon-left inline-block">
+                <i class="pi pi-search" />
+                <InputText
+                  v-model="revenue_filters['global'].value"
+                  placeholder="Keyword Search"
+                />
+              </span>
+            </template> -->
 
                         <template #end>
                             <div class="mr-2">
@@ -152,8 +212,8 @@
                                 <Column field="id" header="ID"></Column>
                                 <Column field="lot" header="Block and Lot">
                                     <template #body="{ data }">
-                                        Block {{ data.lot[0].block_id }} Lot
-                                        {{ data.lot[0].number }}
+                                        Block {{ data.lot.block_id }} Lot
+                                        {{ data.lot.number }}
                                     </template>
                                 </Column>
                                 <Column
@@ -204,15 +264,15 @@
             -->
                 <TabPanel header="Expenses">
                     <Toolbar>
-                        <template #start>
-                            <span class="p-input-icon-left inline-block">
-                                <i class="pi pi-search" />
-                                <InputText
-                                    v-model="expense_filters['global'].value"
-                                    placeholder="Keyword Search"
-                                />
-                            </span>
-                        </template>
+                        <!-- <template #start>
+              <span class="p-input-icon-left inline-block">
+                <i class="pi pi-search" />
+                <InputText
+                  v-model="expense_filters['global'].value"
+                  placeholder="Keyword Search"
+                />
+              </span>
+            </template> -->
 
                         <template #end>
                             <div class="mr-2">
@@ -285,6 +345,146 @@
                         </div>
                     </div>
                 </TabPanel>
+                <!-- 
+                    INCOME STATEMENT TAB
+                 -->
+                <TabPanel header="Income Statement">
+                    <div class="grid mb-2">
+                        <div class="col-12 lg:col-3">
+                            <div class="card mb-0">
+                                <div class="flex justify-content-between mb-3">
+                                    <div>
+                                        <span
+                                            class="block font-medium text-4xl font-bold mb-3"
+                                            >₱{{ revenueTotal }}</span
+                                        >
+                                        <div class="text-900">
+                                            Total Revenue
+                                        </div>
+                                    </div>
+                                    <div
+                                        class="flex align-items-center justify-content-center"
+                                        style="width: 2.5rem; height: 2.5rem"
+                                    ></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 lg:col-3">
+                            <div class="card mb-0">
+                                <div class="flex justify-content-between mb-3">
+                                    <div>
+                                        <span
+                                            class="block font-medium text-4xl font-bold mb-3"
+                                            >₱{{ expenseTotal }}</span
+                                        >
+                                        <div class="text-900">
+                                            Total Expense
+                                        </div>
+                                    </div>
+                                    <div
+                                        class="flex align-items-center justify-content-center"
+                                        style="width: 2.5rem; height: 2.5rem"
+                                    ></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 lg:col-3">
+                            <div class="card mb-0">
+                                <div class="flex justify-content-between mb-3">
+                                    <div>
+                                        <span
+                                            class="block font-medium text-4xl font-bold mb-3"
+                                            >₱{{
+                                                revenueTotal - expenseTotal
+                                            }}</span
+                                        >
+                                        <div class="text-900">Net Income</div>
+                                    </div>
+                                    <div
+                                        class="flex align-items-center justify-content-center"
+                                        style="width: 2.5rem; height: 2.5rem"
+                                    ></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <Toolbar>
+                        <template #end>
+                            <div class="mr-2">
+                                <CascadeSelect
+                                    v-model="reportDate"
+                                    :options="reportDateSelect"
+                                    optionLabel="name"
+                                    optionValue="value"
+                                    optionGroupLabel="name"
+                                    :optionGroupChildren="['range']"
+                                    style="minwidth: 14rem"
+                                    placeholder="Date"
+                                    @change="setStatement()"
+                                />
+                            </div>
+                            <div class="mr-2">
+                                <Calendar
+                                    id="yearpicker"
+                                    v-model="reportDateYear"
+                                    view="year"
+                                    dateFormat="yy"
+                                    placeholder="Year"
+                                    @date-select="setStatement()"
+                                />
+                            </div>
+                            <!-- <div class="mr-2">
+                <Button
+                  label="Download Income Statement"
+                  icon="pi pi-file-pdf"
+                  class="p-button-primary p-mr-2"
+                  @click="generatePDF()"
+                />
+              </div> -->
+                            <div class="mr-2">
+                                <Button
+                                    label="Download Income Statement"
+                                    icon="pi pi-file-pdf"
+                                    class="p-button-primary p-mr-2"
+                                    @click="verifyDate()"
+                                />
+                            </div>
+                        </template>
+                    </Toolbar>
+                    <div class="grid mt-2">
+                        <div class="col-12">
+                            <DataTable
+                                class="p-datatable-sm"
+                                :value="statement"
+                                :paginator="true"
+                                :rows="15"
+                                id="statement"
+                                rowGroupMode="rowspan"
+                                groupRowsBy="type"
+                                sortMode="single"
+                                sortField="type"
+                                :sortOrder="-1"
+                            >
+                                <template #empty> No Data</template>
+                                <template #loading> Loading data </template>
+                                <Column field="type"></Column>
+                                <Column field="created_at">
+                                    <template #body="{ data }">
+                                        {{ data.created_at.getMonth() + 1 }}/{{
+                                            data.created_at.getDate()
+                                        }}/{{ data.created_at.getFullYear() }}
+                                    </template>
+                                </Column>
+                                <Column field="usage"></Column>
+                                <Column field="amount">
+                                    <template #body="{ data }">
+                                        ₱{{ data.amount.toLocaleString() }}
+                                    </template>
+                                </Column>
+                            </DataTable>
+                        </div>
+                    </div>
+                </TabPanel>
             </TabView>
         </div>
         <!-- 
@@ -307,10 +507,10 @@
                         optionLabel="name"
                         optionValue="code"
                         placeholder="Select Collection Type"
-                        @change="setAmount()"
                         :class="{
                             'p-invalid': revenue_valid.state.collection_type,
                         }"
+                        @change="setAmount"
                     />
                     <small
                         v-if="revenue_valid.state.collection_type"
@@ -325,13 +525,29 @@
                         mode="currency"
                         currency="PHP"
                         :useGrouping="false"
-                        disabled
                         :class="{ 'p-invalid': revenue_valid.state.amount }"
                     />
                     <small v-if="revenue_valid.state.amount" class="p-error">{{
                         revenue_valid.msg.amount
                     }}</small>
                 </div>
+                <!-- <div class="col-12 lg:col-6">
+                    <h5>Add to</h5>
+                    <Dropdown
+                        v-model="revenue_form.source"
+                        :options="funds"
+                        optionLabel="fund_type"
+                        optionValue="id"
+                        placeholder="Select Fund Source"
+                        :class="{
+                            'p-invalid': revenue_valid.state.source,
+                        }"
+                    />
+                    <small v-if="revenue_valid.state.source" class="p-error">{{
+                        revenue_valid.msg.source
+                    }}</small>
+                </div> -->
+
                 <div class="col-12 lg:col-6">
                     <h5>Block</h5>
                     <Dropdown
@@ -340,7 +556,7 @@
                         optionLabel="name"
                         optionValue="code"
                         placeholder="Select Block and Lot"
-                        @change="setLots()"
+                        @change="setLots"
                         :class="{ 'p-invalid': revenue_valid.state.block }"
                     />
                     <small v-if="revenue_valid.state.block" class="p-error">{{
@@ -357,26 +573,24 @@
                         placeholder="Select Block and Lot"
                         :disabled="lot_bool"
                         :class="{ 'p-invalid': revenue_valid.state.lot }"
+                        @change="getBalance"
                     />
                     <small v-if="revenue_valid.state.lot" class="p-error">{{
                         revenue_valid.msg.lot
                     }}</small>
                 </div>
-                <div class="col-12 lg:col-6">
-                    <h5>Add Credit to</h5>
-                    <Dropdown
-                        v-model="revenue_form.source"
-                        :options="funds"
-                        optionLabel="fund_type"
-                        optionValue="id"
-                        placeholder="Select Fund Source"
-                        :class="{
-                            'p-invalid': revenue_valid.state.source,
-                        }"
+                <div
+                    v-if="revenue_form.collection_type == 1 && revenue_form.lot"
+                    class="col-12 lg:col-6"
+                >
+                    <h5>Balance</h5>
+                    <InputNumber
+                        v-model="balance"
+                        mode="currency"
+                        currency="PHP"
+                        :useGrouping="false"
+                        disabled
                     />
-                    <small v-if="revenue_valid.state.source" class="p-error">{{
-                        revenue_valid.msg.source
-                    }}</small>
                 </div>
                 <div class="col-12">
                     <h5>Notes</h5>
@@ -402,6 +616,22 @@
         >
             <div class="grid p-fluid">
                 <div class="col-12 lg:col-6">
+                    <h5>Expense Type</h5>
+                    <Dropdown
+                        v-model="expense_form.type"
+                        :options="dropdown_expense_type"
+                        optionLabel="name"
+                        optionValue="id"
+                        placeholder="Select expense type"
+                        :class="{
+                            'p-invalid': expense_valid.state.type,
+                        }"
+                    />
+                    <small v-if="expense_valid.state.type" class="p-error">{{
+                        expense_valid.msg.type
+                    }}</small>
+                </div>
+                <div class="col-12 lg:col-6">
                     <h5>Get Funds From</h5>
                     <Dropdown
                         v-model="expense_form.source"
@@ -417,22 +647,7 @@
                         expense_valid.msg.source
                     }}</small>
                 </div>
-                <div class="col-12 lg:col-6">
-                    <h5>Expense Type</h5>
-                    <Dropdown
-                        v-model="expense_form.type"
-                        :options="dropdown_expense_type"
-                        optionLabel="name"
-                        optionValue="id"
-                        placeholder="Select Fund Source"
-                        :class="{
-                            'p-invalid': expense_valid.state.type,
-                        }"
-                    />
-                    <small v-if="expense_valid.state.type" class="p-error">{{
-                        expense_valid.msg.type
-                    }}</small>
-                </div>
+
                 <div class="col-12 lg:col-6">
                     <h5>Amount</h5>
                     <InputNumber
@@ -554,6 +769,12 @@ export default {
         return {
             userLogged: computed(() => store.state.userLogged),
             funds: computed(() => store.state.fund.Fund),
+            collection_type_list: computed(
+                () => store.state.collectionType.CollectionType
+            ),
+            expense_type_list: computed(
+                () => store.state.expenseType.ExpenseType
+            ),
             dropdown_expense_type: computed(
                 () => store.state.expenseType.ExpenseType
             ),
@@ -570,6 +791,8 @@ export default {
             }),
             revenue: computed(() => store.state.collection.Collection),
             expense: computed(() => store.state.expense.Expense),
+
+            specific_invoices: computed(() => store.state.specific_invoices),
             blocks: computed(() => {
                 let temp = [];
                 store.state.blocks.blocks.forEach((elem) => {
@@ -601,6 +824,98 @@ export default {
     },
     data() {
         return {
+            overall: {
+                revenue: 0,
+                expense: 0,
+                income: 0,
+            },
+            contingency: null,
+            balance: null,
+            revRowSize: true,
+            expRowSize: true,
+            reportDateYear: new Date(),
+            reportDate: null,
+            reportDateSelect: [
+                {
+                    name: "Quarterly",
+                    range: [
+                        {
+                            name: "Jan - Mar",
+                            value: 1,
+                        },
+                        {
+                            name: "Apr - Jun",
+                            value: 2,
+                        },
+                        {
+                            name: "Jul - Sep",
+                            value: 3,
+                        },
+                        {
+                            name: "Oct - Dec",
+                            value: 4,
+                        },
+                    ],
+                },
+                {
+                    name: "Monthly",
+                    range: [
+                        {
+                            name: "January",
+                            value: "JAN",
+                        },
+                        {
+                            name: "February",
+                            value: "FEB",
+                        },
+                        {
+                            name: "March",
+                            value: "MAR",
+                        },
+                        {
+                            name: "April",
+                            value: "APR",
+                        },
+                        {
+                            name: "May",
+                            value: "MAY",
+                        },
+                        {
+                            name: "June",
+                            value: "JUN",
+                        },
+                        {
+                            name: "July",
+                            value: "JUL",
+                        },
+                        {
+                            name: "August",
+                            value: "AUG",
+                        },
+                        {
+                            name: "September",
+                            value: "SEP",
+                        },
+                        {
+                            name: "October",
+                            value: "OCT",
+                        },
+                        {
+                            name: "November",
+                            value: "NOV",
+                        },
+                        {
+                            name: "December",
+                            value: "DEC",
+                        },
+                    ],
+                },
+                {
+                    name: "Anually",
+                    value: 12,
+                },
+            ],
+            statement: [],
             process: false,
             //Modal Control
             addRevenueModal: false,
@@ -681,6 +996,500 @@ export default {
         };
     },
     methods: {
+        async getBalance() {
+            await this.$store.dispatch(
+                "getSpecificInvoices",
+                this.revenue_form.lot
+            );
+            if (this.specific_invoices.running_balance > 0) {
+                this.balance = this.specific_invoices.running_balance;
+            } else {
+                this.balance = 0;
+            }
+        },
+        // testTable() {
+        //   var doc = new jsPDF();
+        //   doc.autoTable({ html: "#statement", theme: "plain" });
+        //   doc.save("table.pdf");
+        // },
+        setStatement() {
+            if (this.reportDate == 1) {
+                let temp = [];
+                let list = this.cashflow;
+                let start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    0,
+                    1
+                );
+                let end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    3,
+                    1
+                );
+                list.reverse();
+                list.forEach((elem) => {
+                    elem.created_at = new Date(elem.created_at);
+                    if (elem.created_at >= start && elem.created_at <= end) {
+                        if (elem.collection_type_id) {
+                            elem["type"] = "Revenue";
+                            temp.push(elem);
+                        } else {
+                            elem["type"] = "Expense";
+                            temp.push(elem);
+                        }
+                    }
+                });
+                this.statement = temp;
+            }
+            if (this.reportDate == 2) {
+                let temp = [];
+                let list = this.cashflow;
+                let start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    3,
+                    1
+                );
+                let end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    6,
+                    1
+                );
+                list.reverse();
+                list.forEach((elem) => {
+                    elem.created_at = new Date(elem.created_at);
+                    if (elem.created_at >= start && elem.created_at <= end) {
+                        if (elem.collection_type_id) {
+                            elem["type"] = "Revenue";
+                            temp.push(elem);
+                        } else {
+                            elem["type"] = "Expense";
+                            temp.push(elem);
+                        }
+                    }
+                });
+                this.statement = temp;
+            }
+            if (this.reportDate == 3) {
+                let temp = [];
+                let list = this.cashflow;
+                let start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    6,
+                    1
+                );
+                let end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    9,
+                    1
+                );
+                list.reverse();
+                list.forEach((elem) => {
+                    elem.created_at = new Date(elem.created_at);
+                    if (elem.created_at >= start && elem.created_at <= end) {
+                        if (elem.collection_type_id) {
+                            elem["type"] = "Revenue";
+                            temp.push(elem);
+                        } else {
+                            elem["type"] = "Expense";
+                            temp.push(elem);
+                        }
+                    }
+                });
+                this.statement = temp;
+            }
+            if (this.reportDate == 4) {
+                let temp = [];
+                let list = this.cashflow;
+                let start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    9,
+                    1
+                );
+                let end = new Date(
+                    new Date(this.reportDateYear).getFullYear() + 1,
+                    0,
+                    1
+                );
+                list.reverse();
+                list.forEach((elem) => {
+                    elem.created_at = new Date(elem.created_at);
+                    if (elem.created_at >= start && elem.created_at <= end) {
+                        if (elem.collection_type_id) {
+                            elem["type"] = "Revenue";
+                            temp.push(elem);
+                        } else {
+                            elem["type"] = "Expense";
+                            temp.push(elem);
+                        }
+                    }
+                });
+                this.statement = temp;
+            }
+            if (this.reportDate == "JAN") {
+                let temp = [];
+                let list = this.cashflow;
+                let start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    0,
+                    1
+                );
+                let end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    1,
+                    1
+                );
+                list.reverse();
+                list.forEach((elem) => {
+                    elem.created_at = new Date(elem.created_at);
+                    if (elem.created_at >= start && elem.created_at <= end) {
+                        if (elem.collection_type_id) {
+                            elem["type"] = "Revenue";
+                            temp.push(elem);
+                        } else {
+                            elem["type"] = "Expense";
+                            temp.push(elem);
+                        }
+                    }
+                });
+                this.statement = temp;
+            }
+            if (this.reportDate == "FEB") {
+                let temp = [];
+                let list = this.cashflow;
+                let start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    1,
+                    1
+                );
+                let end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    2,
+                    1
+                );
+                list.reverse();
+                list.forEach((elem) => {
+                    elem.created_at = new Date(elem.created_at);
+                    if (elem.created_at >= start && elem.created_at <= end) {
+                        if (elem.collection_type_id) {
+                            elem["type"] = "Revenue";
+                            temp.push(elem);
+                        } else {
+                            elem["type"] = "Expense";
+                            temp.push(elem);
+                        }
+                    }
+                });
+                this.statement = temp;
+            }
+            if (this.reportDate == "MAR") {
+                let temp = [];
+                let list = this.cashflow;
+                let start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    2,
+                    1
+                );
+                let end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    3,
+                    1
+                );
+                list.reverse();
+                list.forEach((elem) => {
+                    elem.created_at = new Date(elem.created_at);
+                    if (elem.created_at >= start && elem.created_at <= end) {
+                        if (elem.collection_type_id) {
+                            elem["type"] = "Revenue";
+                            temp.push(elem);
+                        } else {
+                            elem["type"] = "Expense";
+                            temp.push(elem);
+                        }
+                    }
+                });
+                this.statement = temp;
+            }
+            if (this.reportDate == "APR") {
+                let temp = [];
+                let list = this.cashflow;
+                let start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    3,
+                    1
+                );
+                let end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    4,
+                    1
+                );
+                list.reverse();
+                list.forEach((elem) => {
+                    elem.created_at = new Date(elem.created_at);
+                    if (elem.created_at >= start && elem.created_at <= end) {
+                        if (elem.collection_type_id) {
+                            elem["type"] = "Revenue";
+                            temp.push(elem);
+                        } else {
+                            elem["type"] = "Expense";
+                            temp.push(elem);
+                        }
+                    }
+                });
+                this.statement = temp;
+            }
+            if (this.reportDate == "MAY") {
+                let temp = [];
+                let list = this.cashflow;
+                let start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    4,
+                    1
+                );
+                let end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    5,
+                    1
+                );
+                list.reverse();
+                list.forEach((elem) => {
+                    elem.created_at = new Date(elem.created_at);
+                    if (elem.created_at >= start && elem.created_at <= end) {
+                        if (elem.collection_type_id) {
+                            elem["type"] = "Revenue";
+                            temp.push(elem);
+                        } else {
+                            elem["type"] = "Expense";
+                            temp.push(elem);
+                        }
+                    }
+                });
+                this.statement = temp;
+            }
+            if (this.reportDate == "JUN") {
+                let temp = [];
+                let list = this.cashflow;
+                let start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    5,
+                    1
+                );
+                let end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    6,
+                    1
+                );
+                list.reverse();
+                list.forEach((elem) => {
+                    elem.created_at = new Date(elem.created_at);
+                    if (elem.created_at >= start && elem.created_at <= end) {
+                        if (elem.collection_type_id) {
+                            elem["type"] = "Revenue";
+                            temp.push(elem);
+                        } else {
+                            elem["type"] = "Expense";
+                            temp.push(elem);
+                        }
+                    }
+                });
+                this.statement = temp;
+            }
+            if (this.reportDate == "JUL") {
+                let temp = [];
+                let list = this.cashflow;
+                let start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    6,
+                    1
+                );
+                let end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    7,
+                    1
+                );
+                list.reverse();
+                list.forEach((elem) => {
+                    elem.created_at = new Date(elem.created_at);
+                    if (elem.created_at >= start && elem.created_at <= end) {
+                        if (elem.collection_type_id) {
+                            elem["type"] = "Revenue";
+                            temp.push(elem);
+                        } else {
+                            elem["type"] = "Expense";
+                            temp.push(elem);
+                        }
+                    }
+                });
+                this.statement = temp;
+            }
+            if (this.reportDate == "AUG") {
+                let temp = [];
+                let list = this.cashflow;
+                let start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    7,
+                    1
+                );
+                let end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    8,
+                    1
+                );
+                list.reverse();
+                list.forEach((elem) => {
+                    elem.created_at = new Date(elem.created_at);
+                    if (elem.created_at >= start && elem.created_at <= end) {
+                        if (elem.collection_type_id) {
+                            elem["type"] = "Revenue";
+                            temp.push(elem);
+                        } else {
+                            elem["type"] = "Expense";
+                            temp.push(elem);
+                        }
+                    }
+                });
+                this.statement = temp;
+            }
+            if (this.reportDate == "SEP") {
+                let temp = [];
+                let list = this.cashflow;
+                let start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    8,
+                    1
+                );
+                let end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    9,
+                    1
+                );
+                list.reverse();
+                list.forEach((elem) => {
+                    elem.created_at = new Date(elem.created_at);
+                    if (elem.created_at >= start && elem.created_at <= end) {
+                        if (elem.collection_type_id) {
+                            elem["type"] = "Revenue";
+                            temp.push(elem);
+                        } else {
+                            elem["type"] = "Expense";
+                            temp.push(elem);
+                        }
+                    }
+                });
+                this.statement = temp;
+            }
+            if (this.reportDate == "OCT") {
+                let temp = [];
+                let list = this.cashflow;
+                let start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    9,
+                    1
+                );
+                let end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    10,
+                    1
+                );
+                list.reverse();
+                list.forEach((elem) => {
+                    elem.created_at = new Date(elem.created_at);
+                    if (elem.created_at >= start && elem.created_at <= end) {
+                        if (elem.collection_type_id) {
+                            elem["type"] = "Revenue";
+                            temp.push(elem);
+                        } else {
+                            elem["type"] = "Expense";
+                            temp.push(elem);
+                        }
+                    }
+                });
+                this.statement = temp;
+            }
+            if (this.reportDate == "NOV") {
+                let temp = [];
+                let list = this.cashflow;
+                let start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    10,
+                    1
+                );
+                let end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    11,
+                    1
+                );
+                list.reverse();
+                list.forEach((elem) => {
+                    elem.created_at = new Date(elem.created_at);
+                    if (elem.created_at >= start && elem.created_at <= end) {
+                        if (elem.collection_type_id) {
+                            elem["type"] = "Revenue";
+                            temp.push(elem);
+                        } else {
+                            elem["type"] = "Expense";
+                            temp.push(elem);
+                        }
+                    }
+                });
+                this.statement = temp;
+            }
+            if (this.reportDate == "DEC") {
+                let temp = [];
+                let list = this.cashflow;
+                let start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    11,
+                    1
+                );
+                let end = new Date(
+                    new Date(this.reportDateYear).getFullYear() + 1,
+                    0,
+                    1
+                );
+                list.reverse();
+                list.forEach((elem) => {
+                    elem.created_at = new Date(elem.created_at);
+                    if (elem.created_at >= start && elem.created_at <= end) {
+                        if (elem.collection_type_id) {
+                            elem["type"] = "Revenue";
+                            temp.push(elem);
+                        } else {
+                            elem["type"] = "Expense";
+                            temp.push(elem);
+                        }
+                    }
+                });
+                this.statement = temp;
+            }
+            if (this.reportDate == 12) {
+                let temp = [];
+                let list = this.cashflow;
+                let start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    0,
+                    1
+                );
+                let end = new Date(
+                    new Date(this.reportDateYear).getFullYear() + 1,
+                    0,
+                    1
+                );
+                list.reverse();
+                list.forEach((elem) => {
+                    elem.created_at = new Date(elem.created_at);
+                    if (elem.created_at >= start && elem.created_at <= end) {
+                        if (elem.collection_type_id) {
+                            elem["type"] = "Revenue";
+                            temp.push(elem);
+                        } else {
+                            elem["type"] = "Expense";
+                            temp.push(elem);
+                        }
+                    }
+                });
+                this.statement = temp;
+            }
+        },
         resetGeneratePDF() {
             this.report = {
                 start: null,
@@ -699,188 +1508,794 @@ export default {
                 },
             };
         },
-        generatePDF() {
-            this.generateReportModal = true;
-            this.resetErrorGeneratePDF();
-            this.resetGeneratePDF();
-        },
+        // generatePDF() {
+        //   this.generateReportModal = true;
+        //   this.resetErrorGeneratePDF();
+        //   this.resetGeneratePDF();
+        // },
         verifyDate() {
-            this.resetErrorGeneratePDF();
-            let start = this.report.start;
-            let end = this.report.end;
+            //   this.resetErrorGeneratePDF();
+            //   let start = this.report.start;
+            //   let end = this.report.end;
+            let month = [
+                "January",
+                "February",
+                "March",
+                "April",
+                "May",
+                "June",
+                "July",
+                "August",
+                "September",
+                "October",
+                "November",
+                "December",
+            ];
+            const doc = new jsPDF();
+            let finalY = 1;
+            let start = null;
+            let end = null;
+            if (this.reportDate == 1) {
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    0,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    2,
+                    1
+                );
+                doc.text(
+                    "Financial Statement Report " +
+                        month[start.getMonth()] +
+                        " " +
+                        start.getFullYear() +
+                        " to " +
+                        month[end.getMonth()] +
+                        " " +
+                        end.getFullYear(),
+                    15,
+                    finalY + 15
+                );
+            }
+            if (this.reportDate == 2) {
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    3,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    5,
+                    1
+                );
+                doc.text(
+                    "Financial Statement Report " +
+                        month[start.getMonth()] +
+                        " " +
+                        start.getFullYear() +
+                        " to " +
+                        month[end.getMonth()] +
+                        " " +
+                        end.getFullYear(),
+                    15,
+                    finalY + 15
+                );
+            }
+            if (this.reportDate == 3) {
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    6,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    8,
+                    1
+                );
+                doc.text(
+                    "Financial Statement Report " +
+                        month[start.getMonth()] +
+                        " " +
+                        start.getFullYear() +
+                        " to " +
+                        month[end.getMonth()] +
+                        " " +
+                        end.getFullYear(),
+                    15,
+                    finalY + 15
+                );
+            }
+            if (this.reportDate == 4) {
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    9,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    11,
+                    1
+                );
+                doc.text(
+                    "Financial Statement Report " +
+                        month[start.getMonth()] +
+                        " " +
+                        start.getFullYear() +
+                        " to " +
+                        month[end.getMonth()] +
+                        " " +
+                        end.getFullYear(),
+                    15,
+                    finalY + 15
+                );
+            }
+            if (this.reportDate == "JAN") {
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    0,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    1,
+                    1
+                );
+                doc.text(
+                    "Financial Statement Report " +
+                        month[start.getMonth()] +
+                        " " +
+                        start.getFullYear(),
+                    15,
+                    finalY + 15
+                );
+            }
+            if (this.reportDate == "FEB") {
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    1,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    2,
+                    1
+                );
+                doc.text(
+                    "Financial Statement Report " +
+                        month[start.getMonth()] +
+                        " " +
+                        start.getFullYear(),
+                    15,
+                    finalY + 15
+                );
+            }
+            if (this.reportDate == "MAR") {
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    2,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    3,
+                    1
+                );
+                doc.text(
+                    "Financial Statement Report " +
+                        month[start.getMonth()] +
+                        " " +
+                        start.getFullYear(),
+                    15,
+                    finalY + 15
+                );
+            }
+            if (this.reportDate == "APR") {
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    3,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    4,
+                    1
+                );
+                doc.text(
+                    "Financial Statement Report " +
+                        month[start.getMonth()] +
+                        " " +
+                        start.getFullYear(),
+                    15,
+                    finalY + 15
+                );
+            }
+            if (this.reportDate == "MAY") {
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    4,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    5,
+                    1
+                );
+                doc.text(
+                    "Financial Statement Report " +
+                        month[start.getMonth()] +
+                        " " +
+                        start.getFullYear(),
+                    15,
+                    finalY + 15
+                );
+            }
+            if (this.reportDate == "JUN") {
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    5,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    6,
+                    1
+                );
+                doc.text(
+                    "Financial Statement Report " +
+                        month[start.getMonth()] +
+                        " " +
+                        start.getFullYear(),
+                    15,
+                    finalY + 15
+                );
+            }
+            if (this.reportDate == "JUL") {
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    6,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    7,
+                    1
+                );
+                doc.text(
+                    "Financial Statement Report " +
+                        month[start.getMonth()] +
+                        " " +
+                        start.getFullYear(),
+                    15,
+                    finalY + 15
+                );
+            }
+            if (this.reportDate == "AUG") {
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    7,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    8,
+                    1
+                );
+                doc.text(
+                    "Financial Statement Report " +
+                        month[start.getMonth()] +
+                        " " +
+                        start.getFullYear(),
+                    15,
+                    finalY + 15
+                );
+            }
+            if (this.reportDate == "SEP") {
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    8,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    9,
+                    1
+                );
+                doc.text(
+                    "Financial Statement Report " +
+                        month[start.getMonth()] +
+                        " " +
+                        start.getFullYear(),
+                    15,
+                    finalY + 15
+                );
+            }
+            if (this.reportDate == "OCT") {
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    9,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    10,
+                    1
+                );
+                doc.text(
+                    "Financial Statement Report " +
+                        month[start.getMonth()] +
+                        " " +
+                        start.getFullYear(),
+                    15,
+                    finalY + 15
+                );
+            }
+            if (this.reportDate == "NOV") {
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    10,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    11,
+                    1
+                );
+                doc.text(
+                    "Financial Statement Report " +
+                        month[start.getMonth()] +
+                        " " +
+                        start.getFullYear(),
+                    15,
+                    finalY + 15
+                );
+            }
+            if (this.reportDate == "DEC") {
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    11,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear() + 1,
+                    0,
+                    1
+                );
+                doc.text(
+                    "Financial Statement Report " +
+                        month[start.getMonth()] +
+                        " " +
+                        start.getFullYear(),
+                    15,
+                    finalY + 15
+                );
+            }
+            if (this.reportDate == 12) {
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    0,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    11,
+                    1
+                );
+                doc.text(
+                    "Financial Statement Report " +
+                        month[start.getMonth()] +
+                        " " +
+                        start.getFullYear() +
+                        " to " +
+                        month[end.getMonth()] +
+                        " " +
+                        end.getFullYear(),
+                    15,
+                    finalY + 15
+                );
+            }
+            doc.autoTable({
+                startY: finalY + 20,
+                theme: "plain",
+                head: [["Revenue", "", "", ""]],
+                body: this.revenueReport,
+                foot: [
+                    [
+                        { content: "", colSpan: 1, rowSpan: 1 },
+                        { content: "", colSpan: 1, rowSpan: 1 },
+                        {
+                            content: "Total",
+                            colSpan: 1,
+                            rowSpan: 1,
+                            styles: { halign: "right" },
+                        },
+                        {
+                            content:
+                                this.revenueTotal.toLocaleString() + " PHP",
+                            colSpan: 1,
+                            rowSpan: 1,
+                        },
+                    ],
+                ],
+            });
+            doc.addPage();
+            doc.autoTable({
+                startY: finalY + 20,
+                theme: "plain",
+                head: [["Expenses", "", ""]],
+                body: this.expenseReport,
+                foot: [
+                    [
+                        { content: "", colSpan: 1, rowSpan: 1 },
+                        {
+                            content: "Total",
+                            colSpan: 1,
+                            rowSpan: 1,
+                            styles: { halign: "right" },
+                        },
+                        {
+                            content:
+                                this.expenseTotal.toLocaleString() + " PHP",
+                            colSpan: 1,
+                            rowSpan: 1,
+                        },
+                    ],
+                ],
+            });
+            doc.addPage();
+            doc.autoTable({
+                startY: finalY + 20,
+                theme: "plain",
+                head: [["Summary", "", ""]],
+                body: this.netIncome,
+                foot: [
+                    [
+                        { content: "", colSpan: 1, rowSpan: 1 },
+                        {
+                            content: "Net Income",
+                            colSpan: 1,
+                            rowSpan: 1,
+                            styles: { halign: "right" },
+                        },
+                        {
+                            content:
+                                (
+                                    this.revenueTotal - this.expenseTotal
+                                ).toLocaleString() + " PHP",
+                            colSpan: 1,
+                            rowSpan: 1,
+                        },
+                    ],
+                    this.monthlyContingency,
+                ],
+            });
             if (start != null && end != null) {
-                if (start > end) {
-                    this.report_valid.state.start = true;
-                    this.report_valid.msg.start =
-                        "Start Date is bigger than End Date";
-                } else {
-                    let month = [
-                        "January",
-                        "February",
-                        "March",
-                        "April",
-                        "May",
-                        "June",
-                        "July",
-                        "August",
-                        "September",
-                        "October",
-                        "November",
-                        "December",
-                    ];
-                    const doc = new jsPDF();
-                    let finalY = 1;
-                    doc.text(
-                        "Financial Statement Report " +
-                            month[this.report.start.getMonth()] +
-                            "/" +
-                            this.report.start.getDate() +
-                            "/" +
-                            this.report.start.getFullYear() +
-                            " to " +
-                            month[this.report.end.getMonth()] +
-                            "/" +
-                            this.report.end.getDate() +
-                            "/" +
-                            this.report.end.getFullYear(),
-                        15,
-                        finalY + 15
+                if (this.reportDate == 1) {
+                    start = new Date(
+                        new Date(this.reportDateYear).getFullYear(),
+                        0,
+                        1
                     );
-                    doc.autoTable({
-                        startY: finalY + 20,
-                        theme: "plain",
-                        head: [["Revenue", "", ""]],
-                        body: this.revenueReport,
-                        foot: [
-                            [
-                                { content: "", colSpan: 1, rowSpan: 1 },
-                                {
-                                    content: "Total",
-                                    colSpan: 1,
-                                    rowSpan: 1,
-                                    styles: { halign: "right" },
-                                },
-                                {
-                                    content:
-                                        this.revenueTotal.toLocaleString() +
-                                        " PHP",
-                                    colSpan: 1,
-                                    rowSpan: 1,
-                                },
-                            ],
-                        ],
-                    });
-                    doc.addPage();
-                    doc.text(
-                        "Financial Statement Report " +
-                            month[this.report.start.getMonth()] +
-                            "/" +
-                            this.report.start.getDate() +
-                            "/" +
-                            this.report.start.getFullYear() +
-                            " to " +
-                            month[this.report.end.getMonth()] +
-                            "/" +
-                            this.report.end.getDate() +
-                            "/" +
-                            this.report.end.getFullYear(),
-                        15,
-                        finalY + 15
+                    end = new Date(
+                        new Date(this.reportDateYear).getFullYear(),
+                        2,
+                        1
                     );
-                    doc.autoTable({
-                        startY: finalY + 20,
-                        theme: "plain",
-                        head: [["Expenses", "", ""]],
-                        body: this.expenseReport,
-                        foot: [
-                            [
-                                { content: "", colSpan: 1, rowSpan: 1 },
-                                {
-                                    content: "Total",
-                                    colSpan: 1,
-                                    rowSpan: 1,
-                                    styles: { halign: "right" },
-                                },
-                                {
-                                    content:
-                                        this.expenseTotal.toLocaleString() +
-                                        " PHP",
-                                    colSpan: 1,
-                                    rowSpan: 1,
-                                },
-                            ],
-                        ],
-                    });
-                    doc.addPage();
-                    doc.text(
-                        "Financial Statement Report " +
-                            month[this.report.start.getMonth()] +
-                            "/" +
-                            this.report.start.getDate() +
-                            "/" +
-                            this.report.start.getFullYear() +
-                            " to " +
-                            month[this.report.end.getMonth()] +
-                            "/" +
-                            this.report.end.getDate() +
-                            "/" +
-                            this.report.end.getFullYear(),
-                        15,
-                        finalY + 15
-                    );
-                    doc.autoTable({
-                        startY: finalY + 20,
-                        theme: "plain",
-                        head: [["Net Income", "", ""]],
-                        body: [
-                            ["", "Revenue", this.revenueTotal + " PHP"],
-                            ["", "Expense", this.expenseTotal + " PHP"],
-                        ],
-                        foot: [
-                            [
-                                { content: "", colSpan: 1, rowSpan: 1 },
-                                {
-                                    content: "Total",
-                                    colSpan: 1,
-                                    rowSpan: 1,
-                                    styles: { halign: "right" },
-                                },
-                                {
-                                    content:
-                                        (
-                                            this.revenueTotal -
-                                            this.expenseTotal
-                                        ).toLocaleString() + " PHP",
-                                    colSpan: 1,
-                                    rowSpan: 1,
-                                },
-                            ],
-                        ],
-                    });
                     doc.save(
-                        this.report.start.getMonth() +
-                            1 +
-                            "_" +
-                            this.report.start.getDate() +
-                            "_" +
-                            this.report.start.getFullYear() +
-                            "to" +
-                            (this.report.end.getMonth() + 1) +
-                            "_" +
-                            this.report.end.getDate() +
-                            "_" +
-                            this.report.end.getFullYear() +
-                            ".pdf"
+                        "Income Statement Report " +
+                            month[start.getMonth()] +
+                            " " +
+                            start.getFullYear() +
+                            " to " +
+                            month[end.getMonth()] +
+                            " " +
+                            end.getFullYear()
                     );
                 }
-            } else {
-                if (start == null) {
-                    this.report_valid.state.start = true;
-                    this.report_valid.msg.start = "Select Start Date";
+                if (this.reportDate == 2) {
+                    start = new Date(
+                        new Date(this.reportDateYear).getFullYear(),
+                        3,
+                        1
+                    );
+                    end = new Date(
+                        new Date(this.reportDateYear).getFullYear(),
+                        5,
+                        1
+                    );
+                    doc.save(
+                        "Income Statement Report " +
+                            month[start.getMonth()] +
+                            " " +
+                            start.getFullYear() +
+                            " to " +
+                            month[end.getMonth()] +
+                            " " +
+                            end.getFullYear()
+                    );
                 }
-                if (end == null) {
-                    this.report_valid.state.end = true;
-                    this.report_valid.msg.end = "Select End Date";
+                if (this.reportDate == 3) {
+                    start = new Date(
+                        new Date(this.reportDateYear).getFullYear(),
+                        6,
+                        1
+                    );
+                    end = new Date(
+                        new Date(this.reportDateYear).getFullYear(),
+                        8,
+                        1
+                    );
+                    doc.save(
+                        "Income Statement Report " +
+                            month[start.getMonth()] +
+                            " " +
+                            start.getFullYear() +
+                            " to " +
+                            month[end.getMonth()] +
+                            " " +
+                            end.getFullYear()
+                    );
+                }
+                if (this.reportDate == 4) {
+                    start = new Date(
+                        new Date(this.reportDateYear).getFullYear(),
+                        9,
+                        1
+                    );
+                    end = new Date(
+                        new Date(this.reportDateYear).getFullYear(),
+                        11,
+                        1
+                    );
+                    doc.save(
+                        "Income Statement Report " +
+                            month[start.getMonth()] +
+                            " " +
+                            start.getFullYear() +
+                            " to " +
+                            month[end.getMonth()] +
+                            " " +
+                            end.getFullYear()
+                    );
+                }
+                if (this.reportDate == "JAN") {
+                    start = new Date(
+                        new Date(this.reportDateYear).getFullYear(),
+                        0,
+                        1
+                    );
+                    end = new Date(
+                        new Date(this.reportDateYear).getFullYear(),
+                        1,
+                        1
+                    );
+                    doc.save(
+                        "Income Statement Report " +
+                            month[start.getMonth()] +
+                            " " +
+                            start.getFullYear()
+                    );
+                }
+                if (this.reportDate == "FEB") {
+                    start = new Date(
+                        new Date(this.reportDateYear).getFullYear(),
+                        1,
+                        1
+                    );
+                    end = new Date(
+                        new Date(this.reportDateYear).getFullYear(),
+                        2,
+                        1
+                    );
+                    doc.save(
+                        "Income Statement Report " +
+                            month[start.getMonth()] +
+                            " " +
+                            start.getFullYear()
+                    );
+                }
+                if (this.reportDate == "MAR") {
+                    start = new Date(
+                        new Date(this.reportDateYear).getFullYear(),
+                        2,
+                        1
+                    );
+                    end = new Date(
+                        new Date(this.reportDateYear).getFullYear(),
+                        3,
+                        1
+                    );
+                    doc.save(
+                        "Income Statement Report " +
+                            month[start.getMonth()] +
+                            " " +
+                            start.getFullYear()
+                    );
+                }
+                if (this.reportDate == "APR") {
+                    start = new Date(
+                        new Date(this.reportDateYear).getFullYear(),
+                        3,
+                        1
+                    );
+                    end = new Date(
+                        new Date(this.reportDateYear).getFullYear(),
+                        4,
+                        1
+                    );
+                    doc.save(
+                        "Income Statement Report " +
+                            month[start.getMonth()] +
+                            " " +
+                            start.getFullYear()
+                    );
+                }
+                if (this.reportDate == "MAY") {
+                    start = new Date(
+                        new Date(this.reportDateYear).getFullYear(),
+                        4,
+                        1
+                    );
+                    end = new Date(
+                        new Date(this.reportDateYear).getFullYear(),
+                        5,
+                        1
+                    );
+                    doc.save(
+                        "Income Statement Report " +
+                            month[start.getMonth()] +
+                            " " +
+                            start.getFullYear()
+                    );
+                }
+                if (this.reportDate == "JUN") {
+                    start = new Date(
+                        new Date(this.reportDateYear).getFullYear(),
+                        5,
+                        1
+                    );
+                    end = new Date(
+                        new Date(this.reportDateYear).getFullYear(),
+                        6,
+                        1
+                    );
+                    doc.save(
+                        "Income Statement Report " +
+                            month[start.getMonth()] +
+                            " " +
+                            start.getFullYear()
+                    );
+                }
+                if (this.reportDate == "JUL") {
+                    start = new Date(
+                        new Date(this.reportDateYear).getFullYear(),
+                        6,
+                        1
+                    );
+                    end = new Date(
+                        new Date(this.reportDateYear).getFullYear(),
+                        7,
+                        1
+                    );
+                    doc.save(
+                        "Income Statement Report " +
+                            month[start.getMonth()] +
+                            " " +
+                            start.getFullYear()
+                    );
+                }
+                if (this.reportDate == "AUG") {
+                    start = new Date(
+                        new Date(this.reportDateYear).getFullYear(),
+                        7,
+                        1
+                    );
+                    end = new Date(
+                        new Date(this.reportDateYear).getFullYear(),
+                        8,
+                        1
+                    );
+                    doc.save(
+                        "Income Statement Report " +
+                            month[start.getMonth()] +
+                            " " +
+                            start.getFullYear()
+                    );
+                }
+                if (this.reportDate == "SEP") {
+                    start = new Date(
+                        new Date(this.reportDateYear).getFullYear(),
+                        8,
+                        1
+                    );
+                    end = new Date(
+                        new Date(this.reportDateYear).getFullYear(),
+                        9,
+                        1
+                    );
+                    doc.save(
+                        "Income Statement Report " +
+                            month[start.getMonth()] +
+                            " " +
+                            start.getFullYear()
+                    );
+                }
+                if (this.reportDate == "OCT") {
+                    start = new Date(
+                        new Date(this.reportDateYear).getFullYear(),
+                        9,
+                        1
+                    );
+                    end = new Date(
+                        new Date(this.reportDateYear).getFullYear(),
+                        10,
+                        1
+                    );
+                    doc.save(
+                        "Income Statement Report " +
+                            month[start.getMonth()] +
+                            " " +
+                            start.getFullYear()
+                    );
+                }
+                if (this.reportDate == "NOV") {
+                    start = new Date(
+                        new Date(this.reportDateYear).getFullYear(),
+                        10,
+                        1
+                    );
+                    end = new Date(
+                        new Date(this.reportDateYear).getFullYear(),
+                        11,
+                        1
+                    );
+                    doc.save(
+                        "Income Statement Report " +
+                            month[start.getMonth()] +
+                            " " +
+                            start.getFullYear()
+                    );
+                }
+                if (this.reportDate == "DEC") {
+                    start = new Date(
+                        new Date(this.reportDateYear).getFullYear(),
+                        11,
+                        1
+                    );
+                    end = new Date(
+                        new Date(this.reportDateYear).getFullYear() + 1,
+                        0,
+                        1
+                    );
+                    doc.save(
+                        "Income Statement Report " +
+                            month[start.getMonth()] +
+                            " " +
+                            start.getFullYear()
+                    );
+                }
+                if (this.reportDate == 12) {
+                    start = new Date(
+                        new Date(this.reportDateYear).getFullYear(),
+                        0,
+                        1
+                    );
+                    end = new Date(
+                        new Date(this.reportDateYear).getFullYear(),
+                        11,
+                        1
+                    );
+                    doc.save(
+                        "Income Statement Report " +
+                            month[start.getMonth()] +
+                            " " +
+                            start.getFullYear() +
+                            " to " +
+                            month[end.getMonth()] +
+                            " " +
+                            end.getFullYear()
+                    );
                 }
             }
         },
@@ -888,6 +2303,7 @@ export default {
             this.lot_bool = false;
             let temp = null;
             let list = [];
+            this.revenue_form.lot = null;
             // console.log(this.lots.filter(elem=>{return elem.block_id===this.blocks.code}))
             temp = this.lots.filter((elem) => {
                 return elem.block_id === this.revenue_form.block;
@@ -935,6 +2351,13 @@ export default {
                 source: null,
             };
             this.lot_bool = true;
+            let association = this.funds.filter((elem) => {
+                return elem.fund_type == "Association Funds";
+            });
+            this.revenue_form.source = association[0].id;
+            this.contingency = this.funds.filter((elem) => {
+                return elem.fund_type == "Contingency Funds";
+            });
         },
         initFilters() {
             this.filters = {
@@ -1080,8 +2503,9 @@ export default {
                         running_balance:
                             this.revenue_form.source == null
                                 ? null
-                                : +this.funds[this.revenue_form.source - 1]
-                                      .amount + +this.revenue_form.amount,
+                                : this.funds[this.revenue_form.source - 1]
+                                      .amount +
+                                  this.revenue_form.amount * 0.85,
                         fund_id: this.revenue_form.source,
                     },
                 });
@@ -1094,10 +2518,23 @@ export default {
                         method: "put",
                         data: {
                             amount:
-                                +this.funds[this.revenue_form.source - 1]
-                                    .amount + +this.revenue_form.amount,
+                                this.funds[this.revenue_form.source - 1]
+                                    .amount +
+                                this.revenue_form.amount * 0.85,
                             fund_type:
                                 this.funds[this.revenue_form.source - 1]
+                                    .fund_type,
+                        },
+                    });
+                    await axios({
+                        url: "/api/fund/" + this.contingency[0].id,
+                        method: "put",
+                        data: {
+                            amount:
+                                this.funds[this.contingency[0].id - 1].amount +
+                                this.revenue_form.amount * 0.15,
+                            fund_type:
+                                this.funds[this.contingency[0].id - 1]
                                     .fund_type,
                         },
                     });
@@ -1157,11 +2594,218 @@ export default {
                 },
             };
         },
+        test() {
+            console.log("Hello");
+        },
     },
     computed: {
         revenueReport() {
-            let start = new Date(this.report.start);
-            let end = new Date(this.report.end);
+            let start = null;
+            let end = null;
+            if (this.reportDate == 1) {
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    0,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    3,
+                    1
+                );
+            }
+            if (this.reportDate == 2) {
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    3,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    6,
+                    1
+                );
+            }
+            if (this.reportDate == 3) {
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    6,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    9,
+                    1
+                );
+            }
+            if (this.reportDate == 4) {
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    9,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear() + 1,
+                    0,
+                    1
+                );
+            }
+            if (this.reportDate == "JAN") {
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    0,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    1,
+                    1
+                );
+            }
+            if (this.reportDate == "FEB") {
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    1,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    2,
+                    1
+                );
+            }
+            if (this.reportDate == "MAR") {
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    2,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    3,
+                    1
+                );
+            }
+            if (this.reportDate == "APR") {
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    3,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    4,
+                    1
+                );
+            }
+            if (this.reportDate == "MAY") {
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    4,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    5,
+                    1
+                );
+            }
+            if (this.reportDate == "JUN") {
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    5,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    6,
+                    1
+                );
+            }
+            if (this.reportDate == "JUL") {
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    6,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    7,
+                    1
+                );
+            }
+            if (this.reportDate == "AUG") {
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    7,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    8,
+                    1
+                );
+            }
+            if (this.reportDate == "SEP") {
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    8,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    9,
+                    1
+                );
+            }
+            if (this.reportDate == "OCT") {
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    9,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    10,
+                    1
+                );
+            }
+            if (this.reportDate == "NOV") {
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    10,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    11,
+                    1
+                );
+            }
+            if (this.reportDate == "DEC") {
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    11,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear() + 1,
+                    0,
+                    1
+                );
+            }
+            if (this.reportDate == 12) {
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    0,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear() + 1,
+                    0,
+                    1
+                );
+            }
             let temp = [];
             let list = this.cashflow;
             let month = [
@@ -1183,7 +2827,11 @@ export default {
             });
             list.forEach((elem) => {
                 let item_date = new Date(elem.created_at);
-                if (elem.collection_type_id && item_date >= start) {
+                if (
+                    elem.collection_type_id &&
+                    item_date >= start &&
+                    item_date <= end
+                ) {
                     temp.push([
                         {
                             content:
@@ -1192,6 +2840,15 @@ export default {
                                 new Date(elem.created_at).getDate() +
                                 "/" +
                                 new Date(elem.created_at).getFullYear(),
+                            colSpan: 1,
+                            rowSpan: 1,
+                        },
+                        {
+                            content:
+                                "Block " +
+                                elem.lot.block.number +
+                                " Lot " +
+                                elem.lot.number,
                             colSpan: 1,
                             rowSpan: 1,
                         },
@@ -1211,8 +2868,212 @@ export default {
             return temp;
         },
         revenueTotal() {
-            let start = new Date(this.report.start);
-            let end = new Date(this.report.end);
+            let start = null;
+            let end = null;
+            if (this.reportDate == 1) {
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    0,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    3,
+                    1
+                );
+            }
+            if (this.reportDate == 2) {
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    3,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    6,
+                    1
+                );
+            }
+            if (this.reportDate == 3) {
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    6,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    9,
+                    1
+                );
+            }
+            if (this.reportDate == 4) {
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    9,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear() + 1,
+                    0,
+                    1
+                );
+            }
+            if (this.reportDate == "JAN") {
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    0,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    1,
+                    1
+                );
+            }
+            if (this.reportDate == "FEB") {
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    1,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    2,
+                    1
+                );
+            }
+            if (this.reportDate == "MAR") {
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    2,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    3,
+                    1
+                );
+            }
+            if (this.reportDate == "APR") {
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    3,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    4,
+                    1
+                );
+            }
+            if (this.reportDate == "MAY") {
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    4,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    5,
+                    1
+                );
+            }
+            if (this.reportDate == "JUN") {
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    5,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    6,
+                    1
+                );
+            }
+            if (this.reportDate == "JUL") {
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    6,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    7,
+                    1
+                );
+            }
+            if (this.reportDate == "AUG") {
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    7,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    8,
+                    1
+                );
+            }
+            if (this.reportDate == "SEP") {
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    8,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    9,
+                    1
+                );
+            }
+            if (this.reportDate == "OCT") {
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    9,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    10,
+                    1
+                );
+            }
+            if (this.reportDate == "NOV") {
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    10,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    11,
+                    1
+                );
+            }
+            if (this.reportDate == "DEC") {
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    11,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear() + 1,
+                    0,
+                    1
+                );
+            }
+            if (this.reportDate == 12) {
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    0,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear() + 1,
+                    0,
+                    1
+                );
+            }
             let total = 0;
             let list = this.cashflow;
             let month = [
@@ -1234,15 +3095,223 @@ export default {
             });
             list.forEach((elem) => {
                 let item_date = new Date(elem.created_at);
-                if (elem.collection_type_id && item_date >= start) {
-                    total += elem.amount;
+                if (
+                    elem.collection_type_id &&
+                    item_date >= start &&
+                    item_date <= end
+                ) {
+                    total += +elem.amount;
                 }
             });
             return total;
         },
         expenseReport() {
-            let start = new Date(this.report.start);
-            let end = new Date(this.report.end);
+            let start = null;
+            let end = null;
+            if (this.reportDate == 1) {
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    0,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    3,
+                    1
+                );
+            }
+            if (this.reportDate == 2) {
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    3,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    6,
+                    1
+                );
+            }
+            if (this.reportDate == 3) {
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    6,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    9,
+                    1
+                );
+            }
+            if (this.reportDate == 4) {
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    9,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear() + 1,
+                    0,
+                    1
+                );
+            }
+            if (this.reportDate == "JAN") {
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    0,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    1,
+                    1
+                );
+            }
+            if (this.reportDate == "FEB") {
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    1,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    2,
+                    1
+                );
+            }
+            if (this.reportDate == "MAR") {
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    2,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    3,
+                    1
+                );
+            }
+            if (this.reportDate == "APR") {
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    3,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    4,
+                    1
+                );
+            }
+            if (this.reportDate == "MAY") {
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    4,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    5,
+                    1
+                );
+            }
+            if (this.reportDate == "JUN") {
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    5,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    6,
+                    1
+                );
+            }
+            if (this.reportDate == "JUL") {
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    6,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    7,
+                    1
+                );
+            }
+            if (this.reportDate == "AUG") {
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    7,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    8,
+                    1
+                );
+            }
+            if (this.reportDate == "SEP") {
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    8,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    9,
+                    1
+                );
+            }
+            if (this.reportDate == "OCT") {
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    9,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    10,
+                    1
+                );
+            }
+            if (this.reportDate == "NOV") {
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    10,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    11,
+                    1
+                );
+            }
+            if (this.reportDate == "DEC") {
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    11,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear() + 1,
+                    0,
+                    1
+                );
+            }
+            if (this.reportDate == 12) {
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    0,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear() + 1,
+                    0,
+                    1
+                );
+            }
             let temp = [];
             let list = this.cashflow;
             let month = [
@@ -1264,7 +3333,11 @@ export default {
             });
             list.forEach((elem) => {
                 let item_date = new Date(elem.created_at);
-                if (elem.expense_type_id && item_date >= start) {
+                if (
+                    elem.expense_type_id &&
+                    item_date >= start &&
+                    item_date <= end
+                ) {
                     temp.push([
                         {
                             content:
@@ -1292,8 +3365,212 @@ export default {
             return temp;
         },
         expenseTotal() {
-            let start = new Date(this.report.start);
-            let end = new Date(this.report.end);
+            let start = null;
+            let end = null;
+            if (this.reportDate == 1) {
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    0,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    3,
+                    1
+                );
+            }
+            if (this.reportDate == 2) {
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    3,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    6,
+                    1
+                );
+            }
+            if (this.reportDate == 3) {
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    6,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    9,
+                    1
+                );
+            }
+            if (this.reportDate == 4) {
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    9,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear() + 1,
+                    0,
+                    1
+                );
+            }
+            if (this.reportDate == "JAN") {
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    0,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    1,
+                    1
+                );
+            }
+            if (this.reportDate == "FEB") {
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    1,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    2,
+                    1
+                );
+            }
+            if (this.reportDate == "MAR") {
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    2,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    3,
+                    1
+                );
+            }
+            if (this.reportDate == "APR") {
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    3,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    4,
+                    1
+                );
+            }
+            if (this.reportDate == "MAY") {
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    4,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    5,
+                    1
+                );
+            }
+            if (this.reportDate == "JUN") {
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    5,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    6,
+                    1
+                );
+            }
+            if (this.reportDate == "JUL") {
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    6,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    7,
+                    1
+                );
+            }
+            if (this.reportDate == "AUG") {
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    7,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    8,
+                    1
+                );
+            }
+            if (this.reportDate == "SEP") {
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    8,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    9,
+                    1
+                );
+            }
+            if (this.reportDate == "OCT") {
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    9,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    10,
+                    1
+                );
+            }
+            if (this.reportDate == "NOV") {
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    10,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    11,
+                    1
+                );
+            }
+            if (this.reportDate == "DEC") {
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    11,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear() + 1,
+                    0,
+                    1
+                );
+            }
+            if (this.reportDate == 12) {
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    0,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear() + 1,
+                    0,
+                    1
+                );
+            }
             let total = 0;
             let list = this.cashflow;
             let month = [
@@ -1315,12 +3592,504 @@ export default {
             });
             list.forEach((elem) => {
                 let item_date = new Date(elem.created_at);
-                if (!elem.collection_type_id && item_date >= start) {
-                    total += elem.amount;
+                if (
+                    !elem.collection_type_id &&
+                    item_date >= start &&
+                    item_date <= end
+                ) {
+                    total += +elem.amount;
                 }
             });
             return total;
         },
+        netIncome() {
+            let start = null;
+            let end = null;
+            if (this.reportDate == 1) {
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    0,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    3,
+                    1
+                );
+            }
+            if (this.reportDate == 2) {
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    3,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    6,
+                    1
+                );
+            }
+            if (this.reportDate == 3) {
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    6,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    9,
+                    1
+                );
+            }
+            if (this.reportDate == 4) {
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    9,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear() + 1,
+                    0,
+                    1
+                );
+            }
+            if (this.reportDate == "JAN") {
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    0,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    1,
+                    1
+                );
+            }
+            if (this.reportDate == "FEB") {
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    1,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    2,
+                    1
+                );
+            }
+            if (this.reportDate == "MAR") {
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    2,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    3,
+                    1
+                );
+            }
+            if (this.reportDate == "APR") {
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    3,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    4,
+                    1
+                );
+            }
+            if (this.reportDate == "MAY") {
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    4,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    5,
+                    1
+                );
+            }
+            if (this.reportDate == "JUN") {
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    5,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    6,
+                    1
+                );
+            }
+            if (this.reportDate == "JUL") {
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    6,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    7,
+                    1
+                );
+            }
+            if (this.reportDate == "AUG") {
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    7,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    8,
+                    1
+                );
+            }
+            if (this.reportDate == "SEP") {
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    8,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    9,
+                    1
+                );
+            }
+            if (this.reportDate == "OCT") {
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    9,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    10,
+                    1
+                );
+            }
+            if (this.reportDate == "NOV") {
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    10,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    11,
+                    1
+                );
+            }
+            if (this.reportDate == "DEC") {
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    11,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear() + 1,
+                    0,
+                    1
+                );
+            }
+            if (this.reportDate == 12) {
+                start = new Date(
+                    new Date(this.reportDateYear).getFullYear(),
+                    0,
+                    1
+                );
+                end = new Date(
+                    new Date(this.reportDateYear).getFullYear() + 1,
+                    0,
+                    1
+                );
+            }
+            let temp = [];
+            let totals_col = [];
+            let totals_exp = [];
+            let list = this.cashflow;
+            let collection = this.collection_type_list;
+            let expense = this.expense_type_list;
+            temp.push(["Revenue", "", ""]);
+            collection.forEach((elem) => {
+                totals_col.push(0);
+            });
+            collection.forEach((col, idx) => {
+                list.forEach((elem) => {
+                    let item_date = new Date(elem.created_at);
+                    if (
+                        elem.collection_type_id == col.id &&
+                        item_date >= start &&
+                        item_date <= end
+                    ) {
+                        totals_col[idx] += +elem.amount;
+                    }
+                });
+            });
+            collection.forEach((col, idx) => {
+                temp.push([
+                    "",
+                    col.name,
+                    totals_col[idx].toLocaleString() + " PHP",
+                ]);
+            });
+            temp.push(["Expense", "", ""]);
+            expense.forEach((elem) => {
+                totals_exp.push(0);
+            });
+            expense.forEach((col, idx) => {
+                list.forEach((elem) => {
+                    let item_date = new Date(elem.created_at);
+                    if (
+                        elem.expense_type_id == col.id &&
+                        item_date >= start &&
+                        item_date <= end
+                    ) {
+                        totals_exp[idx] += +elem.amount;
+                    }
+                });
+            });
+            expense.forEach((col, idx) => {
+                temp.push([
+                    "",
+                    col.name,
+                    totals_exp[idx].toLocaleString() + " PHP",
+                ]);
+            });
+            // list.forEach((elem) => {
+            //   if(elem.collection_type){
+            //     collection.forEach((col)=>{
+            //       if(col.id==elem.collection_type_id){
+            //         totals[col.id-1]+=elem.amount
+            //       }
+            //     })
+            //   }
+            //   if(elem.expense_type){
+
+            //   }
+            // });
+            return temp;
+        },
+        // revenueCount() {
+        //   let count = 0;
+        //   this.statement.forEach((elem) => {
+        //     if (elem.type == "Revenue") {
+        //       count += 1;
+        //     }
+        //   });
+        //   return count;
+        // },
+        // expenseCount() {
+        //   let count = 0;
+        //   this.statement.forEach((elem) => {
+        //     if (elem.type == "Expense") {
+        //       count += 1;
+        //     }
+        //   });
+        //   return count;
+        // },
+        incomeStatement() {
+            let list = this.cashflow;
+            list.reverse();
+            list.forEach((elem) => {
+                elem.created_at = new Date(elem.created_at);
+                if (elem.collection_type_id) {
+                    elem["type"] = "Revenue";
+                } else {
+                    elem["type"] = "Expense";
+                }
+            });
+            return list;
+        },
+        monthlyContingency() {
+            let contingency = [];
+            if (this.reportDate == "JAN") {
+                contingency = [
+                    "",
+                    {
+                        content: "Contingency",
+                        colSpan: 1,
+                        rowSpan: 1,
+                        styles: {
+                            halign: "right",
+                        },
+                    },
+                    (this.revenueTotal - this.expenseTotal) * 0.15,
+                ];
+            }
+            if (this.reportDate == "FEB") {
+                contingency = [
+                    "",
+                    {
+                        content: "Contingency",
+                        colSpan: 1,
+                        rowSpan: 1,
+                        styles: {
+                            halign: "right",
+                        },
+                    },
+                    (this.revenueTotal - this.expenseTotal) * 0.15,
+                ];
+            }
+            if (this.reportDate == "MAR") {
+                contingency = [
+                    "",
+                    {
+                        content: "Contingency",
+                        colSpan: 1,
+                        rowSpan: 1,
+                        styles: {
+                            halign: "right",
+                        },
+                    },
+                    (this.revenueTotal - this.expenseTotal) * 0.15,
+                ];
+            }
+            if (this.reportDate == "APR") {
+                contingency = [
+                    "",
+                    {
+                        content: "Contingency",
+                        colSpan: 1,
+                        rowSpan: 1,
+                        styles: {
+                            halign: "right",
+                        },
+                    },
+                    (this.revenueTotal - this.expenseTotal) * 0.15,
+                ];
+            }
+            if (this.reportDate == "MAY") {
+                contingency = [
+                    "",
+                    {
+                        content: "Contingency",
+                        colSpan: 1,
+                        rowSpan: 1,
+                        styles: {
+                            halign: "right",
+                        },
+                    },
+                    (this.revenueTotal - this.expenseTotal) * 0.15,
+                ];
+            }
+            if (this.reportDate == "JUN") {
+                contingency = [
+                    "",
+                    {
+                        content: "Contingency",
+                        colSpan: 1,
+                        rowSpan: 1,
+                        styles: {
+                            halign: "right",
+                        },
+                    },
+                    (this.revenueTotal - this.expenseTotal) * 0.15,
+                ];
+            }
+            if (this.reportDate == "JUL") {
+                contingency = [
+                    "",
+                    {
+                        content: "Contingency",
+                        colSpan: 1,
+                        rowSpan: 1,
+                        styles: {
+                            halign: "right",
+                        },
+                    },
+                    (this.revenueTotal - this.expenseTotal) * 0.15,
+                ];
+            }
+            if (this.reportDate == "AUG") {
+                contingency = [
+                    "",
+                    {
+                        content: "Contingency",
+                        colSpan: 1,
+                        rowSpan: 1,
+                        styles: {
+                            halign: "right",
+                        },
+                    },
+                    (this.revenueTotal - this.expenseTotal) * 0.15,
+                ];
+            }
+            if (this.reportDate == "SEP") {
+                contingency = [
+                    "",
+                    {
+                        content: "Contingency",
+                        colSpan: 1,
+                        rowSpan: 1,
+                        styles: {
+                            halign: "right",
+                        },
+                    },
+                    (this.revenueTotal - this.expenseTotal) * 0.15,
+                ];
+            }
+            if (this.reportDate == "OCT") {
+                contingency = [
+                    "",
+                    {
+                        content: "Contingency",
+                        colSpan: 1,
+                        rowSpan: 1,
+                        styles: {
+                            halign: "right",
+                        },
+                    },
+                    (this.revenueTotal - this.expenseTotal) * 0.15,
+                ];
+            }
+            if (this.reportDate == "NOV") {
+                contingency = [
+                    "",
+                    {
+                        content: "Contingency",
+                        colSpan: 1,
+                        rowSpan: 1,
+                        styles: {
+                            halign: "right",
+                        },
+                    },
+                    (this.revenueTotal - this.expenseTotal) * 0.15,
+                ];
+            }
+            if (this.reportDate == "DEC") {
+                contingency = [
+                    "",
+                    {
+                        content: "Contingency",
+                        colSpan: 1,
+                        rowSpan: 1,
+                        styles: {
+                            halign: "right",
+                        },
+                    },
+                    (this.revenueTotal - this.expenseTotal) * 0.15,
+                ];
+            }
+            return contingency;
+        },
+    },
+    mounted() {
+        let revenue = this.revenue;
+        let expenses = this.expense;
+        revenue.forEach((elem) => {
+            this.overall.revenue += +elem.amount;
+        });
+        expenses.forEach((elem) => {
+            this.overall.expense += +elem.amount;
+        });
+
+        this.overall.income = +this.overall.revenue - +this.overall.expense;
     },
     created() {
         this.initFilters();
@@ -1328,4 +4097,17 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+td,
+th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+}
+</style>

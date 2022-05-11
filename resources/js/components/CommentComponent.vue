@@ -55,7 +55,7 @@
         </div>
 
         <div v-if="show_reply" class="col-11 col-offset-1 pt-2 mt-2">
-            <div class="p-inputgroup mb-2">
+            <div v-if="!userLogged.flagged" class="p-inputgroup mb-2">
                 <div v-if="userLogged.profile_pic">
                     <Avatar
                         :image="`http://127.0.0.1:8000${userLogged.profile_pic}`"
@@ -80,6 +80,36 @@
                     :autoResize="true"
                     rows="1"
                     class="w-full"
+                >
+                </Textarea>
+            </div>
+            <div v-else class="p-inputgroup mb-2">
+                <div v-if="userLogged.profile_pic">
+                    <Avatar
+                        :image="`http://127.0.0.1:8000${userLogged.profile_pic}`"
+                        class="mr-2"
+                        size="large"
+                        shape="circle"
+                        alt="Image"
+                    />
+                </div>
+                <div v-else>
+                    <Avatar
+                        image="http://127.0.0.1:8000/storage/images/avatar.png"
+                        class="mr-2"
+                        size="large"
+                        shape="circle"
+                        alt="Image"
+                    />
+                </div>
+                <Textarea
+                    @keypress.enter="replyPost"
+                    v-model="message"
+                    :autoResize="true"
+                    rows="1"
+                    class="w-full"
+                    placeholder="Can't reply because your account is flagged please contact an admin/officer"
+                    disabled
                 >
                 </Textarea>
             </div>

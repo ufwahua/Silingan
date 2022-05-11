@@ -39,7 +39,6 @@
                         :value="positions"
                         :filters="filters"
                         breakpoint="1230px"
-                        :paginator="true"
                         :rows="10"
                     >
                         <template #empty> No positions found </template>

@@ -43,6 +43,42 @@
                 </div>
             </div>
             <div class="col-12 lg:col-6 xl:col-3">
+                <div class="card mb-0 bg-green-100">
+                    <div class="flex justify-content-between mb-3">
+                        <div>
+                            <span
+                                class="block font-medium text-4xl font-bold mb-3"
+                                >{{ not_flagged }}</span
+                            >
+                            <div class="text-900">Not Flagged</div>
+                        </div>
+
+                        <div
+                            class="flex align-items-center justify-content-center"
+                            style="width: 2.5rem; height: 2.5rem"
+                        ></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 lg:col-6 xl:col-3">
+                <div class="card mb-0 bg-pink-100">
+                    <div class="flex justify-content-between mb-3">
+                        <div>
+                            <span
+                                class="block font-medium text-4xl font-bold mb-3"
+                                >{{ flagged }}</span
+                            >
+                            <div class="text-900">Flagged</div>
+                        </div>
+
+                        <div
+                            class="flex align-items-center justify-content-center"
+                            style="width: 2.5rem; height: 2.5rem"
+                        ></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 lg:col-6 xl:col-3">
                 <div class="card mb-0 bg-blue-100">
                     <div class="flex justify-content-between mb-3">
                         <div>
@@ -67,7 +103,7 @@
                         :value="users"
                         :filters="filters"
                         breakpoint="1350px"
-                        :paginator="true"
+                        
                         :rows="10"
                     > -->
         <div class="grid p-fluid">
@@ -77,12 +113,11 @@
                         :value="users"
                         :filters="filters"
                         breakpoint="1350px"
-                        :paginator="true"
                         :rows="10"
                     >
                         <div>
                             <div class="grid formgrid">
-                                <div class="col-12 mb-2 lg:col-4 lg:mb-0">
+                                <div class="col-12 mb-2 lg:col-3 lg:mb-0">
                                     <span class="p-input-icon-left">
                                         <i class="pi pi-search" />
                                         <InputText
@@ -91,7 +126,7 @@
                                         />
                                     </span>
                                 </div>
-                                <div class="col-12 mb-2 lg:col-4 lg:mb-0">
+                                <div class="col-12 mb-2 lg:col-2 lg:mb-0">
                                     <Dropdown
                                         v-model="filters['status'].value"
                                         :showClear="true"
@@ -101,8 +136,18 @@
                                         placeholder="Filter by status"
                                     ></Dropdown>
                                 </div>
+                                <div class="col-12 mb-2 lg:col-2 lg:mb-0">
+                                    <Dropdown
+                                        v-model="filters['flagged'].value"
+                                        :showClear="true"
+                                        :options="flag_dropdown"
+                                        optionLabel="status"
+                                        optionValue="value"
+                                        placeholder="Filter flag"
+                                    ></Dropdown>
+                                </div>
                                 <div
-                                    class="col-12 mb-2 lg:col-4 lg:mb-0 flex justify-content-end"
+                                    class="col-12 mb-2 lg:col-2 lg:mb-0 flex justify-content-end"
                                 >
                                     <Button
                                         icon="pi pi-filter-slash"
@@ -192,6 +237,22 @@
                                 <Badge :class="badgecolor(data.status)">{{
                                     data.status
                                 }}</Badge>
+                            </template>
+                        </Column>
+                        <Column header="Flag" field="flag">
+                            <template #body="{ data }">
+                                <Button
+                                    v-if="data.flagged == true"
+                                    icon="pi pi-flag-fill"
+                                    class="p-button-rounded p-button-danger"
+                                    disabled
+                                />
+                                <Button
+                                    v-else
+                                    icon="pi pi-flag-fill"
+                                    class="p-button-rounded p-button-success"
+                                    disabled
+                                />
                             </template>
                         </Column>
                         <Column header="Actions" field="actions">
@@ -985,11 +1046,7 @@
                         header="Emergency Contacts"
                         :modal="true"
                     >
-                        <DataTable
-                            :value="emergency_contacts"
-                            :paginator="true"
-                            :rows="10"
-                        >
+                        <DataTable :value="emergency_contacts" :rows="10">
                             <template #empty>
                                 No emergency contacts found
                             </template>
@@ -1076,6 +1133,36 @@ export default {
                 });
                 return inactive.length;
             }),
+            flagged: computed(() => {
+                let temp = [];
+                let flagged = [];
+                store.state.users.forEach((elem) => {
+                    if (elem.role.toUpperCase() == "SECURITY OFFICER") {
+                        temp.push(elem);
+                    }
+                });
+                temp.forEach((elem) => {
+                    if (elem.flagged == true) {
+                        flagged.push(elem);
+                    }
+                });
+                return flagged.length;
+            }),
+            not_flagged: computed(() => {
+                let temp = [];
+                let not_flagged = [];
+                store.state.users.forEach((elem) => {
+                    if (elem.role.toUpperCase() == "SECURITY OFFICER") {
+                        temp.push(elem);
+                    }
+                });
+                temp.forEach((elem) => {
+                    if (elem.flagged == false) {
+                        not_flagged.push(elem);
+                    }
+                });
+                return not_flagged.length;
+            }),
             total: computed(() => {
                 let temp = [];
                 store.state.users.forEach((elem) => {
@@ -1118,6 +1205,7 @@ export default {
                 status: "",
                 to: "",
                 from: "",
+                flagged: "",
             },
             security_shift: "",
 
@@ -1141,12 +1229,59 @@ export default {
                 { status: "verified", value: true },
                 { status: "not verified", value: false },
             ],
+            flag_dropdown: [
+                { status: "flagged", value: true },
+                { status: "not flagged", value: false },
+            ],
 
             emergencyContactDialog: false,
             emergency_contacts: null,
         };
     },
     methods: {
+        async changeFlagStatus(data) {
+            this.process = true;
+            console.log("verify", data);
+            await axios({
+                method: "put",
+                url: "/api/user/" + data.id,
+                data: {
+                    first_name: data.first_name,
+                    last_name: data.last_name,
+                    gender: data.gender,
+                    block_lot_id: null,
+                    email: data.email,
+                    verified: data.verified,
+                    status: data.status,
+                    flagged: data.flagged ? false : true,
+                    has_voted: data.has_voted,
+                    age: data.age,
+                    contact_num: data.contact_num,
+                    role: data.role,
+                    security_shift: data.security_shift,
+                },
+            })
+                .then(() => {
+                    this.$toast.add({
+                        severity: "success",
+                        summary: "Successful",
+                        detail:
+                            data.flagged == false
+                                ? "Security Officer flagged"
+                                : "Security Officer unflagged",
+                        life: 3000,
+                    });
+                    this.$store.dispatch("getAllUsers");
+                    this.resetFields();
+                    this.process = false;
+                })
+                .catch((err) => {
+                    console.log(err.response);
+                    this.resetErrors();
+                    this.validate(err);
+                    this.process = false;
+                });
+        },
         getShift(data) {
             const shift = data.security_shift.split(" - ");
 
@@ -1181,6 +1316,7 @@ export default {
         },
         clearFilter() {
             this.filters["status"].value = null;
+            this.filters["flagged"].value = null;
         },
         viewSecurityOfficer() {
             this.viewSecurityDialog = true;
@@ -1188,70 +1324,127 @@ export default {
         toggle(data) {
             this.$refs.menu.toggle(event);
             this.populateFields(data);
-            if (data.status == "active") {
-                this.menus = [
-                    {
-                        label: "View Security Officer",
-                        icon: "pi pi-user",
-                        command: () => {
-                            this.viewSecurityOfficer();
-                        },
-                    },
-                    {
-                        label: "Update Security Officer",
-                        icon: "pi pi-pencil",
-                        command: () => {
-                            this.updateUser();
-                        },
-                    },
-                    {
-                        label: "Emergency Contacts",
-                        icon: "pi pi-id-card",
-                        command: () => {
-                            this.viewEmergencyContacts();
-                        },
-                    },
-                    {
-                        label: "Deactivate Security Officer",
-                        icon: "pi pi-lock",
-                        command: () => {
-                            this.changeStatus(data);
-                        },
-                    },
-                ];
-            } else {
-                this.menus = [
-                    {
-                        label: "View Security Officer",
-                        icon: "pi pi-user",
-                        command: () => {
-                            this.viewSecurityOfficer();
-                        },
-                    },
-                    {
-                        label: "Update Security Officer",
-                        icon: "pi pi-pencil",
-                        command: () => {
-                            this.updateUser();
-                        },
-                    },
-                    {
-                        label: "Emergency Contacts",
-                        icon: "pi pi-id-card",
-                        command: () => {
-                            this.viewEmergencyContacts();
-                        },
-                    },
+            this.menus = [];
+            this.menus.push({
+                label: "View Security Officer",
+                icon: "pi pi-user",
+                command: () => {
+                    this.viewSecurityOfficer();
+                },
+            });
+            this.menus.push({
+                label: "Update Security Officer",
+                icon: "pi pi-pencil",
+                command: () => {
+                    this.updateUser();
+                },
+            });
+            this.menus.push({
+                label: "Emergency Contacts",
+                icon: "pi pi-id-card",
+                command: () => {
+                    this.viewEmergencyContacts();
+                },
+            });
 
-                    {
-                        label: "Activate Security Officer",
-                        icon: "pi pi-unlock",
-                        command: () => {
-                            this.changeStatus(data);
-                        },
+            if (data.status == "active") {
+                this.menus.push({
+                    label: "Deactivate Security Officer",
+                    icon: "pi pi-lock",
+                    command: () => {
+                        this.changeStatus(data);
                     },
-                ];
+                });
+            } else {
+                this.menus.push({
+                    label: "Activate Security Officer",
+                    icon: "pi pi-unlock",
+                    command: () => {
+                        this.changeStatus(data);
+                    },
+                });
             }
+            if (data.flagged == false) {
+                this.menus.push({
+                    label: `Flag ${data.role}`,
+                    icon: "pi pi-flag-fill",
+                    command: () => {
+                        this.changeFlagStatus(data);
+                    },
+                });
+            } else {
+                this.menus.push({
+                    label: `UnFlag ${data.role}`,
+                    icon: "pi pi-flag",
+                    command: () => {
+                        this.changeFlagStatus(data);
+                    },
+                });
+            }
+            // if (data.status == "active") {
+            //     this.menus = [
+            //         {
+            //             label: "View Security Officer",
+            //             icon: "pi pi-user",
+            //             command: () => {
+            //                 this.viewSecurityOfficer();
+            //             },
+            //         },
+            //         {
+            //             label: "Update Security Officer",
+            //             icon: "pi pi-pencil",
+            //             command: () => {
+            //                 this.updateUser();
+            //             },
+            //         },
+            //         {
+            //             label: "Emergency Contacts",
+            //             icon: "pi pi-id-card",
+            //             command: () => {
+            //                 this.viewEmergencyContacts();
+            //             },
+            //         },
+            //         {
+            //             label: "Deactivate Security Officer",
+            //             icon: "pi pi-lock",
+            //             command: () => {
+            //                 this.changeStatus(data);
+            //             },
+            //         },
+            //     ];
+            // } else {
+            //     this.menus = [
+            //         {
+            //             label: "View Security Officer",
+            //             icon: "pi pi-user",
+            //             command: () => {
+            //                 this.viewSecurityOfficer();
+            //             },
+            //         },
+            //         {
+            //             label: "Update Security Officer",
+            //             icon: "pi pi-pencil",
+            //             command: () => {
+            //                 this.updateUser();
+            //             },
+            //         },
+            //         {
+            //             label: "Emergency Contacts",
+            //             icon: "pi pi-id-card",
+            //             command: () => {
+            //                 this.viewEmergencyContacts();
+            //             },
+            //         },
+
+            //         {
+            //             label: "Activate Security Officer",
+            //             icon: "pi pi-unlock",
+            //             command: () => {
+            //                 this.changeStatus(data);
+            //             },
+            //         },
+            //     ];
+            // }
         },
         populateFields(data) {
             this.resetFields();
@@ -1269,7 +1462,7 @@ export default {
             this.form.verified = data.verified;
             this.form.has_voted = data.has_voted;
             this.form.status = data.status;
-
+            this.form.flagged = data.flagged;
             if (data.security_shift) {
                 let shift = data.security_shift.split(" - ");
 
@@ -1305,6 +1498,10 @@ export default {
                     matchMode: FilterMatchMode.EQUALS,
                 },
                 status: {
+                    value: null,
+                    matchMode: FilterMatchMode.EQUALS,
+                },
+                flagged: {
                     value: null,
                     matchMode: FilterMatchMode.EQUALS,
                 },
@@ -1601,6 +1798,4 @@ export default {
 };
 </script>
 
-<style>
-
-</style>
+<style></style>

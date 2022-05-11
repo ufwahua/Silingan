@@ -20,11 +20,7 @@ class FundSeeder extends Seeder
         ]);
         Fund::create([
             'amount' => 0,
-            'fund_type' => 'Savings'
-        ]);
-        Fund::create([
-            'amount' => 0,
-            'fund_type' => 'Maintenance Funds'
+            'fund_type' => 'Contingency Funds'
         ]);
     }
 }

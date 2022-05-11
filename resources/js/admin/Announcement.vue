@@ -39,7 +39,6 @@
                         :value="announcements"
                         :filters="filters"
                         breakpoint="1230px"
-                        :paginator="true"
                         :rows="10"
                     >
                         <template #empty> No announcement found </template>

@@ -35,6 +35,11 @@ div
                                     <b class="p-0 m-0">
                                         [{{ post.user.role }}]
                                     </b>
+                                    <b v-if="post.user.lot">
+                                        Block
+                                        {{ post.user.lot.block.number }} Lot
+                                        {{ post.user.lot.number }}</b
+                                    >
                                 </div>
                                 <div class="col-12">
                                     <p>{{ post.updated_at }}</p>
@@ -132,7 +137,7 @@ div
             </div>
             <hr />
             <div class="p-3" v-if="comment_show">
-                <div class="p-inputgroup mb-2">
+                <div v-if="!userLogged.flagged" class="p-inputgroup mb-2">
                     <div v-if="userLogged.profile_pic">
                         <Avatar
                             :image="`http://127.0.0.1:8000${userLogged.profile_pic}`"
@@ -158,6 +163,37 @@ div
                         :autoResize="true"
                         rows="1"
                         class="w-full"
+                    >
+                    </Textarea>
+                </div>
+                <div v-else class="p-inputgroup mb-2">
+                    <div v-if="userLogged.profile_pic">
+                        <Avatar
+                            :image="`http://127.0.0.1:8000${userLogged.profile_pic}`"
+                            class="mr-2"
+                            size="large"
+                            shape="circle"
+                            alt="Image"
+                        />
+                    </div>
+                    <div v-else>
+                        <Avatar
+                            image="http://127.0.0.1:8000/storage/images/avatar.png"
+                            class="mr-2"
+                            size="large"
+                            shape="circle"
+                            alt="Image"
+                        />
+                    </div>
+
+                    <Textarea
+                        @keypress.enter="commentPost"
+                        v-model="message"
+                        :autoResize="true"
+                        rows="1"
+                        class="w-full"
+                        disabled
+                        placeholder="Can't post because your account is flagged please contact an admin/officer"
                     >
                     </Textarea>
                 </div>
@@ -462,6 +498,106 @@ export default {
     },
 
     methods: {
+        async changeFlagStatus(data) {
+            this.loading = true;
+            if (data.role == "security officer") {
+                await axios({
+                    method: "put",
+                    url: "/api/user/" + data.id,
+                    data: {
+                        first_name: data.first_name,
+                        last_name: data.last_name,
+                        gender: data.gender,
+                        block_lot_id: null,
+                        email: data.email,
+                        verified: data.verified,
+                        status: data.status,
+                        flagged: data.flagged ? false : true,
+                        has_voted: data.has_voted,
+                        age: data.age,
+                        contact_num: data.contact_num,
+                        role: data.role,
+                        security_shift: data.security_shift,
+                    },
+                })
+                    .then(() => {
+                        this.$toast.add({
+                            severity: "success",
+                            summary: "Successful",
+                            detail:
+                                data.flagged == false
+                                    ? "Security Officer flagged"
+                                    : "Security Officer unflagged",
+                            life: 3000,
+                        });
+                        if (this.group_id == 1) {
+                            this.$store.dispatch(
+                                "posts/getTimeLine",
+                                this.$store.state.userLogged.id
+                            );
+                        } else {
+                            this.$store.dispatch(
+                                "posts/getMarketPlaceNotVerified",
+                                this.$store.state.userLogged.id
+                            );
+                        }
+
+                        this.loading = false;
+                    })
+                    .catch((err) => {
+                        console.log(err.response);
+                        this.loading = false;
+                    });
+            } else if (data.role == "officer" || data.role == "resident") {
+                await axios({
+                    method: "put",
+                    url: "/api/user/" + data.id,
+                    data: {
+                        first_name: data.first_name,
+                        last_name: data.last_name,
+                        gender: data.gender,
+                        block_lot_id: data.block_lot_id,
+                        email: data.email,
+                        verified: data.verified,
+                        has_voted: data.has_voted,
+                        age: data.age,
+                        contact_num: data.contact_num,
+                        role: data.role,
+                        status: data.status,
+                        tag_as: data.tag_as,
+                        flagged: data.flagged ? false : true,
+                    },
+                })
+                    .then(() => {
+                        this.$toast.add({
+                            severity: "success",
+                            summary: "Successful",
+                            detail:
+                                data.flagged == false
+                                    ? "User Flagged"
+                                    : "User UnFlagged",
+                            life: 3000,
+                        });
+                        if (this.group_id == 1) {
+                            this.$store.dispatch(
+                                "posts/getTimeLine",
+                                this.$store.state.userLogged.id
+                            );
+                        } else {
+                            this.$store.dispatch(
+                                "posts/getMarketPlaceNotVerified",
+                                this.$store.state.userLogged.id
+                            );
+                        }
+
+                        this.loading = false;
+                    })
+                    .catch((err) => {
+                        console.log(err.response);
+                        this.loading = false;
+                    });
+            }
+        },
         async approvePost() {
             this.loading = true;
             await axios({
@@ -559,6 +695,7 @@ export default {
                             this.$store.state.userLogged.id
                         );
                     }
+
                     if (this.post.user.id != this.$store.state.userLogged.id) {
                         await axios({
                             method: "post",
@@ -578,6 +715,7 @@ export default {
                             });
                     }
                     this.$store.dispatch("posts/getSpecificPost", this.post.id);
+
                     this.message = null;
                 })
                 .catch((error) => {
@@ -588,6 +726,7 @@ export default {
             this.comment_show = !this.comment_show;
         },
         toggle(event) {
+            this.populateMenu();
             this.$refs.menu.toggle(event);
         },
         showDeletedPostToast() {
@@ -764,6 +903,23 @@ export default {
                         },
                     },
                 ];
+                if (this.post.user.flagged) {
+                    this.menus.push({
+                        label: "UnFlag " + this.post.user.first_name,
+                        icon: "pi pi-flag",
+                        command: () => {
+                            this.changeFlagStatus(this.post.user);
+                        },
+                    });
+                } else {
+                    this.menus.push({
+                        label: "Flag " + this.post.user.first_name,
+                        icon: "pi pi-flag-fill",
+                        command: () => {
+                            this.changeFlagStatus(this.post.user);
+                        },
+                    });
+                }
             } else {
                 this.menus = [
                     {
@@ -784,9 +940,6 @@ export default {
     },
     mounted() {
         this.countComment();
-    },
-    created() {
-        this.populateMenu();
     },
 };
 </script>

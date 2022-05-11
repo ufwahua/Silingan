@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Post;
 use App\Models\User;
 use App\Models\Candidate;
-use Illuminate\Support\Str;
 
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\Http\JsonResponse;
@@ -214,6 +215,7 @@ class UserController extends Controller
                     'tag_as' => ['sometimes'],
                     'profile_pic'=> ['sometimes'],
                     'security_shift'=> ['required'],
+                    'flagged'=> ['sometimes'],
                 ]));
             }else{
                  User::query()->where('id', $request->route('user'))->update($request->validate([
@@ -230,6 +232,7 @@ class UserController extends Controller
                     'tag_as' => ['sometimes'],
                     'profile_pic'=> ['sometimes'],
                     'security_shift'=> ['sometimes'],
+                    'flagged'=> ['sometimes'],
                 ]));
             }
          
@@ -248,6 +251,7 @@ class UserController extends Controller
                 'profile_pic'=> ['sometimes'],
                 'tag_as' => ['required'],
                 'position_id' => ['sometimes'],
+                'flagged'=> ['sometimes'],
             ]));
         }
 
@@ -332,11 +336,11 @@ class UserController extends Controller
     public function getSearchUser(Request $request): JsonResponse
     {
        
-        $users = User::orWhere(DB::raw("concat(first_name, ' ', last_name)"), 'LIKE', "%".$request->input('query')."%")
+        $users = User::orWhere(DB::raw("LOWER(concat(first_name, ' ', last_name))"), 'LIKE', "%".strtolower($request->input('query'))."%")
                        ->where('verified',1)
                        ->with(['lot.block','position','emergency_contact'])
                        ->latest()
-                       ->get();
+                       ->get();  
         return response()->json($users);
         
     }
@@ -415,6 +419,17 @@ class UserController extends Controller
         
        
     }
+     public function getResidents(Request $request): JsonResponse
+    {
+        $users =  User::where('role','resident')->with(['lot.block','position','emergency_contact'])->get();
+       
+        
+        return response()->json(
+           $users
+        );
+        
+       
+    }
 
    
     public function updateHasVoted(Request $request): JsonResponse
@@ -425,6 +440,13 @@ class UserController extends Controller
         ]);
 
         return response()->json(['ok']);
+    }
+     public function getResidentInBlockLot(Request $request): JsonResponse
+    {
+      
+        $user = User::where('block_lot_id',$request->route('user'))->get();
+        
+        return response()->json($user);
     }
     public function destroy(User $user): JsonResponse
     {

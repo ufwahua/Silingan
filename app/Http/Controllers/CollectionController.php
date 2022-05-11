@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Invoice;
 use App\Models\Collection;
-use App\Http\Requests\CollectionRequest;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
+use App\Http\Requests\CollectionRequest;
 
 class CollectionController extends Controller
 {
@@ -15,7 +16,7 @@ class CollectionController extends Controller
      */
     public function index() : JsonResponse{
         return response()->json(
-            Collection::with(['collectionType','user','lot','fund'])->latest()->get()
+            Collection::with(['collectionType','user','lot.block','fund'])->latest()->get()
         );
     }
 
@@ -27,13 +28,29 @@ class CollectionController extends Controller
     {
         return response()->json($collection);
     }
-
+     public function getCollectionBlockLot(Request $request) : JsonResponse
+    {
+        $collection = Collection::where('block_lot_id',$request->route('collection'))->with(['lot.block','collectionType','user'])->latest()->get();
+        return response()->json($collection);
+    }
     /**
      * @param CollectionRequest $request
      * @return JsonResponse
      */
     public function store(CollectionRequest $request) : JsonResponse{
-
+        $invoices = Invoice::where('block_lot_id',$request['block_lot_id'])->where('payment',false)->where('collection_type_id',$request['collection_type_id'])->latest()->get();
+        foreach($invoices as $invoice){
+            if($invoice->running_balance > $request['amount']){
+                Invoice::query()->where('id',$invoice->id)->update([
+                    'running_balance'           => $invoice->running_balance - $request['amount'], 
+                ]);
+            }else{
+                 Invoice::query()->where('id',$invoice->id)->update([
+                    'running_balance'   => 0, 
+                    'payment'           => true, 
+                ]);
+        }       
+        }
         $collection = Collection::query()->create($request->validated());
        
         return response()->json($collection);

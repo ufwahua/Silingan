@@ -5,7 +5,10 @@
         >
             <h2>Verify Post in Marketplace</h2>
             <div class="col justify-content-center pt-0">
-                <div v-for="post in posts" :key="post.id">
+                <div
+                    v-for="post in post_marketplace_not_verified"
+                    :key="post.id"
+                >
                     <PostComponent
                         :post="post"
                         :group_id="post.group_id"
@@ -103,7 +106,9 @@ export default {
     setup() {
         const store = useStore();
         return {
-            posts: computed(() => store.state.posts.posts),
+            post_marketplace_not_verified: computed(
+                () => store.state.posts.post_marketplace_not_verified
+            ),
             userLogged: computed(() => store.state.userLogged),
         };
     },

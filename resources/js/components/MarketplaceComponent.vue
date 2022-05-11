@@ -3,7 +3,17 @@
         <div
             class="col-12 sm:col-12 md:col-8 md:col-offset-2 lg:col-6 lg:col-offset-1 xl:col-6 xl:col-offset-1"
         >
-            <h2 class="layout-text">Marketplace</h2>
+            <div class="col mb-4">
+                <h2 class="layout-text">Marketplace</h2>
+                <span class="p-input-icon-left inline-block">
+                    <i class="pi pi-search" />
+                    <InputText
+                        v-model="search"
+                        placeholder="Keyword Search"
+                        class="w-full"
+                    />
+                </span>
+            </div>
             <div class="col justify-content-center pt-0">
                 <div class="card p-3">
                     <div class="p-inputgroup mb-2">
@@ -36,7 +46,7 @@
                         </Textarea>
                     </div>
                 </div>
-                <div v-for="post in posts" :key="post.id">
+                <div v-for="post in post_marketplace" :key="post.id">
                     <PostComponent
                         :post="post"
                         :group_id="post.group_id"
@@ -66,6 +76,7 @@
                         :autoResize="true"
                         class="w-full"
                         placeholder="What's on you mind?"
+                        autofocus
                     >
                     </Textarea>
                     <FileUpload
@@ -160,7 +171,9 @@ export default {
     setup() {
         const store = useStore();
         return {
-            posts: computed(() => store.state.posts.posts),
+            post_marketplace: computed(
+                () => store.state.posts.post_marketplace
+            ),
             userLogged: computed(() => store.state.userLogged),
         };
     },
@@ -172,10 +185,30 @@ export default {
             groud_id: null,
             images: null,
             content: null,
+            search: null,
             openPostModal: false,
         };
     },
+    watch: {
+        search(after, before) {
+            this.searchPost();
+        },
+    },
     methods: {
+        searchPost() {
+            axios({
+                method: "get",
+                url: "/api/post/search/",
+                params: { query: this.search },
+            })
+                .then((res) => {
+                    console.log("post search marketplace", res.data);
+                    this.$store.commit("posts/getMarketplacePost", res.data);
+                })
+                .catch((e) => {
+                    console.log(e.response);
+                });
+        },
         // Open Add Lot Modal
         openAddLotModal() {
             this.resetFields();

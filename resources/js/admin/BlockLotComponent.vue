@@ -73,12 +73,7 @@
             </div>
             <div class="grid">
                 <div class="col-12">
-                    <DataTable
-                        :value="blocks"
-                        :filters="filters"
-                        :paginator="true"
-                        :rows="10"
-                    >
+                    <DataTable :value="blocks" :filters="filters" :rows="10">
                         <template #empty> No Blocks found </template>
                         <template #loading> Loading </template>
 
@@ -182,46 +177,72 @@
                     </div>
                 </div>
                 <div class="card">
-                    <div class="grid mb-4">
-                        <div class="col-12">
-                            <Toolbar>
-                                <template #start>
-                                    <span
-                                        class="p-input-icon-left inline-block"
-                                    >
-                                        <i class="pi pi-search" />
-                                        <InputText
-                                            v-model="filters['global'].value"
-                                            placeholder="Keyword Search"
-                                        />
-                                    </span>
-                                </template>
-
-                                <template #end>
-                                    <div class="mr-2">
-                                        <Button
-                                            label="Add"
-                                            icon="pi pi-plus"
-                                            class="p-button-primary p-mr-2"
-                                            @click="openAddLotModal()"
-                                        />
-                                    </div>
-                                </template>
-                            </Toolbar>
-                        </div>
-                    </div>
-
                     <div class="grid">
                         <div class="col-12">
                             <DataTable :value="filteredLots" :filters="filters">
                                 <template #empty> No Lots found </template>
                                 <template #loading> Loading </template>
+                                <template #header>
+                                    <div
+                                        class="flex flex-wrap justify-content-between"
+                                    >
+                                        <span
+                                            class="p-input-icon-left inline-block"
+                                        >
+                                            <i class="pi pi-search" />
+                                            <InputText
+                                                v-model="
+                                                    filters['global'].value
+                                                "
+                                                placeholder="Keyword Search"
+                                                class="my-2"
+                                            />
+                                        </span>
 
+                                        <Dropdown
+                                            v-model="filters['status'].value"
+                                            :showClear="true"
+                                            :options="status"
+                                            optionLabel="status"
+                                            optionValue="status"
+                                            placeholder="Filter by status"
+                                            style="width: 200px"
+                                            class="my-2"
+                                        ></Dropdown>
+
+                                        <Button
+                                            label="Clear"
+                                            icon="pi pi-filter-slash"
+                                            class="my-2 p-button-outlined p-button-secondary"
+                                            @click="clearFilter"
+                                        />
+
+                                        <Button
+                                            label="Add"
+                                            icon="pi pi-plus"
+                                            class="p-button-primary my-2"
+                                            @click="openAddLotModal()"
+                                        />
+                                    </div>
+                                </template>
                                 <Column field="number" header="Lot Houses">
                                     <template #body="{ data }">
                                         Lot {{ data.number }}
                                     </template></Column
                                 >
+                                <Column field="status" header="Status"
+                                    ><template #body="{ data }">
+                                        <div
+                                            v-if="data.active"
+                                            class="text-green-700"
+                                        >
+                                            {{ (data["status"] = "active") }}
+                                        </div>
+                                        <div v-else class="text-pink-700">
+                                            {{ (data["status"] = "inactive") }}
+                                        </div>
+                                    </template>
+                                </Column>
 
                                 <Column header="Actions" field="actions">
                                     <template #body="{ data }">
@@ -294,7 +315,7 @@
                         :closeOnEscape="true"
                     >
                         <div class="grid">
-                            <div class="col-12">
+                            <div class="col-12 md:col-6">
                                 <div class="p-fluid">
                                     <h5>Lot Number</h5>
                                     <InputText
@@ -305,6 +326,25 @@
                                     <label style="color: red" v-if="error">{{
                                         this.error
                                     }}</label>
+                                </div>
+                            </div>
+                            <div class="col-12 md:col-6">
+                                <div class="p-fluid">
+                                    <h5>Status</h5>
+                                    <Dropdown
+                                        v-model="form_status"
+                                        :options="status_dropdown"
+                                        optionLabel="status"
+                                        optionValue="value"
+                                        :class="{ 'p-invalid': error_active }"
+                                        placeholder="choose status"
+                                    ></Dropdown>
+
+                                    <label
+                                        style="color: red"
+                                        v-if="error_active"
+                                        >{{ this.error_active }}</label
+                                    >
                                 </div>
                             </div>
                         </div>
@@ -540,7 +580,11 @@ export default {
             block: null,
             block_id: null,
             number: null,
-
+            status: [{ status: "active" }, { status: "inactive" }],
+            status_dropdown: [
+                { status: "active", value: true },
+                { status: "inactive", value: false },
+            ],
             lot: null,
             lot_id: null,
             number: null,
@@ -550,7 +594,9 @@ export default {
             actions: null,
             form_block_number: null,
             form_lot_number: null,
+            form_status: null,
             error: null,
+            error_active: null,
 
             //BLOCK MODAL
             addBlockModal: false,
@@ -616,23 +662,38 @@ export default {
         },
         populateLotFields(data) {
             this.resetFields();
+            this.resetErrors();
             this.lot_id = data.id;
             this.block_id = data.block_id;
             this.form_lot_number = data.number;
+            this.form_status = data.active;
         },
         populateFields(data) {
+            this.resetFields();
+            this.resetErrors();
             this.number = data.number;
             this.block_id = data.id;
+        },
+        clearFilter() {
+            this.filters["status"].value = null;
         },
         initFilters() {
             this.filters = {
                 global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+                status: {
+                    value: null,
+                    matchMode: FilterMatchMode.EQUALS,
+                },
             };
         },
         resetFields() {
             this.form_block_number = null;
             this.form_lot_number = null;
+            this.form_status = null;
+        },
+        resetErrors() {
             this.error = null;
+            this.error_active = null;
         },
 
         // Open Block Modal
@@ -671,6 +732,7 @@ export default {
                     this.loading = false;
                 })
                 .catch((error) => {
+                    this.resetErrors();
                     if (error.response.data.errors.number)
                         this.error = error.response.data.errors.number[0];
                     this.loading = false;
@@ -709,6 +771,7 @@ export default {
                     this.loading = false;
                 })
                 .catch((error) => {
+                    this.resetErrors();
                     if (error.response.data.errors.number)
                         this.error = error.response.data.errors.number[0];
                     this.loading = false;
@@ -783,6 +846,7 @@ export default {
                 data: {
                     block_id: this.block_id,
                     number: this.form_lot_number,
+                    active: this.form_status,
                 },
             })
                 .then((res) => {
@@ -794,6 +858,7 @@ export default {
                     this.loading = false;
                 })
                 .catch((error) => {
+                    this.resetErrors();
                     console.log(error.response);
                     if (error.response.data.error)
                         this.error = error.response.data.error;
@@ -829,6 +894,7 @@ export default {
                 data: {
                     block_id: this.block_id,
                     number: this.form_lot_number,
+                    active: this.form_status,
                 },
             })
                 .then((res) => {
@@ -838,7 +904,15 @@ export default {
                     this.loading = false;
                 })
                 .catch((error) => {
-                    this.error = error.response.data;
+                    this.resetErrors();
+
+                    if (error.response.data.errors.number) {
+                        this.error = error.response.data.errors.number[0];
+                    }
+                    if (error.response.data.errors.active) {
+                        this.error_active =
+                            error.response.data.errors.active[0];
+                    }
                     this.loading = false;
                 });
         },

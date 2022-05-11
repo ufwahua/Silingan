@@ -102,22 +102,36 @@ class LotController extends Controller
         $found = false;
         $lots =  Lot::query()->where('block_id',$request['block_id'])->get();
         $lots = json_decode($lots, true);
+        $unique = true;
         foreach ($lots as $lt) // find lot number duplicate
         {
-            if($lt['number'] === (int)$request['number']){
+            if($lt['number'] == (int)$request['number']){
+               
                 $found = true;
+                $unique = false;
                 break;
             }
         }
        if(!$found){
             Lot::query()->where('id',$request->route('lot'))->update( $request->validate([
-            'number' => ['required','integer', 'max:255','gt:0']
-            ]));
-            $lot = Lot::findOrFail($request->route('lot'));
-            return response()->json($lot);
+                    'number' => ['required','integer', 'max:255','gt:0'],
+                    'active' => ['required']
+                ]));
+           
+            return response()->json(['ok']);
        }
-        return response()->json("The lot number has already been taken. ",404);
-     
+       else if($unique){
+            Lot::query()->where('id',$request->route('lot'))->update( $request->validate([
+                'number' => ['required','integer', 'max:255','gt:0'],
+                'active' => ['required']
+            ]));
+         
+            return response()->json(['ok']);
+       }
+       
+        return response()->json(["errors"=>[
+            'number' => ['The lot number has already been taken.'],
+        ]],404);
       
       
         

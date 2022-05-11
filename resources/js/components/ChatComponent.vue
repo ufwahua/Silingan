@@ -47,7 +47,10 @@
             </div>
             <div class="col-12 layout-config-content">
                 <div v-if="resident">
-                    <div v-for="resident in users_verified" :key="resident.id">
+                    <div
+                        v-for="resident in verified_user_chat"
+                        :key="resident.id"
+                    >
                         <ChatSideBarComponent
                             v-if="resident.role === 'resident'"
                             @click="openChatRoom(resident)"
@@ -57,7 +60,7 @@
                 </div>
                 <div v-if="security_officer">
                     <div
-                        v-for="security_officer in users_verified"
+                        v-for="security_officer in verified_user_chat"
                         :key="security_officer.id"
                     >
                         <ChatSideBarComponent
@@ -68,7 +71,10 @@
                     </div>
                 </div>
                 <div v-if="officer">
-                    <div v-for="officer in users_verified" :key="officer.id">
+                    <div
+                        v-for="officer in verified_user_chat"
+                        :key="officer.id"
+                    >
                         <ChatSideBarComponent
                             v-if="officer.role === 'officer'"
                             @click="openChatRoom(resident)"
@@ -77,7 +83,7 @@
                     </div>
                 </div>
                 <div v-if="admin">
-                    <div v-for="admin in users_verified" :key="admin.id">
+                    <div v-for="admin in verified_user_chat" :key="admin.id">
                         <ChatSideBarComponent
                             v-if="admin.role === 'admin'"
                             @click="openChatRoom(admin)"
@@ -176,16 +182,20 @@ export default {
     setup() {
         const store = useStore();
         return {
-            users_verified: computed(() => store.state.users_verified),
+            verified_user_chat: computed(() => store.state.verified_user_chat),
 
             chats: computed(() => store.state.chats),
-            notifications: computed(
-                () => store.state.notifications.specific_notifications
-            ),
+            notifications: computed(() => {
+                if (store.state.notifications.specific_notifications != null) {
+                    return store.state.notifications.specific_notifications;
+                }
+            }),
             notif_count: computed(() => {
-                return store.state.notifications.specific_notifications.filter(
-                    (n) => n.viewed == 0
-                ).length;
+                if (store.state.notifications.specific_notifications != null) {
+                    return store.state.notifications.specific_notifications.filter(
+                        (n) => n.viewed == 0
+                    ).length;
+                }
             }),
         };
     },

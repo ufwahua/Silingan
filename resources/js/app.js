@@ -102,6 +102,7 @@ import ToggleButton from "primevue/togglebutton";
 import Tree from "primevue/tree";
 import TreeTable from "primevue/treetable";
 import TriStateCheckbox from "primevue/tristatecheckbox";
+import CascadeSelect from "primevue/cascadeselect";
 
 createApp(Index)
     .use(ToastService)
@@ -191,4 +192,5 @@ createApp(Index)
     .component("Tree", Tree)
     .component("TreeTable", TreeTable)
     .component("TriStateCheckbox", TriStateCheckbox)
+    .component("CascadeSelect", CascadeSelect)
     .mount("#app");

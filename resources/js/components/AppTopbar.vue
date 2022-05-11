@@ -373,13 +373,17 @@ export default {
         return {
             userLogged: computed(() => store.state.userLogged),
             chats: computed(() => store.state.chats),
-            notifications: computed(
-                () => store.state.notifications.specific_notifications
-            ),
+            notifications: computed(() => {
+                if (store.state.notifications.specific_notifications != null) {
+                    return store.state.notifications.specific_notifications;
+                }
+            }),
             notif_count: computed(() => {
-                return store.state.notifications.specific_notifications.filter(
-                    (n) => n.viewed == 0
-                ).length;
+                if (store.state.notifications.specific_notifications != null) {
+                    return store.state.notifications.specific_notifications.filter(
+                        (n) => n.viewed == 0
+                    ).length;
+                }
             }),
         };
     },
