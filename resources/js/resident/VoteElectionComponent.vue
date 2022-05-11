@@ -5,7 +5,7 @@
             <div v-if="election_on_going">
                 <div v-if="userLogged.has_voted == 0">
                     <h4 class="text-center">
-                        ELECTION IS ON GOING ({{ election_start }} -
+                        ELECTION IS ON GOING ( {{ election_start }} -
                         {{ election_end }} )
                     </h4>
                     <h3 class="text-center">Voted</h3>
@@ -106,7 +106,7 @@
                 </div>
                 <div v-else>
                     <h4 class="text-center">
-                        ELECTION IS ON GOING ({{ election_start }} -
+                        ELECTION IS ON GOING ( {{ election_start }} -
                         {{ election_end }} )
                     </h4>
                     <h3 class="text-center">Voted</h3>
@@ -223,13 +223,19 @@
                 <div v-if="result">
                     <hr />
                     <h2 class="text-center">
-                        ELECTION RESULT ({{ election_start }} -
+                        ELECTION RESULT ( {{ election_start }} -
                         {{ election_end }} )
                     </h2>
-                    <h3 class="text-center">Voted</h3>
-                    <h2 class="text-center">
-                        {{ number_voted }} out of {{ total_voter }}
-                    </h2>
+                    <h3 class="text-center">
+                        Voted {{ number_voted }} out of {{ total_voter }}
+                    </h3>
+                    <div class="flex justify-content-center">
+                        <Button
+                            label="Generate Result"
+                            icon="pi pi-file-pdf"
+                            @click="generateResult"
+                        />
+                    </div>
                     <div v-for="position in positions" :key="position.id">
                         <hr />
                         <div class="grid flex">
@@ -795,6 +801,7 @@
 <script>
 import { computed } from "vue";
 import { useStore } from "vuex";
+import { jsPDF } from "jspdf";
 import axios from "axios";
 export default {
     setup() {
@@ -890,7 +897,52 @@ export default {
             election_end: null,
         };
     },
+    computed: {
+        resultElection() {
+            let temp = [];
+
+            this.positions.forEach((pos) => {
+                temp.push([pos.name, "", ""]);
+                this.last_candidates.forEach((cand) => {
+                    if (pos.id == cand.position_id) {
+                        temp.push([
+                            "",
+                            cand.user.first_name + " " + cand.user.last_name,
+                            cand.vote_count,
+                        ]);
+                    }
+                });
+            });
+
+            return temp;
+        },
+    },
     methods: {
+        generateResult() {
+            let finalY = 1;
+            const doc = new jsPDF();
+            doc.text(
+                "Election Result ( " +
+                    this.election_start +
+                    " - " +
+                    this.election_end +
+                    " )",
+                15,
+                finalY + 15
+            );
+            doc.autoTable({
+                startY: finalY + 20,
+                theme: "plain",
+                head: [["Position", "Full name", "Vote Count"]],
+                body: this.resultElection,
+            });
+            doc.save(
+                "Election Result " +
+                    this.election_start +
+                    "-" +
+                    this.election_end
+            );
+        },
         submitVote() {
             this.loading = true;
             console.log(this.selected_candidate);

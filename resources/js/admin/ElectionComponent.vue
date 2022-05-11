@@ -2,7 +2,7 @@
     <div>
         <div v-if="loading"></div>
         <div v-else>
-            <div v-if="!checkElection">
+            <div v-if="!election_on_going">
                 <div class="flex justify-content-center">
                     <Card class="mb-4" style="width: 23em">
                         <template #title> <h2>Start Election</h2> </template>
@@ -33,71 +33,7 @@
                         </template>
                     </Card>
                 </div>
-                <div v-if="result">
-                    <h2 class="text-center">ELECTION RESULT</h2>
-                    <h3 class="text-center">Voted</h3>
-                    <h2 class="text-center">
-                        {{ number_voted }} out of {{ total_voter }}
-                    </h2>
-                    <div v-for="position in positions" :key="position.id">
-                        <hr />
-                        <div class="grid flex">
-                            <div
-                                class="col-12 p-inputgroup flex justify-content-center"
-                            >
-                                <h4 class="text-center mr-2">
-                                    {{ position.name }}
-                                </h4>
-                            </div>
 
-                            <div
-                                class="col-12 flex justify-content-center flex-wrap"
-                            >
-                                <div
-                                    v-for="candidate in last_candidates"
-                                    :key="candidate.id"
-                                >
-                                    <Card
-                                        v-if="
-                                            candidate.position_id ===
-                                            position.id
-                                        "
-                                        class="mr-2 m-2"
-                                        style="width: 200px; min-height: 350px"
-                                    >
-                                        <template #header>
-                                            <img
-                                                v-if="
-                                                    candidate.user
-                                                        .profile_pic !== null
-                                                "
-                                                src="https://www.primefaces.org/wp-content/uploads/2020/02/primefacesorg-primevue-2020.png"
-                                                style="height: 7rem"
-                                            />
-                                            <img
-                                                v-else
-                                                src="http://127.0.0.1:8000/storage/images/default-prof-pic.png"
-                                                style="height: 10rem"
-                                            />
-                                        </template>
-                                        <template #title>
-                                            <h5 class="text-center">
-                                                {{ candidate.user.first_name }}
-                                                {{ candidate.user.last_name }}
-                                            </h5>
-                                        </template>
-                                        <template #content>
-                                            <div class="text-center">
-                                                <p>Vote count:</p>
-                                                {{ candidate.vote_count }}
-                                            </div>
-                                        </template>
-                                    </Card>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
                 <div v-for="position in positions" :key="position.id">
                     <hr />
                     <div class="grid flex">
@@ -175,10 +111,85 @@
                         </div>
                     </div>
                 </div>
+                <div v-if="result">
+                    <hr />
+                    <h2 class="text-center">
+                        ELECTION RESULT ( {{ election_start }} -
+                        {{ election_end }} )
+                    </h2>
+                    <h3 class="text-center">
+                        Voted {{ number_voted }} out of {{ total_voter }}
+                    </h3>
+                    <div class="flex justify-content-center">
+                        <Button
+                            label="Generate Result"
+                            icon="pi pi-file-pdf"
+                            @click="generateResult"
+                        />
+                    </div>
+
+                    <div v-for="position in positions" :key="position.id">
+                        <hr />
+                        <div class="grid flex">
+                            <div
+                                class="col-12 p-inputgroup flex justify-content-center"
+                            >
+                                <h4 class="text-center mr-2">
+                                    {{ position.name }}
+                                </h4>
+                            </div>
+
+                            <div
+                                class="col-12 flex justify-content-center flex-wrap"
+                            >
+                                <div
+                                    v-for="candidate in last_candidates"
+                                    :key="candidate.id"
+                                >
+                                    <Card
+                                        v-if="
+                                            candidate.position_id == position.id
+                                        "
+                                        class="mr-2 m-2"
+                                        style="width: 200px; min-height: 350px"
+                                    >
+                                        <template #header>
+                                            <img
+                                                v-if="
+                                                    candidate.user
+                                                        .profile_pic !== null
+                                                "
+                                                src="https://www.primefaces.org/wp-content/uploads/2020/02/primefacesorg-primevue-2020.png"
+                                                style="height: 7rem"
+                                            />
+                                            <img
+                                                v-else
+                                                src="http://127.0.0.1:8000/storage/images/default-prof-pic.png"
+                                                style="height: 10rem"
+                                            />
+                                        </template>
+                                        <template #title>
+                                            <h5 class="text-center">
+                                                {{ candidate.user.first_name }}
+                                                {{ candidate.user.last_name }}
+                                            </h5>
+                                        </template>
+                                        <template #content>
+                                            <div class="text-center">
+                                                <p>Vote count:</p>
+                                                {{ candidate.vote_count }}
+                                            </div>
+                                        </template>
+                                    </Card>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div v-else>
                 <h4 class="text-center">
-                    ELECTION IS ON GOING ({{ election_start }} -
+                    ELECTION IS ON GOING ( {{ election_start }} -
                     {{ election_end }} )
                 </h4>
                 <h3 class="text-center">Voted</h3>
@@ -1084,6 +1095,7 @@
 <script>
 import { computed } from "vue";
 import { useStore } from "vuex";
+import { jsPDF } from "jspdf";
 import axios from "axios";
 export default {
     setup() {
@@ -1136,13 +1148,13 @@ export default {
             viewOfficerDialog: false,
             confirmVoteDialog: false,
             id: null,
-            result: null,
+            result: false,
             position_id: null,
             user_id: null,
             name: null,
             election_id: null,
             dateFormatted: null,
-            checkElection: null,
+            election_on_going: false,
 
             invalidDates: null,
             error_position_id: null,
@@ -1176,7 +1188,52 @@ export default {
             election_end: null,
         };
     },
+    computed: {
+        resultElection() {
+            let temp = [];
+
+            this.positions.forEach((pos) => {
+                temp.push([pos.name, "", ""]);
+                this.last_candidates.forEach((cand) => {
+                    if (pos.id == cand.position_id) {
+                        temp.push([
+                            "",
+                            cand.user.first_name + " " + cand.user.last_name,
+                            cand.vote_count,
+                        ]);
+                    }
+                });
+            });
+
+            return temp;
+        },
+    },
     methods: {
+        generateResult() {
+            let finalY = 1;
+            const doc = new jsPDF();
+            doc.text(
+                "Election Result ( " +
+                    this.election_start +
+                    " - " +
+                    this.election_end +
+                    " )",
+                15,
+                finalY + 15
+            );
+            doc.autoTable({
+                startY: finalY + 20,
+                theme: "plain",
+                head: [["Position", "Full name", "Vote Count"]],
+                body: this.resultElection,
+            });
+            doc.save(
+                "Election Result " +
+                    this.election_start +
+                    "-" +
+                    this.election_end
+            );
+        },
         dateFormat(date) {
             var options = {
                 year: "numeric",
@@ -1381,7 +1438,18 @@ export default {
                         },
                     })
                         .then(() => {
-                            console.log("notify announcement success ");
+                            console.log("notify announcement success");
+                        })
+                        .catch((e) => {
+                            console.log(e.response);
+                        });
+                    await axios({
+                        method: "post",
+                        url: "/api/election/update-voters",
+                    })
+                        .then(() => {
+                            console.log("updated voters ");
+                            this.$store.dispatch("getUsersVerified");
                         })
                         .catch((e) => {
                             console.log(e.response);
@@ -1534,7 +1602,7 @@ export default {
             })
                 .then(async (res) => {
                     this.id = res.data.id;
-                    this.result = res.data.result;
+                    console.log("result", (this.result = res.data.result));
                     var end_date = res.data.end_date;
                     var start_date = res.data.start_date;
                     this.election_start = this.dateFormat(start_date);
@@ -1561,7 +1629,7 @@ export default {
                             "candidates/getLastCandidates",
                             this.election_id
                         );
-                        this.checkElection = res.data.end_date;
+                        this.election_on_going = true;
                     } else {
                         console.log("NO ELECTION 3rd");
                         this.$store.dispatch(
@@ -1569,7 +1637,7 @@ export default {
                             this.id
                         );
                         this.election_id = parseInt(res.data.id) + 1;
-                        this.checkElection = null;
+                        this.election_on_going = false;
                         if (this.result == 0) {
                             axios({
                                 method: "put",
@@ -1595,16 +1663,6 @@ export default {
                                             console.log(
                                                 "notify announcement success "
                                             );
-                                        })
-                                        .catch((e) => {
-                                            console.log(e.response);
-                                        });
-                                    await axios({
-                                        method: "post",
-                                        url: "/api/election/update-voters",
-                                    })
-                                        .then(() => {
-                                            console.log("updated voters ");
                                         })
                                         .catch((e) => {
                                             console.log(e.response);

@@ -3,12 +3,18 @@
         <div
             class="col-12 sm:col-12 md:col-8 md:col-offset-2 lg:col-6 lg:col-offset-1 xl:col-6 xl:col-offset-1"
         >
-            <div v-if="specific_post" class="col justify-content-center pt-0">
+            <div
+                v-if="specific_post.approved"
+                class="col justify-content-center pt-0"
+            >
                 <PostComponent
                     :post="specific_post"
                     :group_id="specific_post.group_id"
                     :approved="specific_post.approved"
                 />
+            </div>
+            <div v-else class="col justify-content-center pt-0">
+                This post is not yet approved
             </div>
         </div>
         <div
@@ -77,6 +83,9 @@ export default {
             this.content = null;
             this.user_id = null;
         },
+    },
+    mounted() {
+        this.$store.dispatch("posts/getSpecificPost", this.$route.params.post);
     },
 };
 </script>

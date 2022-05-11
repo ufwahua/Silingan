@@ -12,7 +12,7 @@
                         <img
                             class="Silingan-logo"
                             alt="Silingan-Logo"
-                            src="https://i.ibb.co/V3B8NBM/silingan-icon.png"
+                            src="http://127.0.0.1:8000/storage/images/silingan-icon.png"
                     /></router-link>
                 </div>
                 <form

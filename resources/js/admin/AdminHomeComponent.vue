@@ -148,11 +148,11 @@ export default {
                                     icon: "pi pi-info-circle",
                                     to: "/admin/block-lot",
                                 },
-                                {
-                                    label: "Vehicles",
-                                    icon: "pi pi-info-circle",
-                                    to: "/admin/vehicle",
-                                },
+                                // {
+                                //     label: "Vehicles",
+                                //     icon: "pi pi-info-circle",
+                                //     to: "/admin/vehicle",
+                                // },
                                 {
                                     label: "Cards",
                                     icon: "pi pi-info-circle",

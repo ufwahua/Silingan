@@ -6,9 +6,9 @@
             <div class="col justify-content-center pt-0">
                 <ManageBlockComponent></ManageBlockComponent>
             </div>
-            <div class="col justify-content-center pt-0">
+            <!-- <div class="col justify-content-center pt-0">
                 <ManageVehicleComponent></ManageVehicleComponent>
-            </div>
+            </div> -->
             <div class="col justify-content-center pt-0">
                 <EmergencyContactDetailComponent></EmergencyContactDetailComponent>
             </div>

@@ -50,12 +50,6 @@
                             >
                             <div class="text-900">Expenses</div>
                         </div>
-                        <div
-                            class="flex align-items-center justify-content-center"
-                            style="width: 2.5rem; height: 2.5rem"
-                        >
-                            <i class="pi pi-dollar text-pink-700 text-xl"></i>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -72,12 +66,6 @@
                                 }}</span
                             >
                             <div class="text-900">Net Income</div>
-                        </div>
-                        <div
-                            class="flex align-items-center justify-content-center"
-                            style="width: 2.5rem; height: 2.5rem"
-                        >
-                            <i class="pi pi-dollar text-blue-500 text-xl"></i>
                         </div>
                     </div>
                 </div>
@@ -231,28 +219,7 @@
                                     header="Date and Time"
                                 >
                                     <template #body="{ data }">
-                                        {{
-                                            new Date(
-                                                data.created_at.toString()
-                                            ).getMonth() + 1
-                                        }}-{{
-                                            new Date(
-                                                data.created_at.toString()
-                                            ).getDate()
-                                        }}-{{
-                                            new Date(
-                                                data.created_at.toString()
-                                            ).getFullYear()
-                                        }}
-                                        {{
-                                            new Date(
-                                                data.created_at.toString()
-                                            ).getHours()
-                                        }}:{{
-                                            new Date(
-                                                data.created_at.toString()
-                                            ).getMinutes()
-                                        }}
+                                        {{ dateFormat(data.created_at) }}
                                     </template>
                                 </Column>
                             </DataTable>
@@ -317,28 +284,7 @@
                                     header="Date and Time"
                                 >
                                     <template #body="{ data }">
-                                        {{
-                                            new Date(
-                                                data.created_at.toString()
-                                            ).getMonth() + 1
-                                        }}-{{
-                                            new Date(
-                                                data.created_at.toString()
-                                            ).getDate()
-                                        }}-{{
-                                            new Date(
-                                                data.created_at.toString()
-                                            ).getFullYear()
-                                        }}
-                                        {{
-                                            new Date(
-                                                data.created_at.toString()
-                                            ).getHours()
-                                        }}:{{
-                                            new Date(
-                                                data.created_at.toString()
-                                            ).getMinutes()
-                                        }}
+                                        {{ dateFormat(data.created_at) }}
                                     </template>
                                 </Column>
                             </DataTable>
@@ -996,22 +942,34 @@ export default {
         };
     },
     methods: {
-        updateSummary(){
-            this.overall = {
-              revenue: 0,
-              expense: 0,
-              income: 0
-            }
-            let revenue = this.revenue
-            let expenses = this.expense
-            revenue.forEach((elem)=>{
-                this.overall.revenue+=elem.amount
-            })
-            expenses.forEach((elem)=>{
-                this.overall.expense+=elem.amount
-            })
+        dateFormat(date) {
+            var options = {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+                hour12: true,
+                hour: "numeric",
+                minute: "numeric",
+            };
 
-            this.overall.income = this.overall.revenue - this.overall.expense
+            return new Date(date).toLocaleDateString("en-US", options);
+        },
+        updateSummary() {
+            this.overall = {
+                revenue: 0,
+                expense: 0,
+                income: 0,
+            };
+            let revenue = this.revenue;
+            let expenses = this.expense;
+            revenue.forEach((elem) => {
+                this.overall.revenue += elem.amount;
+            });
+            expenses.forEach((elem) => {
+                this.overall.expense += elem.amount;
+            });
+
+            this.overall.income = +this.overall.revenue - +this.overall.expense;
         },
         async getBalance() {
             await this.$store.dispatch(
@@ -2354,10 +2312,10 @@ export default {
                 source: null,
                 type: null,
             };
-            let association =  this.funds.filter((elem)=>{
-             return elem.fund_type == "Association Funds"
-            })
-            this.expense_form.source = association[0].id
+            let association = this.funds.filter((elem) => {
+                return elem.fund_type == "Association Funds";
+            });
+            this.expense_form.source = association[0].id;
         },
         addRevenue() {
             this.resetRevenueFormError();
@@ -2371,10 +2329,10 @@ export default {
                 source: null,
             };
             this.lot_bool = true;
-            let association =  this.funds.filter((elem)=>{
-             return elem.fund_type == "Association Funds"
-            })
-            this.revenue_form.source = association[0].id
+            let association = this.funds.filter((elem) => {
+                return elem.fund_type == "Association Funds";
+            });
+            this.revenue_form.source = association[0].id;
         },
         initFilters() {
             this.filters = {
@@ -2458,7 +2416,7 @@ export default {
                     });
                     this.$store.dispatch("fund/getAll");
                     this.showSuccess();
-                    this.updateSummary()
+                    this.updateSummary();
                 } catch (error) {
                     console.log(error.response.date);
                 }
@@ -2467,7 +2425,7 @@ export default {
                 this.expenseFormError(error.response.data);
                 console.log(error.response.data);
             }
-            this.updateSummary()
+            this.updateSummary();
         },
         expenseFormError(e) {
             if (e.errors.amount) {
@@ -2523,7 +2481,7 @@ export default {
                             this.revenue_form.source == null
                                 ? null
                                 : this.funds[this.revenue_form.source - 1]
-                                      .amount +this.revenue_form.amount,
+                                      .amount + this.revenue_form.amount,
                         fund_id: this.revenue_form.source,
                     },
                 });
@@ -2545,7 +2503,7 @@ export default {
                     });
                     this.$store.dispatch("fund/getAll");
                     this.showSuccess();
-                    this.updateSummary()
+                    this.updateSummary();
                 } catch (error) {
                     console.log(error.response.date);
                 }

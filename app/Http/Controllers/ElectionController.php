@@ -35,7 +35,7 @@ class ElectionController extends Controller
     }
     public function updateVoters(Request $request, ) : JsonResponse
     {
-        $user = User::query()->where('role', 'officer')->where('role', 'resident')->update([
+        $user = User::query()->where('role', 'officer')->orWhere('role', 'resident')->update([
             'has_voted' => 0,
         ]);
         return response()->json($user);

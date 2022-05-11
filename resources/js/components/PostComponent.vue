@@ -256,21 +256,16 @@ div
             </div>
 
             <template #footer>
-                <div v-if="content === post.content">
-                    <Button
-                        label="Save"
-                        class="p-button-text p-button-primary"
-                        @click="savePost"
-                        disabled
-                    />
-                </div>
-                <div v-else>
-                    <Button
-                        label="Save"
-                        class="p-button-text p-button-primary"
-                        @click="savePost"
-                    />
-                </div>
+                <Button
+                    label="Save"
+                    class="p-button-text p-button-primary"
+                    @click="savePost"
+                    :disabled="
+                        this.content == post.content || !this.content
+                            ? true
+                            : false
+                    "
+                />
             </template>
         </Dialog>
         <Dialog

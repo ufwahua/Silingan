@@ -225,7 +225,7 @@
                                 >
                                     <Button
                                         icon="pi pi-filter-slash"
-                                        class="my-2 p-button-outlined p-button-secondary"
+                                        class="p-button-outlined p-button-secondary"
                                         @click="clearFilter"
                                         v-tooltip="'Clear'"
                                     />
@@ -233,7 +233,7 @@
                                     <Button
                                         label="Add"
                                         icon="pi pi-plus"
-                                        class="ml-2 my-2 p-button-primary"
+                                        class="ml-2 p-button-primary"
                                         style="width: auto"
                                         @click="registerUser"
                                     />

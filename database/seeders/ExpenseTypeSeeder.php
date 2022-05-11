@@ -17,7 +17,6 @@ class ExpenseTypeSeeder extends Seeder
         ExpenseType::create([
             'name' => 'Maintenance expense'
         ]);
-    
         ExpenseType::create([
             'name' => 'Salary expense'
         ]);

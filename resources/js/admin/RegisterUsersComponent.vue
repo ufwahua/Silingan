@@ -232,7 +232,7 @@
                                         placeholder="Filter by role"
                                     ></Dropdown>
                                 </div>
-                                <div class="col-12 mb-2 lg:col-2 lg:mb-0">
+                                <div class="col-12 mb-2 lg:col-2 lg:mb-0 mt-2">
                                     <Dropdown
                                         v-model="filters['status'].value"
                                         :showClear="true"
@@ -242,7 +242,7 @@
                                         placeholder="Filter by status"
                                     ></Dropdown>
                                 </div>
-                                <div class="col-12 mb-2 lg:col-2 lg:mb-0">
+                                <div class="col-12 mb-2 lg:col-2 lg:mb-0 mt-2">
                                     <Dropdown
                                         v-model="filters['verified'].value"
                                         :showClear="true"
@@ -252,7 +252,7 @@
                                         placeholder="Filter by verification"
                                     ></Dropdown>
                                 </div>
-                                <div class="col-12 mb-2 lg:col-2 lg:mb-0">
+                                <div class="col-12 mb-2 lg:col-2 lg:mb-0 mt-2">
                                     <Dropdown
                                         v-model="filters['flagged'].value"
                                         :showClear="true"
@@ -264,11 +264,11 @@
                                 </div>
 
                                 <div
-                                    class="col-12 mb-2 lg:col-4 lg:mb-0 flex justify-content-end"
+                                    class="col-12 mb-2 lg:col-4 lg:mb-0 flex justify-content-end mt-2"
                                 >
                                     <Button
                                         icon="pi pi-filter-slash"
-                                        class="my-2 p-button-outlined p-button-secondary"
+                                        class="p-button-outlined p-button-secondary"
                                         @click="clearFilter"
                                         v-tooltip="'Clear'"
                                     />
@@ -276,7 +276,7 @@
                                     <Button
                                         label="Add"
                                         icon="pi pi-plus"
-                                        class="ml-2 my-2 p-button-primary"
+                                        class="ml-2 p-button-primary"
                                         style="width: auto"
                                         @click="registerUser"
                                     />
