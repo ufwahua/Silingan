@@ -41,6 +41,16 @@
         </div>
         <div class="col-12 pl-7 p-0 m-0">
             <ul class="m-0 p-0" style="list-style-type: none">
+                <li
+                    v-if="comment.user.id == userLogged.id"
+                    style="display: inline"
+                >
+                    <Button
+                        label="Delete"
+                        class="p-button-secondary p-button-text m-0 p-0 mr-2"
+                        @click="showDeleteDialog"
+                    />
+                </li>
                 <li style="display: inline">
                     <Button
                         label="Reply"
@@ -123,6 +133,61 @@
                 />
             </div>
         </div>
+        <Dialog
+            v-model:visible="deleteModal"
+            :style="{ width: '450px' }"
+            header="Delete comment?"
+            :modal="true"
+        >
+            <div class="confirmation-content">
+                <div class="grid">
+                    <div
+                        class="col-12 flex align-items-center justify-content-center"
+                    >
+                        <i
+                            class="pi pi-exclamation-triangle mr-3"
+                            style="font-size: 2rem"
+                        />
+                        <span
+                            >Are you sure you want to delete this comment?</span
+                        >
+                    </div>
+                </div>
+            </div>
+            <template #footer>
+                <Button
+                    label="Cancel"
+                    icon="pi pi-times"
+                    class="p-button-text"
+                    @click="deleteModal = false"
+                />
+                <Button
+                    label="Delete"
+                    icon="pi pi-check"
+                    class="p-button-text p-button-danger"
+                    @click="deleteComment"
+                />
+            </template>
+        </Dialog>
+        <Dialog
+            v-model:visible="loading"
+            :style="{ width: '450px' }"
+            :modal="true"
+            :closable="false"
+            :closeOnEscape="true"
+        >
+            <div class="grid">
+                <div class="col-12 text-center">
+                    <ProgressSpinner
+                        class="block mb-4"
+                        style="width: 100px; height: 100px"
+                        strokeWidth="4"
+                        fill="#EEEEEE"
+                        animationDuration="1s"
+                    />
+                </div>
+            </div>
+        </Dialog>
     </div>
 </template>
 <script>
@@ -151,9 +216,49 @@ export default {
             profile_pic: null,
             show_reply: false,
             message: null,
+            deleteModal: false,
+            loading: false,
         };
     },
     methods: {
+        async deleteComment() {
+            this.loading = true;
+            await axios({
+                method: "delete",
+                url: "/api/comment/" + this.comment.id,
+            })
+                .then((res) => {
+                    this.deleteModal = false;
+                    if (this.group_id == 1) {
+                        this.$store.dispatch(
+                            "posts/getTimeLine",
+                            this.$store.state.userLogged.id
+                        );
+                    } else {
+                        this.$store.dispatch(
+                            "posts/getMarketPlaceVerified",
+                            this.$store.state.userLogged.id
+                        );
+                    }
+                    this.showDeletedtToast();
+                    this.loading = false;
+                })
+                .catch((error) => {
+                    console.log(error.response);
+                    this.loading = false;
+                });
+        },
+        showDeletedtToast() {
+            this.$toast.add({
+                severity: "success",
+                summary: "Success Message",
+                detail: "Deleted comment",
+                life: 3000,
+            });
+        },
+        showDeleteDialog() {
+            this.deleteModal = true;
+        },
         async replyPost() {
             await axios({
                 method: "post",

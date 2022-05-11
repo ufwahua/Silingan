@@ -19,7 +19,7 @@ class Reply extends Model
         return $this->hasMany(Comment::class,'id','comment_id');
     }
     public function user(){
-        return $this->hasMany(User::class,'id','user_id');
+        return $this->hasOne(User::class,'id','user_id');
     }
      public function getCreatedAtAttribute(){
         

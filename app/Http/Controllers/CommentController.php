@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Reply;
 use App\Models\Comment;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\DB;
 use App\Http\Requests\CommentRequest;
 
 class CommentController extends Controller
@@ -56,9 +58,14 @@ class CommentController extends Controller
      * @param Comment $comment
      * @return JsonResponse
      */
-    public function destroy(Comment $comment) : JsonResponse
+    public function destroy(Request $request) : JsonResponse
     {
-        $comment->delete();
+       
+        
+    
+        $reply = DB::table('replies')->where('comment_id', $request->route('comment'))->pluck('id')->toArray();
+        Reply::whereIn('comment_id', $reply)->delete();
+        Comment::where('post_id',$request->route('comment'))->delete();
 
         return response()->json(['ok']);
     }
