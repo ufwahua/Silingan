@@ -18,7 +18,7 @@ class CreateInvoicesTable extends Migration
             $table->foreignId('user_id_from');
             $table->foreignId('collection_type_id');
             $table->foreignId('block_lot_id');
-            $table->date('due_date');
+            $table->string('due_date');
             $table->double('running_balance')->default(0);
             $table->double('over_due')->default(0);
             $table->boolean('payment')->default(0);
