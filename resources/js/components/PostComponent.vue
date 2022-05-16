@@ -303,6 +303,74 @@ div
             </template>
         </Dialog>
         <Dialog
+            v-model:visible="flagModal"
+            :style="{ width: '450px' }"
+            header="Flag user?"
+            :modal="true"
+        >
+            <div class="confirmation-content">
+                <div class="grid">
+                    <div
+                        class="col-12 flex align-items-center justify-content-center"
+                    >
+                        <i
+                            class="pi pi-exclamation-triangle mr-3"
+                            style="font-size: 2rem"
+                        />
+                        <span>Are you sure you want to flag this user?</span>
+                    </div>
+                </div>
+            </div>
+            <template #footer>
+                <Button
+                    label="Cancel"
+                    icon="pi pi-times"
+                    class="p-button-text"
+                    @click="flagModal = false"
+                />
+                <Button
+                    label="Confirm"
+                    icon="pi pi-check"
+                    class="p-button-text p-button-danger"
+                    @click="changeFlagStatus(this.post.user)"
+                />
+            </template>
+        </Dialog>
+        <Dialog
+            v-model:visible="unflagModal"
+            :style="{ width: '450px' }"
+            header="Unflag user?"
+            :modal="true"
+        >
+            <div class="confirmation-content">
+                <div class="grid">
+                    <div
+                        class="col-12 flex align-items-center justify-content-center"
+                    >
+                        <i
+                            class="pi pi-exclamation-triangle mr-3"
+                            style="font-size: 2rem"
+                        />
+                        <span>Are you sure you want to unflag this user?</span>
+                    </div>
+                </div>
+            </div>
+            <template #footer>
+                <Button
+                    label="Cancel"
+                    icon="pi pi-times"
+                    class="p-button-text"
+                    @click="unflagModal = false"
+                />
+                <Button
+                    label="Confirm"
+                    icon="pi pi-check"
+                    class="p-button-text p-button-success"
+                    @click="changeFlagStatus(this.post.user)"
+                />
+            </template>
+        </Dialog>
+        <Dialog
             v-model:visible="loading"
             :style="{ width: '450px' }"
             :modal="true"
@@ -469,6 +537,8 @@ export default {
             loading: false,
             editModal: false,
             deleteModal: false,
+            flagModal: false,
+            unflagModal: false,
             blockDialog: false,
             declineDialog: false,
             approveDialog: false,
@@ -494,6 +564,8 @@ export default {
 
     methods: {
         async changeFlagStatus(data) {
+            this.flagModal = false;
+            this.unflagModal = false;
             this.loading = true;
             if (data.role == "security officer") {
                 await axios({
@@ -521,8 +593,8 @@ export default {
                             summary: "Successful",
                             detail:
                                 data.flagged == false
-                                    ? "Security Officer flagged"
-                                    : "Security Officer unflagged",
+                                    ? "User Flagged"
+                                    : "User UnFlagged",
                             life: 3000,
                         });
                         if (this.group_id == 1) {
@@ -532,7 +604,7 @@ export default {
                             );
                         } else {
                             this.$store.dispatch(
-                                "posts/getMarketPlaceNotVerified",
+                                "posts/getMarketPlaceVerified",
                                 this.$store.state.userLogged.id
                             );
                         }
@@ -541,6 +613,7 @@ export default {
                     })
                     .catch((err) => {
                         console.log(err.response);
+
                         this.loading = false;
                     });
             } else if (data.role == "officer" || data.role == "resident") {
@@ -580,7 +653,7 @@ export default {
                             );
                         } else {
                             this.$store.dispatch(
-                                "posts/getMarketPlaceNotVerified",
+                                "posts/getMarketPlaceVerified",
                                 this.$store.state.userLogged.id
                             );
                         }
@@ -589,6 +662,7 @@ export default {
                     })
                     .catch((err) => {
                         console.log(err.response);
+
                         this.loading = false;
                     });
             }
@@ -614,7 +688,7 @@ export default {
                         );
                     } else {
                         this.$store.dispatch(
-                            "posts/getMarketPlaceNotVerified",
+                            "posts/getMarketPlaceVerified",
                             this.$store.state.userLogged.id
                         );
                     }
@@ -635,7 +709,7 @@ export default {
                 .then((res) => {
                     this.declineDialog = false;
                     this.$store.dispatch(
-                        "posts/getMarketPlaceNotVerified",
+                        "posts/getMarketPlaceVerified",
                         this.$store.state.userLogged.id
                     );
                     this.showDeclinedToast();
@@ -903,7 +977,7 @@ export default {
                         label: "UnFlag " + this.post.user.first_name,
                         icon: "pi pi-flag",
                         command: () => {
-                            this.changeFlagStatus(this.post.user);
+                            this.unflagModal = true;
                         },
                     });
                 } else {
@@ -911,7 +985,7 @@ export default {
                         label: "Flag " + this.post.user.first_name,
                         icon: "pi pi-flag-fill",
                         command: () => {
-                            this.changeFlagStatus(this.post.user);
+                            this.flagModal = true;
                         },
                     });
                 }

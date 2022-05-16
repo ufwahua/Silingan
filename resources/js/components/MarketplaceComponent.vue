@@ -11,6 +11,7 @@
                         v-model="search"
                         placeholder="Keyword Search"
                         class="w-full"
+                        @keypress.enter="searchPost"
                     />
                 </span>
             </div>
@@ -191,7 +192,9 @@ export default {
     },
     watch: {
         search(after, before) {
-            this.searchPost();
+            if (after == "") {
+                this.searchPost();
+            }
         },
     },
     methods: {
