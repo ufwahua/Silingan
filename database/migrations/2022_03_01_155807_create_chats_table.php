@@ -16,7 +16,7 @@ class CreateChatsTable extends Migration
         Schema::create('chats', function (Blueprint $table) {
             $table->id();
             $table->foreignId('chat_room_id');
-            $table->foreignId('user_id')->constrained();
+            $table->foreignId('user_id');
             $table->boolean('read')->default(0);
             $table->text('message');
             $table->timestamps();

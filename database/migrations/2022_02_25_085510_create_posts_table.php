@@ -18,7 +18,7 @@ class CreatePostsTable extends Migration
             $table->foreignId('group_id');
             $table->foreignId('user_id');
             $table->text('images')->nullable();
-            $table->text('content')->nullable();
+            $table->text('content');
             $table->boolean('approved');
             $table->timestamps();
         });

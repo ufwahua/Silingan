@@ -13,7 +13,7 @@ import SecurityOfficerComponent from "../admin/SecurityOfficerComponent.vue";
 import Position from "../admin/PositionComponent.vue";
 import ElectionComponent from "../admin/ElectionComponent.vue";
 import CardComponent from "../admin/CardComponent.vue";
-import VehicleComponent from "../admin/VehicleComponent.vue";
+// import VehicleComponent from "../admin/VehicleComponent.vue";
 import VerifyMarketPlaceComponent from "../admin/VerifyMarketPlaceComponent.vue";
 import CashflowComponent from "../admin/CashflowComponent.vue";
 import CollectionTypeComponent from "../admin/CollectionTypeComponent.vue";
@@ -298,17 +298,17 @@ const router = createRouter({
                         contents: CardComponent,
                     },
                 },
-                {
-                    path: "vehicle",
-                    meta: {
-                        role: "admin",
-                    },
-                    beforeEnter: checkRole,
-                    components: {
-                        default: NotFound,
-                        contents: VehicleComponent,
-                    },
-                },
+                // {
+                //     path: "vehicle",
+                //     meta: {
+                //         role: "admin",
+                //     },
+                //     beforeEnter: checkRole,
+                //     components: {
+                //         default: NotFound,
+                //         contents: VehicleComponent,
+                //     },
+                // },
                 {
                     path: "view-announcement",
                     meta: {

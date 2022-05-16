@@ -195,7 +195,7 @@
                                             <Dropdown
                                                 v-model="
                                                     filters_masterlist[
-                                                        'vehicle_type'
+                                                        'vehicle_label'
                                                     ].value
                                                 "
                                                 style="width: 150px"
@@ -210,7 +210,7 @@
                                             <Dropdown
                                                 v-model="
                                                     filters_masterlist[
-                                                        'vehicle_tag'
+                                                        'vehicle_type'
                                                     ].value
                                                 "
                                                 style="width: 150px"
@@ -294,11 +294,11 @@
                                     </div> </template
                                 ><Column
                                     header="Vehicle Type"
-                                    field="vehicle_type"
+                                    field="vehicle_label"
                                 ></Column>
                                 <Column
                                     header="Vehicle Tag"
-                                    field="vehicle_tag"
+                                    field="vehicle_type"
                                 ></Column>
                                 <Column
                                     header="Plate Number"
@@ -542,7 +542,7 @@
                                         <div class="my-2">
                                             <Dropdown
                                                 v-model="
-                                                    filters['vehicle_type']
+                                                    filters['vehicle_label']
                                                         .value
                                                 "
                                                 style="width: 150px"
@@ -556,7 +556,8 @@
                                         <div class="my-2">
                                             <Dropdown
                                                 v-model="
-                                                    filters['vehicle_tag'].value
+                                                    filters['vehicle_type']
+                                                        .value
                                                 "
                                                 style="width: 150px"
                                                 :showClear="true"
@@ -638,12 +639,12 @@
                                 </template>
                                 <Column
                                     header="Vehicle Type"
-                                    field="vehicle_type"
+                                    field="vehicle_label"
                                 >
                                 </Column>
                                 <Column
                                     header="Vehicle Tag"
-                                    field="vehicle_tag"
+                                    field="vehicle_type"
                                 >
                                 </Column>
                                 <Column
@@ -892,7 +893,7 @@
                                 <div class="field">
                                     <label>Vehicle Type</label>
                                     <Dropdown
-                                        v-model="vehicle_type"
+                                        v-model="vehicle_label"
                                         :class="{
                                             'p-invalid': error_vehicle_type,
                                         }"
@@ -913,7 +914,7 @@
                                 <div class="field">
                                     <label>Vehicle Tag</label>
                                     <Dropdown
-                                        v-model="vehicle_tag"
+                                        v-model="vehicle_type"
                                         :class="{
                                             'p-invalid': error_vehicle_tag,
                                         }"
@@ -1229,7 +1230,7 @@
                         <div class="field">
                             <label>Vehicle Type</label>
                             <Dropdown
-                                v-model="vehicle_type"
+                                v-model="vehicle_label"
                                 :class="{
                                     'p-invalid': error_vehicle_type,
                                 }"
@@ -1250,7 +1251,7 @@
                         <div class="field">
                             <label>Vehicle Tag</label>
                             <Dropdown
-                                v-model="vehicle_tag"
+                                v-model="vehicle_type"
                                 :class="{
                                     'p-invalid': error_vehicle_tag,
                                 }"
@@ -1519,8 +1520,8 @@ export default {
             selected_block: null,
             selected_block_lot: null,
             name: null,
+            vehicle_label: null,
             vehicle_type: null,
-            vehicle_tag: null,
             plate_number: null,
             log_type: null,
             loading: false,
@@ -1558,8 +1559,8 @@ export default {
             this.filters["global"].value = null;
             this.filters["lot.block.number"].value = null;
             this.filters["lot.number"].value = null;
-            this.filters["vehicle_tag"].value = null;
             this.filters["vehicle_type"].value = null;
+            this.filters["vehicle_label"].value = null;
             this.from = null;
             this.to = null;
             this.$store.dispatch("logs/getAll");
@@ -1568,8 +1569,8 @@ export default {
             this.filters_masterlist["global"].value = null;
             this.filters_masterlist["lot.block.number"].value = null;
             this.filters_masterlist["lot.number"].value = null;
-            this.filters_masterlist["vehicle_tag"].value = null;
             this.filters_masterlist["vehicle_type"].value = null;
+            this.filters_masterlist["vehicle_label"].value = null;
             this.from_masterlist = null;
             this.to_masterlist = null;
             this.$store.dispatch("logs/getAll");
@@ -1656,22 +1657,22 @@ export default {
                     value: null,
                     matchMode: FilterMatchMode.EQUALS,
                 },
-                vehicle_type: {
+                vehicle_label: {
                     value: null,
                     matchMode: FilterMatchMode.EQUALS,
                 },
-                vehicle_tag: {
+                vehicle_type: {
                     value: null,
                     matchMode: FilterMatchMode.EQUALS,
                 },
             };
             this.filters = {
                 global: { value: null, matchMode: FilterMatchMode.CONTAINS },
-                vehicle_type: {
+                vehicle_label: {
                     value: null,
                     matchMode: FilterMatchMode.EQUALS,
                 },
-                vehicle_tag: {
+                vehicle_type: {
                     value: null,
                     matchMode: FilterMatchMode.EQUALS,
                 },
@@ -1698,8 +1699,8 @@ export default {
                 this.name = data.name;
             } else {
                 this.plate_number = data.plate_number;
+                this.vehicle_label = data.vehicle_label;
                 this.vehicle_type = data.vehicle_type;
-                this.vehicle_tag = data.vehicle_tag;
             }
             console.log(data);
             this.logOutDialog = true;
@@ -1754,8 +1755,8 @@ export default {
                         purpose_visit: this.purpose_visit,
                         log_type: this.log_type,
                         plate_number: this.plate_number,
+                        vehicle_label: this.vehicle_label,
                         vehicle_type: this.vehicle_type,
-                        vehicle_tag: this.vehicle_tag,
                     },
                 })
                     .then(() => {
@@ -1782,8 +1783,8 @@ export default {
             } else {
                 this.user_login_id = data.user_login_id;
                 this.plate_number = data.plate_number;
+                this.vehicle_label = data.vehicle_label;
                 this.vehicle_type = data.vehicle_type;
-                this.vehicle_tag = data.vehicle_tag;
             }
             this.log_type = data.log_type;
             this.selected_card = data.card.number;
@@ -1843,8 +1844,8 @@ export default {
                         purpose_visit: this.purpose_visit,
                         log_type: this.log_type,
                         plate_number: this.plate_number,
+                        vehicle_label: this.vehicle_label,
                         vehicle_type: this.vehicle_type,
-                        vehicle_tag: this.vehicle_tag,
                     },
                 })
                     .then(() => {
@@ -1918,8 +1919,8 @@ export default {
                         purpose_visit: this.purpose_visit,
                         block_lot_id: this.selected_block_lot,
                         log_type: this.log_type,
+                        vehicle_label: this.vehicle_label,
                         vehicle_type: this.vehicle_type,
-                        vehicle_tag: this.vehicle_tag,
                         plate_number: this.plate_number,
                     },
                 })
@@ -1949,8 +1950,8 @@ export default {
             this.selected_block = null;
             this.selected_block_lot = null;
             this.purpose_visit = null;
+            this.vehicle_label = null;
             this.vehicle_type = null;
-            this.vehicle_tag = null;
         },
         resetErrors() {
             this.error_name = null;
@@ -1977,12 +1978,12 @@ export default {
             if (error.response.data.errors.plate_number)
                 this.error_plate_number =
                     error.response.data.errors.plate_number[0];
-            if (error.response.data.errors.vehicle_type)
+            if (error.response.data.errors.vehicle_label)
                 this.error_vehicle_type =
-                    error.response.data.errors.vehicle_type[0];
-            if (error.response.data.errors.vehicle_tag)
+                    error.response.data.errors.vehicle_label[0];
+            if (error.response.data.errors.vehicle_type)
                 this.error_vehicle_tag =
-                    error.response.data.errors.vehicle_tag[0];
+                    error.response.data.errors.vehicle_type[0];
         },
     },
     created() {

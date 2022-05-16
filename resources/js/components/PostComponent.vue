@@ -964,13 +964,6 @@ export default {
                             this.openBlockDialog();
                         },
                     },
-                    {
-                        label: "Delete post",
-                        icon: "pi pi-trash",
-                        command: () => {
-                            this.deleteModal = true;
-                        },
-                    },
                 ];
                 if (this.post.user.flagged) {
                     this.menus.push({

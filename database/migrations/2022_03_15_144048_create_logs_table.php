@@ -20,8 +20,8 @@ class CreateLogsTable extends Migration
             $table->foreignId('card_id');
             $table->foreignId('block_lot_id');
             $table->enum('log_type',['visitor','vehicle']);
-            $table->enum('vehicle_type',['motorcycle','car','truck','van','tricycle'])->nullable();
-            $table->enum('vehicle_tag',['public','private'])->nullable();
+            $table->enum('vehicle_label',['motorcycle','car','truck','van','tricycle'])->nullable();
+            $table->enum('vehicle_type',['public','private'])->nullable();
             $table->string('purpose_visit');
             $table->string('name')->nullable();
             $table->string('plate_number')->nullable();

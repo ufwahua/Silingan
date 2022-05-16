@@ -15,7 +15,7 @@ class CreateLotsTable extends Migration
     {
         Schema::create('lots', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('block_id')->constrained();
+            $table->foreignId('block_id');
             $table->integer('number');
             $table->boolean('active')->default(true);
             $table->timestamps();

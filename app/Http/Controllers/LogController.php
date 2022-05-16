@@ -65,14 +65,14 @@ class LogController extends Controller
                 'log_type' => ['required'],
                 'purpose_visit' => ['required'],
                 'plate_number' => ['required'],  
+                'vehicle_label' => ['required'],  
                 'vehicle_type' => ['required'],  
-                'vehicle_tag' => ['required'],  
                
             ]);
                 $log = Log::query()->create([
                 'plate_number'                   => $request['plate_number'],
+                'vehicle_label'                   => $request['vehicle_label'],
                 'vehicle_type'                   => $request['vehicle_type'],
-                'vehicle_tag'                   => $request['vehicle_tag'],
                 'user_login_id'                 => $request['user_login_id'],
                 'card_id'              => $request['card_id'],
                 'block_lot_id'            => $request['block_lot_id'],
@@ -125,8 +125,8 @@ class LogController extends Controller
                 'log_type' => ['required'],
                 'purpose_visit' => ['required'],
                 'plate_number' => ['required'],  
+                'vehicle_label' => ['required'],  
                 'vehicle_type' => ['required'],  
-                'vehicle_tag' => ['required'],  
                
             ]);
                 $log = Log::query()->where('id',$request->route('log'))->update([
@@ -137,8 +137,8 @@ class LogController extends Controller
                 'log_type'             => $request['log_type'],
                 'purpose_visit'                => $request['purpose_visit'],
                 'plate_number'                   => $request['plate_number'],
-                 'vehicle_type'                   => $request['vehicle_type'],
-                'vehicle_tag'                   => $request['vehicle_tag'],
+                'vehicle_label'                   => $request['vehicle_label'],
+                'vehicle_type'                   => $request['vehicle_type'],
                 
             ]);   
          }
