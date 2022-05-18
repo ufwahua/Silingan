@@ -21,11 +21,7 @@ class UserSeeder extends Seeder
     public function run()
     {
         
-        User::factory()
-            ->count(50)
-            ->create();
-
-        User::create([
+            User::create([
             'first_name' => "Joshua Henry",
             'last_name' => "Diamos",
             'role' => 'admin',
@@ -41,71 +37,7 @@ class UserSeeder extends Seeder
             'tag_as' => 'owner',
         ]);
 
-        User::create([
-            'first_name' => "Joshua Henry",
-            'last_name' => "Diamos",
-            'role' => 'security officer',
-            'status' => 'active',
-            'block_lot_id' => null,
-            'gender' => 'male',
-            'age' => rand(1, 100),
-            'verified' => 1,
-            'has_voted' => 0,
-            'contact_num' => rand(639000000001, 639999999999),
-            'security_shift' => "Tue Apr 19 2022 12:00:02 GMT+0800" ." - ". "Tue Apr 19 2022 18:00:02 GMT+0800",
-            'email' => 'joshua.diamos@gmail.com',
-            'password' => Hash::make("12345678"),
-
-
-        ]);
-
-        User::create([
-            'first_name' => "Varbie",
-            'last_name' => "Sumido",
-            'role' => 'resident',
-            'status' => 'active',
-            'block_lot_id' => 3,
-            'gender' => 'female',
-            'age' => rand(1, 100),
-            'verified' => 1,
-            'has_voted' => 0,
-            'contact_num' => '639083024328',
-            'email' => 'varbiesumido@gmail.com',
-            'password' => Hash::make("12345678"),
-            'tag_as' => 'owner',
-        ]);
-
-        User::create([
-            'first_name' => "Reynard",
-            'last_name' => "Dahunan",
-            'role' => 'resident',
-            'status' => 'active',
-            'gender' => 'male',
-            'block_lot_id' => 4,
-            'age' => rand(1, 100),
-            'verified' => 1,
-            'has_voted' => 0,
-            'contact_num' => '639484807961',
-            'email' => 'reynard.dahunan@gmail.com',
-            'password' => Hash::make("12345678"),
-            'tag_as' => 'owner',
-        ]);
-        User::create([
-            'first_name' => "Joshua Henry",
-            'last_name' => "Diamos",
-            'role' => 'officer',
-            'position_id' => 1,
-            'status' => 'active',
-            'block_lot_id' => 2,
-            'gender' => 'male',
-            'age' => rand(1, 100),
-            'verified' => 1,
-            'has_voted' => 0,
-            'contact_num' => rand(639000000001, 639999999999),
-            'email' => 'jh.officer@gmail.com',
-            'password' => Hash::make("12345678"),
-            'tag_as' => 'owner',
-        ]);
+        
         User::create([
             'first_name' => "Steven Mitch",
             'last_name' => "Espina",

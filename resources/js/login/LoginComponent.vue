@@ -34,6 +34,7 @@
                         type="text"
                         class="w-full mb-3"
                         style="padding: 1rem"
+                        @keypress.enter="onLoginSubmit"
                     />
 
                     <label class="block text-900 font-medium text-xl mb-2"
@@ -47,6 +48,7 @@
                         class="w-full mb-3"
                         inputClass="w-full"
                         inputStyle="padding:1rem"
+                        @keypress.enter="onLoginSubmit"
                     >
                     </Password>
                     <label style="color: red" v-if="error">{{
@@ -194,8 +196,6 @@ export default {
 </script>
 
 <style scoped>
-
-
 .login100-form {
     height: 475px;
     width: 475px;

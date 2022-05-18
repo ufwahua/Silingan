@@ -65,17 +65,22 @@ class ChatController extends Controller
         }
         $r = request();
         broadcast(new NewChatMessage($message))->toOthers();
-        return response()->json(ChatRoom::with(['chats' => function ( $query){
-            $query->orderBy('created_at','desc');
-        },'chats.user'])->withCount([
-            'chats', 
-            'chats as chat_read_count' => function ( $query) {
-                $query->where('read', 0);
-                 $query->whereIn('user_id', [Auth::id()]);
-            }
-        ])
-        ->where('id',$chat_room->id) 
-        ->get());
+        // return response()->json(ChatRoom::with(['chats' => function ( $query){
+        //     $query->orderBy('created_at','desc');
+        // },'chats.user'])->withCount([
+        //     'chats', 
+        //     'chats as chat_read_count' => function ( $query) {
+        //         $query->where('read', 0);
+        //          $query->whereIn('user_id', [Auth::id()]);
+        //     }
+        // ])
+        // ->where('id',$chat_room->id) 
+        // ->get());
+        return response()->json(ChatRoom::with(['chats' => function ($query) {
+            $query->orderBy('created_at', 'desc');
+        }, 'chats.user'])
+            ->where('id', $chat_room->id)
+            ->get());
     }
     /**
      * @param Chat        $chat
@@ -98,17 +103,23 @@ class ChatController extends Controller
 
 
         $chat->delete();
-        $chats = ChatRoom::with(['chats' => function ( $query){
-            $query->orderBy('created_at','desc');
-        },'chats.user'])->withCount([
-            'chats', 
-            'chats as chat_read_count' => function ( $query) {
-                $query->where('read', 0);
-                 $query->whereNotIn('user_id', [Auth::id()]);
-            }
-        ])
-        ->where('id',$chat['chat_room_id']) 
-        ->get();
+        // $chats = ChatRoom::with(['chats' => function ( $query){
+        //     $query->orderBy('created_at','desc');
+        // },'chats.user'])->withCount([
+        //     'chats', 
+        //     'chats as chat_read_count' => function ( $query) {
+        //         $query->where('read', 0);
+        //          $query->whereNotIn('user_id', [Auth::id()]);
+        //     }
+        // ])
+        // ->where('id',$chat['chat_room_id']) 
+        // ->get();
+        $chats = ChatRoom::with(['chats' => function ($query) {
+            $query->orderBy('created_at', 'desc');
+        }, 'chats.user'])
+            ->where('id', $chat['chat_room_id'])
+            ->get();
+        return response()->json($chats);
         return response()->json($chats);
     }
 }

@@ -327,13 +327,11 @@
                                     v-if="data.flagged == true"
                                     icon="pi pi-flag-fill"
                                     class="p-button-rounded p-button-danger"
-                                    disabled
                                 />
                                 <Button
                                     v-else
                                     icon="pi pi-flag-fill"
                                     class="p-button-rounded p-button-success"
-                                    disabled
                                 />
                             </template>
                         </Column>

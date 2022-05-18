@@ -77,7 +77,7 @@
                     >
                         <ChatSideBarComponent
                             v-if="officer.role === 'officer'"
-                            @click="openChatRoom(resident)"
+                            @click="openChatRoom(officer)"
                             v-bind:user="officer"
                         />
                     </div>
@@ -282,9 +282,6 @@ export default {
         "$store.state.chat_room_id"(val, oldVal) {
             if (oldVal) {
                 this.disconnect(oldVal);
-                this.connect();
-            } else {
-                this.connect();
             }
         },
     },
@@ -353,14 +350,12 @@ export default {
             }
         },
         connect() {
-            if (this.$store.state.chat_room_id) {
-                let vm = this;
-                window.Echo.private(
-                    "chat." + this.$store.state.chat_room_id
-                ).listen(".message.new", (e) => {
-                    vm.openChatRoom(this.user);
-                });
-            }
+            let vm = this;
+            window.Echo.private(
+                "chat." + this.$store.state.chat_room_id
+            ).listen(".message.new", (e) => {
+                vm.openChatRoom(this.user);
+            });
         },
         disconnect(chat_room_id) {
             window.Echo.leave("chat." + chat_room_id);
@@ -375,8 +370,10 @@ export default {
             })
                 .then((res) => {
                     this.$store.commit("getChatRoomId", res.data[0].id);
+
                     console.log("chats", res.data);
                     this.$store.commit("getChats", res.data[0].chats);
+                    this.connect();
                 })
                 .catch((error) => {
                     this.$store.commit("getChats", null);

@@ -232,15 +232,34 @@
                                 >
                                 <Column field="status" header="Status"
                                     ><template #body="{ data }">
-                                        <div
+                                        <!-- <div
                                             v-if="data.active"
                                             class="text-green-700"
                                         >
-                                            {{ (data["status"] = "active") }}
+                                            <Badge
+                                                :class="badgecolor(data.status)"
+                                                >{{ data.status }}</Badge
+                                            >
                                         </div>
                                         <div v-else class="text-pink-700">
                                             {{ (data["status"] = "inactive") }}
-                                        </div>
+                                        </div> -->
+
+                                        <Badge
+                                            v-if="data.active"
+                                            :class="badgecolor(data.active)"
+                                            >{{
+                                                (data["status"] = "active")
+                                            }}</Badge
+                                        >
+
+                                        <Badge
+                                            v-else
+                                            :class="badgecolor(data.active)"
+                                            >{{
+                                                (data["status"] = "inactive")
+                                            }}</Badge
+                                        >
                                     </template>
                                 </Column>
 
@@ -652,6 +671,13 @@ export default {
         };
     },
     methods: {
+        badgecolor(color) {
+            if (color == true) {
+                return "bg-green-500";
+            } else {
+                return "bg-pink-500";
+            }
+        },
         toggleLot(data) {
             this.$refs.menu_lot.toggle(event);
             this.populateLotFields(data);

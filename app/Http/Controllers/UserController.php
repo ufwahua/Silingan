@@ -348,7 +348,7 @@ class UserController extends Controller
     {
        
         $users =  User::where('verified',1)
-        ->with(['lot.block','position'])->get();
+        ->with(['lot.block','position','emergency_contact'])->get();
 
         return response()->json($users);
         
@@ -372,7 +372,7 @@ class UserController extends Controller
     }
      public function getOfficers(Request $request): JsonResponse
     {
-        $users =  User::where('role','officer')->with(['lot.block','position'])->get();
+        $users =  User::where('role','officer')->with(['lot.block','position','emergency_contact'])->get();
         $req = [];
         foreach ($users as $user){
             if(strtoupper($user->position['name']) === "PRESIDENT"){
