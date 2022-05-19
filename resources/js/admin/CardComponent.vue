@@ -582,9 +582,7 @@ export default {
             this.$store.dispatch("users/getAll", this.selected_user);
         },
     },
-    mounted() {
-        console.log(this.allCards);
-    },
+
     created() {
         this.initFilters();
     },

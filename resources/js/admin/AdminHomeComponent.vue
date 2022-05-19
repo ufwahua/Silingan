@@ -99,7 +99,7 @@ export default {
                             to: "/admin/verify-marketplace",
                         },
                         {
-                            label: "Invoice",
+                            label: "Invoices",
                             icon: "pi pi-send",
                             to: "/admin/invoice",
                         },

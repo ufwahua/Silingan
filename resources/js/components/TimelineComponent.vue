@@ -68,6 +68,7 @@
                         </Textarea>
                     </div>
                 </div>
+
                 <div v-for="post in posts_timeline" :key="post.id">
                     <PostComponent
                         :post="post"

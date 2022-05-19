@@ -39,7 +39,7 @@ class InvoiceController extends Controller
     }
     public function billToAll(Request $request) : JsonResponse
     {
-        $lots = DB::table('lots')->pluck('id')->toArray();
+        $lots = DB::table('lots')->where('active',1)->pluck('id')->toArray();
         $request->validate([
             'user_id_from'              => ['required', Rule::exists('users', 'id')],
             'collection_type_id'        => ['required', Rule::exists('collection_types','id')],

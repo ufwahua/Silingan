@@ -329,11 +329,11 @@ export default {
                         [
                             data.collection_type.name,
                             data.notes != null ? data.notes : "",
-                            data.amount,
+                            data.amount.toString(),
                         ],
                     ]),
                     invTotalLabel: "Total:",
-                    invTotal: data.amount,
+                    invTotal: data.amount.toString(),
 
                     invDescLabel: "Issued By:",
                     invDesc:
@@ -441,7 +441,7 @@ export default {
                             ),
                             row1: {
                                 col1: "Current:",
-                                col2: data.collection_type.amount,
+                                col2: data.collection_type.amount.toString(),
                                 style: {
                                     fontSize: 10, //optional, default 12
                                 },
@@ -472,7 +472,7 @@ export default {
                     jsPDFInvoiceTemplate.default(props);
                 })
                 .catch((err) => {
-                    console.log(err.response);
+                    console.log(err);
                 });
 
             var first_invoice = null;

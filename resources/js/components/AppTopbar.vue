@@ -330,7 +330,10 @@
                     </Button>
                 </div>
             </template>
-            <div class="flex flex-column-reverse" style="min-height: 370px">
+            <div
+                class="flex flex-column-reverse chat_container"
+                style="min-height: 370px"
+            >
                 <p v-if="!this.chats" class="text-right">Say Hi</p>
                 <div
                     v-else
@@ -403,6 +406,11 @@ export default {
             if (oldVal) {
                 this.disconnect(oldVal);
             }
+        },
+        chats() {
+            const chatCont =
+                document.querySelector(".chat_container").parentNode;
+            chatCont.scrollTop = chatCont.scrollHeight;
         },
     },
     methods: {

@@ -77,6 +77,7 @@ Route::post('/invoice/bill-specific/', [InvoiceController::class, 'billSpecificB
 Route::get('/invoice/block-lot/{invoice}', [InvoiceController::class, 'getInvoicesBlockLot']);
 Route::post('/election/update-voters/', [ElectionController::class, 'updateVoters']);
 Route::get('/collection/block-lot/{collection}', [CollectionController::class, 'getCollectionBlockLot']);
+Route::get('/collection/association-dues/', [CollectionController::class, 'getAllCollection']);
 
 
 Route::apiResources([

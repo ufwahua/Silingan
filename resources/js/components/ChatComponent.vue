@@ -121,8 +121,7 @@
                 </div>
             </template>
             <div
-                ref="chat_container"
-                class="flex flex-column-reverse"
+                class="flex flex-column-reverse chat_container"
                 style="min-height: 370px"
             >
                 <p v-if="!this.chats" class="text-right">Say Hi</p>
@@ -284,6 +283,11 @@ export default {
                 this.disconnect(oldVal);
             }
         },
+        chats() {
+            const chatCont =
+                document.querySelector(".chat_container").parentNode;
+            chatCont.scrollTop = chatCont.scrollHeight;
+        },
     },
     outsideClickListener: null,
     methods: {
@@ -370,7 +374,6 @@ export default {
             })
                 .then((res) => {
                     this.$store.commit("getChatRoomId", res.data[0].id);
-
                     console.log("chats", res.data);
                     this.$store.commit("getChats", res.data[0].chats);
                     this.connect();
@@ -413,25 +416,13 @@ export default {
                 this.$el.contains(event.target)
             );
         },
-        scrollToEnd() {
-            // var content = this.$refs.chat_container;
-            // content.scrollTop = content.scrollHeight;
-            // alert(
-            //     "scroll height is " +
-            //         content.scrollHeight +
-            //         " scroll Top is " +
-            //         content.scrollTop
-            // );
-        },
     },
     computed: {
         containerClass() {
             return ["layout-config", { "layout-config-active": this.active }];
         },
     },
-    mounted() {
-        // this.$nextTick(() => this.scrollToEnd());
-    },
+
     created() {
         this.$store.dispatch(
             "notifications/getSpecific",

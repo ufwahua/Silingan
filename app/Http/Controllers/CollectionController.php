@@ -28,9 +28,14 @@ class CollectionController extends Controller
     {
         return response()->json($collection);
     }
-     public function getCollectionBlockLot(Request $request) : JsonResponse
+    public function getCollectionBlockLot(Request $request) : JsonResponse
     {
         $collection = Collection::where('block_lot_id',$request->route('collection'))->with(['lot.block','collectionType','user'])->latest()->get();
+        return response()->json($collection);
+    }
+    public function getAllCollection(Request $request) : JsonResponse
+    {
+        $collection = Collection::where('collection_type_id',1)->with(['lot.block','collectionType','user'])->latest()->get();
         return response()->json($collection);
     }
     /**
