@@ -114,7 +114,7 @@ export default {
                 })
                 .catch((err) => {
                     this.error_email = "";
-                    console.log(err.response);
+                    console.log(err);
                     if (err.response.data.errors.email) {
                         this.error_email = err.response.data.errors.email[0];
                     }
