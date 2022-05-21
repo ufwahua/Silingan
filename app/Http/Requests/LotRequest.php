@@ -26,9 +26,16 @@ class LotRequest extends FormRequest
     public function rules()
     {
         return [
-            'block_id' =>['required',  Rule::exists('blocks', 'id')],
-            'number' => ['required','integer', 'max:255','gt:0'],
-            'active' => ['required'],
+            'block_id' =>['required'],
+
+            'number' => ['required','integer','unique:lots,block_id,' . $this->route('lot')],
+            'active' => ['required']
         ];
+        // return [
+        //     'block_id' =>['required'],
+
+        //     'number' => ['required','integer','unique:lots,block_id,' . $this->route('lot')],
+        //     'active' => ['required']
+        // ];
     }
 }

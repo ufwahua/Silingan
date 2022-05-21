@@ -9,6 +9,7 @@ use App\Http\Requests\LotRequest;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use Illuminate\Validation\Rule;
 
 class LotController extends Controller
 {
@@ -99,39 +100,16 @@ class LotController extends Controller
 
       public function update(Request $request ) : JsonResponse
     {
-        $found = false;
-        $lots =  Lot::query()->where('block_id',$request['block_id'])->get();
-        $lots = json_decode($lots, true);
-        $unique = true;
-        foreach ($lots as $lt) // find lot number duplicate
-        {
-            if($lt['number'] == (int)$request['number']){
-               
-                $found = true;
-                $unique = false;
-                break;
-            }
-        }
-       if(!$found){
+       
+      
             Lot::query()->where('id',$request->route('lot'))->update( $request->validate([
-                    'number' => ['required','integer', 'max:255','gt:0'],
+                    'number' => ['required','integer', 'max:255','gt:0',Rule::unique('lots')->where(function ($query) use ($request) {
+                        return $query->where('block_id', $request->block_id);
+                    })->ignore($request->route('lot'))],
                     'active' => ['required']
                 ]));
            
             return response()->json(['ok']);
-       }
-       else if($unique){
-            Lot::query()->where('id',$request->route('lot'))->update( $request->validate([
-                'number' => ['required','integer', 'max:255','gt:0'],
-                'active' => ['required']
-            ]));
-         
-            return response()->json(['ok']);
-       }
-       
-        return response()->json(["errors"=>[
-            'number' => ['The lot number has already been taken.'],
-        ]],404);
       
       
         

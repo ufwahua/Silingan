@@ -392,7 +392,7 @@ div
         <Dialog
             v-model:visible="approveDialog"
             :style="{ width: '450px' }"
-            :header="`Approved Post?`"
+            :header="`Approve Post?`"
             :modal="true"
         >
             <div class="confirmation-content">
@@ -681,17 +681,12 @@ export default {
             })
                 .then((res) => {
                     this.approveDialog = false;
-                    if (this.group_id == 1) {
-                        this.$store.dispatch(
-                            "posts/getTimeLine",
-                            this.$store.state.userLogged.id
-                        );
-                    } else {
-                        this.$store.dispatch(
-                            "posts/getMarketPlaceVerified",
-                            this.$store.state.userLogged.id
-                        );
-                    }
+
+                    this.$store.dispatch(
+                        "posts/getMarketPlaceNotVerified",
+                        this.$store.state.userLogged.id
+                    );
+
                     this.showApprovedToast();
                     this.loading = false;
                 })
@@ -962,6 +957,13 @@ export default {
                         command: () => {
                             this.selectedUser = this.post.user.id;
                             this.openBlockDialog();
+                        },
+                    },
+                    {
+                        label: "Delete post",
+                        icon: "pi pi-trash",
+                        command: () => {
+                            this.deleteModal = true;
                         },
                     },
                 ];

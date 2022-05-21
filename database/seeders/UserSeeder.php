@@ -34,7 +34,7 @@ class UserSeeder extends Seeder
             'contact_num' => '639083024328',
             'email' => 'varbiesumido@gmail.com',
             'password' => Hash::make("12345678"),
-            'tag_as' => 'owner',
+            
         ]);
 
         

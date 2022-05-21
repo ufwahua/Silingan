@@ -601,8 +601,8 @@ export default {
             number: null,
             status: [{ status: "active" }, { status: "inactive" }],
             status_dropdown: [
-                { status: "active", value: true },
-                { status: "inactive", value: false },
+                { status: "active", value: 1 },
+                { status: "inactive", value: 0 },
             ],
             lot: null,
             lot_id: null,
@@ -931,14 +931,14 @@ export default {
                 })
                 .catch((error) => {
                     this.resetErrors();
-
-                    if (error.response.data.errors.number) {
-                        this.error = error.response.data.errors.number[0];
-                    }
-                    if (error.response.data.errors.active) {
-                        this.error_active =
-                            error.response.data.errors.active[0];
-                    }
+                    console.log(error.response);
+                    // if (error.response.data.errors.number) {
+                    //     this.error = error.response.data.errors.number[0];
+                    // }
+                    // if (error.response.data.errors.active) {
+                    //     this.error_active =
+                    //         error.response.data.errors.active[0];
+                    // }
                     this.loading = false;
                 });
         },
