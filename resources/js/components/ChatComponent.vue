@@ -136,7 +136,7 @@
             </div>
 
             <template #footer>
-                <div class="col-12">
+                <div v-if="!user_blocked" class="col-12">
                     <Textarea
                         v-model="message"
                         :autoResize="true"
@@ -146,6 +146,16 @@
                         @keypress.enter="sendMessage"
                     >
                     </Textarea>
+                </div>
+                <div v-else>
+                    <InputText
+                        placeholder="You have blocked this user"
+                        :autoResize="true"
+                        rows="1"
+                        class="w-full"
+                        disabled
+                    >
+                    </InputText>
                 </div>
             </template>
         </Dialog>
@@ -182,7 +192,7 @@ export default {
         const store = useStore();
         return {
             verified_user_chat: computed(() => store.state.verified_user_chat),
-
+            block_users: computed(() => store.state.block_users),
             chats: computed(() => store.state.chats),
             notifications: computed(() => {
                 if (store.state.notifications.specific_notifications != null) {
@@ -228,6 +238,7 @@ export default {
             officer: false,
             security_officer: false,
             admin: false,
+            user_blocked: false,
             items: [
                 {
                     label: "Resident",
@@ -364,10 +375,20 @@ export default {
         disconnect(chat_room_id) {
             window.Echo.leave("chat." + chat_room_id);
         },
+        checkBlockUser() {
+            this.user_blocked = false;
+            console.log("blocked users", this.block_users);
+            this.block_users.forEach((elem) => {
+                if (this.user.id == elem.block_user.id) {
+                    this.user_blocked = true;
+                }
+            });
+        },
         openChatRoom(user) {
             this.chatRoomModal = true;
             this.message = null;
             this.user = user;
+            this.checkBlockUser();
             axios({
                 method: "get",
                 url: "/api/chat_room/" + this.user.id,
