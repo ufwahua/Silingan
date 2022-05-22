@@ -574,10 +574,6 @@ export default {
             this.$refs.menu.toggle(event);
         },
         toggleNotification(event) {
-            this.$store.dispatch(
-                "notifications/getSpecific",
-                this.$store.state.userLogged.id
-            );
             this.items = [];
             if (this.notifications) {
                 this.notifications.forEach((elem) => {

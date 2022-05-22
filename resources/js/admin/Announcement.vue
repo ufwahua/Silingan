@@ -431,6 +431,7 @@ export default {
                 },
             })
                 .then(async (res) => {
+                    console.log("announcement", res.data);
                     this.createAnnouncementDialog = false;
                     this.$store.dispatch("announcements/getAll");
                     this.showCreateAnnouncementToast();

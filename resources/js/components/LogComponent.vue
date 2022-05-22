@@ -1907,7 +1907,7 @@ export default {
                             data: {
                                 from_user_id: this.$store.state.userLogged.id,
                                 message:
-                                    "has logged that you have a visitor named" +
+                                    "has logged that you have a visitor named " +
                                     this.name,
                                 block_lot_id: this.selected_block_lot,
                             },
@@ -1953,8 +1953,8 @@ export default {
                             data: {
                                 from_user_id: this.$store.state.userLogged.id,
                                 message:
-                                    "has logged a visitor with a vehicle of " +
-                                    this.vehicle_type +
+                                    "has logged you a visitor with a vehicle of " +
+                                    this.vehicle_label +
                                     " [" +
                                     this.vehicle_type +
                                     "] " +

@@ -16,6 +16,7 @@ class Notification extends Model
         'chat_room_id',
         'post_id',
         'election_id',
+        'announcement_id',
         'message',
         'viewed'
     ];

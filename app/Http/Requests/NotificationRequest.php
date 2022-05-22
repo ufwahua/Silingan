@@ -31,6 +31,7 @@ class NotificationRequest extends FormRequest
             'chat_room_id'   => ['sometimes'],
             'post_id'   => ['sometimes'],
             'election_id'   => ['sometimes'],
+            'announcement_id'   => ['sometimes'],
             
             'message'   => ['required', 'max:255'],
         ];

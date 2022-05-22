@@ -34,6 +34,7 @@ const notifications = {
             })
                 .then((res) => {
                     commit("getSpecific", res.data);
+                    console.log("specific notification", res.data);
                 })
                 .catch((err) => {
                     console.log(err.response.data);

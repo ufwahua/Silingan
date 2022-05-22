@@ -37,6 +37,22 @@ class UserSeeder extends Seeder
             
         ]);
 
+         User::create([
+            'first_name' => "Kent Luke",
+            'last_name' => "Pescadero",
+            'role' => 'resident',
+            'status' => 'active',
+            'block_lot_id' => 1,
+            'gender' => 'male',
+            'age' => rand(1, 100),
+            'verified' => 1,
+            'has_voted' => 0,
+            'contact_num' => '639083024328',
+            'email' => 'kentluke.pescadero@gmail.com',
+            'password' => Hash::make("12345678"),
+            
+        ]);
+
         
         User::create([
             'first_name' => "Steven Mitch",
@@ -107,8 +123,8 @@ class UserSeeder extends Seeder
         ]);
 
         User::create([
-            'first_name' => "Kent Luke",
-            'last_name' => "Pescadero",
+            'first_name' => "Kevin",
+            'last_name' => "Diamos",
             'role' => 'officer',
             'position_id' => 6,
             'status' => 'active',
@@ -118,7 +134,7 @@ class UserSeeder extends Seeder
             'verified' => 1,
             'has_voted' => 0,
             'contact_num' => rand(639000000001, 639999999999),
-            'email' => 'kentluke.pescadero@gmail.com',
+            'email' => 'kevin.diamos@gmail.com',
             'password' => Hash::make("12345678"),
             'tag_as' => 'owner',
         ]);
