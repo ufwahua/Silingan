@@ -66,7 +66,7 @@ export default createStore({
         getResidents(state, payload) {
             state.residents = payload;
         },
-        getSearchUser(state, payload) {
+        getChatSideBar(state, payload) {
             state.verified_user_chat = payload;
         },
         getUsersNotBlocked(state, payload) {
@@ -177,7 +177,19 @@ export default createStore({
             })
                 .then((res) => {
                     commit("getUsersVerified", res.data);
-                    commit("getSearchUser", res.data);
+                    commit("getChatSideBar", res.data);
+                })
+                .catch((err) => {
+                    console.log(err.response.data);
+                });
+        },
+        async getChatSideBar({ commit }, payload) {
+            await axios({
+                method: "get",
+                url: "/api/user/chat-sidebar/" + payload,
+            })
+                .then((res) => {
+                    commit("getChatSideBar", res.data);
                 })
                 .catch((err) => {
                     console.log(err.response.data);

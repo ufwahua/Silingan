@@ -20,6 +20,7 @@ class CreateNotificationsTable extends Migration
             $table->foreignID('chat_room_id')->nullable();
             $table->foreignID('post_id')->nullable();
             $table->foreignID('election_id')->nullable();
+            $table->foreignID('announcement_id')->nullable();
             $table->text('message');
             $table->boolean('viewed')->default(false);
             $table->timestamps();

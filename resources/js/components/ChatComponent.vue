@@ -298,7 +298,7 @@ export default {
                 params: { query: this.search },
             })
                 .then((res) => {
-                    this.$store.commit("getSearchUser", res.data);
+                    this.$store.commit("getChatSideBar", res.data);
                 })
                 .catch((e) => {
                     console.log(e.response);
@@ -428,7 +428,7 @@ export default {
             "notifications/getSpecific",
             this.$store.state.userLogged.id
         );
-        this.$store.dispatch("getUsersVerified");
+        this.$store.dispatch("getChatSideBar", this.$store.state.userLogged.id);
     },
 };
 </script>

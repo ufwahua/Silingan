@@ -198,6 +198,10 @@ export default {
                         "getBlockUsers",
                         this.$store.state.userLogged.id
                     );
+                    this.$store.dispatch(
+                        "getChatSideBar",
+                        this.$store.state.userLogged.id
+                    );
                     this.showUnblockToast();
                     this.unblockDialog = false;
                     this.loading = false;
@@ -247,6 +251,10 @@ export default {
 
                     this.$store.dispatch(
                         "getBlockUsers",
+                        this.$store.state.userLogged.id
+                    );
+                    this.$store.dispatch(
+                        "getChatSideBar",
                         this.$store.state.userLogged.id
                     );
                     this.showBlockToast();

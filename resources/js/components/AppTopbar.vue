@@ -200,6 +200,12 @@
                                         class="col-12 m-1"
                                     >
                                         <Button
+                                            v-if="
+                                                notif.chat_room_id ||
+                                                notif.post_id ||
+                                                notif.election_id ||
+                                                notif.announcement_id
+                                            "
                                             class="p-button-text p-button-secondary w-full"
                                             @click="
                                                 notif.chat_room_id
@@ -272,6 +278,64 @@
                                                 </div>
                                             </div>
                                         </Button>
+                                        <div v-else>
+                                            <div class="p-inputgroup">
+                                                <div
+                                                    v-if="
+                                                        notif.from_user
+                                                            .profile_pic
+                                                    "
+                                                >
+                                                    <Avatar
+                                                        :image="`http://127.0.0.1:8000${notif.from_user.profile_pic}`"
+                                                        class="mr-2"
+                                                        size="large"
+                                                        shape="circle"
+                                                        alt="Image"
+                                                    />
+                                                </div>
+                                                <div v-else>
+                                                    <Avatar
+                                                        image="http://127.0.0.1:8000/storage/images/avatar.png"
+                                                        class="mr-2"
+                                                        size="large"
+                                                        shape="circle"
+                                                        alt="Image"
+                                                    />
+                                                </div>
+
+                                                <div class="grid grid-nogutter">
+                                                    <div class="col-12">
+                                                        <b class="p-0 m-0">
+                                                            {{
+                                                                notif.from_user
+                                                                    .first_name
+                                                            }}
+                                                            {{
+                                                                notif.from_user
+                                                                    .last_name
+                                                            }}</b
+                                                        >
+                                                        <b class="p-0 m-0">
+                                                            [{{
+                                                                notif.from_user
+                                                                    .role
+                                                            }}]
+                                                        </b>
+                                                    </div>
+                                                    <div class="col-12">
+                                                        <p>
+                                                            {{ notif.message }}
+                                                        </p>
+                                                        <p class="text-right">
+                                                            {{
+                                                                notif.created_at
+                                                            }}
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
 
                                     <div class="col-12">

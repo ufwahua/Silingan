@@ -1895,12 +1895,29 @@ export default {
                         name: this.name,
                     },
                 })
-                    .then(() => {
+                    .then(async () => {
                         this.logVisitorDialog = false;
                         this.logVisitorDialog = false;
                         this.$store.dispatch("logs/getAll");
                         this.$store.dispatch("cards/getAll");
                         this.showLogToast();
+                        await axios({
+                            method: "post",
+                            url: "/api/notification/security-log",
+                            data: {
+                                from_user_id: this.$store.state.userLogged.id,
+                                message:
+                                    "has logged that you have a visitor named" +
+                                    this.name,
+                                block_lot_id: this.selected_block_lot,
+                            },
+                        })
+                            .then((res) => {
+                                console.log("notify announcement success");
+                            })
+                            .catch((e) => {
+                                console.log(e.response);
+                            });
                         this.loading = false;
                     })
                     .catch((err) => {
@@ -1924,12 +1941,34 @@ export default {
                         plate_number: this.plate_number,
                     },
                 })
-                    .then(() => {
+                    .then(async () => {
                         this.logVisitorDialog = false;
                         this.logVisitorDialog = false;
                         this.$store.dispatch("logs/getAll");
                         this.$store.dispatch("cards/getAll");
                         this.showLogToast();
+                        await axios({
+                            method: "post",
+                            url: "/api/notification/security-log",
+                            data: {
+                                from_user_id: this.$store.state.userLogged.id,
+                                message:
+                                    "has logged a visitor with a vehicle of " +
+                                    this.vehicle_type +
+                                    " [" +
+                                    this.vehicle_type +
+                                    "] " +
+                                    "Plate no. " +
+                                    this.plate_number,
+                                block_lot_id: this.selected_block_lot,
+                            },
+                        })
+                            .then((res) => {
+                                console.log("notify announcement success");
+                            })
+                            .catch((e) => {
+                                console.log(e.response);
+                            });
                         this.loading = false;
                     })
                     .catch((err) => {

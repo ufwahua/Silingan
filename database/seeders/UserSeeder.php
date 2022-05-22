@@ -22,17 +22,17 @@ class UserSeeder extends Seeder
     {
         
             User::create([
-            'first_name' => "Varbie",
-            'last_name' => "Sumido",
+            'first_name' => "Reynard",
+            'last_name' => "Dahunan",
             'role' => 'admin',
             'status' => 'active',
             'block_lot_id' => null,
-            'gender' => 'female',
+            'gender' => 'male',
             'age' => rand(1, 100),
             'verified' => 1,
             'has_voted' => 0,
             'contact_num' => '639083024328',
-            'email' => 'varbiesumido@gmail.com',
+            'email' => 'reynard.dahunan@gmail.com',
             'password' => Hash::make("12345678"),
             
         ]);

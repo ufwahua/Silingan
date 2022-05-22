@@ -77,34 +77,67 @@ class InvoiceController extends Controller
 
     public function billSpecificBlockLot(Request $request) : JsonResponse
     {
-         $request->validate([
+    //      $request->validate([
+    //         'user_id_from'              => ['required', Rule::exists('users', 'id')],
+    //         'collection_type_id'        => ['required', Rule::exists('collection_types','id')],
+    //         'block_lot_id'              => ['required', Rule::exists('lots','id')],
+    //         'due_date'                  => ['required'],
+                
+    //     ]);
+    //     $last_invoice = Invoice::where('block_lot_id', $request['block_lot_id'])->latest()->first();
+    //     if($last_invoice){
+    //         $collection = CollectionType::where('id',$request['collection_type_id'])->first();
+    //         Invoice::query()->create([
+    //             'user_id_from'              => $request['user_id_from'],
+    //             'collection_type_id'        => $request['collection_type_id'],
+    //             'block_lot_id'              => $request['block_lot_id'],
+    //             'due_date'                  => $request['due_date'],
+    //             'running_balance'           => $last_invoice->running_balance + $collection->amount,
+    //             'over_due'                  => $last_invoice->running_balance,
+    //         ]);
+    //     }else{
+    //         Invoice::query()->create([
+    //             'user_id_from'              => $request['user_id_ from'],
+    //             'collection_type_id'        => $request['collection_type_id'],
+    //             'block_lot_id'              => $request['block_lot_id'],
+    //             'due_date'                  => $request['due_date'],
+    //         ]);
+    //     }
+
+    //    return response()->json($last_invoice);
+
+        $request->validate([
             'user_id_from'              => ['required', Rule::exists('users', 'id')],
             'collection_type_id'        => ['required', Rule::exists('collection_types','id')],
-            'block_lot_id'              => ['required', Rule::exists('lots','id')],
             'due_date'                  => ['required'],
                 
         ]);
-        $last_invoice = Invoice::where('block_lot_id', $request['block_lot_id'])->latest()->first();
-        if($last_invoice){
+            
+            $last_invoice = Invoice::where('block_lot_id', $request['block_lot_id'])->latest()->first();
             $collection = CollectionType::where('id',$request['collection_type_id'])->first();
-            Invoice::query()->create([
-                'user_id_from'              => $request['user_id_from'],
-                'collection_type_id'        => $request['collection_type_id'],
-                'block_lot_id'              => $request['block_lot_id'],
-                'due_date'                  => $request['due_date'],
-                'running_balance'           => $last_invoice->running_balance + $collection->amount,
-                'over_due'                  => $last_invoice->running_balance,
-            ]);
-        }else{
-            Invoice::query()->create([
-                'user_id_from'              => $request['user_id_ from'],
-                'collection_type_id'        => $request['collection_type_id'],
-                'block_lot_id'              => $request['block_lot_id'],
-                'due_date'                  => $request['due_date'],
-            ]);
-        }
-
-       return response()->json($last_invoice);
+            if($last_invoice){
+                
+                Invoice::query()->create([
+                    'user_id_from'              => $request['user_id_from'],
+                    'collection_type_id'        => $request['collection_type_id'],
+                    'block_lot_id'              => $request['block_lot_id'],
+                    'due_date'                  => $request['due_date'],
+                    'running_balance'           => $last_invoice->running_balance + $collection->amount,
+                    'over_due'                  => $last_invoice->running_balance,
+                ]);
+            }else{
+                Invoice::query()->create([
+                    'user_id_from'              => $request['user_id_from'],
+                    'collection_type_id'        => $request['collection_type_id'],
+                    'block_lot_id'              => $request['block_lot_id'],
+                    'due_date'                  => $request['due_date'],
+                    'running_balance'           => $collection->amount,
+    
+                ]);
+            }
+            
+       
+        return response()->json($last_invoice);
     }
 
     public function update(Invoice $invoice, InvoiceRequest $request) : JsonResponse

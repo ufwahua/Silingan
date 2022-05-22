@@ -430,7 +430,7 @@ export default {
                     content: this.content,
                 },
             })
-                .then(async () => {
+                .then(async (res) => {
                     this.createAnnouncementDialog = false;
                     this.$store.dispatch("announcements/getAll");
                     this.showCreateAnnouncementToast();
@@ -440,6 +440,7 @@ export default {
                         data: {
                             from_user_id: this.$store.state.userLogged.id,
                             message: "has an announcement",
+                            announcement_id: res.data.id,
                         },
                     })
                         .then(() => {

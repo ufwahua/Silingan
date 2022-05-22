@@ -336,8 +336,11 @@ class UserController extends Controller
     public function getSearchUser(Request $request): JsonResponse
     {
        
+        $block_user_ids = DB::table('block_users')->where('user_id', $request->route('user'))->pluck('block_user_id')->toArray();
+       
         $users = User::orWhere(DB::raw("LOWER(concat(first_name, ' ', last_name))"), 'LIKE', "%".strtolower($request->input('query'))."%")
                        ->where('verified',1)
+                       ->whereNotIn("id",$block_user_ids)
                        ->with(['lot.block','position','emergency_contact'])
                        ->latest()
                        ->get();  
@@ -351,6 +354,17 @@ class UserController extends Controller
         ->with(['lot.block','position','emergency_contact'])->get();
 
         return response()->json($users);
+        
+    }
+    public function getChatSideBar(Request $request): JsonResponse
+    {
+          $block_user_ids = DB::table('block_users')->where('user_id', $request->route('user'))->pluck('block_user_id')->toArray();
+        $users =  User::where('verified',1)->whereNotIn("id",$block_user_ids)
+        ->with(['lot.block','position','emergency_contact'])->latest()->get();
+
+        return response()->json($users);
+
+    
         
     }
     public function filterResident(Request $request): JsonResponse

@@ -57,6 +57,7 @@ Route::get('/user/search/', [UserController::class, 'getSearchUser']);
 Route::get('/user/officers/', [UserController::class, 'getOfficers']);
 Route::get('/user/residents/', [UserController::class, 'getResidents']);
 Route::get('/user/user-verified/', [UserController::class, 'getUsersVerified']);
+Route::get('/user/chat-sidebar/{user}', [UserController::class, 'getChatSideBar']);
 Route::get('/user/filter-resident/{user}', [UserController::class, 'filterResident']);
 Route::put('/user/vote/{user}', [UserController::class, 'updateHasVoted']);
 Route::get('/user/filter-resident/block-lot/{user}', [UserController::class, 'getResidentInBlockLot']);
@@ -71,6 +72,7 @@ Route::post('/notification/chat',[NotificationController::class, 'notificationCh
 Route::post('/notification/announcement',[NotificationController::class, 'notificationAnnouncement']);
 Route::post('/notification/election',[NotificationController::class, 'notificationElection']);
 Route::post('/notification/comment',[NotificationController::class, 'notificationComment']);
+Route::post('/notification/security-log',[NotificationController::class, 'notificationSecurityLog']);
 Route::get('/post/search/', [PostController::class, 'getMarketPlacePost']);
 Route::post('/invoice/bill-all/', [InvoiceController::class, 'billToAll']);
 Route::post('/invoice/bill-specific/', [InvoiceController::class, 'billSpecificBlockLot']);
