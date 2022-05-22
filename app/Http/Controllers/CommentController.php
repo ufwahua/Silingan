@@ -65,7 +65,7 @@ class CommentController extends Controller
     
         $reply = DB::table('replies')->where('comment_id', $request->route('comment'))->pluck('id')->toArray();
         Reply::whereIn('comment_id', $reply)->delete();
-        Comment::where('post_id',$request->route('comment'))->delete();
+        Comment::where('id',$request->route('comment'))->delete();
 
         return response()->json(['ok']);
     }

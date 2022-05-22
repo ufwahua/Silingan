@@ -945,7 +945,7 @@ export default {
         },
         submitVote() {
             this.loading = true;
-            console.log(this.selected_candidate);
+
             this.positions.forEach((elem) => {
                 axios({
                     method: "put",
@@ -1015,8 +1015,8 @@ export default {
         },
         validateVote() {
             var validation = null;
-            this.positions.forEach((elem) => {
-                if (this.selected_candidate[elem.name] == null) {
+            this.candidates.forEach((elem) => {
+                if (this.selected_candidate[elem.position.name] == null) {
                     ++validation;
                 }
             });
@@ -1136,6 +1136,10 @@ export default {
                         console.log("ELECTION ON GOING 2nd if ");
                         this.election_on_going = true;
                         this.election_id = res.data.id;
+                        this.$store.dispatch(
+                            "candidates/getLastCandidates",
+                            this.election_id
+                        );
                     } else {
                         console.log("NO ELECTION 3rd");
                         this.$store.dispatch(
@@ -1145,6 +1149,7 @@ export default {
                         this.election_on_going = false;
                         this.election_id = parseInt(res.data.id) + 1;
                     }
+                    console.log("election id", this.election_id);
                     this.$store.dispatch("candidates/getAll", this.election_id);
                     this.$store.dispatch("filterResident", this.election_id);
                     this.loading = false;
@@ -1159,11 +1164,17 @@ export default {
     mounted() {
         this.$store.dispatch("timeNow/getAll");
         this.checkElectionDate();
+        this.$store.dispatch("positions/getAll");
         this.$store.dispatch("getOfficers");
 
         this.positions.forEach((elem) => {
-            this.selected_candidate[elem.name] = null;
+            this.candidates.forEach((e) => {
+                if (e.position_id == elem.position_id) {
+                    this.selected_candidate[elem.name] = null;
+                }
+            });
         });
+
         this.$store.dispatch("getUsersVerified");
     },
     created() {},

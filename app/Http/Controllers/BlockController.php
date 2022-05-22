@@ -9,7 +9,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\BlockRequest;
-
+use Illuminate\Validation\Rule;
 
 class BlockController extends Controller
 {
@@ -71,8 +71,9 @@ class BlockController extends Controller
      */
     public function update(Block $block, BlockRequest $request) : JsonResponse
     {
+        
         $request->validate([
-        'number' => ['required','integer', 'max:255','gt:0','unique:blocks' ]
+        'number' => ['required','integer', 'max:255','gt:0' ,Rule::unique('blocks')->ignore($request->route('block'))]
         ]);
         $block->update($request->validated());
 

@@ -408,6 +408,9 @@ export default {
     created() {
         this.initFilters();
     },
+    mounted() {
+        this.$store.dispatch("positions/getAll");
+    },
 };
 </script>
 

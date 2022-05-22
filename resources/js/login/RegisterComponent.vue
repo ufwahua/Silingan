@@ -434,7 +434,10 @@ export default {
             this.$store.dispatch("lots/getBlockLots", this.selected_block);
         },
     },
-    created() {},
+    mounted() {
+        this.$store.dispatch("blocks/getAll");
+        this.$store.dispatch("lots/getAll");
+    },
 };
 </script>
 

@@ -1693,12 +1693,12 @@ export default {
                 { tag: "family member" },
             ],
             verification: [
-                { status: "verified", value: true },
-                { status: "not verified", value: false },
+                { status: "verified", value: 1 },
+                { status: "not verified", value: 0 },
             ],
             flag_dropdown: [
-                { status: "flagged", value: true },
-                { status: "not flagged", value: false },
+                { status: "flagged", value: 1 },
+                { status: "not flagged", value: 0 },
             ],
 
             emergencyContactDialog: false,

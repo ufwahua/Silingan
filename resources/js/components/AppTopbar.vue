@@ -509,7 +509,7 @@ export default {
                         if (this.notif_count == 0) {
                             await axios({
                                 method: "post",
-                                url: "/api/notification",
+                                url: "/api/notification/chat",
                                 data: {
                                     from_user_id:
                                         this.$store.state.userLogged.id,
@@ -570,6 +570,7 @@ export default {
                     this.$store.commit("getChatRoomId", res.data[0].id);
                     console.log("chats", res.data);
                     this.$store.commit("getChats", res.data[0].chats);
+                    this.disconnect(this.$store.state.chat_room_id);
                     this.connect();
                 })
                 .catch((error) => {
@@ -642,6 +643,8 @@ export default {
         getAnnouncementPage() {
             if (this.userLogged.role == "security officer") {
                 return this.$router.push("/security-officer/view-announcement");
+            } else if (this.userLogged.role == "officer") {
+                return this.$router.push("/admin/view-announcement/");
             } else {
                 return this.$router.push(
                     `/${this.userLogged.role}` + "/view-announcement"
@@ -655,6 +658,8 @@ export default {
             this.$store.dispatch("posts/getSpecificPost", post_id);
             if (this.userLogged.role == "security officer") {
                 return this.$router.push("/security-officer/post/" + post_id);
+            } else if (this.userLogged.role == "officer") {
+                return this.$router.push("/admin/post/" + post_id);
             } else {
                 return this.$router.push(
                     `/${this.userLogged.role}` + "/post/" + post_id
@@ -737,6 +742,8 @@ export default {
                                     this.$router.push(
                                         "/security-officer/setting"
                                     );
+                                } else if (this.userLogged.role === "officer") {
+                                    this.$router.push("/admin/setting");
                                 } else {
                                     this.$router.push(
                                         `/${this.userLogged.role}` + "/setting"
@@ -804,6 +811,8 @@ export default {
                                     this.$router.push(
                                         "/security-officer/setting"
                                     );
+                                } else if (this.userLogged.role === "officer") {
+                                    this.$router.push("/admin/setting");
                                 } else {
                                     this.$router.push(
                                         `/${this.userLogged.role}` + "/setting"

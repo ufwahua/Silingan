@@ -1391,6 +1391,7 @@ export default {
         },
         showElectionDialog() {
             var validation = null;
+
             this.positions.forEach((p) => {
                 var candidates = [];
                 this.candidates.forEach((c) => {
@@ -1398,13 +1399,15 @@ export default {
                         candidates.push(c);
                     }
                 });
-                if (candidates.length < 2) {
+                if (candidates.length == 1) {
                     ++validation;
                 }
             });
+            console.log("validation", validation);
+            console.log("candidates", this.candidates);
             if (this.date === null) {
                 this.error_date = "Date field is required";
-            } else if (validation) {
+            } else if (validation != null || this.candidates == null) {
                 this.showWarningStartElection();
             } else {
                 this.resetErrors();
@@ -1673,6 +1676,7 @@ export default {
                                 });
                         }
                     }
+                    console.log("election id", this.election_id);
                     this.$store.dispatch("candidates/getAll", this.election_id);
                     this.$store.dispatch("filterResident", this.election_id);
                     this.loading = false;
@@ -1687,9 +1691,10 @@ export default {
     mounted() {
         this.$store.dispatch("timeNow/getAll");
         this.checkElectionDate();
-        this.$store.dispatch("getUsersVerified");
-        this.$store.dispatch("getOfficers");
 
+        this.$store.dispatch("getUsersVerified");
+        this.$store.dispatch("positions/getAll");
+        this.$store.dispatch("getOfficers");
         this.positions.forEach((elem) => {
             this.selected_candidate[elem.name] = null;
         });

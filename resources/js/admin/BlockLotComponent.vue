@@ -293,20 +293,36 @@
                         :closeOnEscape="true"
                     >
                         <div class="grid">
-                            <div class="col-12">
+                            <div class="col-12 md:col-6">
                                 <div class="p-fluid">
-                                    <h5>Lots</h5>
+                                    <h5>Lot Number</h5>
                                     <InputText
-                                        id="number"
-                                        type="number"
                                         :class="{ 'p-invalid': error }"
                                         oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*?)\..*/g, '$1');"
-                                        class="inputfield w-full"
                                         v-model="form_lot_number"
                                     />
                                     <label style="color: red" v-if="error">{{
                                         this.error
                                     }}</label>
+                                </div>
+                            </div>
+                            <div class="col-12 md:col-6">
+                                <div class="p-fluid">
+                                    <h5>Status</h5>
+                                    <Dropdown
+                                        v-model="form_status"
+                                        :options="status_dropdown"
+                                        optionLabel="status"
+                                        optionValue="value"
+                                        :class="{ 'p-invalid': error_active }"
+                                        placeholder="choose status"
+                                    ></Dropdown>
+
+                                    <label
+                                        style="color: red"
+                                        v-if="error_active"
+                                        >{{ this.error_active }}</label
+                                    >
                                 </div>
                             </div>
                         </div>
@@ -761,6 +777,7 @@ export default {
                     this.resetErrors();
                     if (error.response.data.errors.number)
                         this.error = error.response.data.errors.number[0];
+
                     this.loading = false;
                 });
         },
@@ -800,6 +817,8 @@ export default {
                     this.resetErrors();
                     if (error.response.data.errors.number)
                         this.error = error.response.data.errors.number[0];
+                    if (error.response.data.errors.status)
+                        this.error = error.response.data.errors.status[0];
                     this.loading = false;
                 });
         },
@@ -849,6 +868,7 @@ export default {
         // Open Add Lot Modal
         openAddLotModal() {
             this.resetFields();
+            this.resetErrors();
             this.addLotModal = true;
         },
         closeAddLotModal() {
@@ -886,8 +906,12 @@ export default {
                 .catch((error) => {
                     this.resetErrors();
                     console.log(error.response);
-                    if (error.response.data.error)
-                        this.error = error.response.data.error;
+                    if (error.response.data.errors.number)
+                        this.error = error.response.data.errors.number[0];
+                    if (error.response.data.errors.active) {
+                        this.error_active =
+                            error.response.data.errors.active[0];
+                    }
                     this.lot = [];
                     this.loading = false;
                 });
@@ -932,13 +956,15 @@ export default {
                 .catch((error) => {
                     this.resetErrors();
                     console.log(error.response);
+                    if (error.response.data.errors.number)
+                        this.error = error.response.data.errors.number[0];
                     // if (error.response.data.errors.number) {
                     //     this.error = error.response.data.errors.number[0];
                     // }
-                    // if (error.response.data.errors.active) {
-                    //     this.error_active =
-                    //         error.response.data.errors.active[0];
-                    // }
+                    if (error.response.data.errors.active) {
+                        this.error_active =
+                            error.response.data.errors.active[0];
+                    }
                     this.loading = false;
                 });
         },
@@ -979,6 +1005,10 @@ export default {
 
     created() {
         this.initFilters();
+    },
+    mounted() {
+        this.$store.dispatch("blocks/getAll");
+        this.$store.dispatch("lots/getAll");
     },
 };
 </script>

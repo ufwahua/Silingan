@@ -193,7 +193,7 @@ div
                         rows="1"
                         class="w-full"
                         disabled
-                        placeholder="Can't post because your account is flagged please contact an admin/officer"
+                        placeholder="Can't comment because your account is flagged please contact an admin/officer"
                     >
                     </Textarea>
                 </div>
@@ -526,7 +526,7 @@ export default {
             type: Object,
         },
         group_id: { type: Number },
-        approved: { type: Boolean },
+        approved: { type: Number },
     },
     components: {
         CommentComponent,

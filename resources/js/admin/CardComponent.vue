@@ -383,8 +383,8 @@ export default {
             selected_user: null,
             error_number: null,
             availability: [
-                { availability: "available", value: true },
-                { availability: "not available", value: false },
+                { availability: "available", value: 1 },
+                { availability: "not available", value: 0 },
             ],
             //action menu overlay
             menus: [

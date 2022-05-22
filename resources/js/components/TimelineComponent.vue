@@ -27,7 +27,7 @@
                         </div>
 
                         <Textarea
-                            @click="openAddLotModal"
+                            @click="openModalPost"
                             :autoResize="true"
                             class="w-full"
                             placeholder="What's on you mind?"
@@ -58,12 +58,12 @@
                         </div>
 
                         <Textarea
-                            @click="openAddLotModal"
+                            @click="openModalPost"
                             :autoResize="true"
                             class="w-full"
                             rows="1"
                             disabled
-                            placeholder="Can't comment because your account is flagged please contact an admin/officer"
+                            placeholder="Can't post because your account is flagged please contact an admin/officer"
                         >
                         </Textarea>
                     </div>
@@ -212,7 +212,7 @@ export default {
     },
     methods: {
         // Open Add Lot Modal
-        openAddLotModal() {
+        openModalPost() {
             this.resetFields();
             this.openPostModal = true;
         },

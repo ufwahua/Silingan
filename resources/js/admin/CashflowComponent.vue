@@ -1,7 +1,7 @@
 <template>
     <div>
         <Toast />
-        <div class="grid">
+        <!-- <div class="grid">
             <div class="col-12">
                 <h1>Funds</h1>
             </div>
@@ -20,7 +20,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> -->
         <div class="grid">
             <div class="col-12">
                 <h1>Summary</h1>

@@ -308,7 +308,7 @@ export default {
         this.$store.dispatch("blocks/getAll");
         this.$store.dispatch("lots/getAll");
         this.$store.dispatch("announcements/getAll");
-        this.$store.dispatch("positions/getAll");
+
         this.$store.dispatch("emergency_contact_details/getAll");
 
         this.$store.dispatch("getAllUsers");

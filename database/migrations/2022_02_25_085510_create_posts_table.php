@@ -21,7 +21,6 @@ class CreatePostsTable extends Migration
             $table->text('content');
             $table->boolean('approved');
             $table->timestamps();
-            $table->softDeletes();
             
 
         });

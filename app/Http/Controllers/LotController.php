@@ -42,6 +42,12 @@ class LotController extends Controller
      */
     public function store(LotRequest $request) : JsonResponse
     {
+           $request->validate([
+                    'number' => ['required','integer', 'max:255','gt:0',Rule::unique('lots')->where(function ($query) use ($request) {
+                        return $query->where('block_id', $request->block_id);
+                    })->ignore($request->route('lot'))],
+                    'active' => ['required']
+                ]);
         $lots = Lot::where('block_id',$request['block_id'])->get();
 
         $found = false;

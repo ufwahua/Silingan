@@ -611,7 +611,7 @@ export default {
                     invTotal: this.getOBalance(
                         data.over_due,
                         data.collection_type.amount
-                    ),
+                    ).toString(),
                     row1: {
                         col1: "Current:",
                         col2: data.collection_type.amount.toString(),
@@ -621,7 +621,7 @@ export default {
                     },
                     row2: {
                         col1: "Overdue:",
-                        col2: this.getOverDue(data.over_due),
+                        col2: this.getOverDue(data.over_due).toString(),
                         style: {
                             fontSize: 10, //optional, default 12
                         },

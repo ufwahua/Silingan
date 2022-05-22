@@ -223,6 +223,7 @@ export default {
     methods: {
         async deleteComment() {
             this.loading = true;
+            console.log("comment id", this.comment.id);
             await axios({
                 method: "delete",
                 url: "/api/comment/" + this.comment.id,
