@@ -1466,19 +1466,8 @@ export default {
             if (data.security_shift) {
                 let shift = data.security_shift.split(" - ");
 
-                this.form.from = new Date(shift[0]).toLocaleTimeString(
-                    "en-US",
-                    {
-                        hour12: true,
-                        hour: "numeric",
-                        minute: "numeric",
-                    }
-                );
-                this.form.to = new Date(shift[1]).toLocaleTimeString("en-US", {
-                    hour12: true,
-                    hour: "numeric",
-                    minute: "numeric",
-                });
+                this.form.from = new Date(shift[0]);
+                this.form.to = new Date(shift[1]);
             }
         },
 
@@ -1554,6 +1543,7 @@ export default {
             if (!this.form.from || !this.form.to) {
                 this.security_shift = null;
             }
+
             await axios({
                 method: "put",
                 url: "/api/user/" + this.id,
@@ -1682,15 +1672,8 @@ export default {
         },
         async onRegisterClick() {
             this.process = true;
-            const from = new Date(this.form.from).toLocaleTimeString("en-US", {
-                hour: "numeric",
-                minute: "numeric",
-            });
-            const to = new Date(this.form.to).toLocaleTimeString("en-US", {
-                hour: "numeric",
-                minute: "numeric",
-            });
-            this.security_shift = from + " - " + to;
+
+            this.security_shift = this.form.from + " - " + this.form.to;
             if (!this.form.from || !this.form.to) {
                 this.security_shift = null;
             }
