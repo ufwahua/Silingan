@@ -21,6 +21,9 @@ class CreatePostsTable extends Migration
             $table->text('content');
             $table->boolean('approved');
             $table->timestamps();
+            $table->softDeletes();
+            
+
         });
     }
 
@@ -29,8 +32,10 @@ class CreatePostsTable extends Migration
      *
      * @return void
      */
-    public function down()
+     public function down()
     {
-        Schema::dropIfExists('posts');
+        Schema::table('posts', function (Blueprint $table) {
+            $table->dropSoftDeletes();
+        });
     }
 }

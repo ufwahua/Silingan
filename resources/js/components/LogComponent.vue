@@ -142,12 +142,15 @@
                                 </Column>
                                 <Column header="Lot" field="lot.number">
                                 </Column>
-                                <Column header="Login" field="created_at">
+                                <Column
+                                    header="Date Entered"
+                                    field="created_at"
+                                >
                                     <template #body="{ data }">
                                         {{ dateFormat(data.created_at) }}
                                     </template>
                                 </Column>
-                                <Column header="Logout" field="updated_at">
+                                <Column header="Date Leaved" field="updated_at">
                                     <template #body="{ data }">
                                         {{ dateFormat(data.updated_at) }}
                                     </template>
@@ -336,12 +339,15 @@
                                 </Column>
                                 <Column header="Card" field="card.number">
                                 </Column>
-                                <Column header="Login" field="created_at">
+                                <Column
+                                    header="Date Entered"
+                                    field="created_at"
+                                >
                                     <template #body="{ data }">
                                         {{ dateFormat(data.created_at) }}
                                     </template>
                                 </Column>
-                                <Column header="Logout" field="created_at">
+                                <Column header="Date Leaved" field="created_at">
                                     <template #body="{ data }">
                                         {{ dateFormat(data.created_at) }}
                                     </template>
@@ -480,7 +486,10 @@
                                 </Column>
                                 <Column header="Card" field="card.number">
                                 </Column>
-                                <Column header="Login" field="created_at">
+                                <Column
+                                    header="Date Entered"
+                                    field="created_at"
+                                >
                                     <template #body="{ data }">
                                         {{ dateFormat(data.created_at) }}
                                     </template>
@@ -673,7 +682,10 @@
                                 </Column>
                                 <Column header="Card" field="card.number">
                                 </Column>
-                                <Column header="Login" field="created_at">
+                                <Column
+                                    header="Date Entered"
+                                    field="created_at"
+                                >
                                     <template #body="{ data }">
                                         {{ dateFormat(data.created_at) }}
                                     </template>
@@ -1907,7 +1919,7 @@ export default {
                             data: {
                                 from_user_id: this.$store.state.userLogged.id,
                                 message:
-                                    "has logged that you have a visitor named " +
+                                    "has logged visitor entry to your residence named " +
                                     this.name,
                                 block_lot_id: this.selected_block_lot,
                             },
@@ -1953,7 +1965,7 @@ export default {
                             data: {
                                 from_user_id: this.$store.state.userLogged.id,
                                 message:
-                                    "has logged you a visitor with a vehicle of " +
+                                    "has logged vehicle entry to your residence a " +
                                     this.vehicle_label +
                                     " [" +
                                     this.vehicle_type +

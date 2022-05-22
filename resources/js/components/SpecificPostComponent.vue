@@ -3,8 +3,9 @@
         <div
             class="col-12 sm:col-12 md:col-8 md:col-offset-2 lg:col-6 lg:col-offset-1 xl:col-6 xl:col-offset-1"
         >
+            <div v-if="specific_post == null"><h3>Post not found</h3></div>
             <div
-                v-if="specific_post.approved"
+                v-else-if="specific_post.approved"
                 class="col justify-content-center pt-0"
             >
                 <PostComponent
@@ -14,7 +15,7 @@
                 />
             </div>
             <div v-else class="col justify-content-center pt-0">
-                This post is not yet approved
+                <h3>This post is not yet approved</h3>
             </div>
         </div>
         <div
