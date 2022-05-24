@@ -29,12 +29,14 @@ class LogRequest extends FormRequest
             'user_logout_id' => ['sometimes',Rule::exists('users', 'id')],
             'card_id' => ['required',Rule::exists('cards', 'id')],
             'block_lot_id' => ['required',Rule::exists('lots', 'id')],
+            'log_id' => ['required',Rule::exists('logs', 'id')],
             'log_type' => ['required'],
             'vehicle_label' => ['sometimes'],
             'vehicle_type' => ['sometimes'],
             'purpose_visit' => ['required'],
             'name' => ['sometimes'],  
             'plate_number' => ['sometimes'],
+            'num_passenger' => ['sometimes'],
 
         ];
     }

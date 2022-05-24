@@ -12,7 +12,7 @@ const news = {
     },
     actions: {
         async getAll({ commit }) {
-            const apiKey = "211413c68a3048feb5a299e93eb4988d";
+            const apiKey = "80177a88447842579c4e251d36c2350c";
             var xhr = new XMLHttpRequest();
             var news = [];
             await xhr.open(

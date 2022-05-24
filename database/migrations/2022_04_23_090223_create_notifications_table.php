@@ -21,6 +21,7 @@ class CreateNotificationsTable extends Migration
             $table->foreignID('post_id')->nullable();
             $table->foreignID('election_id')->nullable();
             $table->foreignID('announcement_id')->nullable();
+            $table->foreignID('log_id')->nullable();
             $table->text('message');
             $table->boolean('viewed')->default(false);
             $table->timestamps();

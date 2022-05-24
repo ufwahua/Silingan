@@ -135,7 +135,7 @@ export default {
                     email: data.email,
                     verified: data.verified,
                     status: data.status == "active" ? "inactive" : "active",
-                    has_voted: data.has_voted,
+
                     age: data.age,
                     contact_num: data.contact_num,
                     role: data.role,

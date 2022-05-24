@@ -86,6 +86,11 @@ export default {
                             icon: "pi pi-fw pi-calendar",
                             to: "/resident/election",
                         },
+                        {
+                            label: "Map",
+                            icon: "pi pi-compass",
+                            to: "/resident/map",
+                        },
                     ],
                 },
             ],
@@ -204,7 +209,7 @@ export default {
         AppFooter: AppFooter,
     },
     created() {
-        this.$store.dispatch("news/getAll");
+        // this.$store.dispatch("news/getAll");
         this.$store.dispatch(
             "getUsersNotBlocked",
             this.$store.state.userLogged.id

@@ -17,6 +17,7 @@ class Notification extends Model
         'post_id',
         'election_id',
         'announcement_id',
+        'log_id',
         'message',
         'viewed'
     ];

@@ -18,6 +18,7 @@ class CreateLotsTable extends Migration
             $table->foreignId('block_id');
             $table->integer('number');
             $table->boolean('active')->default(true);
+            $table->boolean('has_voted')->default(false);
             $table->timestamps();
         });
     }

@@ -83,6 +83,11 @@ export default {
                             icon: "pi pi-fw pi-calendar",
                             to: "/security-officer/log",
                         },
+                        {
+                            label: "Map",
+                            icon: "pi pi-compass",
+                            to: "/security-officer/map",
+                        },
                     ],
                 },
             ],
@@ -201,7 +206,7 @@ export default {
         AppFooter: AppFooter,
     },
     created() {
-        this.$store.dispatch("news/getAll");
+        // this.$store.dispatch("news/getAll");
         this.$store.dispatch("cards/getAll");
         this.$store.dispatch("getAllUsers");
         this.$store.dispatch("getBlockUsers", this.$store.state.userLogged.id);

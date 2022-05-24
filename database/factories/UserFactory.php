@@ -35,7 +35,7 @@ class UserFactory extends Factory
             'block_lot_id' =>  $role != 'security officer' &&  $role != 'admin' ? Lot::all()->random()->id : null,
             'age' => rand(1, 100),
             'verified' => $role == 'resident' ? rand(0, 1) : 1,
-            'has_voted' => 0,
+            
             'contact_num' => '639083024328',
             'email' => strtolower($first_name) . "." . strtolower($last_name) . $this->faker->randomElement(['@gmail.com', '@yahoo.com', '@hotmail.com', '@outlook.com']),
             'password' => Hash::make("12345678"),

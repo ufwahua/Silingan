@@ -28,9 +28,9 @@ class LogController extends Controller
                 ->with(['card','user_login','user_logout','lot.block'])->get()          
         );
     }
-    public function show(Log $log) : JsonResponse
+    public function show(Request $request) : JsonResponse
     {
-        return response()->json($log);
+        return response()->json(  Log::where('block_lot_id',$request->route('log'))->with(['card','user_login','user_logout','lot.block'])->get());
     }
 
   
@@ -67,6 +67,7 @@ class LogController extends Controller
                 'plate_number' => ['required'],  
                 'vehicle_label' => ['required'],  
                 'vehicle_type' => ['required'],  
+                'num_passenger' => ['required'],  
                
             ]);
                 $log = Log::query()->create([
@@ -78,8 +79,7 @@ class LogController extends Controller
                 'block_lot_id'            => $request['block_lot_id'],
                 'log_type'             => $request['log_type'],
                 'purpose_visit'                => $request['purpose_visit'],
-               
-                
+                'num_passenger'                => $request['num_passenger'],    
             ]);   
          }
    
@@ -127,7 +127,8 @@ class LogController extends Controller
                 'plate_number' => ['required'],  
                 'vehicle_label' => ['required'],  
                 'vehicle_type' => ['required'],  
-               
+                'name' => ['required'],  
+                'num_passenger' => ['required'],  
             ]);
                 $log = Log::query()->where('id',$request->route('log'))->update([
                 'user_logout_id'                 => $request['user_logout_id'],
@@ -139,7 +140,8 @@ class LogController extends Controller
                 'plate_number'                   => $request['plate_number'],
                 'vehicle_label'                   => $request['vehicle_label'],
                 'vehicle_type'                   => $request['vehicle_type'],
-                
+                 'name' => $request['name'],
+                'num_passenger' => $request['num_passenger'],
             ]);   
          }
        

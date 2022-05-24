@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Post;
-use App\Models\User;
-use App\Models\Candidate;
+use App\Models\Post;use App\Models\User;
+
+use App\Models\Lot;
 
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
@@ -55,7 +55,7 @@ class UserController extends Controller
                     'age'                   => ['required', 'integer', 'numeric', 'gt:0', 'max:130'],
                     'contact_num'           => ['required','string','min:10'],
                     'profile_pic'           => ['sometimes'],
-                    'has_voted'             => ['required'],
+                   
                     'verified'              => ['required'],
                     'status'                => ['required'],
                     'role'                  => ['required'],
@@ -71,7 +71,7 @@ class UserController extends Controller
                     'gender'                => $request['gender'],
                     'age'                   => $request['age'],
                     'contact_num'           => $request['contact_num'],
-                    'has_voted'             => $request['has_voted'],
+                  
                     'verified'              => $request['verified'],
                     'status'                => $request['status'],
                     'role'                  => $request['role'],        
@@ -88,7 +88,7 @@ class UserController extends Controller
                     'age'                   => ['required', 'integer', 'numeric', 'gt:0', 'max:130'],
                     'contact_num'           => ['required','string','min:10'],
                     'profile_pic'           => ['sometimes'],
-                    'has_voted'             => ['required'],
+                 
                     'verified'              => ['required'],
                     'status'                => ['required'],
                     'role'                  => ['required'],
@@ -103,7 +103,7 @@ class UserController extends Controller
                     'gender'                => $request['gender'],
                     'age'                   => $request['age'],
                     'contact_num'           => $request['contact_num'],
-                    'has_voted'             => $request['has_voted'],
+                   
                     'verified'              => $request['verified'],
                     'status'                => $request['status'],
                     'role'                  => $request['role'],        
@@ -122,7 +122,7 @@ class UserController extends Controller
                 'age'                   => ['required','integer','numeric','gt:0', 'max:130'],
                 'contact_num'           => ['required','string','min:10'],
                 'profile_pic'           => ['sometimes'],
-                'has_voted'             => ['required'],
+                
                 'verified'              => ['required'],
                 'status'                => ['required'],
                 'role'                  => ['required'],
@@ -138,7 +138,7 @@ class UserController extends Controller
                 'gender'                => $request['gender'],
                 'age'                   => $request['age'],
                 'contact_num'           => $request['contact_num'],
-                'has_voted'             => $request['has_voted'],
+             
                 'verified'              => $request['verified'],
                 'status'                => $request['status'],
                 'role'                  => $request['role'],
@@ -211,7 +211,7 @@ class UserController extends Controller
                     'role' => ['required'],
                     'status' => ['required'],
                     'verified' => ['required'],
-                    'has_voted' => ['required'],
+                   
                     'tag_as' => ['sometimes'],
                     'profile_pic'=> ['sometimes'],
                     'security_shift'=> ['required'],
@@ -228,7 +228,7 @@ class UserController extends Controller
                     'role' => ['required'],
                     'status' => ['required'],
                     'verified' => ['required'],
-                    'has_voted' => ['required'],
+                
                     'tag_as' => ['sometimes'],
                     'profile_pic'=> ['sometimes'],
                     'security_shift'=> ['sometimes'],
@@ -247,7 +247,7 @@ class UserController extends Controller
                 'role' => ['required'],
                 'status' => ['required'],
                 'verified' => ['required'],
-                'has_voted' => ['required'],
+        
                 'profile_pic'=> ['sometimes'],
                 'tag_as' => ['required'],
                 'position_id' => ['sometimes'],
@@ -449,7 +449,7 @@ class UserController extends Controller
     public function updateHasVoted(Request $request): JsonResponse
     {
       
-        User::query()->where('id', $request->route('user'))->update([
+        Lot::query()->where('id', $request->route('user'))->update([
             'has_voted' => $request['has_voted'],
         ]);
 

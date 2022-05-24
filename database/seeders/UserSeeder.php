@@ -30,7 +30,7 @@ class UserSeeder extends Seeder
             'gender' => 'male',
             'age' => rand(1, 100),
             'verified' => 1,
-            'has_voted' => 0,
+          
             'contact_num' => '639083024328',
             'email' => 'reynarddahunan@gmail.com',
             'password' => Hash::make("12345678"),
@@ -46,11 +46,26 @@ class UserSeeder extends Seeder
             'gender' => 'male',
             'age' => rand(1, 100),
             'verified' => 1,
-            'has_voted' => 0,
+            
             'contact_num' => '639083024328',
             'email' => 'henry.diamos@gmail.com',
             'password' => Hash::make("12345678"),
             'tag_as' => 'owner',
+        ]);
+        User::create([
+            'first_name' => "Robert",
+            'last_name' => "Maguikay",
+            'role' => 'security officer',
+            'status' => 'active',
+            'block_lot_id' => null,
+            'gender' => 'male',
+            'age' => rand(1, 100),
+            'verified' => 1,
+          
+            'contact_num' => '639083024328',
+            'email' => 'robert.maguikay@gmail.com',
+            'password' => Hash::make("12345678"),
+            
         ]);
         User::create([
             'first_name' => "Ritche",
@@ -61,7 +76,7 @@ class UserSeeder extends Seeder
             'gender' => 'female',
             'age' => rand(1, 100),
             'verified' => 1,
-            'has_voted' => 0,
+            
             'contact_num' => '639083024328',
             'email' => 'ritche.diamos@gmail.com',
             'password' => Hash::make("12345678"),
@@ -78,7 +93,7 @@ class UserSeeder extends Seeder
             'block_lot_id' => 1,
             'age' => rand(1, 100),
             'verified' => 1,
-            'has_voted' => 0,
+            
             'contact_num' => rand(639000000001, 639999999999),
             'email' => 'kevin.diamos@gmail.com',
             'password' => Hash::make("12345678"),
@@ -97,7 +112,7 @@ class UserSeeder extends Seeder
             'block_lot_id' => 1,
             'age' => rand(1, 100),
             'verified' => 1,
-            'has_voted' => 0,
+            
             'contact_num' => rand(639000000001, 639999999999),
             'email' => 'rikamae.diamos@gmail.com',
             'password' => Hash::make("12345678"),
@@ -114,7 +129,7 @@ class UserSeeder extends Seeder
             'gender' => 'male',
             'age' => rand(1, 100),
             'verified' => 1,
-            'has_voted' => 0,
+            
             'contact_num' => '639083024328',
             'email' => 'kentluke.pescadero@gmail.com',
             'password' => Hash::make("12345678"),
@@ -130,7 +145,7 @@ class UserSeeder extends Seeder
             'block_lot_id' => 1,
             'age' => rand(1, 100),
             'verified' => 1,
-            'has_voted' => 0,
+            
             'contact_num' => rand(639000000001, 639999999999),
             'email' => 'guilamae.bagolor@gmail.com',
             'password' => Hash::make("12345678"),
@@ -148,7 +163,7 @@ class UserSeeder extends Seeder
             'block_lot_id' => 6,
             'age' => rand(1, 100),
             'verified' => 1,
-            'has_voted' => 0,
+            
             'contact_num' => rand(639000000001, 639999999999),
             'email' => 'stevenmitch.espina@gmail.com',
             'password' => Hash::make("12345678"),
@@ -165,7 +180,7 @@ class UserSeeder extends Seeder
             'block_lot_id' => 7,
             'age' => rand(1, 100),
             'verified' => 1,
-            'has_voted' => 0,
+            
             'contact_num' => rand(639000000001, 639999999999),
             'email' => 'rodrigo.natad@gmail.com',
             'password' => Hash::make("12345678"),
@@ -182,7 +197,7 @@ class UserSeeder extends Seeder
             'block_lot_id' => 8,
             'age' => rand(1, 100),
             'verified' => 1,
-            'has_voted' => 0,
+            
             'contact_num' => rand(639000000001, 639999999999),
             'email' => 'warren.ngujo@gmail.com',
             'password' => Hash::make("12345678"),

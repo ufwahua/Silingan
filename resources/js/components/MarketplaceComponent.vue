@@ -223,6 +223,17 @@ export default {
             content: null,
             search: null,
             openPostModal: false,
+            responsiveOptions: [
+                {
+                    breakpoint: "1600px",
+                    numVisible: 3,
+                },
+
+                {
+                    breakpoint: "1400px",
+                    numVisible: 2,
+                },
+            ],
         };
     },
     watch: {
@@ -283,6 +294,7 @@ export default {
                     })
                     .then((res) => {
                         this.images = res.data;
+                        console.log("images", res.data);
                         this.loading = false;
                     })
                     .catch((e) => {

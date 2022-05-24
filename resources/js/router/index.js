@@ -39,6 +39,7 @@ import SettingComponent from "../components/SettingComponent.vue";
 import ActivateAccountComponent from "../components/ActivateAccountComponent.vue";
 import LogComponent from "../components/LogComponent.vue";
 import SpecificPostComponent from "../components/SpecificPostComponent.vue";
+import SiteMapComponent from "../components/SiteMapComponent.vue";
 
 import { createRouter, createWebHistory } from "vue-router";
 import store from "../store/store";
@@ -401,6 +402,17 @@ const router = createRouter({
                         contents: InvoiceComponent,
                     },
                 },
+                {
+                    path: "map",
+                    meta: {
+                        role: "admin",
+                    },
+                    beforeEnter: checkRole,
+                    components: {
+                        default: NotFound,
+                        contents: SiteMapComponent,
+                    },
+                },
             ],
         },
         {
@@ -514,6 +526,28 @@ const router = createRouter({
                     components: {
                         default: NotFound,
                         contents: VoteElectionComponent,
+                    },
+                },
+                {
+                    path: "map",
+                    meta: {
+                        role: "admin",
+                    },
+                    beforeEnter: checkRole,
+                    components: {
+                        default: NotFound,
+                        contents: SiteMapComponent,
+                    },
+                },
+                {
+                    path: "log",
+                    meta: {
+                        role: "resident",
+                    },
+                    beforeEnter: checkRole,
+                    components: {
+                        default: NotFound,
+                        contents: LogComponent,
                     },
                 },
             ],
@@ -630,6 +664,17 @@ const router = createRouter({
                     components: {
                         default: NotFound,
                         contents: SpecificPostComponent,
+                    },
+                },
+                {
+                    path: "map",
+                    meta: {
+                        role: "security_officer",
+                    },
+                    beforeEnter: checkRole,
+                    components: {
+                        default: NotFound,
+                        contents: SiteMapComponent,
                     },
                 },
             ],

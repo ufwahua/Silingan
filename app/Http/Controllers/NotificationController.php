@@ -89,7 +89,8 @@ class NotificationController extends Controller
         $request->validate([
             'from_user_id'   => ['required', Rule::exists('users', 'id')], 
             'message'   => ['required', 'max:255'],    
-            'block_lot_id'   => ['required', 'max:255'],    
+            'block_lot_id'   => ['required', ],    
+            'log_id'   => ['required'],    
         ]);
         $users = User::whereIn('block_lot_id',[$request['block_lot_id']])->get();
         foreach($users as $user){
@@ -97,6 +98,7 @@ class NotificationController extends Controller
                 'from_user_id'           => $request['from_user_id'],
                 'to_user_id'             => $user['id'],
                 'message'                => $request['message'],
+                'log_id'                => $request['log_id'],
             ]);
         }
         return response()->json($notification);

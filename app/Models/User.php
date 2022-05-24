@@ -28,7 +28,7 @@ class User extends Authenticatable
         'age',
         'contact_num',
         'profile_pic',
-        'has_voted',
+     
         'verified',
         'status',
         'role',

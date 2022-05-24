@@ -60,6 +60,7 @@ Route::get('/user/user-verified/', [UserController::class, 'getUsersVerified']);
 Route::get('/user/chat-sidebar/{user}', [UserController::class, 'getChatSideBar']);
 Route::get('/user/filter-resident/{user}', [UserController::class, 'filterResident']);
 Route::put('/user/vote/{user}', [UserController::class, 'updateHasVoted']);
+Route::put('/lot/vote/{lot}', [LotController::class, 'vote']);
 Route::get('/user/filter-resident/block-lot/{user}', [UserController::class, 'getResidentInBlockLot']);
 Route::put('/candidate/vote/{candidate}', [CandidateController::class, 'vote']);
 Route::delete('/candidate/election/{candidate}', [CandidateController::class, 'deleteAllCandidate']);

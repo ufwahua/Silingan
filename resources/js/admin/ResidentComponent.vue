@@ -1652,7 +1652,7 @@ export default {
                 contact_num: "",
                 selected_role: "resident",
                 verified: "",
-                has_voted: "",
+
                 status: "",
                 selected_tag: "",
                 flagged: "",
@@ -1666,7 +1666,6 @@ export default {
             password: null,
             confirm_password: null,
 
-            has_voted: 0,
             age: null,
             contact_num: null,
             role: null,
@@ -1719,7 +1718,7 @@ export default {
                     block_lot_id: this.form.selected_block_lot,
                     email: this.form.email,
                     verified: this.form.verified,
-                    has_voted: this.form.has_voted,
+
                     age: this.form.age,
                     contact_num: this.form.contact_num,
                     role: this.form.selected_role,
@@ -1884,7 +1883,7 @@ export default {
             this.form.contact_num = data.contact_num;
             this.form.selected_role = data.role;
             this.form.verified = data.verified;
-            this.form.has_voted = data.has_voted;
+
             this.form.status = data.status;
             this.form.selected_tag = data.tag_as;
             this.form.flagged = data.flagged;
@@ -1996,7 +1995,7 @@ export default {
                     password: this.form.password,
                     confirm_password: this.form.confirm_password,
                     verified: this.form.verified,
-                    has_voted: this.form.has_voted,
+
                     age: this.form.age,
                     contact_num: this.form.contact_num,
                     role: this.form.selected_role,
@@ -2043,7 +2042,7 @@ export default {
                             block_lot_id: this.form.selected_block_lot,
                             email: this.form.email,
                             verified: 1,
-                            has_voted: this.form.has_voted,
+
                             age: this.form.age,
                             contact_num: this.form.contact_num,
                             role: this.form.selected_role,
@@ -2088,7 +2087,7 @@ export default {
                     block_lot_id: this.form.selected_block_lot,
                     email: this.form.email,
                     verified: this.form.verified,
-                    has_voted: this.form.has_voted,
+
                     age: this.form.age,
                     contact_num: this.form.contact_num,
                     role: this.form.selected_role,
@@ -2139,7 +2138,7 @@ export default {
                     password: this.form.password,
                     confirm_password: this.form.confirm_password,
                     verified: 1,
-                    has_voted: 0,
+
                     age: this.form.age,
                     contact_num: this.form.contact_num,
                     role: this.form.selected_role,

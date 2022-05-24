@@ -1201,7 +1201,7 @@ export default {
                 contact_num: "",
                 selected_role: "",
                 verified: "",
-                has_voted: "",
+
                 status: "",
                 to: "",
                 from: "",
@@ -1254,7 +1254,7 @@ export default {
                     verified: data.verified,
                     status: data.status,
                     flagged: data.flagged ? false : true,
-                    has_voted: data.has_voted,
+
                     age: data.age,
                     contact_num: data.contact_num,
                     role: data.role,
@@ -1460,7 +1460,7 @@ export default {
             this.form.contact_num = data.contact_num;
             this.form.selected_role = data.role;
             this.form.verified = data.verified;
-            this.form.has_voted = data.has_voted;
+
             this.form.status = data.status;
             this.form.flagged = data.flagged;
             if (data.security_shift) {
@@ -1556,7 +1556,7 @@ export default {
                     password: this.form.password,
                     confirm_password: this.form.confirm_password,
                     verified: this.form.verified,
-                    has_voted: this.form.has_voted,
+
                     age: this.form.age,
                     contact_num: this.form.contact_num,
                     role: this.form.selected_role,
@@ -1597,7 +1597,7 @@ export default {
                     email: data.email,
                     verified: 1,
                     status: data.status,
-                    has_voted: data.has_voted,
+
                     age: data.age,
                     contact_num: data.contact_num,
                     role: data.role,
@@ -1635,7 +1635,7 @@ export default {
                     email: data.email,
                     verified: data.verified,
                     status: data.status == "active" ? "inactive" : "active",
-                    has_voted: data.has_voted,
+
                     age: data.age,
                     contact_num: data.contact_num,
                     role: data.role,
@@ -1690,7 +1690,7 @@ export default {
                     password: this.form.password,
                     confirm_password: this.form.confirm_password,
                     verified: 1,
-                    has_voted: 0,
+
                     age: this.form.age,
                     contact_num: this.form.contact_num,
                     role: this.form.selected_role,

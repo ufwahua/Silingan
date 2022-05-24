@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
+use App\Models\Lot;
 use App\Models\Election;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
@@ -35,7 +35,7 @@ class ElectionController extends Controller
     }
     public function updateVoters(Request $request, ) : JsonResponse
     {
-        $user = User::query()->where('role', 'officer')->orWhere('role', 'resident')->update([
+        $user = Lot::query()->update([
             'has_voted' => 0,
         ]);
         return response()->json($user);

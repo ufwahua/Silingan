@@ -1413,7 +1413,7 @@ export default {
                 contact_num: "",
                 selected_role: "",
                 verified: "",
-                has_voted: "",
+
                 status: "",
                 selected_position: "",
                 selected_tag: "",
@@ -1428,7 +1428,6 @@ export default {
             password: null,
             confirm_password: null,
 
-            has_voted: 0,
             age: null,
             contact_num: null,
             selected_role: null,
@@ -1485,7 +1484,7 @@ export default {
                     block_lot_id: this.form.selected_block_lot,
                     email: this.form.email,
                     verified: this.form.verified,
-                    has_voted: this.form.has_voted,
+
                     age: this.form.age,
                     contact_num: this.form.contact_num,
                     role: this.form.selected_role,
@@ -1529,7 +1528,7 @@ export default {
                     password: this.form.password,
                     confirm_password: this.form.confirm_password,
                     verified: this.form.verified,
-                    has_voted: this.form.has_voted,
+
                     age: this.form.age,
                     contact_num: this.form.contact_num,
                     role: this.form.selected_role,
@@ -1582,7 +1581,7 @@ export default {
                     this.form.contact_num = elem.contact_num;
                     this.form.selected_role = "officer";
                     this.form.verified = elem.verified;
-                    this.form.has_voted = elem.has_voted;
+
                     this.form.status = elem.status;
                     this.form.selected_tag = elem.tag_as;
                 }
@@ -1841,7 +1840,7 @@ export default {
             this.form.contact_num = data.contact_num;
             this.form.selected_role = data.role;
             this.form.verified = data.verified;
-            this.form.has_voted = data.has_voted;
+
             this.form.status = data.status;
             this.form.selected_tag = data.tag_as;
             this.form.flagged = data.flagged;
@@ -1953,7 +1952,7 @@ export default {
                     password: this.form.password,
                     confirm_password: this.form.confirm_password,
                     verified: this.form.verified,
-                    has_voted: this.form.has_voted,
+
                     age: this.form.age,
                     contact_num: this.form.contact_num,
                     role: this.form.selected_role,
@@ -1998,7 +1997,7 @@ export default {
                     email: data.email,
                     verified: 1,
                     status: data.status,
-                    has_voted: data.has_voted,
+
                     age: data.age,
                     contact_num: data.contact_num,
                     role: data.role,
@@ -2035,7 +2034,7 @@ export default {
                     block_lot_id: this.form.selected_block_lot,
                     email: this.form.email,
                     verified: this.form.verified,
-                    has_voted: this.form.has_voted,
+
                     age: this.form.age,
                     contact_num: this.form.contact_num,
                     role: this.form.selected_role,

@@ -46,7 +46,7 @@ class LotController extends Controller
                     'number' => ['required','integer', 'max:255','gt:0',Rule::unique('lots')->where(function ($query) use ($request) {
                         return $query->where('block_id', $request->block_id);
                     })->ignore($request->route('lot'))],
-                    'active' => ['required']
+                    'active' => ['required'], 
                 ]);
         $lots = Lot::where('block_id',$request['block_id'])->get();
 
@@ -112,12 +112,23 @@ class LotController extends Controller
                     'number' => ['required','integer', 'max:255','gt:0',Rule::unique('lots')->where(function ($query) use ($request) {
                         return $query->where('block_id', $request->block_id);
                     })->ignore($request->route('lot'))],
-                    'active' => ['required']
+                    'active' => ['required'],
+                    'has_voted' => ['sometimes'],
                 ]));
            
             return response()->json(['ok']);
       
       
+        
+    }
+      public function vote(Request $request ) : JsonResponse
+    {
+       
+            Lot::query()->where('id',$request->route('lot'))->update( $request->validate([
+                    'has_voted' => ['sometimes'],
+                ]));
+           
+            return response()->json(['ok']);
         
     }
 

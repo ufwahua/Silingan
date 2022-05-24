@@ -20,6 +20,7 @@ class Log extends Model
         'purpose_visit',
         'name',
         'plate_number',
+        'num_passenger',
        
     ];
     public function user_login(){

@@ -189,6 +189,11 @@ export default {
                             icon: "pi pi-user-plus",
                             to: "/admin/election",
                         },
+                        {
+                            label: "Map",
+                            icon: "pi pi-compass",
+                            to: "/admin/map",
+                        },
                     ],
                 },
             ],
@@ -304,7 +309,7 @@ export default {
     },
 
     mounted() {
-        this.$store.dispatch("news/getAll");
+        // this.$store.dispatch("news/getAll");
         this.$store.dispatch("blocks/getAll");
         this.$store.dispatch("lots/getAll");
         this.$store.dispatch("announcements/getAll");

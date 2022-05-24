@@ -208,6 +208,17 @@ export default {
 
             content: null,
             openPostModal: false,
+            responsiveOptions: [
+                {
+                    breakpoint: "1600px",
+                    numVisible: 3,
+                },
+
+                {
+                    breakpoint: "1400px",
+                    numVisible: 2,
+                },
+            ],
         };
     },
     methods: {

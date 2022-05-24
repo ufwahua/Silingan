@@ -18,6 +18,7 @@ class Lot extends Model
         'block_id',
         'number',
         'active',
+        'has_voted',
     ];
     public function block(){
         return $this->hasOne(Block::class,'id','block_id');

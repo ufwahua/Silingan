@@ -1,78 +1,83 @@
 <template>
     <div>
         <Toast />
-        <div class="mb-4">
-            <h5>Log Masterlist</h5>
-            <TabView class="tabview-custom" ref="tabview4">
-                <TabPanel>
-                    <template #header>
-                        <i class="pi pi-user mr-2"></i>
-                        <span>Visitor</span>
-                    </template>
+        <div v-if="userLogged.role != 'resident'">
+            <div class="mb-4">
+                <h5>Log Masterlist</h5>
+                <TabView class="tabview-custom" ref="tabview4">
+                    <TabPanel>
+                        <template #header>
+                            <i class="pi pi-user mr-2"></i>
+                            <span>Visitor</span>
+                        </template>
 
-                    <div class="grid">
-                        <div class="col-12">
-                            <DataTable
-                                :value="visitor_logs"
-                                :filters="filters_masterlist"
-                                breakpoint="1230px"
-                                :rows="15"
-                            >
-                                <template #empty> No Visitors found </template>
-                                <template #loading> Loading Visitors </template>
-                                <template #header>
-                                    <div
-                                        class="flex flex-wrap justify-content-between"
-                                    >
-                                        <div class="my-2">
-                                            <span
-                                                class="p-input-icon-left inline-block"
-                                            >
-                                                <i class="pi pi-search" />
-                                                <InputText
+                        <div class="grid">
+                            <div class="col-12">
+                                <DataTable
+                                    :value="visitor_logs"
+                                    :filters="filters_masterlist"
+                                    breakpoint="1230px"
+                                    :rows="15"
+                                >
+                                    <template #empty>
+                                        No Visitors found
+                                    </template>
+                                    <template #loading>
+                                        Loading Visitors
+                                    </template>
+                                    <template #header>
+                                        <div
+                                            class="flex flex-wrap justify-content-between"
+                                        >
+                                            <div class="my-2">
+                                                <span
+                                                    class="p-input-icon-left inline-block"
+                                                >
+                                                    <i class="pi pi-search" />
+                                                    <InputText
+                                                        v-model="
+                                                            filters_masterlist[
+                                                                'global'
+                                                            ].value
+                                                        "
+                                                        placeholder="Keyword Search"
+                                                    />
+                                                </span>
+                                            </div>
+                                            <div class="my-2">
+                                                <Dropdown
                                                     v-model="
                                                         filters_masterlist[
-                                                            'global'
+                                                            'lot.block.number'
                                                         ].value
                                                     "
-                                                    placeholder="Keyword Search"
-                                                />
-                                            </span>
-                                        </div>
-                                        <div class="my-2">
-                                            <Dropdown
-                                                v-model="
-                                                    filters_masterlist[
-                                                        'lot.block.number'
-                                                    ].value
-                                                "
-                                                style="width: 150px"
-                                                :showClear="true"
-                                                :options="blocks"
-                                                optionLabel="number"
-                                                optionValue="number"
-                                                placeholder="Filter block"
-                                                @change="
-                                                    getFilterBlockLotMaster
-                                                "
-                                            ></Dropdown>
-                                        </div>
-                                        <div class="my-2">
-                                            <Dropdown
-                                                v-model="
-                                                    filters_masterlist[
-                                                        'lot.number'
-                                                    ].value
-                                                "
-                                                style="width: 150px"
-                                                :showClear="true"
-                                                :options="filteredLots"
-                                                optionLabel="number"
-                                                optionValue="number"
-                                                placeholder="Filter lot"
-                                            ></Dropdown>
-                                        </div>
-                                        <div class="my-2">
+                                                    style="width: 150px"
+                                                    :showClear="true"
+                                                    :options="blocks"
+                                                    optionLabel="number"
+                                                    optionValue="number"
+                                                    placeholder="Filter block"
+                                                    @change="
+                                                        getFilterBlockLotMaster
+                                                    "
+                                                ></Dropdown>
+                                            </div>
+                                            <div class="my-2">
+                                                <Dropdown
+                                                    v-model="
+                                                        filters_masterlist[
+                                                            'lot.number'
+                                                        ].value
+                                                    "
+                                                    style="width: 150px"
+                                                    :showClear="true"
+                                                    :options="filteredLots"
+                                                    optionLabel="number"
+                                                    optionValue="number"
+                                                    placeholder="Filter lot"
+                                                ></Dropdown>
+                                            </div>
+                                            <!-- <div class="my-2">
                                             <Calendar
                                                 v-model="from_masterlist"
                                                 placeholder="From"
@@ -100,164 +105,178 @@
                                                         : true
                                                 "
                                             />
+                                        </div> -->
+                                            <div class="my-2">
+                                                <Button
+                                                    icon="pi pi-filter-slash"
+                                                    class="p-button-outlined p-button-secondary"
+                                                    @click="clearFilterMaster"
+                                                    v-tooltip="'Clear Filters'"
+                                                />
+                                            </div>
                                         </div>
-                                        <div class="my-2">
-                                            <Button
-                                                icon="pi pi-filter-slash"
-                                                class="p-button-outlined p-button-secondary"
-                                                @click="clearFilterMaster"
-                                                v-tooltip="'Clear Filters'"
-                                            />
-                                        </div>
-                                    </div>
-                                </template>
-                                <Column header="Visitor Name" field="name">
-                                </Column>
-                                <Column header="Login by" field="login_by">
-                                    <template #body="{ data }">
-                                        {{
-                                            (data["login_by"] =
-                                                data.user_login.first_name +
-                                                " " +
-                                                data.user_login.last_name)
-                                        }}
                                     </template>
-                                </Column>
-                                <Column header="Logout by" field="logout_by">
-                                    <template #body="{ data }">
-                                        {{
-                                            (data["logout_by"] =
-                                                data.user_logout.first_name +
-                                                " " +
-                                                data.user_logout.last_name)
-                                        }}
-                                    </template>
-                                </Column>
-                                <Column
-                                    header="Purpose of Visit"
-                                    field="purpose_visit"
-                                >
-                                </Column>
-                                <Column header="Block" field="lot.block.number">
-                                </Column>
-                                <Column header="Lot" field="lot.number">
-                                </Column>
-                                <Column
-                                    header="Date Entered"
-                                    field="created_at"
-                                >
-                                    <template #body="{ data }">
-                                        {{ dateFormat(data.created_at) }}
-                                    </template>
-                                </Column>
-                                <Column header="Date Leaved" field="updated_at">
-                                    <template #body="{ data }">
-                                        {{ dateFormat(data.updated_at) }}
-                                    </template>
-                                </Column>
-                            </DataTable>
-                        </div>
-                    </div>
-                </TabPanel>
-                <TabPanel>
-                    <template #header>
-                        <i class="pi pi-car mr-2"></i>
-                        <span>Vehicles</span>
-                    </template>
-
-                    <div class="grid">
-                        <div class="col-12">
-                            <DataTable
-                                :value="vehicle_logs"
-                                :filters="filters_masterlist"
-                                breakpoint="1230px"
-                                :rows="15"
-                            >
-                                <template #empty> No Vehicles found </template>
-                                <template #loading> Loading Visitors </template>
-                                <template #header>
-                                    <div
-                                        class="flex flex-wrap justify-content-between"
+                                    <Column header="Visitor Name" field="name">
+                                    </Column>
+                                    <Column header="Login by" field="login_by">
+                                        <template #body="{ data }">
+                                            {{
+                                                (data["login_by"] =
+                                                    data.user_login.first_name +
+                                                    " " +
+                                                    data.user_login.last_name)
+                                            }}
+                                        </template>
+                                    </Column>
+                                    <Column
+                                        header="Logout by"
+                                        field="logout_by"
                                     >
-                                        <div class="my-2">
-                                            <span
-                                                class="p-input-icon-left inline-block"
-                                            >
-                                                <i class="pi pi-search" />
-                                                <InputText
+                                        <template #body="{ data }">
+                                            {{
+                                                (data["logout_by"] =
+                                                    data.user_logout
+                                                        .first_name +
+                                                    " " +
+                                                    data.user_logout.last_name)
+                                            }}
+                                        </template>
+                                    </Column>
+                                    <Column
+                                        header="Purpose of Visit"
+                                        field="purpose_visit"
+                                    >
+                                    </Column>
+                                    <Column
+                                        header="Block"
+                                        field="lot.block.number"
+                                    >
+                                    </Column>
+                                    <Column header="Lot" field="lot.number">
+                                    </Column>
+                                    <Column
+                                        header="Date Entered"
+                                        field="created_at"
+                                    >
+                                        <template #body="{ data }">
+                                            {{ dateFormat(data.created_at) }}
+                                        </template>
+                                    </Column>
+                                    <Column
+                                        header="Date Leaved"
+                                        field="updated_at"
+                                    >
+                                        <template #body="{ data }">
+                                            {{ dateFormat(data.updated_at) }}
+                                        </template>
+                                    </Column>
+                                </DataTable>
+                            </div>
+                        </div>
+                    </TabPanel>
+                    <TabPanel>
+                        <template #header>
+                            <i class="pi pi-car mr-2"></i>
+                            <span>Vehicles</span>
+                        </template>
+
+                        <div class="grid">
+                            <div class="col-12">
+                                <DataTable
+                                    :value="vehicle_logs"
+                                    :filters="filters_masterlist"
+                                    breakpoint="1230px"
+                                    :rows="15"
+                                >
+                                    <template #empty>
+                                        No Vehicles found
+                                    </template>
+                                    <template #loading>
+                                        Loading Visitors
+                                    </template>
+                                    <template #header>
+                                        <div
+                                            class="flex flex-wrap justify-content-between"
+                                        >
+                                            <div class="my-2">
+                                                <span
+                                                    class="p-input-icon-left inline-block"
+                                                >
+                                                    <i class="pi pi-search" />
+                                                    <InputText
+                                                        v-model="
+                                                            filters_masterlist[
+                                                                'global'
+                                                            ].value
+                                                        "
+                                                        placeholder="Keyword Search"
+                                                    />
+                                                </span>
+                                            </div>
+                                            <div class="my-2">
+                                                <Dropdown
                                                     v-model="
                                                         filters_masterlist[
-                                                            'global'
+                                                            'vehicle_label'
                                                         ].value
                                                     "
-                                                    placeholder="Keyword Search"
-                                                />
-                                            </span>
-                                        </div>
-                                        <div class="my-2">
-                                            <Dropdown
-                                                v-model="
-                                                    filters_masterlist[
-                                                        'vehicle_label'
-                                                    ].value
-                                                "
-                                                style="width: 150px"
-                                                :showClear="true"
-                                                :options="vehicle_types"
-                                                optionLabel="type"
-                                                optionValue="type"
-                                                placeholder="Filter type"
-                                            ></Dropdown>
-                                        </div>
-                                        <div class="my-2">
-                                            <Dropdown
-                                                v-model="
-                                                    filters_masterlist[
-                                                        'vehicle_type'
-                                                    ].value
-                                                "
-                                                style="width: 150px"
-                                                :showClear="true"
-                                                :options="vehicle_tags"
-                                                optionLabel="tag"
-                                                optionValue="tag"
-                                                placeholder="Filter tag"
-                                            ></Dropdown>
-                                        </div>
-                                        <div class="my-2">
-                                            <Dropdown
-                                                v-model="
-                                                    filters_masterlist[
-                                                        'lot.block.number'
-                                                    ].value
-                                                "
-                                                style="width: 150px"
-                                                :showClear="true"
-                                                :options="blocks"
-                                                optionLabel="number"
-                                                optionValue="number"
-                                                placeholder="Filter block"
-                                                @change="
-                                                    getFilterBlockLotMaster
-                                                "
-                                            ></Dropdown>
-                                        </div>
-                                        <div class="my-2">
-                                            <Dropdown
-                                                v-model="
-                                                    filters_masterlist[
-                                                        'lot.number'
-                                                    ].value
-                                                "
-                                                style="width: 150px"
-                                                :showClear="true"
-                                                :options="filteredLots"
-                                                optionLabel="number"
-                                                optionValue="number"
-                                                placeholder="Filter lot"
-                                            ></Dropdown>
-                                        </div>
-                                        <div class="my-2">
+                                                    style="width: 150px"
+                                                    :showClear="true"
+                                                    :options="vehicle_types"
+                                                    optionLabel="type"
+                                                    optionValue="type"
+                                                    placeholder="Filter type"
+                                                ></Dropdown>
+                                            </div>
+                                            <div class="my-2">
+                                                <Dropdown
+                                                    v-model="
+                                                        filters_masterlist[
+                                                            'vehicle_type'
+                                                        ].value
+                                                    "
+                                                    style="width: 150px"
+                                                    :showClear="true"
+                                                    :options="vehicle_tags"
+                                                    optionLabel="tag"
+                                                    optionValue="tag"
+                                                    placeholder="Filter tag"
+                                                ></Dropdown>
+                                            </div>
+                                            <div class="my-2">
+                                                <Dropdown
+                                                    v-model="
+                                                        filters_masterlist[
+                                                            'lot.block.number'
+                                                        ].value
+                                                    "
+                                                    style="width: 150px"
+                                                    :showClear="true"
+                                                    :options="blocks"
+                                                    optionLabel="number"
+                                                    optionValue="number"
+                                                    placeholder="Filter block"
+                                                    @change="
+                                                        getFilterBlockLotMaster
+                                                    "
+                                                ></Dropdown>
+                                            </div>
+                                            <div class="my-2">
+                                                <Dropdown
+                                                    v-model="
+                                                        filters_masterlist[
+                                                            'lot.number'
+                                                        ].value
+                                                    "
+                                                    style="width: 150px"
+                                                    :showClear="true"
+                                                    :options="filteredLots"
+                                                    optionLabel="number"
+                                                    optionValue="number"
+                                                    placeholder="Filter lot"
+                                                ></Dropdown>
+                                            </div>
+                                            <!-- <div class="my-2">
                                             <Calendar
                                                 v-model="from_masterlist"
                                                 placeholder="From"
@@ -285,434 +304,717 @@
                                                         : true
                                                 "
                                             />
-                                        </div>
-                                        <div class="my-2">
-                                            <Button
-                                                icon="pi pi-filter-slash"
-                                                class="p-button-outlined p-button-secondary"
-                                                @click="clearFilterMaster"
-                                                v-tooltip="'Clear Filters'"
-                                            />
-                                        </div>
-                                    </div> </template
-                                ><Column
-                                    header="Vehicle Type"
-                                    field="vehicle_label"
-                                ></Column>
-                                <Column
-                                    header="Vehicle Tag"
-                                    field="vehicle_type"
-                                ></Column>
-                                <Column
-                                    header="Plate Number"
-                                    field="plate_number"
-                                >
-                                </Column>
-                                <Column header="Login by" field="login_by">
-                                    <template #body="{ data }">
-                                        {{
-                                            (data["login_by"] =
-                                                data.user_login.first_name +
-                                                " " +
-                                                data.user_login.last_name)
-                                        }}
-                                    </template>
-                                </Column>
-                                <Column header="Logout by" field="logout_by">
-                                    <template #body="{ data }">
-                                        {{
-                                            (data["logout_by"] =
-                                                data.user_logout.first_name +
-                                                " " +
-                                                data.user_logout.last_name)
-                                        }}
-                                    </template>
-                                </Column>
-                                <Column
-                                    header="Purpose of Visit"
-                                    field="purpose_visit"
-                                >
-                                </Column>
-                                <Column header="Block" field="lot.block.number">
-                                </Column>
-                                <Column header="Lot" field="lot.number">
-                                </Column>
-                                <Column header="Card" field="card.number">
-                                </Column>
-                                <Column
-                                    header="Date Entered"
-                                    field="created_at"
-                                >
-                                    <template #body="{ data }">
-                                        {{ dateFormat(data.created_at) }}
-                                    </template>
-                                </Column>
-                                <Column header="Date Leaved" field="created_at">
-                                    <template #body="{ data }">
-                                        {{ dateFormat(data.created_at) }}
-                                    </template>
-                                </Column>
-                            </DataTable>
-                        </div>
-                    </div>
-                </TabPanel>
-            </TabView>
-        </div>
-        <div class="card">
-            <h5>Log</h5>
-            <TabView class="tabview-custom" ref="tabview4">
-                <TabPanel>
-                    <template #header>
-                        <i class="pi pi-user mr-2"></i>
-                        <span>Visitor</span>
-                    </template>
-
-                    <div class="grid">
-                        <div class="col-12">
-                            <DataTable
-                                :value="visitors"
-                                :filters="filters"
-                                breakpoint="1230px"
-                                :rows="15"
-                            >
-                                <template #empty> No Visitors found </template>
-                                <template #loading> Loading Visitors </template>
-                                <template #header>
-                                    <div
-                                        class="flex flex-wrap align-content-center justify-content-between"
-                                    >
-                                        <div class="my-2">
-                                            <span
-                                                class="p-input-icon-left inline-block"
-                                            >
-                                                <i class="pi pi-search" />
-                                                <InputText
-                                                    v-model="
-                                                        filters['global'].value
-                                                    "
-                                                    placeholder="Keyword Search"
+                                        </div> -->
+                                            <div class="my-2">
+                                                <Button
+                                                    icon="pi pi-filter-slash"
+                                                    class="p-button-outlined p-button-secondary"
+                                                    @click="clearFilterMaster"
+                                                    v-tooltip="'Clear Filters'"
                                                 />
-                                            </span>
-                                        </div>
-                                        <div class="my-2">
-                                            <Dropdown
-                                                v-model="
-                                                    filters['lot.block.number']
-                                                        .value
-                                                "
-                                                style="width: 150px"
-                                                :showClear="true"
-                                                :options="blocks"
-                                                optionLabel="number"
-                                                optionValue="number"
-                                                placeholder="Filter block"
-                                                @change="getFilterBlockLot"
-                                            ></Dropdown>
-                                        </div>
-                                        <div class="my-2">
-                                            <Dropdown
-                                                v-model="
-                                                    filters['lot.number'].value
-                                                "
-                                                style="width: 150px"
-                                                :showClear="true"
-                                                :options="filteredLots"
-                                                optionLabel="number"
-                                                optionValue="number"
-                                                placeholder="Filter lot"
-                                            ></Dropdown>
-                                        </div>
-                                        <div class="my-2">
-                                            <Calendar
-                                                v-model="from"
-                                                placeholder="From"
-                                                dateFormat="yy-mm-dd"
-                                                @date-select="
-                                                    changeFromToDate('log')
-                                                "
-                                            />
-                                        </div>
-                                        <div class="my-2">
-                                            <Calendar
-                                                v-model="to"
-                                                placeholder="To"
-                                                dateFormat="yy-mm-dd"
-                                                @date-select="
-                                                    changeFromToDate('log')
-                                                "
-                                                :disabled="from ? false : true"
-                                            />
-                                        </div>
-                                        <div class="my-2">
-                                            <Button
-                                                icon="pi pi-filter-slash"
-                                                class="p-button-outlined p-button-secondary"
-                                                @click="clearFilter"
-                                                v-tooltip="'Clear Filters'"
-                                            />
-                                        </div>
-                                        <div class="my-2">
-                                            <Button
-                                                label="Log in"
-                                                icon="pi pi-user-plus"
-                                                class="p-button-success p-mr-2"
-                                                @click="
-                                                    openLogDialog('visitor')
-                                                "
-                                            />
-                                        </div>
-                                    </div>
-                                </template>
-                                <Column header="Visitor Name" field="name">
-                                </Column>
-                                <Column header="Login by" field="login_by">
-                                    <template #body="{ data }">
-                                        {{
-                                            (data["login_by"] =
-                                                data.user_login.first_name +
-                                                " " +
-                                                data.user_login.last_name)
-                                        }}
-                                    </template>
-                                </Column>
-                                <Column
-                                    header="Purpose of Visit"
-                                    field="purpose_visit"
-                                >
-                                </Column>
-                                <Column header="Block" field="lot.block.number">
-                                </Column>
-                                <Column header="Lot" field="lot.number">
-                                </Column>
-                                <Column header="Card" field="card.number">
-                                </Column>
-                                <Column
-                                    header="Date Entered"
-                                    field="created_at"
-                                >
-                                    <template #body="{ data }">
-                                        {{ dateFormat(data.created_at) }}
-                                    </template>
-                                </Column>
-
-                                <Column header="Actions" field="actions">
-                                    <template #body="{ data }">
-                                        <Button
-                                            icon="pi pi-pencil"
-                                            class="p-button-rounded p-button-primary mr-2"
-                                            v-tooltip="'Edit Log'"
-                                            @click="updateLog(data)"
-                                        />
-                                        <Button
-                                            icon="pi pi-user-minus"
-                                            class="p-button-rounded p-button-danger"
-                                            v-tooltip="'Logout'"
-                                            @click="logout(data)"
-                                        />
-                                    </template>
-                                </Column>
-                            </DataTable>
-                        </div>
-                    </div>
-                </TabPanel>
-                <TabPanel>
-                    <template #header>
-                        <i class="pi pi-car mr-2"></i>
-                        <span>Vehicles</span>
-                    </template>
-
-                    <div class="grid">
-                        <div class="col-12">
-                            <DataTable
-                                :value="vehicles"
-                                :filters="filters"
-                                breakpoint="1230px"
-                                :rows="15"
-                            >
-                                <template #empty> No Vehicles found </template>
-                                <template #loading> Loading Visitors </template>
-                                <template #header>
-                                    <div
-                                        class="flex flex-wrap align-content-center justify-content-between"
+                                            </div>
+                                        </div> </template
+                                    ><Column
+                                        header="Driver's Name"
+                                        field="name"
                                     >
-                                        <div class="my-2">
-                                            <span
-                                                class="p-input-icon-left inline-block"
-                                            >
-                                                <i class="pi pi-search" />
-                                                <InputText
-                                                    v-model="
-                                                        filters['global'].value
-                                                    "
-                                                    placeholder="Keyword Search"
-                                                />
-                                            </span>
-                                        </div>
-                                        <div class="my-2">
-                                            <Dropdown
-                                                v-model="
-                                                    filters['vehicle_label']
-                                                        .value
-                                                "
-                                                style="width: 150px"
-                                                :showClear="true"
-                                                :options="vehicle_types"
-                                                optionLabel="type"
-                                                optionValue="type"
-                                                placeholder="Filter type"
-                                            ></Dropdown>
-                                        </div>
-                                        <div class="my-2">
-                                            <Dropdown
-                                                v-model="
-                                                    filters['vehicle_type']
-                                                        .value
-                                                "
-                                                style="width: 150px"
-                                                :showClear="true"
-                                                :options="vehicle_tags"
-                                                optionLabel="tag"
-                                                optionValue="tag"
-                                                placeholder="Filter tag"
-                                            ></Dropdown>
-                                        </div>
-                                        <div class="my-2">
-                                            <Dropdown
-                                                v-model="
-                                                    filters['lot.block.number']
-                                                        .value
-                                                "
-                                                style="width: 150px"
-                                                :showClear="true"
-                                                :options="blocks"
-                                                optionLabel="number"
-                                                optionValue="number"
-                                                placeholder="Filter block"
-                                                @change="getFilterBlockLot"
-                                            ></Dropdown>
-                                        </div>
-
-                                        <div class="my-2">
-                                            <Dropdown
-                                                v-model="
-                                                    filters['lot.number'].value
-                                                "
-                                                style="width: 150px"
-                                                :showClear="true"
-                                                :options="filteredLots"
-                                                optionLabel="number"
-                                                optionValue="number"
-                                                placeholder="Filter lot"
-                                            ></Dropdown>
-                                        </div>
-                                        <div class="my-2">
-                                            <Calendar
-                                                v-model="from"
-                                                placeholder="From"
-                                                dateFormat="yy-mm-dd"
-                                                @date-select="
-                                                    changeFromToDate('log')
-                                                "
-                                            />
-                                        </div>
-                                        <div class="my-2">
-                                            <Calendar
-                                                v-model="to"
-                                                placeholder="To"
-                                                dateFormat="yy-mm-dd"
-                                                @date-select="
-                                                    changeFromToDate('log')
-                                                "
-                                                :disabled="from ? false : true"
-                                            />
-                                        </div>
-                                        <div class="my-2">
-                                            <Button
-                                                icon="pi pi-filter-slash"
-                                                class="p-button-outlined p-button-secondary"
-                                                @click="clearFilter"
-                                                v-tooltip="'Clear Filters'"
-                                            />
-                                        </div>
-                                        <div class="my-2">
-                                            <Button
-                                                label="Log in"
-                                                icon="pi pi-user-plus"
-                                                class="p-button-success p-mr-2"
-                                                @click="
-                                                    openLogDialog('vehicle')
-                                                "
-                                            />
-                                        </div>
-                                    </div>
-                                </template>
-                                <Column
-                                    header="Vehicle Type"
-                                    field="vehicle_label"
-                                >
-                                </Column>
-                                <Column
-                                    header="Vehicle Tag"
-                                    field="vehicle_type"
-                                >
-                                </Column>
-                                <Column
-                                    header="Plate Number"
-                                    field="plate_number"
-                                >
-                                </Column>
-                                <Column header="Login by" field="login_by">
-                                    <template #body="{ data }">
-                                        {{
-                                            (data["login_by"] =
-                                                data.user_login.first_name +
-                                                " " +
-                                                data.user_login.last_name)
-                                        }}
-                                    </template>
-                                </Column>
-                                <Column
-                                    header="Purpose of Visit"
-                                    field="purpose_visit"
-                                >
-                                </Column>
-                                <Column header="Block" field="lot.block.number">
-                                </Column>
-                                <Column header="Lot" field="lot.number">
-                                </Column>
-                                <Column header="Card" field="card.number">
-                                </Column>
-                                <Column
-                                    header="Date Entered"
-                                    field="created_at"
-                                >
-                                    <template #body="{ data }">
-                                        {{ dateFormat(data.created_at) }}
-                                    </template>
-                                </Column>
-
-                                <Column header="Actions" field="actions">
-                                    <template #body="{ data }">
-                                        <Button
-                                            icon="pi pi-pencil"
-                                            class="p-button-rounded p-button-primary mr-2"
-                                            v-tooltip="'Edit Log'"
-                                            @click="updateLog(data)"
-                                        />
-                                        <Button
-                                            icon="pi pi-user-minus"
-                                            class="p-button-rounded p-button-danger"
-                                            v-tooltip="'Logout'"
-                                            @click="logout(data)"
-                                        />
-                                    </template>
-                                </Column>
-                            </DataTable>
+                                    </Column>
+                                    <Column
+                                        header="Number of Passenger"
+                                        field="num_passenger"
+                                        style="min-width: 20rem"
+                                    ></Column
+                                    ><Column
+                                        header="Vehicle Type"
+                                        field="vehicle_label"
+                                    ></Column>
+                                    <Column
+                                        header="Vehicle Tag"
+                                        field="vehicle_type"
+                                    ></Column>
+                                    <Column
+                                        header="Plate Number"
+                                        field="plate_number"
+                                    >
+                                    </Column>
+                                    <Column header="Login by" field="login_by">
+                                        <template #body="{ data }">
+                                            {{
+                                                (data["login_by"] =
+                                                    data.user_login.first_name +
+                                                    " " +
+                                                    data.user_login.last_name)
+                                            }}
+                                        </template>
+                                    </Column>
+                                    <Column
+                                        header="Logout by"
+                                        field="logout_by"
+                                    >
+                                        <template #body="{ data }">
+                                            {{
+                                                (data["logout_by"] =
+                                                    data.user_logout
+                                                        .first_name +
+                                                    " " +
+                                                    data.user_logout.last_name)
+                                            }}
+                                        </template>
+                                    </Column>
+                                    <Column
+                                        header="Purpose of Visit"
+                                        field="purpose_visit"
+                                    >
+                                    </Column>
+                                    <Column
+                                        header="Block"
+                                        field="lot.block.number"
+                                    >
+                                    </Column>
+                                    <Column header="Lot" field="lot.number">
+                                    </Column>
+                                    <Column header="Card" field="card.number">
+                                    </Column>
+                                    <Column
+                                        header="Date Entered"
+                                        field="created_at"
+                                    >
+                                        <template #body="{ data }">
+                                            {{ dateFormat(data.created_at) }}
+                                        </template>
+                                    </Column>
+                                    <Column
+                                        header="Date Leaved"
+                                        field="updated_at"
+                                    >
+                                        <template #body="{ data }">
+                                            {{ dateFormat(data.created_at) }}
+                                        </template>
+                                    </Column>
+                                </DataTable>
+                            </div>
                         </div>
-                    </div>
-                </TabPanel>
-            </TabView>
+                    </TabPanel>
+                </TabView>
+            </div>
+            <div class="card">
+                <h5>Log</h5>
+                <TabView class="tabview-custom" ref="tabview4">
+                    <TabPanel>
+                        <template #header>
+                            <i class="pi pi-user mr-2"></i>
+                            <span>Visitor</span>
+                        </template>
+
+                        <div class="grid">
+                            <div class="col-12">
+                                <DataTable
+                                    :value="visitors"
+                                    :filters="filters"
+                                    breakpoint="1230px"
+                                    :rows="15"
+                                >
+                                    <template #empty>
+                                        No Visitors found
+                                    </template>
+                                    <template #loading>
+                                        Loading Visitors
+                                    </template>
+                                    <template #header>
+                                        <div
+                                            class="flex flex-wrap align-content-center justify-content-between"
+                                        >
+                                            <div class="my-2">
+                                                <span
+                                                    class="p-input-icon-left inline-block"
+                                                >
+                                                    <i class="pi pi-search" />
+                                                    <InputText
+                                                        v-model="
+                                                            filters['global']
+                                                                .value
+                                                        "
+                                                        placeholder="Keyword Search"
+                                                    />
+                                                </span>
+                                            </div>
+                                            <div class="my-2">
+                                                <Dropdown
+                                                    v-model="
+                                                        filters[
+                                                            'lot.block.number'
+                                                        ].value
+                                                    "
+                                                    style="width: 150px"
+                                                    :showClear="true"
+                                                    :options="blocks"
+                                                    optionLabel="number"
+                                                    optionValue="number"
+                                                    placeholder="Filter block"
+                                                    @change="getFilterBlockLot"
+                                                ></Dropdown>
+                                            </div>
+                                            <div class="my-2">
+                                                <Dropdown
+                                                    v-model="
+                                                        filters['lot.number']
+                                                            .value
+                                                    "
+                                                    style="width: 150px"
+                                                    :showClear="true"
+                                                    :options="filteredLots"
+                                                    optionLabel="number"
+                                                    optionValue="number"
+                                                    placeholder="Filter lot"
+                                                ></Dropdown>
+                                            </div>
+                                            <div class="my-2">
+                                                <Calendar
+                                                    v-model="from"
+                                                    placeholder="From"
+                                                    dateFormat="yy-mm-dd"
+                                                    @date-select="
+                                                        changeFromToDate('log')
+                                                    "
+                                                />
+                                            </div>
+                                            <div class="my-2">
+                                                <Calendar
+                                                    v-model="to"
+                                                    placeholder="To"
+                                                    dateFormat="yy-mm-dd"
+                                                    @date-select="
+                                                        changeFromToDate('log')
+                                                    "
+                                                    :disabled="
+                                                        from ? false : true
+                                                    "
+                                                />
+                                            </div>
+                                            <div class="my-2">
+                                                <Button
+                                                    icon="pi pi-filter-slash"
+                                                    class="p-button-outlined p-button-secondary"
+                                                    @click="clearFilter"
+                                                    v-tooltip="'Clear Filters'"
+                                                />
+                                            </div>
+                                            <div class="my-2">
+                                                <Button
+                                                    label="Log in"
+                                                    icon="pi pi-user-plus"
+                                                    class="p-button-success p-mr-2"
+                                                    @click="
+                                                        openLogDialog('visitor')
+                                                    "
+                                                />
+                                            </div>
+                                        </div>
+                                    </template>
+                                    <Column header="Visitor Name" field="name">
+                                    </Column>
+                                    <Column header="Login by" field="login_by">
+                                        <template #body="{ data }">
+                                            {{
+                                                (data["login_by"] =
+                                                    data.user_login.first_name +
+                                                    " " +
+                                                    data.user_login.last_name)
+                                            }}
+                                        </template>
+                                    </Column>
+                                    <Column
+                                        header="Purpose of Visit"
+                                        field="purpose_visit"
+                                    >
+                                    </Column>
+                                    <Column
+                                        header="Block"
+                                        field="lot.block.number"
+                                    >
+                                    </Column>
+                                    <Column header="Lot" field="lot.number">
+                                    </Column>
+                                    <Column header="Card" field="card.number">
+                                    </Column>
+                                    <Column
+                                        header="Date Entered"
+                                        field="created_at"
+                                    >
+                                        <template #body="{ data }">
+                                            {{ dateFormat(data.created_at) }}
+                                        </template>
+                                    </Column>
+
+                                    <Column header="Actions" field="actions">
+                                        <template #body="{ data }">
+                                            <Button
+                                                icon="pi pi-pencil"
+                                                class="p-button-rounded p-button-primary mr-2"
+                                                v-tooltip="'Edit Log'"
+                                                @click="updateLog(data)"
+                                            />
+                                            <Button
+                                                icon="pi pi-user-minus"
+                                                class="p-button-rounded p-button-danger"
+                                                v-tooltip="'Logout'"
+                                                @click="logout(data)"
+                                            />
+                                        </template>
+                                    </Column>
+                                </DataTable>
+                            </div>
+                        </div>
+                    </TabPanel>
+                    <TabPanel>
+                        <template #header>
+                            <i class="pi pi-car mr-2"></i>
+                            <span>Vehicles</span>
+                        </template>
+
+                        <div class="grid">
+                            <div class="col-12">
+                                <DataTable
+                                    :value="vehicles"
+                                    :filters="filters"
+                                    breakpoint="1500px"
+                                    :rows="15"
+                                >
+                                    <template #empty>
+                                        No Vehicles found
+                                    </template>
+                                    <template #loading>
+                                        Loading Visitors
+                                    </template>
+                                    <template #header>
+                                        <div
+                                            class="flex flex-wrap align-content-center justify-content-between"
+                                        >
+                                            <div class="my-2">
+                                                <span
+                                                    class="p-input-icon-left inline-block"
+                                                >
+                                                    <i class="pi pi-search" />
+                                                    <InputText
+                                                        v-model="
+                                                            filters['global']
+                                                                .value
+                                                        "
+                                                        placeholder="Keyword Search"
+                                                    />
+                                                </span>
+                                            </div>
+                                            <div class="my-2">
+                                                <Dropdown
+                                                    v-model="
+                                                        filters['vehicle_label']
+                                                            .value
+                                                    "
+                                                    style="width: 150px"
+                                                    :showClear="true"
+                                                    :options="vehicle_types"
+                                                    optionLabel="type"
+                                                    optionValue="type"
+                                                    placeholder="Filter type"
+                                                ></Dropdown>
+                                            </div>
+                                            <div class="my-2">
+                                                <Dropdown
+                                                    v-model="
+                                                        filters['vehicle_type']
+                                                            .value
+                                                    "
+                                                    style="width: 150px"
+                                                    :showClear="true"
+                                                    :options="vehicle_tags"
+                                                    optionLabel="tag"
+                                                    optionValue="tag"
+                                                    placeholder="Filter tag"
+                                                ></Dropdown>
+                                            </div>
+                                            <div class="my-2">
+                                                <Dropdown
+                                                    v-model="
+                                                        filters[
+                                                            'lot.block.number'
+                                                        ].value
+                                                    "
+                                                    style="width: 150px"
+                                                    :showClear="true"
+                                                    :options="blocks"
+                                                    optionLabel="number"
+                                                    optionValue="number"
+                                                    placeholder="Filter block"
+                                                    @change="getFilterBlockLot"
+                                                ></Dropdown>
+                                            </div>
+
+                                            <div class="my-2">
+                                                <Dropdown
+                                                    v-model="
+                                                        filters['lot.number']
+                                                            .value
+                                                    "
+                                                    style="width: 150px"
+                                                    :showClear="true"
+                                                    :options="filteredLots"
+                                                    optionLabel="number"
+                                                    optionValue="number"
+                                                    placeholder="Filter lot"
+                                                ></Dropdown>
+                                            </div>
+                                            <div class="my-2">
+                                                <Calendar
+                                                    v-model="from"
+                                                    placeholder="From"
+                                                    dateFormat="yy-mm-dd"
+                                                    @date-select="
+                                                        changeFromToDate('log')
+                                                    "
+                                                />
+                                            </div>
+                                            <div class="my-2">
+                                                <Calendar
+                                                    v-model="to"
+                                                    placeholder="To"
+                                                    dateFormat="yy-mm-dd"
+                                                    @date-select="
+                                                        changeFromToDate('log')
+                                                    "
+                                                    :disabled="
+                                                        from ? false : true
+                                                    "
+                                                />
+                                            </div>
+                                            <div class="my-2">
+                                                <Button
+                                                    icon="pi pi-filter-slash"
+                                                    class="p-button-outlined p-button-secondary"
+                                                    @click="clearFilter"
+                                                    v-tooltip="'Clear Filters'"
+                                                />
+                                            </div>
+                                            <div class="my-2">
+                                                <Button
+                                                    label="Log in"
+                                                    icon="pi pi-user-plus"
+                                                    class="p-button-success p-mr-2"
+                                                    @click="
+                                                        openLogDialog('vehicle')
+                                                    "
+                                                />
+                                            </div>
+                                        </div>
+                                    </template>
+                                    <Column header="Driver's Name" field="name">
+                                    </Column>
+                                    <Column
+                                        header="Number of Passenger"
+                                        field="num_passenger"
+                                        style="min-width: 20rem"
+                                    >
+                                    </Column>
+                                    <Column
+                                        header="Vehicle Type"
+                                        field="vehicle_label"
+                                    >
+                                    </Column>
+                                    <Column
+                                        header="Vehicle Tag"
+                                        field="vehicle_type"
+                                    >
+                                    </Column>
+                                    <Column
+                                        header="Plate Number"
+                                        field="plate_number"
+                                    >
+                                    </Column>
+                                    <Column header="Login by" field="login_by">
+                                        <template #body="{ data }">
+                                            {{
+                                                (data["login_by"] =
+                                                    data.user_login.first_name +
+                                                    " " +
+                                                    data.user_login.last_name)
+                                            }}
+                                        </template>
+                                    </Column>
+                                    <Column
+                                        header="Purpose of Visit"
+                                        field="purpose_visit"
+                                    >
+                                    </Column>
+                                    <Column
+                                        header="Block"
+                                        field="lot.block.number"
+                                    >
+                                    </Column>
+                                    <Column header="Lot" field="lot.number">
+                                    </Column>
+                                    <Column header="Card" field="card.number">
+                                    </Column>
+                                    <Column
+                                        header="Date Entered"
+                                        field="created_at"
+                                    >
+                                        <template #body="{ data }">
+                                            {{ dateFormat(data.created_at) }}
+                                        </template>
+                                    </Column>
+
+                                    <Column header="Actions" field="actions">
+                                        <template #body="{ data }">
+                                            <Button
+                                                icon="pi pi-pencil"
+                                                class="p-button-rounded p-button-primary mr-2"
+                                                v-tooltip="'Edit Log'"
+                                                @click="updateLog(data)"
+                                            />
+                                            <Button
+                                                icon="pi pi-user-minus"
+                                                class="p-button-rounded p-button-danger"
+                                                v-tooltip="'Logout'"
+                                                @click="logout(data)"
+                                            />
+                                        </template>
+                                    </Column>
+                                </DataTable>
+                            </div>
+                        </div>
+                    </TabPanel>
+                </TabView>
+            </div>
         </div>
+        <div v-else>
+            <div class="mb-4">
+                <h5>Logs</h5>
+                <TabView class="tabview-custom" ref="tabview4">
+                    <TabPanel>
+                        <template #header>
+                            <i class="pi pi-user mr-2"></i>
+                            <span>Visitor</span>
+                        </template>
+
+                        <div class="grid">
+                            <div class="col-12">
+                                <DataTable
+                                    :value="log_specific_visitor"
+                                    :filters="filters_resident"
+                                    breakpoint="1230px"
+                                    :rows="15"
+                                >
+                                    <template #empty>
+                                        No Visitors found
+                                    </template>
+                                    <template #loading>
+                                        Loading Visitors
+                                    </template>
+                                    <template #header>
+                                        <div
+                                            class="flex flex-wrap justify-content-between"
+                                        >
+                                            <div class="my-2">
+                                                <span
+                                                    class="p-input-icon-left inline-block"
+                                                >
+                                                    <i class="pi pi-search" />
+                                                    <InputText
+                                                        v-model="
+                                                            filters_resident[
+                                                                'global'
+                                                            ].value
+                                                        "
+                                                        placeholder="Keyword Search"
+                                                    />
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </template>
+                                    <Column header="Visitor Name" field="name">
+                                    </Column>
+                                    <Column header="Login by" field="login_by">
+                                        <template #body="{ data }">
+                                            {{
+                                                (data["login_by"] =
+                                                    data.user_login.first_name +
+                                                    " " +
+                                                    data.user_login.last_name)
+                                            }}
+                                        </template>
+                                    </Column>
+                                    <Column
+                                        header="Logout by"
+                                        field="logout_by"
+                                    >
+                                        <template #body="{ data }">
+                                            <div v-if="data.user_logout_id">
+                                                {{
+                                                    (data["logout_by"] =
+                                                        data.user_logout
+                                                            .first_name +
+                                                        " " +
+                                                        data.user_logout
+                                                            .last_name)
+                                                }}
+                                            </div>
+                                        </template>
+                                    </Column>
+                                    <Column
+                                        header="Purpose of Visit"
+                                        field="purpose_visit"
+                                    >
+                                    </Column>
+
+                                    <Column
+                                        header="Date Entered"
+                                        field="created_at"
+                                    >
+                                        <template #body="{ data }">
+                                            {{ dateFormat(data.created_at) }}
+                                        </template>
+                                    </Column>
+                                    <Column
+                                        header="Date Leaved"
+                                        field="updated_at"
+                                    >
+                                        <template #body="{ data }">
+                                            {{ dateFormat(data.updated_at) }}
+                                        </template>
+                                    </Column>
+                                </DataTable>
+                            </div>
+                        </div>
+                    </TabPanel>
+                    <TabPanel>
+                        <template #header>
+                            <i class="pi pi-car mr-2"></i>
+                            <span>Vehicles</span>
+                        </template>
+
+                        <div class="grid">
+                            <div class="col-12">
+                                <DataTable
+                                    :value="log_specific_vehicles"
+                                    :filters="filters_resident"
+                                    breakpoint="1230px"
+                                    :rows="15"
+                                >
+                                    <template #empty>
+                                        No Vehicles found
+                                    </template>
+                                    <template #loading>
+                                        Loading Vehicles
+                                    </template>
+                                    <template #header>
+                                        <div
+                                            class="flex flex-wrap justify-content-between"
+                                        >
+                                            <div class="my-2">
+                                                <span
+                                                    class="p-input-icon-left inline-block"
+                                                >
+                                                    <i class="pi pi-search" />
+                                                    <InputText
+                                                        v-model="
+                                                            filters_resident[
+                                                                'global'
+                                                            ].value
+                                                        "
+                                                        placeholder="Keyword Search"
+                                                    />
+                                                </span>
+                                            </div>
+                                        </div> </template
+                                    ><Column
+                                        header="Driver's Name"
+                                        field="name"
+                                    >
+                                    </Column>
+                                    <Column
+                                        header="Number of Passenger"
+                                        field="num_passenger"
+                                        style="min-width: 20rem"
+                                    ></Column
+                                    ><Column
+                                        header="Vehicle Type"
+                                        field="vehicle_label"
+                                    ></Column>
+                                    <Column
+                                        header="Vehicle Tag"
+                                        field="vehicle_type"
+                                    ></Column>
+                                    <Column
+                                        header="Plate Number"
+                                        field="plate_number"
+                                    >
+                                    </Column>
+                                    <Column header="Login by" field="login_by">
+                                        <template #body="{ data }">
+                                            {{
+                                                (data["login_by"] =
+                                                    data.user_login.first_name +
+                                                    " " +
+                                                    data.user_login.last_name)
+                                            }}
+                                        </template>
+                                    </Column>
+                                    <Column
+                                        header="Logout by"
+                                        field="logout_by"
+                                    >
+                                        <template #body="{ data }">
+                                            <div v-if="data.user_logout_id">
+                                                {{
+                                                    (data["logout_by"] =
+                                                        data.user_logout
+                                                            .first_name +
+                                                        " " +
+                                                        data.user_logout
+                                                            .last_name)
+                                                }}
+                                            </div>
+                                        </template>
+                                    </Column>
+                                    <Column
+                                        header="Purpose of Visit"
+                                        field="purpose_visit"
+                                    >
+                                    </Column>
+
+                                    <Column
+                                        header="Date Entered"
+                                        field="created_at"
+                                    >
+                                        <template #body="{ data }">
+                                            {{ dateFormat(data.created_at) }}
+                                        </template>
+                                    </Column>
+                                    <Column
+                                        header="Date Leaved"
+                                        field="updated_at"
+                                    >
+                                        <template #body="{ data }">
+                                            <div v-if="data.user_logout_id">
+                                                {{
+                                                    (data["logout_by"] =
+                                                        data.user_logout
+                                                            .first_name +
+                                                        " " +
+                                                        data.user_logout
+                                                            .last_name)
+                                                }}
+                                            </div>
+                                            {{ dateFormat(data.updated_at) }}
+                                        </template>
+                                    </Column>
+                                </DataTable>
+                            </div>
+                        </div>
+                    </TabPanel>
+                </TabView>
+            </div>
+        </div>
+
         <Dialog
             v-model:visible="logOutDialog"
             :style="{ width: '450px' }"
@@ -940,6 +1242,44 @@
                                         style="color: red"
                                         v-if="error_vehicle_tag"
                                         >{{ error_vehicle_tag }}</label
+                                    >
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="field">
+                                    <label>Driver's Name</label>
+                                    <InputText
+                                        v-model="name"
+                                        :class="{
+                                            'p-invalid': error_name,
+                                        }"
+                                        class="w-full"
+                                    />
+                                    <label
+                                        style="color: red"
+                                        v-if="error_name"
+                                        >{{ error_name }}</label
+                                    >
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="field">
+                                    <label>Number of Passenger</label>
+                                    <InputNumber
+                                        v-model="num_passenger"
+                                        :class="{
+                                            'p-invalid': error_num_passenger,
+                                        }"
+                                        mode="decimal"
+                                        showButtons
+                                        :min="0"
+                                        :max="100"
+                                        oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*?)\..*/g, '$1');"
+                                    />
+                                    <label
+                                        style="color: red"
+                                        v-if="error_num_passenger"
+                                        >{{ error_num_passenger }}</label
                                     >
                                 </div>
                             </div>
@@ -1280,7 +1620,7 @@
                             >
                         </div>
                     </div>
-                    <div class="col-12">
+                    <div class="col-6">
                         <div class="field">
                             <label>Plate Number</label>
                             <InputText
@@ -1294,6 +1634,27 @@
                                 style="color: red"
                                 v-if="error_plate_number"
                                 >{{ error_plate_number }}</label
+                            >
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="field">
+                            <label>Number of Passenger</label>
+                            <InputNumber
+                                v-model="num_passenger"
+                                :class="{
+                                    'p-invalid': error_num_passenger,
+                                }"
+                                mode="decimal"
+                                showButtons
+                                :min="0"
+                                :max="100"
+                                oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*?)\..*/g, '$1');"
+                            />
+                            <label
+                                style="color: red"
+                                v-if="error_num_passenger"
+                                >{{ error_num_passenger }}</label
                             >
                         </div>
                     </div>
@@ -1460,12 +1821,32 @@ export default {
         const store = useStore();
 
         return {
+            userLogged: computed(() => store.state.userLogged),
+
             cards: computed(() => store.state.cards.cards),
             blocks: computed(() => store.state.blocks.blocks),
             filteredLots: computed(() => store.state.lots.filteredLots),
             filtered_resident_block_lot: computed(
                 () => store.state.filtered_resident_block_lot
             ),
+            log_specific_visitor: computed(() => {
+                let temp = [];
+                store.state.logs.logs_specific.forEach((elem) => {
+                    if (elem.log_type == "visitor") {
+                        temp.push(elem);
+                    }
+                });
+                return temp;
+            }),
+            log_specific_vehicles: computed(() => {
+                let temp = [];
+                store.state.logs.logs_specific.forEach((elem) => {
+                    if (elem.log_type == "vehicle") {
+                        temp.push(elem);
+                    }
+                });
+                return temp;
+            }),
             visitor_logs: computed(() => {
                 let temp = [];
                 store.state.logs.logs_masterlist.forEach((elem) => {
@@ -1520,6 +1901,7 @@ export default {
     data() {
         return {
             filters_masterlist: {},
+            filters_resident: {},
             filters: {},
             from_masterlist: null,
             from: null,
@@ -1541,6 +1923,8 @@ export default {
             logOutDialog: false,
             logUpdate: false,
             id: null,
+
+            num_passenger: 0,
             error_name: null,
             error_card: null,
             error_plate_number: null,
@@ -1678,6 +2062,9 @@ export default {
                     matchMode: FilterMatchMode.EQUALS,
                 },
             };
+            this.filters_resident = {
+                global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+            };
             this.filters = {
                 global: { value: null, matchMode: FilterMatchMode.CONTAINS },
                 vehicle_label: {
@@ -1707,12 +2094,12 @@ export default {
             this.selected_card_id = data.card_id;
             this.selected_block_lot = data.block_lot_id;
             this.purpose_visit = data.purpose_visit;
-            if (data.log_type == "visitor") {
-                this.name = data.name;
-            } else {
+            this.name = data.name;
+            if (data.log_type == "vehicle") {
                 this.plate_number = data.plate_number;
                 this.vehicle_label = data.vehicle_label;
                 this.vehicle_type = data.vehicle_type;
+                this.num_passenger = data.num_passenger;
             }
             console.log(data);
             this.logOutDialog = true;
@@ -1722,6 +2109,14 @@ export default {
                 severity: "success",
                 summary: "Successful Request",
                 detail: "Successful Logout",
+                life: 3000,
+            });
+        },
+        showError() {
+            this.$toast.add({
+                severity: "warn",
+                summary: "Warning",
+                detail: "Please Add Driver's Name",
                 life: 3000,
             });
         },
@@ -1756,47 +2151,54 @@ export default {
                         this.loading = false;
                     });
             } else {
-                await axios({
-                    method: "put",
-                    url: "/api/log/" + this.id,
-                    data: {
-                        user_login_id: this.user_login_id,
-                        user_logout_id: this.$store.state.userLogged.id,
-                        card_id: this.selected_card_id,
-                        block_lot_id: this.selected_block_lot,
-                        purpose_visit: this.purpose_visit,
-                        log_type: this.log_type,
-                        plate_number: this.plate_number,
-                        vehicle_label: this.vehicle_label,
-                        vehicle_type: this.vehicle_type,
-                    },
-                })
-                    .then(() => {
-                        this.logOutDialog = false;
-                        this.resetFields();
-                        this.$store.dispatch("logs/getAll");
-                        this.$store.dispatch("cards/getAll");
-                        this.showLogoutToast();
-                        this.loading = false;
+                if (this.name != null) {
+                    await axios({
+                        method: "put",
+                        url: "/api/log/" + this.id,
+                        data: {
+                            user_login_id: this.user_login_id,
+                            user_logout_id: this.$store.state.userLogged.id,
+                            card_id: this.selected_card_id,
+                            block_lot_id: this.selected_block_lot,
+                            purpose_visit: this.purpose_visit,
+                            log_type: this.log_type,
+                            plate_number: this.plate_number,
+                            vehicle_label: this.vehicle_label,
+                            vehicle_type: this.vehicle_type,
+                            name: this.name,
+                            num_passenger: this.num_passenger,
+                        },
                     })
-                    .catch((err) => {
-                        console.log(err.response.data);
-                        this.resetErrors();
-                        this.validate(err);
-                        this.loading = false;
-                    });
+                        .then(() => {
+                            this.resetFields();
+                            this.$store.dispatch("logs/getAll");
+                            this.$store.dispatch("cards/getAll");
+                            this.showLogoutToast();
+                            this.logOutDialog = false;
+                            this.loading = false;
+                        })
+                        .catch((err) => {
+                            console.log(err.response.data);
+                            this.resetErrors();
+                            this.validate(err);
+                        });
+                } else {
+                    this.showError();
+                    this.logOutDialog = false;
+                    this.loading = false;
+                }
             }
         },
         updateLog(data) {
             this.resetErrors();
             this.id = data.id;
-            if (data.log_type == "visitor") {
-                this.name = data.name;
-            } else {
+            this.name = data.name;
+            if (data.log_type == "vehicle") {
                 this.user_login_id = data.user_login_id;
                 this.plate_number = data.plate_number;
                 this.vehicle_label = data.vehicle_label;
                 this.vehicle_type = data.vehicle_type;
+                this.num_passenger = data.num_passenger;
             }
             this.log_type = data.log_type;
             this.selected_card = data.card.number;
@@ -1858,6 +2260,8 @@ export default {
                         plate_number: this.plate_number,
                         vehicle_label: this.vehicle_label,
                         vehicle_type: this.vehicle_type,
+                        name: this.name,
+                        num_passenger: this.num_passenger,
                     },
                 })
                     .then(() => {
@@ -1907,7 +2311,8 @@ export default {
                         name: this.name,
                     },
                 })
-                    .then(async () => {
+                    .then(async (res) => {
+                        var id = res.data.id;
                         this.logVisitorDialog = false;
                         this.logVisitorDialog = false;
                         this.$store.dispatch("logs/getAll");
@@ -1922,6 +2327,7 @@ export default {
                                     "has logged visitor entry to your residence named " +
                                     this.name,
                                 block_lot_id: this.selected_block_lot,
+                                log_id: id,
                             },
                         })
                             .then((res) => {
@@ -1951,9 +2357,12 @@ export default {
                         vehicle_label: this.vehicle_label,
                         vehicle_type: this.vehicle_type,
                         plate_number: this.plate_number,
+                        num_passenger: this.num_passenger,
                     },
                 })
-                    .then(async () => {
+                    .then(async (res) => {
+                        console.log("id", res.data.id);
+                        var id = res.data.id;
                         this.logVisitorDialog = false;
                         this.logVisitorDialog = false;
                         this.$store.dispatch("logs/getAll");
@@ -1973,6 +2382,7 @@ export default {
                                     "Plate no. " +
                                     this.plate_number,
                                 block_lot_id: this.selected_block_lot,
+                                log_id: id,
                             },
                         })
                             .then((res) => {
@@ -2003,6 +2413,7 @@ export default {
             this.purpose_visit = null;
             this.vehicle_label = null;
             this.vehicle_type = null;
+            this.num_passenger = null;
         },
         resetErrors() {
             this.error_name = null;
@@ -2013,6 +2424,7 @@ export default {
             this.error_plate_number = null;
             this.error_vehicle_type = null;
             this.error_vehicle_tag = null;
+            this.error_num_passenger = null;
         },
         validate(error) {
             if (error.response.data.errors.name)
@@ -2035,6 +2447,9 @@ export default {
             if (error.response.data.errors.vehicle_type)
                 this.error_vehicle_tag =
                     error.response.data.errors.vehicle_type[0];
+            if (error.response.data.errors.num_passenger)
+                this.error_num_passenger =
+                    error.response.data.errors.num_passenger[0];
         },
     },
     created() {
@@ -2042,7 +2457,14 @@ export default {
     },
     mounted() {
         this.$store.dispatch("logs/getAll");
+        this.$store.dispatch(
+            "logs/getSpecific",
+            this.$store.state.userLogged.block_lot_id
+        );
+        console.log("log specific", this.logs_specific);
         this.$store.dispatch("cards/getAll");
+        this.$store.dispatch("blocks/getAll");
+        this.$store.dispatch("lots/getAll");
     },
 };
 </script>

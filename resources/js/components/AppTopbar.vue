@@ -89,6 +89,8 @@
                                                       )
                                                     : notif.election_id
                                                     ? openElection()
+                                                    : notif.log_id
+                                                    ? openLog()
                                                     : getAnnouncementPage()
                                             "
                                         >
@@ -204,6 +206,7 @@
                                                 notif.chat_room_id ||
                                                 notif.post_id ||
                                                 notif.election_id ||
+                                                notif.log_id ||
                                                 notif.announcement_id
                                             "
                                             class="p-button-text p-button-secondary w-full"
@@ -218,6 +221,8 @@
                                                       )
                                                     : notif.election_id
                                                     ? openElection()
+                                                    : notif.log_id
+                                                    ? openLog()
                                                     : getAnnouncementPage()
                                             "
                                         >
@@ -653,6 +658,9 @@ export default {
         },
         openElection() {
             return this.$router.push(`/${this.userLogged.role}` + "/election");
+        },
+        openLog() {
+            return this.$router.push(`/${this.userLogged.role}` + "/log");
         },
         getSpecificPost(post_id) {
             this.$store.dispatch("posts/getSpecificPost", post_id);

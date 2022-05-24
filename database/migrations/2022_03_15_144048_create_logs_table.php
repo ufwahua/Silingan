@@ -25,7 +25,7 @@ class CreateLogsTable extends Migration
             $table->string('purpose_visit');
             $table->string('name')->nullable();
             $table->string('plate_number')->nullable();
-
+            $table->integer('num_passenger')->nullable();
             $table->timestamps();
         });
     }

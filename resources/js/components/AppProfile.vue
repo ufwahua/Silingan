@@ -496,7 +496,7 @@ export default {
             confirm_password: null,
             status: null,
             verified: null,
-            has_voted: null,
+
             age: null,
             contact_num: null,
             selected_role: null,
@@ -619,7 +619,7 @@ export default {
                         block_lot_id: this.selected_block_lot,
                         email: this.email,
                         verified: this.verified,
-                        has_voted: this.has_voted,
+
                         age: this.age,
                         contact_num: this.contact_num,
                         role: this.selected_role,
@@ -656,7 +656,7 @@ export default {
                         block_lot_id: null,
                         email: this.email,
                         verified: this.verified,
-                        has_voted: this.has_voted,
+
                         age: this.age,
                         contact_num: this.contact_num,
                         role: this.selected_role,
@@ -742,7 +742,7 @@ export default {
             this.confirm_password = null;
             this.status = this.$store.state.userLogged.status;
             this.verified = this.$store.state.userLogged.verified;
-            this.has_voted = this.$store.state.userLogged.has_voted;
+
             this.age = this.$store.state.userLogged.age;
             this.contact_num = this.$store.state.userLogged.contact_num;
             this.selected_role = this.$store.state.userLogged.role;
