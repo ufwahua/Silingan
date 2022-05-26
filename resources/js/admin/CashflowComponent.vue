@@ -985,7 +985,7 @@ export default {
         // testTable() {
         //   var doc = new jsPDF();
         //   doc.autoTable({ html: "#statement", theme: "plain" });
-        //   doc.save("table.pdf");
+        //   var IncomeStatement = "table.pdf");
         // },
         setStatement() {
             if (this.reportDate == 1) {
@@ -1521,18 +1521,18 @@ export default {
                     2,
                     1
                 );
-                doc.text(
-                    "Financial Statement Report " +
-                        month[start.getMonth()] +
-                        " " +
-                        start.getFullYear() +
-                        " to " +
-                        month[end.getMonth()] +
-                        " " +
-                        end.getFullYear(),
-                    15,
-                    finalY + 15
-                );
+                // doc.text(
+                //     "Financial Statement Report " +
+                //         month[start.getMonth()] +
+                //         " " +
+                //         start.getFullYear() +
+                //         " to " +
+                //         month[end.getMonth()] +
+                //         " " +
+                //         end.getFullYear(),
+                //     15,
+                //     finalY + 15
+                // );
             }
             if (this.reportDate == 2) {
                 start = new Date(
@@ -1545,18 +1545,18 @@ export default {
                     5,
                     1
                 );
-                doc.text(
-                    "Financial Statement Report " +
-                        month[start.getMonth()] +
-                        " " +
-                        start.getFullYear() +
-                        " to " +
-                        month[end.getMonth()] +
-                        " " +
-                        end.getFullYear(),
-                    15,
-                    finalY + 15
-                );
+                // doc.text(
+                //     "Financial Statement Report " +
+                //         month[start.getMonth()] +
+                //         " " +
+                //         start.getFullYear() +
+                //         " to " +
+                //         month[end.getMonth()] +
+                //         " " +
+                //         end.getFullYear(),
+                //     15,
+                //     finalY + 15
+                // );
             }
             if (this.reportDate == 3) {
                 start = new Date(
@@ -1569,18 +1569,18 @@ export default {
                     8,
                     1
                 );
-                doc.text(
-                    "Financial Statement Report " +
-                        month[start.getMonth()] +
-                        " " +
-                        start.getFullYear() +
-                        " to " +
-                        month[end.getMonth()] +
-                        " " +
-                        end.getFullYear(),
-                    15,
-                    finalY + 15
-                );
+                // doc.text(
+                //     "Financial Statement Report " +
+                //         month[start.getMonth()] +
+                //         " " +
+                //         start.getFullYear() +
+                //         " to " +
+                //         month[end.getMonth()] +
+                //         " " +
+                //         end.getFullYear(),
+                //     15,
+                //     finalY + 15
+                // );
             }
             if (this.reportDate == 4) {
                 start = new Date(
@@ -1593,18 +1593,18 @@ export default {
                     11,
                     1
                 );
-                doc.text(
-                    "Financial Statement Report " +
-                        month[start.getMonth()] +
-                        " " +
-                        start.getFullYear() +
-                        " to " +
-                        month[end.getMonth()] +
-                        " " +
-                        end.getFullYear(),
-                    15,
-                    finalY + 15
-                );
+                // doc.text(
+                //     "Financial Statement Report " +
+                //         month[start.getMonth()] +
+                //         " " +
+                //         start.getFullYear() +
+                //         " to " +
+                //         month[end.getMonth()] +
+                //         " " +
+                //         end.getFullYear(),
+                //     15,
+                //     finalY + 15
+                // );
             }
             if (this.reportDate == "JAN") {
                 start = new Date(
@@ -1617,14 +1617,14 @@ export default {
                     1,
                     1
                 );
-                doc.text(
-                    "Financial Statement Report " +
-                        month[start.getMonth()] +
-                        " " +
-                        start.getFullYear(),
-                    15,
-                    finalY + 15
-                );
+                // doc.text(
+                //     "Financial Statement Report " +
+                //         month[start.getMonth()] +
+                //         " " +
+                //         start.getFullYear(),
+                //     15,
+                //     finalY + 15
+                // );
             }
             if (this.reportDate == "FEB") {
                 start = new Date(
@@ -1637,14 +1637,14 @@ export default {
                     2,
                     1
                 );
-                doc.text(
-                    "Financial Statement Report " +
-                        month[start.getMonth()] +
-                        " " +
-                        start.getFullYear(),
-                    15,
-                    finalY + 15
-                );
+                // doc.text(
+                //     "Financial Statement Report " +
+                //         month[start.getMonth()] +
+                //         " " +
+                //         start.getFullYear(),
+                //     15,
+                //     finalY + 15
+                // );
             }
             if (this.reportDate == "MAR") {
                 start = new Date(
@@ -1657,14 +1657,14 @@ export default {
                     3,
                     1
                 );
-                doc.text(
-                    "Financial Statement Report " +
-                        month[start.getMonth()] +
-                        " " +
-                        start.getFullYear(),
-                    15,
-                    finalY + 15
-                );
+                // doc.text(
+                //     "Financial Statement Report " +
+                //         month[start.getMonth()] +
+                //         " " +
+                //         start.getFullYear(),
+                //     15,
+                //     finalY + 15
+                // );
             }
             if (this.reportDate == "APR") {
                 start = new Date(
@@ -1677,14 +1677,14 @@ export default {
                     4,
                     1
                 );
-                doc.text(
-                    "Financial Statement Report " +
-                        month[start.getMonth()] +
-                        " " +
-                        start.getFullYear(),
-                    15,
-                    finalY + 15
-                );
+                // doc.text(
+                //     "Financial Statement Report " +
+                //         month[start.getMonth()] +
+                //         " " +
+                //         start.getFullYear(),
+                //     15,
+                //     finalY + 15
+                // );
             }
             if (this.reportDate == "MAY") {
                 start = new Date(
@@ -1697,14 +1697,14 @@ export default {
                     5,
                     1
                 );
-                doc.text(
-                    "Financial Statement Report " +
-                        month[start.getMonth()] +
-                        " " +
-                        start.getFullYear(),
-                    15,
-                    finalY + 15
-                );
+                // doc.text(
+                //     "Financial Statement Report " +
+                //         month[start.getMonth()] +
+                //         " " +
+                //         start.getFullYear(),
+                //     15,
+                //     finalY + 15
+                // );
             }
             if (this.reportDate == "JUN") {
                 start = new Date(
@@ -1717,14 +1717,14 @@ export default {
                     6,
                     1
                 );
-                doc.text(
-                    "Financial Statement Report " +
-                        month[start.getMonth()] +
-                        " " +
-                        start.getFullYear(),
-                    15,
-                    finalY + 15
-                );
+                // doc.text(
+                //     "Financial Statement Report " +
+                //         month[start.getMonth()] +
+                //         " " +
+                //         start.getFullYear(),
+                //     15,
+                //     finalY + 15
+                // );
             }
             if (this.reportDate == "JUL") {
                 start = new Date(
@@ -1737,14 +1737,14 @@ export default {
                     7,
                     1
                 );
-                doc.text(
-                    "Financial Statement Report " +
-                        month[start.getMonth()] +
-                        " " +
-                        start.getFullYear(),
-                    15,
-                    finalY + 15
-                );
+                // doc.text(
+                //     "Financial Statement Report " +
+                //         month[start.getMonth()] +
+                //         " " +
+                //         start.getFullYear(),
+                //     15,
+                //     finalY + 15
+                // );
             }
             if (this.reportDate == "AUG") {
                 start = new Date(
@@ -1757,14 +1757,14 @@ export default {
                     8,
                     1
                 );
-                doc.text(
-                    "Financial Statement Report " +
-                        month[start.getMonth()] +
-                        " " +
-                        start.getFullYear(),
-                    15,
-                    finalY + 15
-                );
+                // doc.text(
+                //     "Financial Statement Report " +
+                //         month[start.getMonth()] +
+                //         " " +
+                //         start.getFullYear(),
+                //     15,
+                //     finalY + 15
+                // );
             }
             if (this.reportDate == "SEP") {
                 start = new Date(
@@ -1777,14 +1777,14 @@ export default {
                     9,
                     1
                 );
-                doc.text(
-                    "Financial Statement Report " +
-                        month[start.getMonth()] +
-                        " " +
-                        start.getFullYear(),
-                    15,
-                    finalY + 15
-                );
+                // doc.text(
+                //     "Financial Statement Report " +
+                //         month[start.getMonth()] +
+                //         " " +
+                //         start.getFullYear(),
+                //     15,
+                //     finalY + 15
+                // );
             }
             if (this.reportDate == "OCT") {
                 start = new Date(
@@ -1797,14 +1797,14 @@ export default {
                     10,
                     1
                 );
-                doc.text(
-                    "Financial Statement Report " +
-                        month[start.getMonth()] +
-                        " " +
-                        start.getFullYear(),
-                    15,
-                    finalY + 15
-                );
+                // doc.text(
+                //     "Financial Statement Report " +
+                //         month[start.getMonth()] +
+                //         " " +
+                //         start.getFullYear(),
+                //     15,
+                //     finalY + 15
+                // );
             }
             if (this.reportDate == "NOV") {
                 start = new Date(
@@ -1817,14 +1817,14 @@ export default {
                     11,
                     1
                 );
-                doc.text(
-                    "Financial Statement Report " +
-                        month[start.getMonth()] +
-                        " " +
-                        start.getFullYear(),
-                    15,
-                    finalY + 15
-                );
+                // doc.text(
+                //     "Financial Statement Report " +
+                //         month[start.getMonth()] +
+                //         " " +
+                //         start.getFullYear(),
+                //     15,
+                //     finalY + 15
+                // );
             }
             if (this.reportDate == "DEC") {
                 start = new Date(
@@ -1837,14 +1837,14 @@ export default {
                     0,
                     1
                 );
-                doc.text(
-                    "Financial Statement Report " +
-                        month[start.getMonth()] +
-                        " " +
-                        start.getFullYear(),
-                    15,
-                    finalY + 15
-                );
+                // doc.text(
+                //     "Financial Statement Report " +
+                //         month[start.getMonth()] +
+                //         " " +
+                //         start.getFullYear(),
+                //     15,
+                //     finalY + 15
+                // );
             }
             if (this.reportDate == 12) {
                 start = new Date(
@@ -1857,93 +1857,93 @@ export default {
                     11,
                     1
                 );
-                doc.text(
-                    "Financial Statement Report " +
-                        month[start.getMonth()] +
-                        " " +
-                        start.getFullYear() +
-                        " to " +
-                        month[end.getMonth()] +
-                        " " +
-                        end.getFullYear(),
-                    15,
-                    finalY + 15
-                );
+                // doc.text(
+                //     "Financial Statement Report " +
+                //         month[start.getMonth()] +
+                //         " " +
+                //         start.getFullYear() +
+                //         " to " +
+                //         month[end.getMonth()] +
+                //         " " +
+                //         end.getFullYear(),
+                //     15,
+                //     finalY + 15
+                // );
             }
-            doc.autoTable({
-                startY: finalY + 20,
-                theme: "plain",
-                head: [["Revenue", "", "", ""]],
-                body: this.revenueReport,
-                foot: [
-                    [
-                        { content: "", colSpan: 1, rowSpan: 1 },
-                        { content: "", colSpan: 1, rowSpan: 1 },
-                        {
-                            content: "Total",
-                            colSpan: 1,
-                            rowSpan: 1,
-                            styles: { halign: "right" },
-                        },
-                        {
-                            content:
-                                this.revenueTotal.toLocaleString() + " PHP",
-                            colSpan: 1,
-                            rowSpan: 1,
-                        },
-                    ],
-                ],
-            });
-            doc.addPage();
-            doc.autoTable({
-                startY: finalY + 20,
-                theme: "plain",
-                head: [["Expenses", "", ""]],
-                body: this.expenseReport,
-                foot: [
-                    [
-                        { content: "", colSpan: 1, rowSpan: 1 },
-                        {
-                            content: "Total",
-                            colSpan: 1,
-                            rowSpan: 1,
-                            styles: { halign: "right" },
-                        },
-                        {
-                            content:
-                                this.expenseTotal.toLocaleString() + " PHP",
-                            colSpan: 1,
-                            rowSpan: 1,
-                        },
-                    ],
-                ],
-            });
-            doc.addPage();
-            doc.autoTable({
-                startY: finalY + 20,
-                theme: "plain",
-                head: [["Summary", "", ""]],
-                body: this.netIncome,
-                foot: [
-                    [
-                        { content: "", colSpan: 1, rowSpan: 1 },
-                        {
-                            content: "Net Income",
-                            colSpan: 1,
-                            rowSpan: 1,
-                            styles: { halign: "right" },
-                        },
-                        {
-                            content:
-                                (
-                                    this.revenueTotal - this.expenseTotal
-                                ).toLocaleString() + " PHP",
-                            colSpan: 1,
-                            rowSpan: 1,
-                        },
-                    ],
-                ],
-            });
+            // doc.autoTable({
+            //     startY: finalY + 20,
+            //     theme: "plain",
+            //     head: [["Revenue", "", "", ""]],
+            //     body: this.revenueReport,
+            //     foot: [
+            //         [
+            //             { content: "", colSpan: 1, rowSpan: 1 },
+            //             { content: "", colSpan: 1, rowSpan: 1 },
+            //             {
+            //                 content: "Total",
+            //                 colSpan: 1,
+            //                 rowSpan: 1,
+            //                 styles: { halign: "right" },
+            //             },
+            //             {
+            //                 content:
+            //                     this.revenueTotal.toLocaleString() + " PHP",
+            //                 colSpan: 1,
+            //                 rowSpan: 1,
+            //             },
+            //         ],
+            //     ],
+            // });
+            // doc.addPage();
+            // doc.autoTable({
+            //     startY: finalY + 20,
+            //     theme: "plain",
+            //     head: [["Expenses", "", ""]],
+            //     body: this.expenseReport,
+            //     foot: [
+            //         [
+            //             { content: "", colSpan: 1, rowSpan: 1 },
+            //             {
+            //                 content: "Total",
+            //                 colSpan: 1,
+            //                 rowSpan: 1,
+            //                 styles: { halign: "right" },
+            //             },
+            //             {
+            //                 content:
+            //                     this.expenseTotal.toLocaleString() + " PHP",
+            //                 colSpan: 1,
+            //                 rowSpan: 1,
+            //             },
+            //         ],
+            //     ],
+            // });
+            // doc.addPage();
+            // doc.autoTable({
+            //     startY: finalY + 20,
+            //     theme: "plain",
+            //     head: [["Summary", "", ""]],
+            //     body: this.netIncome,
+            //     foot: [
+            //         [
+            //             { content: "", colSpan: 1, rowSpan: 1 },
+            //             {
+            //                 content: "Net Income",
+            //                 colSpan: 1,
+            //                 rowSpan: 1,
+            //                 styles: { halign: "right" },
+            //             },
+            //             {
+            //                 content:
+            //                     (
+            //                         this.revenueTotal - this.expenseTotal
+            //                     ).toLocaleString() + " PHP",
+            //                 colSpan: 1,
+            //                 rowSpan: 1,
+            //             },
+            //         ],
+            //     ],
+            // });
             if (start != null && end != null) {
                 if (this.reportDate == 1) {
                     start = new Date(
@@ -1956,16 +1956,15 @@ export default {
                         2,
                         1
                     );
-                    doc.save(
+                    var IncomeStatement =
                         "Income Statement Report " +
-                            month[start.getMonth()] +
-                            " " +
-                            start.getFullYear() +
-                            " to " +
-                            month[end.getMonth()] +
-                            " " +
-                            end.getFullYear()
-                    );
+                        month[start.getMonth()] +
+                        " " +
+                        start.getFullYear() +
+                        " to " +
+                        month[end.getMonth()] +
+                        " " +
+                        end.getFullYear();
                 }
                 if (this.reportDate == 2) {
                     start = new Date(
@@ -1978,16 +1977,15 @@ export default {
                         5,
                         1
                     );
-                    doc.save(
+                    var IncomeStatement =
                         "Income Statement Report " +
-                            month[start.getMonth()] +
-                            " " +
-                            start.getFullYear() +
-                            " to " +
-                            month[end.getMonth()] +
-                            " " +
-                            end.getFullYear()
-                    );
+                        month[start.getMonth()] +
+                        " " +
+                        start.getFullYear() +
+                        " to " +
+                        month[end.getMonth()] +
+                        " " +
+                        end.getFullYear();
                 }
                 if (this.reportDate == 3) {
                     start = new Date(
@@ -2000,16 +1998,15 @@ export default {
                         8,
                         1
                     );
-                    doc.save(
+                    var IncomeStatement =
                         "Income Statement Report " +
-                            month[start.getMonth()] +
-                            " " +
-                            start.getFullYear() +
-                            " to " +
-                            month[end.getMonth()] +
-                            " " +
-                            end.getFullYear()
-                    );
+                        month[start.getMonth()] +
+                        " " +
+                        start.getFullYear() +
+                        " to " +
+                        month[end.getMonth()] +
+                        " " +
+                        end.getFullYear();
                 }
                 if (this.reportDate == 4) {
                     start = new Date(
@@ -2022,16 +2019,15 @@ export default {
                         11,
                         1
                     );
-                    doc.save(
+                    var IncomeStatement =
                         "Income Statement Report " +
-                            month[start.getMonth()] +
-                            " " +
-                            start.getFullYear() +
-                            " to " +
-                            month[end.getMonth()] +
-                            " " +
-                            end.getFullYear()
-                    );
+                        month[start.getMonth()] +
+                        " " +
+                        start.getFullYear() +
+                        " to " +
+                        month[end.getMonth()] +
+                        " " +
+                        end.getFullYear();
                 }
                 if (this.reportDate == "JAN") {
                     start = new Date(
@@ -2044,12 +2040,11 @@ export default {
                         1,
                         1
                     );
-                    doc.save(
+                    var IncomeStatement =
                         "Income Statement Report " +
-                            month[start.getMonth()] +
-                            " " +
-                            start.getFullYear()
-                    );
+                        month[start.getMonth()] +
+                        " " +
+                        start.getFullYear();
                 }
                 if (this.reportDate == "FEB") {
                     start = new Date(
@@ -2062,12 +2057,11 @@ export default {
                         2,
                         1
                     );
-                    doc.save(
+                    var IncomeStatement =
                         "Income Statement Report " +
-                            month[start.getMonth()] +
-                            " " +
-                            start.getFullYear()
-                    );
+                        month[start.getMonth()] +
+                        " " +
+                        start.getFullYear();
                 }
                 if (this.reportDate == "MAR") {
                     start = new Date(
@@ -2080,12 +2074,11 @@ export default {
                         3,
                         1
                     );
-                    doc.save(
+                    var IncomeStatement =
                         "Income Statement Report " +
-                            month[start.getMonth()] +
-                            " " +
-                            start.getFullYear()
-                    );
+                        month[start.getMonth()] +
+                        " " +
+                        start.getFullYear();
                 }
                 if (this.reportDate == "APR") {
                     start = new Date(
@@ -2098,12 +2091,11 @@ export default {
                         4,
                         1
                     );
-                    doc.save(
+                    var IncomeStatement =
                         "Income Statement Report " +
-                            month[start.getMonth()] +
-                            " " +
-                            start.getFullYear()
-                    );
+                        month[start.getMonth()] +
+                        " " +
+                        start.getFullYear();
                 }
                 if (this.reportDate == "MAY") {
                     start = new Date(
@@ -2116,12 +2108,11 @@ export default {
                         5,
                         1
                     );
-                    doc.save(
+                    var IncomeStatement =
                         "Income Statement Report " +
-                            month[start.getMonth()] +
-                            " " +
-                            start.getFullYear()
-                    );
+                        month[start.getMonth()] +
+                        " " +
+                        start.getFullYear();
                 }
                 if (this.reportDate == "JUN") {
                     start = new Date(
@@ -2134,12 +2125,11 @@ export default {
                         6,
                         1
                     );
-                    doc.save(
+                    var IncomeStatement =
                         "Income Statement Report " +
-                            month[start.getMonth()] +
-                            " " +
-                            start.getFullYear()
-                    );
+                        month[start.getMonth()] +
+                        " " +
+                        start.getFullYear();
                 }
                 if (this.reportDate == "JUL") {
                     start = new Date(
@@ -2152,12 +2142,11 @@ export default {
                         7,
                         1
                     );
-                    doc.save(
+                    var IncomeStatement =
                         "Income Statement Report " +
-                            month[start.getMonth()] +
-                            " " +
-                            start.getFullYear()
-                    );
+                        month[start.getMonth()] +
+                        " " +
+                        start.getFullYear();
                 }
                 if (this.reportDate == "AUG") {
                     start = new Date(
@@ -2170,12 +2159,11 @@ export default {
                         8,
                         1
                     );
-                    doc.save(
+                    var IncomeStatement =
                         "Income Statement Report " +
-                            month[start.getMonth()] +
-                            " " +
-                            start.getFullYear()
-                    );
+                        month[start.getMonth()] +
+                        " " +
+                        start.getFullYear();
                 }
                 if (this.reportDate == "SEP") {
                     start = new Date(
@@ -2188,12 +2176,11 @@ export default {
                         9,
                         1
                     );
-                    doc.save(
+                    var IncomeStatement =
                         "Income Statement Report " +
-                            month[start.getMonth()] +
-                            " " +
-                            start.getFullYear()
-                    );
+                        month[start.getMonth()] +
+                        " " +
+                        start.getFullYear();
                 }
                 if (this.reportDate == "OCT") {
                     start = new Date(
@@ -2206,12 +2193,11 @@ export default {
                         10,
                         1
                     );
-                    doc.save(
+                    var IncomeStatement =
                         "Income Statement Report " +
-                            month[start.getMonth()] +
-                            " " +
-                            start.getFullYear()
-                    );
+                        month[start.getMonth()] +
+                        " " +
+                        start.getFullYear();
                 }
                 if (this.reportDate == "NOV") {
                     start = new Date(
@@ -2224,12 +2210,11 @@ export default {
                         11,
                         1
                     );
-                    doc.save(
+                    var IncomeStatement =
                         "Income Statement Report " +
-                            month[start.getMonth()] +
-                            " " +
-                            start.getFullYear()
-                    );
+                        month[start.getMonth()] +
+                        " " +
+                        start.getFullYear();
                 }
                 if (this.reportDate == "DEC") {
                     start = new Date(
@@ -2242,12 +2227,11 @@ export default {
                         0,
                         1
                     );
-                    doc.save(
+                    var IncomeStatement =
                         "Income Statement Report " +
-                            month[start.getMonth()] +
-                            " " +
-                            start.getFullYear()
-                    );
+                        month[start.getMonth()] +
+                        " " +
+                        start.getFullYear();
                 }
                 if (this.reportDate == 12) {
                     start = new Date(
@@ -2260,18 +2244,92 @@ export default {
                         11,
                         1
                     );
-                    doc.save(
+                    var IncomeStatement =
                         "Income Statement Report " +
-                            month[start.getMonth()] +
-                            " " +
-                            start.getFullYear() +
-                            " to " +
-                            month[end.getMonth()] +
-                            " " +
-                            end.getFullYear()
-                    );
+                        month[start.getMonth()] +
+                        " " +
+                        start.getFullYear() +
+                        " to " +
+                        month[end.getMonth()] +
+                        " " +
+                        end.getFullYear();
                 }
             }
+
+            console.log("income statement", this.netIncome);
+            var props = {
+                outputType: "save",
+                returnJsPDFDocObject: true,
+                fileName: IncomeStatement,
+                orientationLandscape: false,
+                compress: true,
+                logo: {
+                    src: "http://127.0.0.1:8000/storage/images/silingan-icon.png",
+                    type: "PNG", //optional, when src= data:uri (nodejs case)
+                    width: 53.33, //aspect ratio = width/height
+                    height: 26.66,
+                    margin: {
+                        top: 0, //negative or positive num, from the current position
+                        left: 0, //negative or positive num, from the current position
+                    },
+                },
+                business: {
+                    label: "Invoice issued for:",
+                    name: "Silingan",
+                    address: "Camella Homes Mactan, Lapu-Lapu City",
+                    phone: "(+63) 908 302 4328",
+                    email: "silinganapp.ph@gmail.com",
+                    website: "http://127.0.0.1:8000/",
+                },
+                contact: {
+                    label: "",
+                    name: IncomeStatement,
+                    address: "",
+                },
+                invoice: {
+                    label: "",
+                    num: "",
+                    invGenDate: "",
+                    header: [
+                        {
+                            title: "",
+                            style: {
+                                width: 42,
+                            },
+                        },
+                        {
+                            title: "",
+                            style: {
+                                width: 125,
+                            },
+                        },
+                        {
+                            title: "Amount",
+                            style: {
+                                width: 90,
+                            },
+                        },
+                    ],
+                    table: Array.from(this.netIncome),
+
+                    invTotalLabel: "Net Income:",
+                    invTotal:
+                        (
+                            this.revenueTotal - this.expenseTotal
+                        ).toLocaleString() + " PHP",
+                },
+                footer: {
+                    text: "The invoice is created on a computer and is valid without the signature and stamp",
+                },
+                pageEnable: true,
+                pageLabel: "Page ",
+            };
+            jsPDFInvoiceTemplate.default(props);
+
+            // })
+            // .catch((err) => {
+            //     console.log(err.response);
+            // });
         },
         setLots() {
             this.lot_bool = false;

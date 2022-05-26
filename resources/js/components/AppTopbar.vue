@@ -657,10 +657,24 @@ export default {
             }
         },
         openElection() {
-            return this.$router.push(`/${this.userLogged.role}` + "/election");
+            if (this.userLogged.role == "security officer") {
+                return this.$router.push("/security-officer/election");
+            } else if (this.userLogged.role == "officer") {
+                return this.$router.push("/admin/election/");
+            } else {
+                return this.$router.push(
+                    `/${this.userLogged.role}` + "/election"
+                );
+            }
         },
         openLog() {
-            return this.$router.push(`/${this.userLogged.role}` + "/log");
+            if (this.userLogged.role == "security officer") {
+                return this.$router.push("/security-officer/log");
+            } else if (this.userLogged.role == "officer") {
+                return this.$router.push("/admin/log/");
+            } else {
+                return this.$router.push(`/${this.userLogged.role}` + "/log");
+            }
         },
         getSpecificPost(post_id) {
             this.$store.dispatch("posts/getSpecificPost", post_id);

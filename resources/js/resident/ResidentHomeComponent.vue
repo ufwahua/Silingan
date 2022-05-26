@@ -91,6 +91,11 @@ export default {
                             icon: "pi pi-compass",
                             to: "/resident/map",
                         },
+                        {
+                            label: "Log",
+                            icon: "pipi pi-fw pi-calendar",
+                            to: "/resident/log",
+                        },
                     ],
                 },
             ],

@@ -261,37 +261,6 @@
                                                         }}
                                                     </h5>
                                                 </template>
-                                                <template #content>
-                                                    <div
-                                                        v-if="!result"
-                                                        class="flex justify-content-center"
-                                                    >
-                                                        <Button
-                                                            icon="pi pi-trash"
-                                                            class="p-button-rounded p-button-secondary mr-2"
-                                                            @click="
-                                                                deleteCandidate(
-                                                                    candidate
-                                                                )
-                                                            "
-                                                            v-tooltip="
-                                                                'Delete Candidate'
-                                                            "
-                                                        />
-                                                        <Button
-                                                            icon="pi pi-pencil"
-                                                            class="p-button-rounded p-button-primary"
-                                                            @click="
-                                                                updateCandidate(
-                                                                    candidate
-                                                                )
-                                                            "
-                                                            v-tooltip="
-                                                                'Edit Candidate'
-                                                            "
-                                                        />
-                                                    </div>
-                                                </template>
                                             </Card>
                                         </Button>
                                         <div
@@ -1652,8 +1621,8 @@ export default {
         },
         validateVote() {
             var validation = null;
-            this.positions.forEach((elem) => {
-                if (this.selected_candidate[elem.name] == null) {
+            this.candidates.forEach((elem) => {
+                if (this.selected_candidate[elem.position.name] == null) {
                     ++validation;
                 }
             });
@@ -1853,6 +1822,7 @@ export default {
                         .then(() => {
                             console.log("updated voters ");
                             this.$store.dispatch("getUsersVerified");
+                            this.$store.dispatch("lots/getAll");
                         })
                         .catch((e) => {
                             console.log(e.response);
@@ -2005,7 +1975,7 @@ export default {
             })
                 .then(async (res) => {
                     this.id = res.data.id;
-                    console.log("result", (this.result = res.data.result));
+
                     var end_date = res.data.end_date;
                     var start_date = res.data.start_date;
                     this.election_start = this.dateFormat(start_date);
@@ -2050,6 +2020,17 @@ export default {
                                 },
                             })
                                 .then(async () => {
+                                    await axios({
+                                        method: "get",
+                                        url: "/api/election",
+                                    })
+                                        .then((res) => {
+                                            this.result = res.data.result;
+                                        })
+                                        .catch((error) => {
+                                            console.log(error.response);
+                                        });
+
                                     console.log("election ended");
                                     await axios({
                                         method: "post",
@@ -2090,8 +2071,10 @@ export default {
     },
     mounted() {
         this.$store.dispatch("timeNow/getAll");
+        this.$store.dispatch("lots/getAll");
         this.checkElectionDate();
 
+        this.$store.dispatch("getUserLogged");
         this.$store.dispatch("getUsersVerified");
         this.$store.dispatch("positions/getAll");
         this.$store.dispatch("getOfficers");

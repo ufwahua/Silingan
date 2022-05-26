@@ -511,6 +511,7 @@ export default {
                             data.amount.toString(),
                         ],
                     ]),
+
                     invTotalLabel: "Total:",
                     invTotal: data.amount.toString(),
 

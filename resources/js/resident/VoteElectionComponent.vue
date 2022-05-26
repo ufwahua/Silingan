@@ -1493,6 +1493,7 @@ export default {
     },
     mounted() {
         this.$store.dispatch("timeNow/getAll");
+        this.$store.dispatch("lots/getAll");
         this.checkElectionDate();
         this.$store.dispatch("positions/getAll");
         this.$store.dispatch("getOfficers");
